@@ -140,3 +140,94 @@ Fixed gameplay rules must be specified before implementation, but values explici
 ### Rationale
 
 Some values cannot be validated without playable feedback. Separating rules from parameters preserves design authority without preventing iteration.
+
+
+---
+
+## DD-010 — Single-Player Is the Complete Core Game
+
+**Status:** Accepted
+
+### Decision
+
+Project StarForge is designed so that all core gameplay and progression function completely in single-player.
+
+Synchronous multiplayer is not a dependency of the initial product.
+
+### Rationale
+
+The project remains technically achievable for a custom C++/OpenGL codebase while preserving the option to explore asynchronous multiplayer later.
+
+---
+
+## DD-011 — On-Foot Gameplay Is First-Person
+
+**Status:** Accepted
+
+### Decision
+
+Normal on-foot gameplay uses a first-person perspective.
+
+Special construction, navigation, or strategic interfaces may use dedicated cameras.
+
+### Rationale
+
+First-person supports direct station presence, exploration, combat, engineering interaction, and a manageable animation/content scope.
+
+---
+
+## DD-012 — No Real-World Offline Progression
+
+**Status:** Accepted
+
+### Decision
+
+Game-world production, research, farming, attacks, and other simulations do not continue simply because real-world time passes while the game is closed.
+
+### Rationale
+
+Progression should result from active play and in-game systems rather than mobile-style waiting mechanics.
+
+---
+
+## DD-013 — Recruited Crew Do Not Routinely Die Permanently
+
+**Status:** Accepted
+
+### Decision
+
+Ordinary failures and automated combat do not permanently delete recruited crew.
+
+Crew may be injured or incapacitated. Permanent death requires an explicitly authored narrative case or a later accepted design change.
+
+### Rationale
+
+Crew members are persistent progression assets intended to create attachment and station identity rather than function as expendable units.
+
+---
+
+## DD-014 — Automation Removes Solved Repetition
+
+**Status:** Accepted
+
+### Decision
+
+Routine station operations can become progressively automated, while strategic choices remain under player control.
+
+### Rationale
+
+The player's role should evolve from hands-on operator to commander without turning progression into repeated maintenance of already-solved tasks.
+
+---
+
+## DD-015 — The Galaxy Does Not Universally Scale to the Player
+
+**Status:** Accepted
+
+### Decision
+
+Locations and enemies have intended threat ranges rather than automatically matching player power everywhere.
+
+### Rationale
+
+Fixed and bounded threat structure preserves meaningful danger, progression, preparation, and the feeling that previously difficult content has become easier through advancement.

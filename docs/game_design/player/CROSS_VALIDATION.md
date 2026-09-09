@@ -348,13 +348,13 @@ GDS-7 defines gravity bands, atmosphere/environment metadata, biome classes, lan
 
 GDS-5 remains authoritative for player protection/exposure.
 
-### Missions
+### Missions — First-Pass Resolved by GDS-8
 
-Required for:
-- exact extraction commit transaction;
-- recovery/rescue windows;
-- mission objective interaction;
-- dropped-item persistence.
+**Result: PASS**
+
+GDS-8 now defines extraction commit atomicity, Field-Unsecured → Vehicle/Extraction-Secured transitions, recoverable incapacitation windows, objective interaction state, mission-instance dropped-item persistence, abandonment, and ordinary defeat resolution.
+
+These rules complete the mission-facing side of GDS-5 player failure and inventory security.
 
 ### Combat
 
@@ -396,4 +396,4 @@ GDS-5 can be marked:
 
 GDS-6 Spacecraft has now been first-pass cross-validated.
 
-The next unresolved player-facing dependencies are Missions, Combat, Economy, Presentation/Accessibility, and Persistence.
+The next unresolved player-facing dependencies are Combat, Economy, Presentation/Accessibility, and Persistence.

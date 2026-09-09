@@ -192,7 +192,7 @@ Define:
 
 ## GDS-10 — Robots
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -208,7 +208,7 @@ Define:
 
 ## GDS-11 — Raids and Station Defense
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

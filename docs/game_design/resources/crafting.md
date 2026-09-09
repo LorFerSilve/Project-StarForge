@@ -126,12 +126,10 @@ Output:
 Inputs:
 - Copper
 - Basic Circuit
-- Structural Steel or Aluminum according to final balance data
+- Aluminum
 
 Output:
 - Power Regulator
-
-Because structural casing choice does not change gameplay identity, the exact casing material is a tuneable recipe-data decision within allowed structural materials.
 
 ### RECIPE_MAGNETIC_COIL
 
@@ -154,14 +152,12 @@ Output:
 ### RECIPE_SERVO
 
 Inputs:
-- Aluminum or Structural Steel
+- Aluminum
 - Copper
 - Basic Circuit
 
 Output:
 - Servo Assembly
-
-Exact frame metal is tuneable within the authored recipe data.
 
 ### RECIPE_SENSOR
 
@@ -182,28 +178,40 @@ Inputs:
 Output:
 - Heat Exchanger Core
 
+### RECIPE_QUANTUM_SUBSTRATE
+
+Inputs:
+- Voltaic Crystal
+- Superconductive Material
+- Exotic Matter Sample
+
+Output:
+- Quantum Substrate
+
+Technology:
+- Quantum Materials
+
 ### RECIPE_QUANTUM_PROCESSOR
 
 Inputs:
 - Advanced Circuit
 - Platinum
-- Exotic processing subcomponent unlocked by Quantum Computing research
+- Quantum Substrate
 
 Output:
 - Quantum Processor
 
-The exotic subcomponent must be concretely defined before Quantum Processor becomes Design Complete.
+Technology:
+- Quantum Computing
 
 ### RECIPE_RATIONS
 
 Inputs:
 - Fresh Produce
-- Polymer-derived packaging input
+- Polymer Resin
 
 Output:
 - Packaged Rations
-
-Packaging input is represented by Polymer Resin unless later food-processing balancing defines a dedicated packaging component.
 
 ## 8. Finished Equipment Recipes
 
@@ -337,7 +345,7 @@ Crafting does not provide:
 
 ## 22. Tuneable Parameters
 
-Tuneable values include recipe quantities, batch size, processing duration, energy demand, and allowed casing-material choices where explicitly marked.
+Tuneable values include recipe quantities, batch size, processing duration, and energy demand.
 
 ## 23. Dependencies
 
@@ -345,4 +353,6 @@ This specification depends on Resource Catalog, Processing, Blueprints, Research
 
 ## 24. Open Questions
 
-The Quantum Processor's exact exotic subcomponent remains dependent on Research/late-game technology definition and must be resolved inside GDS-4 before the domain first-pass closes.
+None in the current core crafting baseline.
+
+Finished weapon, ship, robot, and armor recipes remain intentionally owned by their future content domains and must register only canonical resources/components.

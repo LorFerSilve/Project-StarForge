@@ -126,7 +126,7 @@ Define:
 
 ## GDS-6 — Spacecraft
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -144,7 +144,7 @@ Define:
 
 ## GDS-7 — World, Galaxy, Narrative, and Factions
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

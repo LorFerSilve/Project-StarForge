@@ -389,12 +389,13 @@ GDS-9 now defines ship weapon families, shield/armor resolution, subsystem targe
 
 GDS-6 remains authoritative for flight, power, thermal state, module condition, Disabled/Derelict state, and recovery.
 
-### GDS-10 Robots
+### GDS-10 Robots — First-Pass Resolved
 
-Required for:
-- robot transport;
-- repair drones;
-- deployment bays.
+**Result: PASS**
+
+GDS-10 now defines Light/Medium/Heavy robot footprints, Tactical Squads, reserve/deployment semantics, charging/support needs, and robot extraction/recovery.
+
+GDS-6 Cargo/Utility now explicitly owns Robot Rack Units, Robot Racks, and Heavy Robot Bays as physical spacecraft capabilities.
 
 ### GDS-11 Raids
 

@@ -519,4 +519,6 @@ This specification depends on:
 
 None in the current atmosphere baseline.
 
-The document remains Draft until player survival, crew, thermal, water, damage, and automation behavior are cross-validated.
+Player survival has now been first-pass cross-validated through GDS-5: this specification owns environmental atmosphere state, while Player Field Survival owns suit protection and player exposure.
+
+The document remains Draft pending final cross-domain validation and later balance/presentation integration.

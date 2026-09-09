@@ -105,31 +105,35 @@ Their mass still contributes to total carried mass.
 
 ## 12. Mission Ownership State
 
-Inventory entries can carry mission security state:
+Portable mission inventory distinguishes origin/security state:
 
-- Field-Unsecured;
-- Vehicle/Extraction-Secured;
-- Station-Secured.
+- Secured Loadout — physical gear/resources that were already owned and committed from station/ship storage before mission deployment;
+- Field-Unsecured — resources/items acquired during the current external mission and not yet secured;
+- Vehicle/Extraction-Secured — mission-acquired resources successfully committed to an authorized extraction/vehicle store;
+- Station-Secured — resources already returned to persistent station ownership.
 
-Player Inventory on an external mission is normally Field-Unsecured unless a mission rule marks a particular objective differently.
+A pickup acquired in the field enters Field-Unsecured unless a mission rule explicitly commits it directly to a valid secure extraction owner.
 
-## 13. Persistent Gear
+## 13. Ordinary Mission-Defeat Inventory Transaction
 
-Equipped persistent gear is protected from ordinary mission-defeat deletion under Global Rules.
+On ordinary external-mission defeat:
 
-Consumables, ammunition, and Field-Unsecured collected resources can be lost/consumed according to mission resolution.
+- persistent Secured Loadout equipment returns with the player, subject to condition damage;
+- unconsumed Secured Loadout ammunition and consumables return with the player;
+- ammunition/consumables already consumed during the mission remain consumed;
+- Field-Unsecured resources/items are lost unless the specific mission defines a recoverable post-defeat state;
+- Vehicle/Extraction-Secured resources remain secured and are not lost merely because the player is later defeated;
+- Station-Secured resources are unaffected.
 
-## 14. Mission Loadout Origin
+This transaction is deterministic and occurs exactly once.
 
-Items brought from station inventory into a mission remain persistent owned gear/resources.
+## 14. Deliberately Dropped Loadout
 
-Mission failure rules must distinguish:
+A Secured Loadout item deliberately dropped into the world remains a persistent owned item only while the mission/location persistence system still tracks that object as recoverable.
 
-- pre-existing loadout;
-- newly acquired Field-Unsecured loot;
-- consumed ammunition/consumables.
+If the mission ends in ordinary defeat while that item remains abandoned outside the player's recovered loadout, the item is treated as lost unless a mission-specific recovery rule preserves it.
 
-Failure does not magically refund consumed supplies.
+This prevents deliberate dropping from duplicating protected gear.
 
 ## 15. Transfer to Station
 

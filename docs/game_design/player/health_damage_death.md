@@ -295,4 +295,4 @@ This specification depends on Player Character, Movement, Equipment, Field Survi
 
 None in the health/failure baseline.
 
-Combat damage formulas and exact mission defeat transaction order remain future authoritative dependencies rather than undefined player rules.
+Combat damage formulas are now authoritative in GDS-9, and the exact mission defeat transaction order is authoritative in GDS-8. No unresolved player-health rule remains at this boundary.

@@ -371,3 +371,82 @@ Recycling and transformation chains may recover resources but cannot create net 
 ### Rationale
 
 Station automation should create efficiency and self-sufficiency, not exploitable resource duplication.
+
+
+---
+
+## DD-025 — Player Progression Is Capability-Based, Not Level-Based
+
+**Status:** Accepted
+
+### Decision
+
+The player has no generic Player Level or universal RPG attribute tree.
+
+Direct player progression comes primarily from equipment, tools, research, station capability, spacecraft, robots, and preparation.
+
+### Rationale
+
+StarForge's progression should unlock new capabilities and strategic options rather than rely on invisible percentage inflation.
+
+---
+
+## DD-026 — Normal Sprinting Does Not Use a Stamina Bar
+
+**Status:** Accepted
+
+### Decision
+
+Ordinary on-foot sprinting is not limited by a generic regenerating stamina resource.
+
+Movement limitations come from environment, carried load, health, equipment, gravity, and explicit combat effects.
+
+### Rationale
+
+Routine traversal should remain responsive; survival pressure belongs in meaningful engineering and environmental systems.
+
+---
+
+## DD-027 — Player Inventory Uses Both Mass and Volume Capacity
+
+**Status:** Accepted
+
+### Decision
+
+Portable backpack storage is constrained by both carried Mass and occupied Volume.
+
+Equipped gear contributes to carried Mass, and a Heavy Load state can begin below hard maximum capacity.
+
+### Rationale
+
+This prevents unrealistic ore hauling while distinguishing dense and bulky cargo without requiring a grid-placement minigame.
+
+---
+
+## DD-028 — Ordinary Mission Defeat Uses a Deterministic Loadout/Loot Transaction
+
+**Status:** Accepted
+
+### Decision
+
+On ordinary external-mission defeat, recovered Secured Loadout equipment and unconsumed pre-mission supplies return with the player, consumed supplies remain consumed, Field-Unsecured mission loot is lost, and already Vehicle/Extraction-Secured cargo remains secured.
+
+### Rationale
+
+This creates meaningful extraction risk without deleting the player's established equipment and prevents duplication/refund exploits.
+
+---
+
+## DD-029 — Suit Energy and Life-Support Reserve Are Separate Resources
+
+**Status:** Accepted
+
+### Decision
+
+Player environmental equipment distinguishes electrical Suit Energy from finite Life-Support Reserve.
+
+Loss of Suit Energy disables active systems according to priority but does not automatically erase all remaining breathable-atmosphere endurance if the suit supports passive emergency life support.
+
+### Rationale
+
+Separating electrical energy from atmosphere endurance creates clearer engineering decisions and avoids arbitrary instant death at battery depletion.

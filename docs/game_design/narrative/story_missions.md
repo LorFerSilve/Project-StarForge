@@ -19,6 +19,9 @@ Some missions can be completed in flexible order, but mandatory discoveries and 
 
 ### MS-P01 — Silent Signal
 
+Location:
+- Aster's Rest System — Horizon Station
+
 Narrative Goal:
 - introduce player;
 - discover dormant home station.
@@ -33,6 +36,9 @@ Output:
 - station registered as active recovery target.
 
 ### MS-P02 — Heart of the Station
+
+Location:
+- Aster's Rest System — Horizon Station
 
 Narrative Goal:
 - claim/recover home station.
@@ -53,6 +59,9 @@ Output:
 
 ### MS-A101 — Broken Relay
 
+Location:
+- Caldera System — Relay ECHO-12
+
 Goal:
 - restore local Deep-Space Relay.
 
@@ -65,6 +74,9 @@ Output:
 
 ### MS-A102 — The Living
 
+Location:
+- Morrow System — Morrow Rescue Corridor / associated mission site
+
 Goal:
 - resolve a survivor distress site.
 
@@ -76,6 +88,9 @@ Output:
 - Freehold contact lead.
 
 ### MS-A103 — A Line Reopened
+
+Location:
+- Recovery Sector route network centered on Morrow ↔ Aster's Rest/Caldera
 
 Goal:
 - establish a stable local corridor and first regular outside contact.
@@ -90,6 +105,9 @@ These missions can partially reorder after initial contact.
 
 ### MS-A201 — The Institute
 
+Location:
+- Vesper System — Vesper Observatory
+
 Goal:
 - establish contact with Dr. Mara Venn/Asterion.
 
@@ -101,6 +119,9 @@ Output:
 - Asterion relationship opened.
 
 ### MS-A202 — Security Line
+
+Location:
+- Bastion System — Bastion Gate
 
 Goal:
 - pass or negotiate Helios-controlled route security.
@@ -114,6 +135,9 @@ Output:
 
 ### MS-A203 — Custodian Seven
 
+Location:
+- Orison System — Custodian Vault Seven
+
 Goal:
 - reach Continuance Node CUSTODIAN-7.
 
@@ -125,6 +149,9 @@ Output:
 - Containment Directive lead.
 
 ### MS-A204 — Echo Laboratory
+
+Location:
+- Nacre System — Nacre Echo Laboratory
 
 Goal:
 - investigate a pre-Fracture anomaly research site.
@@ -154,6 +181,9 @@ Obtained through Asterion-linked scientific investigation and physical anomaly e
 
 ### MS-A301 — Rook's Wake
 
+Location:
+- Kestrel System — Rook's Wake
+
 Goal:
 - confront/negotiate/raid Captain Sable Rook's network for stolen archive intelligence.
 
@@ -167,6 +197,9 @@ Output:
 
 ### MS-A302 — Sealed Authority
 
+Location:
+- Lyra System — Authority Archive L-4
+
 Goal:
 - obtain suppressed pre-Fracture emergency records.
 
@@ -175,6 +208,9 @@ Output:
 - Helios/Asterion political consequences.
 
 ### MS-A303 — The Lattice Equation
+
+Location:
+- assembled at Horizon Station after required evidence is secured
 
 Goal:
 - combine the three evidence packages.
@@ -191,6 +227,9 @@ Output:
 
 ### MS-A401 — Beyond the Map
 
+Location:
+- Eidolon System — Eidolon Deep Dock / Verge Observatory
+
 Goal:
 - commission a Reach IV-capable expedition.
 
@@ -202,6 +241,9 @@ Output:
 
 ### MS-A402 — Verge Entry
 
+Location:
+- Threshold System — Threshold Entry Zone
+
 Goal:
 - survive first Reach IV transit and establish safe local navigation.
 
@@ -212,6 +254,9 @@ Output:
 - Verge staging location.
 
 ### MS-A403 — The Older Signal
+
+Location:
+- Null Choir System — Choir Structure
 
 Goal:
 - investigate an Ancient Structure.
@@ -225,6 +270,9 @@ Output:
 
 ### MS-A404 — Wake Pattern
 
+Location:
+- Null Choir / Crownless route observation chain
+
 Goal:
 - confirm that dormant Transit Lattice remnants are reactivating.
 
@@ -235,6 +283,9 @@ Output:
 ## 8. Finale
 
 ### MS-F01 — Coalition
+
+Location:
+- Horizon Station with remote/physical faction support
 
 Goal:
 - assemble sufficient capability to respond.
@@ -252,6 +303,9 @@ Inputs can include:
 The exact required capability model is defined by GDS-12/GDS-8.
 
 ### MS-F02 — Second Cascade
+
+Location:
+- Crownless System — Crownless Lattice Nexus
 
 Goal:
 - reach final Fracture control/anomaly site;

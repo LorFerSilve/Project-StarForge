@@ -369,14 +369,13 @@ GDS-7 now defines the canonical campaign route graph, Strategic Locations, secto
 
 Exact economy acquisition prices remain GDS-12 authority.
 
-### GDS-8 Missions
+### GDS-8 Missions — First-Pass Resolved
 
-Required for:
-- extraction commit/failure;
-- ship deployment;
-- mission-specific landing;
-- rescue/tow events;
-- stranded-state outcomes.
+**Result: PASS**
+
+GDS-8 now defines ship mission deployment, landing/docking use within Mission Zones, extraction commit/failure, ship-secured cargo behavior, rescue/tow mission contexts, and stranded-state mission recovery.
+
+GDS-6 remains authoritative for the ship's actual flight, cargo, docking, damage, and recovery systems.
 
 ### GDS-9 Combat
 

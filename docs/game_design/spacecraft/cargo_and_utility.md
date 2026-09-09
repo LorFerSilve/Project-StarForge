@@ -208,7 +208,48 @@ Robot transport consumes:
 
 Combat robot squad rules belong to GDS-10.
 
-## 23. Utility Bays
+## 23. Robot Rack Units
+
+A dedicated **Robot Rack** defines a finite number of Robot Rack Units for compatible deployed robots.
+
+GDS-10 defines baseline footprint:
+
+- Light robot = 1 Rack Unit;
+- Medium robot = 2 Rack Units;
+- Heavy robot = not valid in ordinary Rack capacity.
+
+A Robot Rack can provide:
+
+- physical restraint/storage;
+- charging;
+- data/command connection;
+- deployment/recovery interface.
+
+Exact rack capacity, power draw, mass, and service rate are ship-module data.
+
+## 24. Heavy Robot Bay
+
+A **Heavy Robot Bay** is the compatible spacecraft transport/service capability required for Heavy-class robots such as the Heavy Mech.
+
+A Heavy Robot Bay:
+
+- occupies a real utility/module slot;
+- contributes mass;
+- consumes power/service capacity;
+- provides an authored heavy deployment path;
+- is not substituted by general cargo volume or passenger seating.
+
+GDS-10 owns Heavy robot footprint and squad deployment rules.
+
+## 25. Robot Support Capacity
+
+Transport space and robot support are distinct from Tactical Control Capacity.
+
+A ship can physically transport more robots than the player can actively command.
+
+Powered-down reserve transport is allowed where the rack/bay supports it.
+
+## 26. Utility Bays
 
 Utility bays can host specialized mission systems such as:
 
@@ -219,7 +260,7 @@ Utility bays can host specialized mission systems such as:
 - field storage expansion;
 - robot deployment rack.
 
-## 24. Utility Capacity
+## 27. Utility Capacity
 
 A utility system occupies a real slot/bay and contributes:
 
@@ -228,11 +269,11 @@ A utility system occupies a real slot/bay and contributes:
 - heat;
 - cargo displacement where relevant.
 
-## 25. No Universal Cargo Conversion
+## 28. No Universal Cargo Conversion
 
 Cargo capacity cannot automatically transform into passenger seats, robot racks, or cryogenic tanks without installing compatible modules.
 
-## 26. Cargo Manifest
+## 29. Cargo Manifest
 
 The ship UI provides:
 
@@ -244,7 +285,7 @@ The ship UI provides:
 - reserved cargo;
 - destination/transfer task where relevant.
 
-## 27. Reservations
+## 30. Reservations
 
 Cargo can be reserved for:
 
@@ -256,17 +297,17 @@ Cargo can be reserved for:
 
 Reservations do not move ownership.
 
-## 28. Field Storage Container Integration
+## 31. Field Storage Container Integration
 
 A field storage container is not automatically ship cargo.
 
 Its contents require a valid transfer.
 
-## 29. Persistence
+## 32. Persistence
 
 Cargo ownership, quantities, container state, reservations, security state, and passenger/robot occupancy persist.
 
-## 30. Edge Cases
+## 33. Edge Cases
 
 If cargo is loaded while route is planned, Navigation recalculates cost.
 
@@ -276,7 +317,7 @@ If a passenger is aboard while life support degrades, occupant safety follows sh
 
 If cargo interface is destroyed, cargo remains onboard but transfer may become impossible until repaired or alternative access exists.
 
-## 31. Explicit Non-Goals
+## 34. Explicit Non-Goals
 
 Cargo does not provide:
 
@@ -286,14 +327,14 @@ Cargo does not provide:
 - instant secure status from proximity;
 - arbitrary category conversion.
 
-## 32. Tuneable Parameters
+## 35. Tuneable Parameters
 
 Tuneable values include hold mass/volume, refrigeration power, containment capacity, transfer throughput, passenger count, and utility-bay capacity.
 
-## 33. Dependencies
+## 36. Dependencies
 
 This specification depends on GDS-4 Resource Model, GDS-5 Inventory, Ship Classes/Configuration, Flight/Propulsion, Docking, Missions, Crew Survivor/Recruitment, Robots, and Station Logistics.
 
-## 34. Open Questions
+## 37. Open Questions
 
 None in the cargo/utility baseline.

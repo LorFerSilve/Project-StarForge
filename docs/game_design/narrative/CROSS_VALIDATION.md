@@ -170,10 +170,13 @@ Ending epilogues reflect faction/player relationship without forcing ownership c
 
 Narrative remains first-pass pending:
 
-### GDS-8 Missions
-- exact mission implementation;
-- mission failure/retry;
-- extraction and pacing.
+### GDS-8 Missions — First-Pass Resolved
+
+**Result: PASS**
+
+GDS-8 now maps every canonical main-story Mission ID to a fixed mission archetype, zone composition, mandatory objective chain, extraction rule, failure/retry contract, and story output.
+
+Narrative remains authoritative for the story beats and canon; GDS-8 owns gameplay execution.
 
 ### GDS-9 Combat
 - combat encounters;
@@ -207,4 +210,4 @@ Narrative can be marked:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-GDS-8 can now design mission mechanics against a fixed campaign/world context instead of inventing narrative structure during implementation.
+GDS-8 has now first-pass implemented the fixed campaign/world context as mission-execution contracts. Remaining narrative dependencies are Combat, Robots, Raids, Progression/Persistence, and Presentation.

@@ -210,3 +210,38 @@ A spacecraft state in which the ship is Disabled and lacks normal active operato
 ## Vehicle/Extraction-Secured
 
 A mission-acquired physical resource or item that has been successfully committed to an authorized secure extraction owner such as valid spacecraft cargo but has not necessarily yet been transferred to Station-Secured ownership.
+
+
+## The Fracture
+
+The interstellar infrastructure collapse at 0 AF that disrupted the Transit Lattice, isolated regions, fragmented political authority, and produced the post-collapse world of Project StarForge.
+
+## AF — After Fracture
+
+The primary historical calendar notation used for years after The Fracture.
+
+The game begins in 67 AF.
+
+## Transit Lattice
+
+The pre-Fracture interconnected ecosystem of route relays, navigation observatories, reference infrastructure, autonomous traffic control, and anomaly-prediction systems used to coordinate interstellar travel.
+
+## Strategic Location
+
+A selectable world-map node such as a station, planet orbit, asteroid field, derelict zone, faction facility, relay, or anomaly site.
+
+## Faction Reputation
+
+A persistent independent -100 to +100 relationship value used by standard human major factions to represent how that faction evaluates the player's demonstrated actions.
+
+## The Continuance
+
+A distributed machine-intelligence/infrastructure network descended from pre-Fracture autonomous systems operating fragmented preservation, restoration, and containment directives.
+
+## Horizon Station
+
+The player's persistent home station located in the Aster's Rest System of the Recovery Sector.
+
+## Postgame Resolution State
+
+The persistent world-state outcome created after the campaign finale, including whether the player chose Stabilize, Sever, or Contain and the resulting route/faction/epilogue consequences.

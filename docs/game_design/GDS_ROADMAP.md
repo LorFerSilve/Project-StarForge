@@ -9,7 +9,7 @@ The sequence is dependency-driven: foundational rules are specified before syste
 
 ## GDS-0 — Governance, Structure, and Historical Baseline
 
-**Status:** In Progress
+**Status:** Complete
 
 Deliverables:
 
@@ -53,7 +53,7 @@ Exit criteria:
 
 ## GDS-2 — Home Space Station
 
-**Status:** Planned
+**Status:** In Progress
 
 Authoritative specifications for:
 

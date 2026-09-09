@@ -715,3 +715,100 @@ Narrative importance does not create an unrelated special mission engine.
 ### Rationale
 
 A single mission framework reduces bespoke exceptions and keeps story gameplay consistent with the systemic game.
+
+
+---
+
+## DD-047 — Combat Uses Physical Hit Resolution, Not RPG Hit Rolls
+
+**Status:** Accepted
+
+### Decision
+
+Ranged and melee attacks resolve through traces, projectiles, collision volumes, cover, and actual target hit zones.
+
+There is no secondary hidden hit-chance roll after physical intersection.
+
+### Rationale
+
+StarForge combat should reward aim, positioning, movement, and physical world understanding rather than invisible probability.
+
+---
+
+## DD-048 — Critical Damage Comes From Authored Weak Points
+
+**Status:** Accepted
+
+### Decision
+
+The baseline has no random critical-hit chance.
+
+Critical damage comes from hitting a defined head, weak point, exposed component, or vulnerable subsystem.
+
+### Rationale
+
+Critical performance becomes skill- and knowledge-based rather than luck-based.
+
+---
+
+## DD-049 — Combat Uses Explicit Damage Channels and Deterministic Protection
+
+**Status:** Accepted
+
+### Decision
+
+Combat damage uses Kinetic, Thermal, Explosive, Electrical/EMP, and Corrosive channels.
+
+Protection resolves in deterministic order through Shield, Armor/Protection, and target-specific Health/System/Structure.
+
+### Rationale
+
+This creates understandable weapon/protection tradeoffs and reusable rules for people, machines, ships, and stations.
+
+---
+
+## DD-050 — Ammunition Is Finite and Physically Conserved
+
+**Status:** Accepted
+
+### Decision
+
+Weapons consume finite ammunition or finite energy.
+
+Reloading transfers authoritative ammunition ownership into weapon state and cannot create or refund rounds.
+
+### Rationale
+
+Ammunition preparation, logistics, crafting, and mission failure should remain materially connected to the resource system.
+
+---
+
+## DD-051 — Weapons Progress Through Technology and Configuration, Not Loot Rarity
+
+**Status:** Accepted
+
+### Decision
+
+Weapons are differentiated through model, technology, firing behavior, ammunition, modifications, condition, and manufacturing access.
+
+The baseline does not use random Common/Rare/Epic/Legendary weapon stat tiers.
+
+### Rationale
+
+This preserves Project StarForge's capability-based engineering progression and avoids generic looter-shooter inflation.
+
+---
+
+## DD-052 — Enemy Combat AI Cannot Use Omniscient Knowledge
+
+**Status:** Accepted
+
+### Decision
+
+Enemy combat decisions use perceived or communicated information through vision, hearing, sensors, alerts, and last-known-position memory.
+
+Enemies do not continuously know the player's hidden current position.
+
+### Rationale
+
+Combat difficulty should come from credible tactics and capability rather than AI cheating.

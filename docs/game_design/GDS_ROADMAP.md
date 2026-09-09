@@ -144,7 +144,7 @@ Define:
 
 ## GDS-7 — World, Galaxy, Narrative, and Factions
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -162,7 +162,7 @@ Define:
 
 ## GDS-8 — Missions and Exploration
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

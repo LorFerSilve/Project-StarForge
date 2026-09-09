@@ -278,13 +278,17 @@ GDS-6 owns:
 - disabled/derelict state;
 - repair/recovery.
 
-GDS-9 will own:
+GDS-9 now owns:
 
 - attack resolution;
-- damage types;
+- combat damage channels;
 - penetration;
 - shield overflow;
-- weapon formulas.
+- weapon formulas;
+- subsystem targeting semantics;
+- missile/point-defense combat behavior.
+
+**Result: PASS**
 
 No combat formula is duplicated.
 
@@ -377,15 +381,13 @@ GDS-8 now defines ship mission deployment, landing/docking use within Mission Zo
 
 GDS-6 remains authoritative for the ship's actual flight, cargo, docking, damage, and recovery systems.
 
-### GDS-9 Combat
+### GDS-9 Combat — First-Pass Resolved
 
-Required for:
-- weapons;
-- damage types;
-- shields;
-- armor;
-- collision damage;
-- enemy ship behavior.
+**Result: PASS**
+
+GDS-9 now defines ship weapon families, shield/armor resolution, subsystem targeting, missile/point-defense behavior, collision-damage authority, and generic enemy ship-combat behavior.
+
+GDS-6 remains authoritative for flight, power, thermal state, module condition, Disabled/Derelict state, and recovery.
 
 ### GDS-10 Robots
 

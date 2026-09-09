@@ -348,23 +348,21 @@ Recruited human crew remain non-disposable persistent assets.
 
 Combat can incapacitate/injure them where they participate, but ordinary combat does not override GDS-3 routine no-permadeath rule.
 
-## 35. Robots — Result: PASS WITH DOWNSTREAM DEPENDENCY
+## 35. Robots — Result: PASS
 
-GDS-9 provides generic:
-- hit;
-- damage;
-- EMP;
-- disable;
-- machine targeting.
+GDS-10 now defines:
+- robot classes/chassis roles;
+- component/hit-zone layout;
+- Internal Energy Reserve;
+- robot-specific subsystem disablement;
+- repair/recovery/destruction;
+- tactical squad behavior;
+- finite robot ammunition/energy;
+- player Robot ID persistence.
 
-GDS-10 still must define:
-- robot chassis/classes;
-- component layout;
-- repair;
-- squad behavior;
-- player robot persistence.
+GDS-9 remains authoritative for generic hit, Damage Packets, EMP, armor/shields, weapons, and combat-objective Disable/Destroy semantics.
 
-No robot-specific authority was preempted.
+No authority is duplicated.
 
 ## 36. Raids — Result: PASS WITH DOWNSTREAM DEPENDENCY
 
@@ -440,11 +438,11 @@ Combat resolves attacks; GDS-6 resolves operational consequences/recovery.
 
 GDS-9 remains first-pass pending:
 
-### GDS-10 Robots
-- robot chassis hit zones;
-- player robot combat roles;
-- squad combat AI;
-- robot component disable/repair.
+### GDS-10 Robots — First-Pass Resolved
+
+**Result: PASS**
+
+Robot combat roles, hit-zone/subsystem consequences, squad AI, and repair/loss are now first-pass defined under GDS-10.
 
 ### GDS-11 Raids
 - station-defense combat orchestration;

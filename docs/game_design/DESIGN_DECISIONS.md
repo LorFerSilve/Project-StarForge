@@ -812,3 +812,100 @@ Enemies do not continuously know the player's hidden current position.
 ### Rationale
 
 Combat difficulty should come from credible tactics and capability rather than AI cheating.
+
+
+---
+
+## DD-053 — Player Robots Are Physical Persistent Manufactured Units
+
+**Status:** Accepted
+
+### Decision
+
+Player-owned robots have persistent Robot IDs, physical locations, components, energy, condition, and deployment state.
+
+They are not abstract troop cards or instant-summon effects.
+
+### Rationale
+
+This keeps robots consistent with the station, resource, spacecraft, mission, and physical-world simulation.
+
+---
+
+## DD-054 — Robots Can Be Permanently Destroyed Through Ordinary Gameplay
+
+**Status:** Accepted
+
+### Decision
+
+Unlike recruited human crew, robots do not receive routine permanent-loss protection.
+
+A Destroyed robot's original Robot ID cannot be repaired back into service; replacement requires a new manufactured/acquired unit.
+
+### Rationale
+
+Robots are the repeatable tactical force and must carry meaningful manufacturing, recovery, and attrition consequences without making human survivors disposable.
+
+---
+
+## DD-055 — Robot Deployment Uses Separate Command and Transport Constraints
+
+**Status:** Accepted
+
+### Decision
+
+Active field robots are limited by both Tactical Control Capacity and actual spacecraft transport/support capacity.
+
+A robot can fit physically but exceed command capacity, or fit command capacity but lack transport.
+
+### Rationale
+
+This creates strategic squad composition and ship-design tradeoffs without one arbitrary global troop-count cap.
+
+---
+
+## DD-056 — Tactical Control Capacity Is Capability, Not Currency
+
+**Status:** Accepted
+
+### Decision
+
+Each robot has Command Load and the active squad must remain within available Tactical Control Capacity.
+
+TCC is a command-system capability and is not spent or traded as a physical/economic resource.
+
+### Rationale
+
+Command complexity should limit simultaneous deployment without creating another artificial progression currency.
+
+---
+
+## DD-057 — Robot AI Uses Bounded Autonomy and Explicit Fallback Orders
+
+**Status:** Accepted
+
+### Decision
+
+Player robots execute direct commands and role autonomy using only sensed/communicated information.
+
+When disconnected, they follow a preconfigured fallback rather than receiving magical live orders.
+
+### Rationale
+
+This makes communication, EMP, positioning, and control infrastructure mechanically meaningful while preventing omniscient companion AI.
+
+---
+
+## DD-058 — Robot Progression Is Component-Based, Not Level/Rarity-Based
+
+**Status:** Accepted
+
+### Decision
+
+Robot capability advances through chassis, hardware components, software packages, weapons/tools, Research, Blueprints, and configuration.
+
+The baseline does not use generic Robot Levels or Common/Rare/Epic/Legendary robot tiers.
+
+### Rationale
+
+This preserves StarForge's engineering-oriented capability progression and keeps robot strengths explainable through physical design.

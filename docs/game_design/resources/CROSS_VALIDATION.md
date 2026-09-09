@@ -270,12 +270,13 @@ GDS-6 now defines ship cargo ownership, Mass + Volume capacity, Fuel vs Propella
 
 Ship construction explicitly reuses GDS-4 resources, Blueprints, Research, and production chains without introducing undefined generic ship materials.
 
-### World
+### World — First-Pass Resolved by GDS-7
 
-Required for:
-- exact geographic distribution;
-- biome/deposit tables;
-- faction ownership of resources.
+**Result: PASS**
+
+GDS-7 defines biome/location resource plausibility, canonical campaign systems, faction-controlled industrial hubs, and sector progression bands while using only existing GDS-4 Resource IDs.
+
+Exact numeric deposit weights remain tuneable content data.
 
 ### Missions
 

@@ -76,4 +76,4 @@ GDS-8 establishes:
 
 GDS-8 is not yet Design Complete.
 
-Combat, Robots, Raids, Economy/Progression/Difficulty/Persistence, and Presentation must still cross-validate their mission-facing behavior.
+Combat and Robots are now first-pass cross-validated against GDS-8. Raids, Economy/Progression/Difficulty/Persistence, and Presentation remain downstream mission dependencies.

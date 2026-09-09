@@ -231,3 +231,66 @@ Locations and enemies have intended threat ranges rather than automatically matc
 ### Rationale
 
 Fixed and bounded threat structure preserves meaningful danger, progression, preparation, and the feeling that previously difficult content has become easier through advancement.
+
+
+---
+
+## DD-016 — Crew Quality Is Not Represented by Loot Rarity
+
+**Status:** Accepted
+
+### Decision
+
+Recruited crew does not use generic Common, Rare, Epic, or Legendary tiers as the primary measure of character quality.
+
+Crew value comes from profession, skills, traits, background, special knowledge, and earned progression.
+
+### Rationale
+
+Crew members are intended to feel like persistent people and specialists rather than collectible loot cards.
+
+---
+
+## DD-017 — Crew Has Finite Assignment Workload
+
+**Status:** Accepted
+
+### Decision
+
+A crew member has one Primary Assignment at a time and finite workload capacity.
+
+Higher skill can improve supervision capacity, but no specialist can provide unlimited coverage.
+
+### Rationale
+
+This preserves meaningful staffing, redundancy, specialization, and emergency tradeoffs as the station grows.
+
+---
+
+## DD-018 — Crew Needs Are Station-Level, Not Life-Sim Micromanagement
+
+**Status:** Accepted
+
+### Decision
+
+Crew requires habitation, food, water, breathable atmosphere, safe temperature, and medical support, but the game does not require individual hunger, thirst, happiness, or minute-by-minute sleep management.
+
+### Rationale
+
+Crew support should reinforce station engineering and population planning without turning Project StarForge into a detailed social-survival simulator.
+
+---
+
+## DD-019 — Crew Progresses Through Skills and Training, Not a Generic Crew Level
+
+**Status:** Accepted
+
+### Decision
+
+Crew competence progresses through skill-specific experience, training, mentorship, and special knowledge.
+
+There is no generic crew level that replaces professional skill.
+
+### Rationale
+
+Skill-specific progression preserves meaningful specialization and makes a crew member's history of work mechanically legible.

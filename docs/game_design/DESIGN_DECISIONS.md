@@ -527,3 +527,96 @@ Ships may be damaged, disabled, stranded, or recovered. Permanent ship loss requ
 ### Rationale
 
 Ships are long-term configurable progression assets analogous to the home station and recruited crew, not disposable lives.
+
+
+---
+
+## DD-035 — The Game Begins 67 Years After The Fracture
+
+**Status:** Accepted
+
+### Decision
+
+Project StarForge begins in 67 AF (After Fracture), in a fragmented but recovering interstellar human civilization.
+
+### Rationale
+
+A fixed historical era provides consistent technological loss, faction emergence, survivor context, and infrastructure decay without requiring total civilizational extinction.
+
+---
+
+## DD-036 — The Fracture Has a Multi-Causal Canonical Explanation
+
+**Status:** Accepted
+
+### Decision
+
+The Fracture resulted from interacting anomalous route physics, Transit Lattice coupling, human emergency intervention, conflicting autonomous containment directives, and subsequent institutional suppression.
+
+No single villain or faction caused the entire event.
+
+### Rationale
+
+This preserves the mystery while supporting faction disagreement, technical investigation, and a more credible systemic disaster.
+
+---
+
+## DD-037 — The Campaign Uses a Fixed Geographic Backbone
+
+**Status:** Accepted
+
+### Decision
+
+The base campaign uses fixed named sectors, systems, faction hubs, story locations, and Reach I–IV routes defined in `world/canonical_region_map.md`.
+
+Procedural side content may expand around that backbone but cannot randomize away mandatory campaign geography.
+
+### Rationale
+
+Mission design should not have to invent or relocate core world structure during implementation.
+
+---
+
+## DD-038 — Major Human Factions Use Independent Reputation
+
+**Status:** Accepted
+
+### Decision
+
+Helios Directorate, Meridian Compact, Asterion Institute, Freehold Coalition, and Blackwake Corsairs use separate -100 to +100 player reputation values.
+
+The Continuance uses node/authentication states instead of human-style reputation.
+
+### Rationale
+
+Faction relations should represent demonstrated history with each group rather than one global morality score.
+
+---
+
+## DD-039 — The Main Campaign Uses Convergent Branching
+
+**Status:** Accepted
+
+### Decision
+
+Faction choices, mission approaches, relationships, and local outcomes may branch, while the core Fracture investigation converges on a shared late-game crisis.
+
+### Rationale
+
+This preserves meaningful agency while keeping campaign scope achievable and coherent.
+
+---
+
+## DD-040 — The Finale Offers Stabilize, Sever, or Contain
+
+**Status:** Accepted
+
+### Decision
+
+The Second Cascade is resolved through one of three strategic outcomes: Stabilize, Sever, or Contain.
+
+There is no hidden fourth ending that removes all tradeoffs.
+
+### Rationale
+
+The ending should reflect the game's themes of connectivity, safety, autonomy, and knowledge rather than collapse into a single objectively perfect answer.

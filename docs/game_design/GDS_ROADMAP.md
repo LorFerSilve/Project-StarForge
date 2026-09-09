@@ -178,7 +178,7 @@ Define:
 
 ## GDS-9 — Combat
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -192,7 +192,7 @@ Define:
 
 ## GDS-10 — Robots
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

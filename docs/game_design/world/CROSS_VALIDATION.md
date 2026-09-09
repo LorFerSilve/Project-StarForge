@@ -214,4 +214,4 @@ World/Factions can be marked:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-Exact named system catalog, final route counts, and balance distributions remain content/balance work within the fixed framework rather than unresolved system rules.
+The canonical campaign system/route backbone is now fixed in `canonical_region_map.md`. Side-content node counts, optional procedural locations, and balance distributions remain tuneable content data within that fixed framework.

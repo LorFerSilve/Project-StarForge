@@ -221,15 +221,19 @@ GDS-5 defines:
 - recovery;
 - player shield/equipment existence.
 
-GDS-9 will define:
+GDS-9 now defines:
 
-- hit detection;
-- damage types;
+- physical hit detection;
+- combat damage channels;
 - attack resolution;
-- armor/shield combat formulas;
-- weapon behavior.
+- deterministic shield overflow;
+- armor penetration/mitigation;
+- weapon/ammunition behavior;
+- status effects.
 
-No conflicting combat formula has been preemptively hard-coded.
+**Result: PASS**
+
+GDS-5 remains authoritative for biological Health, Incapacitation, equipment state, and recovery, so no damage authority is duplicated.
 
 ## 17. Personal Shield vs Station Shield — Result: PASS
 
@@ -396,4 +400,4 @@ GDS-5 can be marked:
 
 GDS-6 Spacecraft has now been first-pass cross-validated.
 
-The next unresolved player-facing dependencies are Combat, Economy, Presentation/Accessibility, and Persistence.
+The next unresolved player-facing dependencies are Economy, Presentation/Accessibility, and Persistence.

@@ -1,6 +1,6 @@
 # Home Station Design
 
-> **Domain Status:** In Progress
+> **Domain Status:** First-Pass Complete — Cross-Validation Pending
 
 Authoritative design domain for the player's persistent home space station.
 

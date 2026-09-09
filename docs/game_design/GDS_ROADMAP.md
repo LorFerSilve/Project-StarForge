@@ -162,7 +162,7 @@ Define:
 
 ## GDS-8 — Missions and Exploration
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -178,7 +178,7 @@ Define:
 
 ## GDS-9 — Combat
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

@@ -192,14 +192,13 @@ GDS-9 now defines physical hit resolution, damage channels, shields/armor, statu
 
 Crew remains governed by GDS-3 injury/incapacitation and no-routine-permadeath rules; combat does not turn human crew into disposable units.
 
-### Robots
+### Robots — First-Pass Resolved by GDS-10
 
-Required for:
+**Result: PASS**
 
-- repair-drone supervision;
-- security robots;
-- Robotics Specialist;
-- crew-to-robot supervision ratios.
+GDS-10 now defines Repair Drones, Security Sentinels, robot manufacturing/maintenance, bounded robot AI, and the Robotics Specialist supervision boundary.
+
+Robotics Specialists improve diagnostics, production supervision, maintenance, and advanced fleet support but do not bypass missing parts, tools, access, or physical capability.
 
 ### Narrative / Factions — First-Pass Resolved by GDS-7
 
@@ -236,7 +235,6 @@ The crew domain can therefore remain the authoritative first-pass dependency for
 
 This audit must be revisited after completion of:
 
-1. GDS-10 Robots;
-2. relevant cross-cutting time/persistence specifications.
+1. relevant cross-cutting time/persistence specifications.
 
 Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.

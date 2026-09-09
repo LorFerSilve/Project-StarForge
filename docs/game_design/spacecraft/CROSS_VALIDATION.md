@@ -361,14 +361,13 @@ Cargo can provide secure extraction ownership without automatically completing a
 
 GDS-6 remains first-pass pending:
 
-### GDS-7 World / Galaxy / Factions
+### GDS-7 World / Galaxy / Factions — First-Pass Resolved
 
-Required for:
-- actual route graph;
-- location types;
-- faction ship designs;
-- exact ship acquisition sources;
-- environmental flight contexts.
+**Result: PASS**
+
+GDS-7 now defines the canonical campaign route graph, Strategic Locations, sector Reach bands, faction ship identity, major shipyard/service hubs, and planetary/space location contexts.
+
+Exact economy acquisition prices remain GDS-12 authority.
 
 ### GDS-8 Missions
 

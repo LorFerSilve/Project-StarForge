@@ -278,3 +278,38 @@ A persistent non-physical entitlement representing a physical mission-resolution
 ## Extraction Required
 
 A mission rule stating that completing primary objectives alone is insufficient for Success and that an authorized extraction transaction must also commit.
+
+
+## Damage Packet
+
+The authoritative combat event produced after a valid hit, containing damage channel components, penetration, hit location, impulse, status payloads, and source/target identity.
+
+## Penetration
+
+An attack property that reduces the relevant Armor/Protection Rating before mitigation is calculated.
+
+Penetration does not directly add bonus damage.
+
+## Weak Point
+
+An authored physical or sensor-discoverable target zone that produces an explicitly defined damage multiplier or subsystem consequence when hit.
+
+## Shield Cost Multiplier
+
+A per-damage-channel coefficient determining how much Shield Capacity is consumed to absorb incoming damage.
+
+## Combat Disabled
+
+A target state satisfying an explicitly defined combat-disable condition such as loss of mobility, weapons, control, power, or general operational capability without requiring destruction.
+
+## Last Known Position
+
+The most recent player/target position credibly perceived or communicated to an AI actor, retained with confidence that decays when no new information is obtained.
+
+## Tactical Reload
+
+A reload performed while ammunition remains loaded, preserving existing loaded rounds and transferring only the compatible amount needed from reserve.
+
+## Clear Area
+
+A combat-objective resolution condition in which no qualifying hostile actor capable of immediate combat remains inside the defined objective area under that objective's explicit rules.

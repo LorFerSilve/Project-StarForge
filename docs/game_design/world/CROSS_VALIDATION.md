@@ -178,11 +178,13 @@ Ancient technology does not imply a mandatory active spacefaring alien empire.
 
 World/Factions remain first-pass pending:
 
-### GDS-8 Missions
-- exact location instance generation;
-- hazards;
-- mission persistence;
-- dynamic survivor placement.
+### GDS-8 Missions — First-Pass Resolved
+
+**Result: PASS**
+
+GDS-8 now defines bounded instance generation, Mission Zones, local environmental hazards, mission persistence, exploration/POI states, and stable procedural survivor placement.
+
+Generated content is constrained by GDS-7 biome, faction, route, resource, and canonical-story geography.
 
 ### GDS-9 Combat
 - faction enemy behavior;

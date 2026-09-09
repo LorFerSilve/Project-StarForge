@@ -142,3 +142,36 @@ Research Evidence can satisfy project requirements but is not spent like currenc
 A property of a resource deposit describing the amount of canonical resource recovered per unit of extraction work.
 
 Yield Grade is not a separate inventory-quality tier.
+
+
+## Field-Unsecured
+
+A physical resource or item acquired during an external mission that has not yet been committed to an authorized secure extraction owner.
+
+Field-Unsecured loot is subject to ordinary mission-failure loss.
+
+## Secured Loadout
+
+Physical equipment, ammunition, consumables, tools, or supplies already owned before mission deployment and committed from persistent station/ship inventory.
+
+Ordinary mission defeat preserves the unconsumed recovered portion according to Player Inventory rules.
+
+## Heavy Load
+
+A player movement state entered when carried Mass exceeds the backpack's soft-load threshold while remaining below hard capacity.
+
+Heavy Load can reduce sprint and jump performance.
+
+## Life-Support Reserve
+
+The finite consumable capacity of a sealed player suit used to maintain breathable internal atmosphere when the external environment is unsafe.
+
+It is distinct from electrical Suit Energy.
+
+## Suit Energy
+
+Finite electrical energy available to active player-suit systems such as thermal regulation, zero-gravity thrusters, personal shields, scanners, and powered tools.
+
+## Incapacitated
+
+A player or crew health state in which normal movement, work, and direct action are unavailable until rescue, stabilization, or recovery occurs.

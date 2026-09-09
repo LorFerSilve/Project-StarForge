@@ -294,3 +294,80 @@ There is no generic crew level that replaces professional skill.
 ### Rationale
 
 Skill-specific progression preserves meaningful specialization and makes a crew member's history of work mechanically legible.
+
+
+---
+
+## DD-020 — Physical Resources Have Single Authoritative Ownership
+
+**Status:** Accepted
+
+### Decision
+
+Every physical resource quantity exists at exactly one authoritative physical owner/location at any moment.
+
+Reservation and UI aggregation do not duplicate ownership.
+
+### Rationale
+
+This prevents resource duplication and keeps mission loot, ship cargo, station storage, manufacturing, and logistics mechanically consistent.
+
+---
+
+## DD-021 — Materials Do Not Use Loot-Rarity Quality Tiers
+
+**Status:** Accepted
+
+### Decision
+
+Canonical resources do not have Common, Rare, Epic, or Legendary quality variants.
+
+Scarcity comes from deposit richness, location, acquisition difficulty, processing requirements, and technology access.
+
+### Rationale
+
+This avoids inventory clutter and preserves readable industrial production chains.
+
+---
+
+## DD-022 — Research Uses Persistent Evidence, Not Spendable Science Points
+
+**Status:** Accepted
+
+### Decision
+
+Research progression is gated by persistent non-consumable Research Evidence, unique discoveries, laboratory work, and prerequisites rather than a universal spendable Science Point currency.
+
+### Rationale
+
+Exploration discoveries remain meaningful and research feels like accumulated knowledge rather than another generic resource bar.
+
+---
+
+## DD-023 — Blueprint Knowledge Is Distinct From Technology Research
+
+**Status:** Accepted
+
+### Decision
+
+Research determines whether the player understands an underlying technology, while Blueprints determine whether the player possesses a specific design.
+
+Possessing one does not automatically imply possession of the other.
+
+### Rationale
+
+This creates clearer progression and supports discovery, reverse engineering, faction rewards, and research without collapsing every unlock into one tree.
+
+---
+
+## DD-024 — Production Chains Must Prevent Infinite Material Loops
+
+**Status:** Accepted
+
+### Decision
+
+Recycling and transformation chains may recover resources but cannot create net free physical material through closed loops.
+
+### Rationale
+
+Station automation should create efficiency and self-sufficiency, not exploitable resource duplication.

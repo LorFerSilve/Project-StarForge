@@ -245,3 +245,36 @@ The player's persistent home station located in the Aster's Rest System of the R
 ## Postgame Resolution State
 
 The persistent world-state outcome created after the campaign finale, including whether the player chose Stabilize, Sever, or Contain and the resulting route/faction/epilogue consequences.
+
+
+## Mission ID
+
+A persistent unique identifier for one authored or procedural mission and its lifecycle, objectives, generation data, outcomes, and reward state.
+
+## Mission Instance
+
+The currently deployed runtime/persistent mission state associated with a Mission ID, including active zones, objective state, spawned entities, discoveries, hazards, and mission-specific world changes.
+
+## Objective ID
+
+A mission-local unique identifier for one objective and its prerequisites, state, completion condition, and failure condition.
+
+## Point of Interest — POI
+
+A discoverable local mission/world site such as a resource deposit, wreck, signal, survivor location, anomaly, cache, or structure.
+
+## Overall Threat
+
+The highest currently known value among a mission's Hostile Threat, Environmental Threat, Operational Complexity, and Extraction Risk axes.
+
+## Extraction Point
+
+An authorized physical or logical mission exit that can commit a defined extraction transition when its requirements are satisfied.
+
+## Reward Delivery Claim
+
+A persistent non-physical entitlement representing a physical mission-resolution reward that has been earned but not yet delivered into a valid physical inventory owner.
+
+## Extraction Required
+
+A mission rule stating that completing primary objectives alone is insufficient for Success and that an authorized extraction transaction must also commit.

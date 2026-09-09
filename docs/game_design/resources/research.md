@@ -370,7 +370,84 @@ Unlocks alien biological analysis and advanced medical/biological research.
 Requires analyzed Ancient Technology Core + Xenotechnology Evidence.  
 Unlocks ancient-technology research branch rather than a single universal item.
 
-## 24. Evidence Accumulation
+## 24. Canonical Sample Analysis Procedures
+
+The following baseline analyses are authoritative:
+
+### ANALYSIS_VOLTAIC_CRYSTAL
+
+Physical Input:
+- 1 Voltaic Crystal
+
+Procedure:
+- Destructive
+
+Output:
+- Evidence Record: EVID_VOLTAIC_CRYSTAL
+
+Evidence:
+- Materials: 2
+- Energy: 2
+- Anomaly Physics: 1
+
+The analyzed physical crystal is consumed.
+
+### ANALYSIS_EXOTIC_MATTER
+
+Physical Input:
+- 1 Exotic Matter Sample
+
+Procedure:
+- Destructive
+
+Output:
+- Evidence Record: EVID_EXOTIC_MATTER
+
+Evidence:
+- Anomaly Physics: 4
+- Energy: 1
+
+The analyzed sample is consumed.
+
+### ANALYSIS_ALIEN_BIOMATERIAL
+
+Physical Input:
+- 1 Alien Biomaterial
+
+Procedure:
+- Destructive
+
+Output:
+- Evidence Record: EVID_ALIEN_BIOMATERIAL
+
+Evidence:
+- Life Science: 3
+- Medicine: 1
+- Xenotechnology: 1
+
+The analyzed sample is consumed.
+
+### ANALYSIS_ANCIENT_CORE
+
+Physical Input:
+- 1 Ancient Technology Core
+
+Procedure:
+- Non-Destructive but Securely Occupied During Analysis
+
+Output:
+- Evidence Record: EVID_ANCIENT_CORE
+
+Evidence:
+- Xenotechnology: 4
+- Electronics and Computing: 2
+- Anomaly Physics: 2
+
+The Ancient Technology Core remains a physical strategic item after successful analysis.
+
+While analysis is active, it is reserved and unavailable to another project.
+
+## 25. Evidence Accumulation
 
 Evidence values are persistent and cumulative.
 
@@ -380,13 +457,13 @@ Every Evidence ID has one authoritative acquisition state.
 
 Procedural discoveries may generate distinct evidence records only when world/mission rules classify them as scientifically distinct.
 
-## 25. Duplicate Data
+## 26. Duplicate Data
 
 Recovering an identical already-integrated data record does not increase Evidence Value again.
 
 It can still have economic/salvage value where relevant.
 
-## 26. Research Discovery
+## 27. Research Discovery
 
 Projects become visible through:
 
@@ -397,13 +474,13 @@ Projects become visible through:
 
 Hidden projects are not shown as unexplained locked silhouettes unless presentation intentionally uses a general undiscovered indicator.
 
-## 27. Research and Crew Special Knowledge
+## 28. Research and Crew Special Knowledge
 
 Crew Special Knowledge can satisfy explicit project eligibility requirements or improve analysis.
 
 It does not automatically add arbitrary Evidence Value unless the knowledge definition says it represents already-integrated evidence.
 
-## 28. Research and Blueprints
+## 29. Research and Blueprints
 
 Research can output Blueprint Unlocks.
 
@@ -411,7 +488,7 @@ Recovered blueprints can also reveal new research projects.
 
 This creates two-way interaction without merging the concepts.
 
-## 29. Research UI
+## 30. Research UI
 
 The research interface shows:
 
@@ -427,13 +504,13 @@ The research interface shows:
 - outputs;
 - blocking conditions.
 
-## 30. Persistence
+## 31. Persistence
 
 Evidence, project visibility, progress, queues, consumed inputs, completed technologies, and outputs persist.
 
 Save/load cannot duplicate completion or evidence.
 
-## 31. Edge Cases
+## 32. Edge Cases
 
 If a Scientist becomes incapacitated, affected project pauses or reassigns.
 
@@ -443,7 +520,7 @@ If a unique physical sample is consumed but the project is interrupted afterward
 
 If evidence threshold is later exceeded, previously Blocked projects update immediately.
 
-## 32. Progression Philosophy
+## 33. Progression Philosophy
 
 Early research improves basic station self-sufficiency and manufacturing.
 
@@ -451,7 +528,7 @@ Mid-game research branches into nuclear/fusion, robotics, defense, advanced mate
 
 Late-game research depends increasingly on unique exploration evidence, exotic resources, faction technology, and ancient systems.
 
-## 33. Explicit Non-Goals
+## 34. Explicit Non-Goals
 
 Research does not use:
 
@@ -462,15 +539,15 @@ Research does not use:
 - one Scientist supervising unlimited projects;
 - automatic access to every blueprint in a researched field.
 
-## 34. Tuneable Parameters
+## 35. Tuneable Parameters
 
 Tuneable values include evidence thresholds, Research Work requirements, lab throughput, Scientist modifiers, and parallel-capacity limits.
 
-## 35. Dependencies
+## 36. Dependencies
 
 This specification depends on Resource Model, Resource Catalog, Blueprints, Processing, station power/thermal/manufacturing, Crew Scientist/skills/assignments, missions, world, factions, narrative, and progression.
 
-## 36. Open Questions
+## 37. Open Questions
 
 None in the research-framework baseline.
 

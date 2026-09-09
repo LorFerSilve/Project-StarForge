@@ -154,6 +154,22 @@ Uses: high-power coils, advanced reactors, engines, shields
 
 # 5. Energy and Operational Resources
 
+## RES_OP_FRESH_WATER — Fresh Water
+
+Class: Physical Bulk Resource  
+State: Fluid  
+Primary Sources: Water Ice processing, station wastewater recycling, trade/recovery  
+Uses: crew support, farming, oxygen generation, coolant/propellant/deuterium processing
+
+## RES_OP_WASTEWATER — Wastewater
+
+Class: Physical Bulk Resource  
+State: Fluid  
+Primary Sources: crew/farming/compatible station processes  
+Uses: station water recycling back into Fresh Water
+
+Wastewater is not a crafting ingredient unless an explicit future process requires it. Its primary authority remains the station water-recycling system.
+
 ## RES_ENR_URANIUM_FUEL — Uranium Fuel Rod
 
 Class: Discrete Component  

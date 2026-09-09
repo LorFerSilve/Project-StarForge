@@ -13,9 +13,9 @@ Authoritative design domain for the player's persistent home space station.
 - [`atmosphere_and_oxygen.md`](atmosphere_and_oxygen.md) — **Draft**
 - [`thermal_systems.md`](thermal_systems.md) — **Draft**
 - [`water.md`](water.md) — **Draft**
-- `farming_and_food.md` — planned
-- `storage_and_logistics.md` — planned
-- `manufacturing.md` — planned
+- [`farming_and_food.md`](farming_and_food.md) — **Draft**
+- [`storage_and_logistics.md`](storage_and_logistics.md) — **Draft**
+- [`manufacturing.md`](manufacturing.md) — **Draft**
 - `damage_and_repairs.md` — planned
 - `automation.md` — planned
 - `defenses.md` — planned

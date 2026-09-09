@@ -59,9 +59,26 @@ Industrial equipment can include:
 - chemical processor;
 - food processor;
 - ammunition plant;
-- advanced component assembler.
+- advanced component assembler;
+- Robot Assembly Bay.
 
 Technology progression may add new classes.
+
+### Robot Assembly Bay
+
+The Robot Assembly Bay is the station manufacturing capability used to assemble and commission persistent GDS-10 robots.
+
+It provides:
+
+- heavy/robot-scale assembly workspace;
+- component installation support;
+- control/software initialization;
+- diagnostics;
+- commissioning/output interface.
+
+GDS-10 owns robot recipes, Robot ID creation, configuration validation, and robot-specific commissioning rules.
+
+The Robot Assembly Bay still obeys this document's normal power, thermal, logistics, queue, work-in-progress, damage, and output-blocking rules.
 
 ## 5. Machine Local Storage
 

@@ -186,10 +186,13 @@ GDS-8 now defines bounded instance generation, Mission Zones, local environmenta
 
 Generated content is constrained by GDS-7 biome, faction, route, resource, and canonical-story geography.
 
-### GDS-9 Combat
-- faction enemy behavior;
-- local hostility resolution;
-- native/hostile combat entities.
+### GDS-9 Combat — First-Pass Resolved
+
+**Result: PASS**
+
+GDS-9 now defines generic faction/hostile combat behavior, non-omniscient perception, local engagement/disengagement, human/machine/wildlife combat-actor boundaries, and damage/weapon behavior.
+
+GDS-7 remains authoritative for faction identity and world placement.
 
 ### GDS-11 Raids
 - territory assaults;

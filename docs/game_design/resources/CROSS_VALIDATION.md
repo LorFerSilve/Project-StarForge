@@ -294,11 +294,13 @@ GDS-9 now defines finished ammunition classes, weapon/armor/shield equipment beh
 
 Exact per-model crafting recipes and enemy salvage quantities remain content/balance work under GDS-4/GDS-12 rather than unresolved combat rules.
 
-### Robots
+### Robots — First-Pass Resolved by GDS-10
 
-Required for:
-- robot finished-component recipes;
-- robot salvage tables.
+**Result: PASS**
+
+GDS-10 now defines robot chassis/component manufacturing inputs, physical component installation, repair consumption, dismantling, wreck recovery, and salvage ownership.
+
+Exact per-model recipe quantities and salvage yields remain GDS-4/GDS-12 content/balance data rather than unresolved robot rules.
 
 ### Economy
 

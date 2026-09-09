@@ -278,13 +278,13 @@ GDS-7 defines biome/location resource plausibility, canonical campaign systems, 
 
 Exact numeric deposit weights remain tuneable content data.
 
-### Missions
+### Missions — First-Pass Resolved by GDS-8
 
-Required for:
-- extraction;
-- mission loot persistence;
-- salvage/mining objectives;
-- securing Field-Unsecured resources.
+**Result: PASS**
+
+GDS-8 now defines mission loot persistence, mining/salvage objective use, Field-Unsecured ownership, Vehicle/Extraction-Secured transitions, mission reward claims, and failure/abandonment consequences.
+
+GDS-4 remains authoritative for physical resource identity, yield, ownership conservation, and Research/Blueprint knowledge.
 
 ### Combat
 

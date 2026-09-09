@@ -332,14 +332,13 @@ Mission defeat uses one deterministic inventory transaction.
 
 GDS-5 remains first-pass pending future cross-validation.
 
-### Spacecraft
+### Spacecraft — First-Pass Resolved by GDS-6
 
-Required for:
-- cockpit/control transitions;
-- ship cargo transfer;
-- ship life-support refill;
-- EVA around moving ships;
-- boarding transitions.
+**Result: PASS**
+
+GDS-6 now defines cockpit/ship control context, ship cargo transfer, finite life-support refill, EVA ship-repair context, local flight, and docking/boarding physical preconditions.
+
+These rules are compatible with GDS-5 player inventory, controls, Field Survival, and zero-gravity movement.
 
 ### World
 
@@ -394,4 +393,6 @@ GDS-5 can be marked:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The next dependency-driven phase is GDS-6 Spacecraft.
+GDS-6 Spacecraft has now been first-pass cross-validated.
+
+The next unresolved player-facing dependencies are World, Missions, Combat, Economy, Presentation/Accessibility, and Persistence.

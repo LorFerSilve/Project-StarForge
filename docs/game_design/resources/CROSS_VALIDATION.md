@@ -262,13 +262,13 @@ GDS-5 now defines Mass + Volume portable inventory, hard/soft carrying limits, m
 
 These rules preserve GDS-4 physical ownership and conservation.
 
-### Spacecraft
+### Spacecraft — First-Pass Resolved by GDS-6
 
-Required for:
-- cargo;
-- fuel/propellant usage;
-- ship-component recipes;
-- extraction securing.
+**Result: PASS**
+
+GDS-6 now defines ship cargo ownership, Mass + Volume capacity, Fuel vs Propellant behavior, canonical propulsion inputs, spacecraft configuration, and Vehicle/Extraction-Secured cargo commits.
+
+Ship construction explicitly reuses GDS-4 resources, Blueprints, Research, and production chains without introducing undefined generic ship materials.
 
 ### World
 

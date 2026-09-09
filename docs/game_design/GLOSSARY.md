@@ -1,0 +1,72 @@
+# Glossary
+
+> **Status:** Draft  
+> **Authority:** Project-wide game-design terminology
+
+This glossary standardizes terminology used throughout Project StarForge.
+
+A subsystem specification may introduce additional local terms, but it must not redefine a glossary term with a conflicting meaning.
+
+## Automation
+
+The delegation of recurring operational tasks to crew, robots, machinery, or control systems according to defined rules.
+
+## Crew
+
+A recruited persistent character assigned to the player's station or an authorized expedition role.
+
+A rescued survivor is not automatically crew until recruitment is completed.
+
+## Design Complete
+
+A specification state indicating that all implementation-relevant gameplay behavior is defined and no unresolved design question requires an implementer to invent intended behavior.
+
+See [Design Authority](00_design_authority.md).
+
+## Expedition
+
+A player operation outside the home station undertaken to complete objectives such as exploration, resource gathering, salvage, rescue, research, defense, or combat.
+
+## Home Station
+
+The player's persistent, physically traversable, modular space station and primary progression hub.
+
+## Mission
+
+A structured gameplay objective or set of objectives with defined entry conditions, success conditions, failure rules, and rewards.
+
+## Mission Zone
+
+A bounded playable 3D environment used for mission gameplay.
+
+A mission zone is not assumed to represent an entire seamless planet, moon, asteroid, or station at real scale.
+
+## Module
+
+A structural or functional building unit integrated into a space station.
+
+## Raid
+
+An offensive operation against a hostile station or comparable fortified installation in which the player may attack external defenses, board the target, fight internally, sabotage infrastructure, acquire objectives or resources, and extract.
+
+## Robot
+
+A manufactured autonomous or semi-autonomous machine used for station operations, combat, support, or tactical deployment.
+
+## Sector
+
+A strategic subdivision of navigable game space containing one or more relevant systems, locations, routes, or points of interest.
+
+## Station System
+
+A connected operational network or functional domain within a station, such as power, atmosphere, thermal control, logistics, security, or production.
+
+## Survivor
+
+A non-hostile character encountered outside the player's established crew structure who can potentially be rescued, assisted, or recruited.
+
+## Tuneable Parameter
+
+A numerical or data-driven value intended to be adjustable during balancing without redefining the underlying gameplay rule.
+
+Examples include damage, duration, capacity, range, production speed, and resource yield.

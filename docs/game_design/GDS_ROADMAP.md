@@ -53,7 +53,7 @@ Exit criteria:
 
 ## GDS-2 — Home Space Station
 
-**Status:** In Progress
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Authoritative specifications for:
 
@@ -75,7 +75,7 @@ Authoritative specifications for:
 
 ## GDS-3 — Survivors and Crew
 
-**Status:** Planned
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Authoritative specifications for:
 
@@ -92,7 +92,7 @@ Authoritative specifications for:
 
 ## GDS-4 — Resources, Processing, Crafting, and Research
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

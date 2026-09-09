@@ -14,29 +14,31 @@ No subsystem is considered implementation-ready merely because its concept is me
 
 - [Design Authority](00_design_authority.md)
 - [Game Overview](01_game_overview.md)
+- [Global Game Rules](02_global_game_rules.md)
+- [GDS Roadmap](GDS_ROADMAP.md)
+- [Structure Audit](STRUCTURE_AUDIT.md)
 - [Glossary](GLOSSARY.md)
 - [Design Decisions](DESIGN_DECISIONS.md)
 - [Subsystem Specification Template](SPECIFICATION_TEMPLATE.md)
 
-## Planned Design Domains
+## Authoritative Design Domains
 
-The specification will be decomposed into authoritative thematic domains:
+- [World](world/)
+- [Narrative](narrative/)
+- [Player](player/)
+- [Combat](combat/)
+- [Home Station](station/)
+- [Crew](crew/)
+- [Spacecraft](spacecraft/)
+- [Resources, Crafting & Research](resources/)
+- [Missions](missions/)
+- [Robots](robots/)
+- [Raids](raids/)
+- [Progression](progression/)
+- [Cross-Cutting Systems](systems/)
+- [Presentation](presentation/)
 
-- `world/`
-- `player/`
-- `combat/`
-- `station/`
-- `crew/`
-- `spacecraft/`
-- `resources/`
-- `missions/`
-- `robots/`
-- `raids/`
-- `progression/`
-- `systems/`
-- `presentation/`
-
-These directories are created progressively as their first authoritative specifications are introduced. Empty directories are intentionally not tracked.
+Historical, superseded design material is preserved under [`history/`](history/) and is not authoritative.
 
 ## Documentation Rule
 
@@ -53,3 +55,9 @@ Implementation of a subsystem may begin only when:
 3. no unresolved design question can force the implementer to invent gameplay behavior;
 4. known edge cases and failure states are specified;
 5. tuneable balancing parameters are clearly separated from fixed game rules.
+
+## Current Sequence
+
+The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
+
+The project is currently completing **GDS-0** and **GDS-1** before detailed **GDS-2 Home Space Station** work.

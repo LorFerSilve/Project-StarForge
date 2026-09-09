@@ -7,8 +7,8 @@ Authoritative design domain for the player's persistent home space station.
 ## Specifications
 
 - [`overview.md`](overview.md) — **Draft**
-- `construction.md` — planned
-- `structural_rules.md` — planned
+- [`construction.md`](construction.md) — **Draft**
+- [`structural_rules.md`](structural_rules.md) — **Draft**
 - `power.md` — planned
 - `atmosphere_and_oxygen.md` — planned
 - `thermal_systems.md` — planned

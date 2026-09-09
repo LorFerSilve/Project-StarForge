@@ -54,6 +54,6 @@ This domain defines how persistent people interact with those systems and must n
 
 The crew domain is **not yet Design Complete**.
 
-Its own first-pass rules are present, but several specifications depend on future authoritative domains such as missions, resources, combat, robots, narrative, player movement, and time/persistence.
+Its mission, resource, spacecraft, narrative, player, combat, and robot dependencies are now first-pass cross-validated. Remaining blocking review work is primarily cross-cutting time/persistence and later raid/presentation interactions where relevant.
 
 Those dependencies are explicitly tracked in [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md).

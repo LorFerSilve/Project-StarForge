@@ -184,14 +184,13 @@ GDS-6 now defines passenger/life-support capacity, temporary survivor transport,
 
 Crew remains optional for baseline piloting while specialists improve advanced operation without bypassing physical ship requirements.
 
-### Combat
+### Combat — First-Pass Resolved by GDS-9
 
-Required for:
+**Result: PASS**
 
-- crew injury severity;
-- security combat;
-- protective equipment;
-- boarding behavior.
+GDS-9 now defines physical hit resolution, damage channels, shields/armor, status effects, combat AI, and direct boarding-combat primitives.
+
+Crew remains governed by GDS-3 injury/incapacitation and no-routine-permadeath rules; combat does not turn human crew into disposable units.
 
 ### Robots
 
@@ -237,8 +236,7 @@ The crew domain can therefore remain the authoritative first-pass dependency for
 
 This audit must be revisited after completion of:
 
-1. GDS-9 Combat;
-2. GDS-10 Robots;
-3. relevant cross-cutting time/persistence specifications.
+1. GDS-10 Robots;
+2. relevant cross-cutting time/persistence specifications.
 
 Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.

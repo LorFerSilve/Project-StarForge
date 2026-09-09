@@ -69,4 +69,4 @@ GDS-6 establishes:
 
 GDS-6 is not yet Design Complete.
 
-World/Galaxy, Missions, Combat, Robots, Raids, Economy/Progression/Persistence, and Presentation must still cross-validate future-facing spacecraft interfaces.
+World/Galaxy, Missions, Combat, and Robots are now first-pass cross-validated. Raids, Economy/Progression/Persistence, and Presentation remain downstream spacecraft dependencies.

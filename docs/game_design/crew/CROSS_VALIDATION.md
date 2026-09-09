@@ -214,14 +214,13 @@ Required for:
 - unique specialists;
 - permanent narrative-death exceptions.
 
-### Player / Movement / Interaction
+### Player / Movement / Interaction — First-Pass Resolved by GDS-5
 
-Required for:
+**Result: PASS**
 
-- local crew/player collision;
-- physical interaction;
-- manual rescue;
-- manual repair cooperation.
+GDS-5 now defines first-person movement, collision, physical interaction, manual repair/tool use, player incapacitation, and rescue constraints.
+
+Crew presence rules are compatible with the player collision/interaction baseline and do not require teleporting manual cooperation.
 
 ### Time and Persistence
 

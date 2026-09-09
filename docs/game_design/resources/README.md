@@ -60,4 +60,4 @@ The current first-pass establishes:
 
 GDS-4 is not yet Design Complete.
 
-Future Player, Spacecraft, World, Missions, Combat, Robots, Economy, and Progression domains must cross-validate acquisition, cargo, finished recipes, prices, and pacing.
+Player, Spacecraft, World, Missions, Combat, and Robots are now first-pass cross-validated against GDS-4. Economy/Progression/Persistence still owns final prices, pacing, and balance, while finished content recipes continue to register through the canonical resource authority.

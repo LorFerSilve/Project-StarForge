@@ -178,14 +178,13 @@ GDS-4 now defines Research Evidence, laboratory Research Work, Scientist require
 
 Crew Scientist responsibilities and finite workload are compatible with the research framework.
 
-### Spacecraft
+### Spacecraft — First-Pass Resolved by GDS-6
 
-Required for:
+**Result: PASS**
 
-- passenger transport;
-- Navigator role;
-- Mechanic ship servicing;
-- survivor extraction capacity.
+GDS-6 now defines passenger/life-support capacity, temporary survivor transport, Navigator contribution to route planning, Mechanic/Engineer ship-service boundaries, docking, and spacecraft recovery.
+
+Crew remains optional for baseline piloting while specialists improve advanced operation without bypassing physical ship requirements.
 
 ### Combat
 
@@ -241,10 +240,9 @@ The crew domain can therefore remain the authoritative first-pass dependency for
 
 This audit must be revisited after completion of:
 
-1. GDS-6 Spacecraft;
-2. GDS-8 Missions;
-3. GDS-9 Combat;
-4. GDS-10 Robots;
-5. relevant cross-cutting time/persistence specifications.
+1. GDS-8 Missions;
+2. GDS-9 Combat;
+3. GDS-10 Robots;
+4. relevant cross-cutting time/persistence specifications.
 
 Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.

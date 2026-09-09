@@ -204,14 +204,13 @@ Required for:
 - Robotics Specialist;
 - crew-to-robot supervision ratios.
 
-### Narrative
+### Narrative / Factions — First-Pass Resolved by GDS-7
 
-Required for:
+**Result: PASS**
 
-- authored survivor conditions;
-- personal backgrounds;
-- unique specialists;
-- permanent narrative-death exceptions.
+GDS-7 now defines authored major characters, Nia Calder's recruitable-character mapping, faction/reputation context, survivor story sources, and the rule that no baseline main-story mission requires recruited-crew permadeath.
+
+Procedural crew remain governed by GDS-3 while authored crew can add fixed background/dialogue without bypassing core mechanics.
 
 ### Player / Movement / Interaction — First-Pass Resolved by GDS-5
 

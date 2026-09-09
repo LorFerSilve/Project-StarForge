@@ -450,3 +450,80 @@ Loss of Suit Energy disables active systems according to priority but does not a
 ### Rationale
 
 Separating electrical energy from atmosphere endurance creates clearer engineering decisions and avoids arbitrary instant death at battery depletion.
+
+
+---
+
+## DD-030 — Spacecraft Use Authored Hull Frames With Modular Fitting
+
+**Status:** Accepted
+
+### Decision
+
+Player spacecraft use authored hull variants with defined internal bays, external hardpoints, docking geometry, mass envelopes, and modular equipment slots.
+
+The baseline does not use unrestricted voxel/block ship construction.
+
+### Rationale
+
+This preserves meaningful customization while keeping flight collision, interiors, damage zones, docking, AI, and presentation tractable for the custom C++/OpenGL project.
+
+---
+
+## DD-031 — Local Flight and Strategic Travel Are Separate Simulation Scales
+
+**Status:** Accepted
+
+### Decision
+
+Spacecraft use real-time local flight inside bounded gameplay zones and explicit strategic travel between galaxy locations.
+
+The game does not require seamless manual flight across astronomical distances.
+
+### Rationale
+
+This preserves direct piloting while keeping galaxy scale technically and mechanically manageable.
+
+---
+
+## DD-032 — Strategic Reach Classes Gate Galaxy Access
+
+**Status:** Accepted
+
+### Decision
+
+Propulsion systems provide Strategic Reach Classes I–IV, and galaxy routes declare minimum Reach requirements.
+
+### Rationale
+
+Propulsion progression directly unlocks new locations and mission opportunities instead of functioning only as a speed upgrade.
+
+---
+
+## DD-033 — Fuel and Propellant Are Distinct Spacecraft Resources
+
+**Status:** Accepted
+
+### Decision
+
+Spacecraft explicitly distinguish energy-producing Fuel from momentum-producing Propellant whenever a drive architecture requires both.
+
+### Rationale
+
+The distinction creates clearer propulsion engineering, refueling decisions, cargo/mass tradeoffs, and avoids an ambiguous universal fuel bar.
+
+---
+
+## DD-034 — Established Player Ships Are Persistent Assets
+
+**Status:** Accepted
+
+### Decision
+
+Ordinary mission defeat does not permanently delete the player's established Primary Ship.
+
+Ships may be damaged, disabled, stranded, or recovered. Permanent ship loss requires an explicit high-stakes rule or player-authorized scrapping/abandonment.
+
+### Rationale
+
+Ships are long-term configurable progression assets analogous to the home station and recruited crew, not disposable lives.

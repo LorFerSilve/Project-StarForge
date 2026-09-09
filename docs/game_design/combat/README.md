@@ -69,4 +69,4 @@ GDS-9 establishes:
 
 GDS-9 is not yet Design Complete.
 
-Robots, Raids, Economy/Progression/Difficulty/Persistence, and Presentation must still cross-validate their combat-facing behavior.
+Robots are now first-pass cross-validated against GDS-9. Raids, Economy/Progression/Difficulty/Persistence, and Presentation remain downstream combat dependencies.

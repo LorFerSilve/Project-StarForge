@@ -214,7 +214,7 @@ The player can configure eligible priorities.
 
 Passive physical armor does not require energy.
 
-## 21. Suit Oxygen Reserve
+## 21. Suit Life-Support Reserve
 
 A sealed suit has finite breathable-gas/life-support endurance where independent atmosphere is required.
 
@@ -278,7 +278,7 @@ It is not an instant combat action.
 
 ## 29. Persistence
 
-Equipped-slot assignment, condition, energy, oxygen reserve where gameplay relevant, modifications, and ammunition state persist.
+Equipped-slot assignment, condition, energy, Life-Support Reserve where gameplay relevant, modifications, and ammunition state persist.
 
 ## 30. Edge Cases
 
@@ -302,7 +302,7 @@ Equipment does not provide:
 
 ## 32. Tuneable Parameters
 
-Tuneable values include slot swap times, condition thresholds, armor/protection values, suit energy, recharge rate, oxygen capacity, mass, and modification values.
+Tuneable values include slot swap times, condition thresholds, armor/protection values, suit energy, recharge rate, Life-Support Reserve capacity, mass, and modification values.
 
 ## 33. Dependencies
 

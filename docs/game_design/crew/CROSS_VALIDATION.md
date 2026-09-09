@@ -150,15 +150,13 @@ Progression occurs through skills/training and does not require crew rarity upgr
 
 The following future domains must be cross-validated before crew files can progress to Design Complete.
 
-### Missions
+### Missions — First-Pass Resolved by GDS-8
 
-Required for:
+**Result: PASS**
 
-- survivor rescue failure;
-- extraction;
-- temporary passengers;
-- mission persistence;
-- authored crew participation.
+GDS-8 now defines survivor mission identity, rescue objective states, temporary-passenger extraction, mission persistence, failure/retry, and authored story-mission participation.
+
+GDS-3 remains authoritative for survivor identity, recruitment, crew persistence, and crew health.
 
 ### Resources — First-Pass Resolved by GDS-4
 
@@ -239,9 +237,8 @@ The crew domain can therefore remain the authoritative first-pass dependency for
 
 This audit must be revisited after completion of:
 
-1. GDS-8 Missions;
-2. GDS-9 Combat;
-3. GDS-10 Robots;
-4. relevant cross-cutting time/persistence specifications.
+1. GDS-9 Combat;
+2. GDS-10 Robots;
+3. relevant cross-cutting time/persistence specifications.
 
 Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.

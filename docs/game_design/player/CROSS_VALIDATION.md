@@ -340,12 +340,13 @@ GDS-6 now defines cockpit/ship control context, ship cargo transfer, finite life
 
 These rules are compatible with GDS-5 player inventory, controls, Field Survival, and zero-gravity movement.
 
-### World
+### World — First-Pass Resolved by GDS-7
 
-Required for:
-- gravity values;
-- environmental hazard distributions;
-- terrain/surface classifications.
+**Result: PASS**
+
+GDS-7 defines gravity bands, atmosphere/environment metadata, biome classes, landing-site boundaries, and the world-side ownership of hazard context.
+
+GDS-5 remains authoritative for player protection/exposure.
 
 ### Missions
 
@@ -395,4 +396,4 @@ GDS-5 can be marked:
 
 GDS-6 Spacecraft has now been first-pass cross-validated.
 
-The next unresolved player-facing dependencies are World, Missions, Combat, Economy, Presentation/Accessibility, and Persistence.
+The next unresolved player-facing dependencies are Missions, Combat, Economy, Presentation/Accessibility, and Persistence.

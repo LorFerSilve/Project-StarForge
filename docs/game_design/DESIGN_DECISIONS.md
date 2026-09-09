@@ -620,3 +620,98 @@ There is no hidden fourth ending that removes all tradeoffs.
 ### Rationale
 
 The ending should reflect the game's themes of connectivity, safety, autonomy, and knowledge rather than collapse into a single objectively perfect answer.
+
+
+---
+
+## DD-041 — Only One External Mission Instance Can Be Deployed at a Time
+
+**Status:** Accepted
+
+### Decision
+
+The player may accept multiple missions but only one external Deployed Mission Instance can be active at a time.
+
+### Rationale
+
+This keeps player location, deployed ship, mission inventory security, zone persistence, and extraction ownership unambiguous.
+
+---
+
+## DD-042 — Procedural Missions Use Persistent IDs and Stable Seeds
+
+**Status:** Accepted
+
+### Decision
+
+Once a procedural mission is created, its Mission ID, seed, major objectives, survivor identities, major loot, hazard schedule, and generated layout remain stable for that mission.
+
+Reloading or reopening the offer does not reroll them.
+
+### Rationale
+
+Mission generation should create replayability, not save-scumming or survivor/loot reroll exploits.
+
+---
+
+## DD-043 — Mission Threat Uses Four Independent 0–5 Axes
+
+**Status:** Accepted
+
+### Decision
+
+Mission threat is represented through Hostile Threat, Environmental Threat, Operational Complexity, and Extraction Risk on a fixed 0–5 scale.
+
+Overall Threat equals the highest known axis rather than an average.
+
+### Rationale
+
+A single extreme danger must remain visible instead of being hidden inside an averaged difficulty score.
+
+---
+
+## DD-044 — Extraction Is an Explicit Security Transaction
+
+**Status:** Accepted
+
+### Decision
+
+Mission-acquired field resources are not permanently secured on pickup.
+
+Successful extraction explicitly transitions eligible Field-Unsecured holdings to Vehicle/Extraction-Secured, while Station-Secured still requires actual station ownership/transfer.
+
+### Rationale
+
+This makes extraction mechanically meaningful while preserving the single-authoritative-owner resource model.
+
+---
+
+## DD-045 — Field Acquisition and Mission Resolution Rewards Are Separate
+
+**Status:** Accepted
+
+### Decision
+
+Resources and items physically acquired during a mission are governed by field ownership/extraction.
+
+Mission completion compensation such as reputation, Blueprint unlocks, Research Evidence, access, economic entitlements, or sponsor-provided physical rewards is resolved separately.
+
+### Rationale
+
+This prevents duplicated loot, weightless reward insertion, and ambiguity between what the player found and what a sponsor grants.
+
+---
+
+## DD-046 — Main-Story Missions Use the Same Mission Framework as Other Expeditions
+
+**Status:** Accepted
+
+### Decision
+
+The canonical GDS-7 main-story missions use GDS-8 mission lifecycle, zones, objectives, extraction, failure, and persistence rules.
+
+Narrative importance does not create an unrelated special mission engine.
+
+### Rationale
+
+A single mission framework reduces bespoke exceptions and keeps story gameplay consistent with the systemic game.

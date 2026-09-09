@@ -2,7 +2,7 @@
 
 > **Domain Status:** Draft
 
-Authoritative design domain for how game state is communicated and visually presented.
+Authoritative design domain for how game state is communicated, taught, and visually presented.
 
 ## Planned Specifications
 
@@ -16,4 +16,7 @@ Authoritative design domain for how game state is communicated and visually pres
 - `vfx.md`
 - `audio_direction.md`
 - `alarms_and_signaling.md`
+- `onboarding_and_tutorials.md`
 - `accessibility.md`
+
+Presentation documents specify communication and teaching behavior. They reference underlying gameplay rules rather than redefining those rules.

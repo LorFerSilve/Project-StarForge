@@ -92,7 +92,7 @@ Authoritative specifications for:
 
 ## GDS-4 — Resources, Processing, Crafting, and Research
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -108,7 +108,7 @@ Define:
 
 ## GDS-5 — Player Character
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

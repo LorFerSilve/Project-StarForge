@@ -327,16 +327,18 @@ Active mission abandonment:
 
 GDS-8 defines where/why combat can occur and what combat outcome an objective requires.
 
-GDS-9 remains authoritative for:
+GDS-9 is now first-pass authoritative for:
 
 - damage;
 - weapons;
 - armor;
 - shields;
 - enemy combat behavior;
-- kill/disable mechanics.
+- Kill/Incapacitate/Destroy/Disable/Drive Off/Capture/Clear Area semantics.
 
-No final combat formula was preempted.
+**Result: PASS**
+
+GDS-8 retains mission lifecycle/objective authority while GDS-9 supplies exact combat resolution.
 
 ## 30. Robot Authority Boundary — Result: PASS
 
@@ -399,14 +401,13 @@ GDS-8 implements fixed GDS-7 story beats without changing canon.
 
 GDS-8 remains first-pass pending:
 
-### GDS-9 Combat
+### GDS-9 Combat — First-Pass Resolved
 
-Required for:
-- combat encounter resolution;
-- kill/disable/capture semantics;
-- enemy AI;
-- combat-related extraction contest;
-- protected-target combat.
+**Result: PASS**
+
+GDS-9 now defines combat encounter resolution primitives, exact combat-objective outcome semantics, generic enemy AI, physical friendly-fire/protected-target behavior, and combat conditions used by contested extraction.
+
+GDS-8 remains authoritative for mission/extraction state transitions.
 
 ### GDS-10 Robots
 

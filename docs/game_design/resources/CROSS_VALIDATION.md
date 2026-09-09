@@ -286,12 +286,13 @@ GDS-8 now defines mission loot persistence, mining/salvage objective use, Field-
 
 GDS-4 remains authoritative for physical resource identity, yield, ownership conservation, and Research/Blueprint knowledge.
 
-### Combat
+### Combat — First-Pass Resolved by GDS-9
 
-Required for:
-- ammunition finished-item recipes;
-- weapon/armor recipes;
-- enemy salvage.
+**Result: PASS**
+
+GDS-9 now defines finished ammunition classes, weapon/armor/shield equipment behavior, canonical ammunition manufacturing-input expectations, and the ownership boundary for combat loot.
+
+Exact per-model crafting recipes and enemy salvage quantities remain content/balance work under GDS-4/GDS-12 rather than unresolved combat rules.
 
 ### Robots
 

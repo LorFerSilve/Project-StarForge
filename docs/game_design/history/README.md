@@ -4,4 +4,8 @@ This directory preserves superseded concept documents and historical design snap
 
 Historical files are **not authoritative** unless an active specification explicitly references a still-valid decision.
 
-The original `game_idea.md` concept document will be archived here once its contents have been fully preserved and migration into the authoritative specification begins.
+## Archived Baselines
+
+- [`game_idea_v0.md`](game_idea_v0.md) — the original Project StarForge game idea and design-bible snapshot created before migration to the authoritative multi-file Game Design Specification.
+
+The archived baseline is preserved for traceability. It must not be edited to reflect later design changes; later changes belong in the authoritative specification and, where appropriate, in `../DESIGN_DECISIONS.md`.

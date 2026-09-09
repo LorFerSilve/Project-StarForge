@@ -60,4 +60,4 @@ Implementation of a subsystem may begin only when:
 
 The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
 
-The project has completed first-pass design for **GDS-2 Home Space Station**, **GDS-3 Survivors and Crew**, **GDS-4 Resources, Processing, Crafting, and Research**, **GDS-5 Player Character**, and **GDS-6 Spacecraft**. The next dependency-driven design phase is **GDS-7 World, Galaxy, Narrative, and Factions**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.
+The project has completed first-pass design through **GDS-7 World, Galaxy, Narrative, and Factions**. The next dependency-driven design phase is **GDS-8 Missions and Exploration**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.

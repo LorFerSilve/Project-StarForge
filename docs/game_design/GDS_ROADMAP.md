@@ -108,7 +108,7 @@ Define:
 
 ## GDS-5 — Player Character
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -126,7 +126,7 @@ Define:
 
 ## GDS-6 — Spacecraft
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

@@ -99,3 +99,46 @@ Temporary Guests consume applicable station support but cannot hold permanent cr
 The finite amount of professional supervision or assigned work a crew member can support at one time.
 
 Workload Capacity depends on relevant skill, traits, health, and applicable automation infrastructure.
+
+
+## Blueprint
+
+A persistent Knowledge Asset representing possession of the concrete design required to build or manufacture a specific object.
+
+A Blueprint is distinct from the underlying technology required to understand or produce that design.
+
+## Knowledge Asset
+
+Persistent non-physical information such as a Blueprint Unlock, Research Evidence record, or analyzed technology record.
+
+Knowledge Assets do not occupy ordinary physical cargo capacity.
+
+## Resource
+
+A canonical physical material, fluid, consumable, fuel, or manufactured component used by gameplay systems.
+
+Every physical resource quantity has one authoritative owner/location.
+
+## Resource Deposit
+
+A finite world source of a canonical raw resource with a defined remaining reserve, extraction requirement, and Yield Grade.
+
+## Processing
+
+The transformation of raw or bulk resources into refined materials or standardized industrial feedstock.
+
+## Crafting
+
+The transformation of refined materials/components into manufactured components, consumables, or finished items according to a Blueprint/Recipe.
+
+## Research Evidence
+
+Persistent non-consumable scientific knowledge derived from a secured analysis, scan, data record, or discovery.
+
+Research Evidence can satisfy project requirements but is not spent like currency.
+
+## Yield Grade
+
+A property of a resource deposit describing the amount of canonical resource recovered per unit of extraction work.
+
+Yield Grade is not a separate inventory-quality tier.

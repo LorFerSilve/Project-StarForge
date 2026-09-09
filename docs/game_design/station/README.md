@@ -16,11 +16,11 @@ Authoritative design domain for the player's persistent home space station.
 - [`farming_and_food.md`](farming_and_food.md) — **Draft**
 - [`storage_and_logistics.md`](storage_and_logistics.md) — **Draft**
 - [`manufacturing.md`](manufacturing.md) — **Draft**
-- `damage_and_repairs.md` — planned
-- `automation.md` — planned
-- `defenses.md` — planned
-- `security.md` — planned
-- `station_events.md` — planned
+- [`damage_and_repairs.md`](damage_and_repairs.md) — **Draft**
+- [`automation.md`](automation.md) — **Draft**
+- [`defenses.md`](defenses.md) — **Draft**
+- [`security.md`](security.md) — **Draft**
+- [`station_events.md`](station_events.md) — **Draft**
 
 ## Authority Boundary
 

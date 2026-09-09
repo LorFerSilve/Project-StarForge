@@ -175,3 +175,38 @@ Finite electrical energy available to active player-suit systems such as thermal
 ## Incapacitated
 
 A player or crew health state in which normal movement, work, and direct action are unavailable until rescue, stabilization, or recovery occurs.
+
+
+## Ship Hull Class
+
+A structural spacecraft category defining the normal scale and configuration envelope of a ship, including mass, module capacity, hardpoints, cargo, occupancy, and docking compatibility.
+
+## Hull Variant
+
+A specific authored spacecraft frame within a Ship Hull Class with exact geometry, slots, mass limits, interior scope, and docking interface.
+
+## Flight Assist
+
+An avionics mode that uses available thrusters to stabilize unwanted linear and angular motion while preserving the ship's actual thrust, mass, power, and damage constraints.
+
+## Strategic Reach Class
+
+A propulsion capability tier from Reach I through Reach IV used to determine whether a spacecraft can traverse a strategic galaxy route.
+
+## Propellant
+
+A physical spacecraft resource expelled or otherwise used as reaction mass to produce momentum.
+
+Propellant is distinct from Fuel, which provides energy.
+
+## Hard Dock
+
+A physical spacecraft attachment state in which compatible docking connectors are captured and eligible finite service links such as cargo, power, atmosphere, or refueling can be established.
+
+## Derelict
+
+A spacecraft state in which the ship is Disabled and lacks normal active operator/control capability while remaining a persistent physical asset.
+
+## Vehicle/Extraction-Secured
+
+A mission-acquired physical resource or item that has been successfully committed to an authorized secure extraction owner such as valid spacecraft cargo but has not necessarily yet been transferred to Station-Secured ownership.

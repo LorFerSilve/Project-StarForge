@@ -77,11 +77,12 @@ Narrative permanent death is not part of the baseline.
 Ordinary external-mission incapacitation normally results in:
 
 1. mission failure;
-2. loss of Field-Unsecured physical resources according to mission rules;
-3. preservation of persistent equipped gear ownership;
-4. possible equipment condition loss;
-5. return/recovery at the home station through mission recovery fiction;
-6. medical recovery cost/time where defined.
+2. the deterministic inventory transaction defined in inventory.md;
+3. loss of unresolved Field-Unsecured physical resources;
+4. preservation of recovered Secured Loadout ownership, subject to condition damage;
+5. no refund of ammunition/consumables already consumed;
+6. return/recovery at the home station through mission recovery fiction;
+7. medical recovery cost/time where defined.
 
 Missions can define a local rescue window before final failure if they explicitly support it.
 

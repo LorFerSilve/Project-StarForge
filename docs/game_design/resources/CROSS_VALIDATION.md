@@ -254,13 +254,13 @@ This is consistent with the crew decision to avoid loot-card rarity as a core qu
 
 GDS-4 remains first-pass rather than Design Complete because future domains must register or validate final content.
 
-### Player
+### Player — First-Pass Resolved by GDS-5
 
-Required for:
-- inventory mass/volume;
-- mining-tool interaction;
-- field crafting;
-- carrying limits.
+**Result: PASS**
+
+GDS-5 now defines Mass + Volume portable inventory, hard/soft carrying limits, mining/salvage tool interactions, hazardous-material containment, and limited field-crafting boundaries.
+
+These rules preserve GDS-4 physical ownership and conservation.
 
 ### Spacecraft
 

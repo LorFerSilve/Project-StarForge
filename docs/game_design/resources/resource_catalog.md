@@ -169,10 +169,18 @@ Hazard: Pressurized
 Primary Sources: lunar/regolith extraction, gas-resource missions, trade  
 Uses: fusion fuel processing
 
+## RES_ENR_DEUTERIUM — Deuterium
+
+Class: Physical Bulk Resource  
+State: Gas / cryogenic storage abstraction  
+Hazard: Pressurized  
+Produced From: Fresh Water through isotope separation  
+Uses: fusion fuel processing
+
 ## RES_ENR_FUSION_PELLET — Fusion Fuel Pellet
 
 Class: Discrete Component  
-Produced From: Helium-3 + processed fuel materials  
+Produced From: Helium-3 + Deuterium  
 Uses: fusion reactors and advanced propulsion
 
 ## RES_OP_COOLANT — Industrial Coolant
@@ -267,9 +275,14 @@ Uses: station sensors, ships, robots, targeting
 Produced From: Copper + Titanium  
 Uses: cooling systems, reactors, industrial equipment
 
+## RES_CMP_QUANTUM_SUBSTRATE — Quantum Substrate
+
+Produced From: Voltaic Crystal + Superconductive Material + Exotic Matter Sample  
+Uses: late-game quantum computation components
+
 ## RES_CMP_QUANTUM_PROCESSOR — Quantum Processor
 
-Produced From: Advanced Circuit + Platinum + exotic research process  
+Produced From: Advanced Circuit + Platinum + Quantum Substrate  
 Uses: late-game computation, advanced navigation, AI/control, exotic technology
 
 # 8. Exotic Resources

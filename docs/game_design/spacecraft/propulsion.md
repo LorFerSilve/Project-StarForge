@@ -116,15 +116,26 @@ Characteristics:
 Late-game experimental family.
 
 Uses:
-- advanced power;
-- Quantum Processor/control;
-- Exotic Matter-related technology/resource where defined by future research content.
+- Fusion Fuel Pellets;
+- Reaction Propellant;
+- very high electrical power;
+- Quantum Processor-based control hardware;
+- Quantum Substrate-derived drive components.
+
+Technology:
+- Quantum Materials;
+- Quantum Computing;
+- advanced propulsion research derived from Anomaly Physics.
 
 Characteristics:
-- access to otherwise unreachable strategic links/regions;
-- expensive and technologically demanding.
+- Reach IV capability;
+- access to otherwise unreachable anomalous/high-energy strategic routes;
+- very high power and thermal demand;
+- expensive, fragile advanced hardware.
 
-It does not provide teleportation anywhere without route rules.
+The exotic field system changes route accessibility and drive efficiency; it does not create reaction mass or free energy.
+
+It does not provide unrestricted teleportation.
 
 ## 9. Strategic Drive Rating
 
@@ -369,4 +380,6 @@ This specification depends on GDS-4 resources/research, Ship Systems, Flight, Na
 
 ## 34. Open Questions
 
-The exact consumable requirement of the late-game Exotic/Quantum Drive remains intentionally owned by future GDS-7/GDS-12 progression/world content, but its rule boundary and Reach IV role are fixed.
+None in the propulsion-framework baseline.
+
+Future World/Progression content defines which Reach IV routes exist and when their blueprints become obtainable, but the drive's physical operating inputs and rules are fixed.

@@ -70,3 +70,32 @@ A non-hostile character encountered outside the player's established crew struct
 A numerical or data-driven value intended to be adjustable during balancing without redefining the underlying gameplay rule.
 
 Examples include damage, duration, capacity, range, production speed, and resource yield.
+
+
+## Assignment
+
+A persistent crew responsibility linking one crew member to a compatible facility, zone, network, or station-wide professional duty.
+
+A crew member has one Primary Assignment at a time.
+
+## Profession
+
+A crew member's primary recognized role and default automation domain, such as Engineer, Farmer, Scientist, or Logistics Officer.
+
+Profession does not erase independently learned secondary skills.
+
+## Skill
+
+A learned crew competence rated from 0 (Untrained) through 5 (Master) in a specific domain.
+
+## Temporary Guest
+
+A rescued or otherwise accepted character temporarily supported by the home station who has not yet become permanent assigned crew.
+
+Temporary Guests consume applicable station support but cannot hold permanent crew assignments.
+
+## Workload Capacity
+
+The finite amount of professional supervision or assigned work a crew member can support at one time.
+
+Workload Capacity depends on relevant skill, traits, health, and applicable automation infrastructure.

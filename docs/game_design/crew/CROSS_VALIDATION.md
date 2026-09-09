@@ -160,24 +160,23 @@ Required for:
 - mission persistence;
 - authored crew participation.
 
-### Resources
+### Resources — First-Pass Resolved by GDS-4
 
-Required for:
+**Result: PASS**
 
-- food quantities;
-- medical supplies;
-- training materials;
-- specialist tools;
-- repair resources.
+GDS-4 now defines canonical food, water, medical, repair, operational, and component resources together with physical ownership/reservation rules.
 
-### Research
+Crew does not conflict with the resource model.
 
-Required for:
+Exact balance quantities remain tuneable and do not block crew rule definition.
 
-- Scientist responsibilities;
-- research-specialist requirements;
-- special knowledge;
-- training unlocks.
+### Research — First-Pass Resolved by GDS-4
+
+**Result: PASS**
+
+GDS-4 now defines Research Evidence, laboratory Research Work, Scientist requirements, technology prerequisites, Blueprint separation, and persistent research state.
+
+Crew Scientist responsibilities and finite workload are compatible with the research framework.
 
 ### Spacecraft
 
@@ -243,11 +242,10 @@ The crew domain can therefore remain the authoritative first-pass dependency for
 
 This audit must be revisited after completion of:
 
-1. GDS-4 Resources, Processing, Crafting, and Research;
-2. GDS-6 Spacecraft;
-3. GDS-8 Missions;
-4. GDS-9 Combat;
-5. GDS-10 Robots;
-6. relevant cross-cutting time/persistence specifications.
+1. GDS-6 Spacecraft;
+2. GDS-8 Missions;
+3. GDS-9 Combat;
+4. GDS-10 Robots;
+5. relevant cross-cutting time/persistence specifications.
 
 Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.

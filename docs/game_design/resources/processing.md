@@ -228,11 +228,25 @@ Output:
 Machine:
 - Water Processor
 
+### PROC_DEUTERIUM_SEPARATION
+
+Input:
+- Fresh Water
+
+Output:
+- Deuterium
+
+Machine:
+- Isotope Separator
+
+Technology:
+- Fusion Fuel Handling
+
 ### PROC_FUSION_FUEL
 
 Input:
 - Helium-3
-- authored fuel-processing input
+- Deuterium
 
 Output:
 - Fusion Fuel Pellet
@@ -246,8 +260,8 @@ Technology:
 ### PROC_COOLANT
 
 Input:
-- Water
-- Polymer/Chemical inputs
+- Fresh Water
+- Polymer Resin
 
 Output:
 - Industrial Coolant
@@ -255,10 +269,23 @@ Output:
 Machine:
 - Chemical Processor
 
+### PROC_PROPELLANT
+
+Input:
+- Fresh Water
+
+Output:
+- Reaction Propellant
+
+Machine:
+- Electrolysis / Propellant Processor
+
 ### PROC_NUTRIENT_MIX
 
 Input:
-- recovered biological/agricultural feedstock and chemical inputs
+- Fresh Produce
+- Fresh Water
+- Carbonaceous Feedstock
 
 Output:
 - Nutrient Mix
@@ -266,12 +293,14 @@ Output:
 Machine:
 - Chemical/Food Processor
 
-Detailed biological recycling inputs are refined when farming/resource loops are cross-validated.
+The recipe represents controlled recovery of agricultural biomass plus imported mineral/carbon feedstock. It is intentionally lossy so agriculture does not create a closed infinite resource loop.
 
 ### PROC_MEDICAL_COMPOUND
 
 Input:
-- biological/chemical feedstock
+- Fresh Produce
+- Fresh Water
+- Polymer Resin
 
 Output:
 - Medical Compound
@@ -279,7 +308,7 @@ Output:
 Machine:
 - Medical/Chemical Processor
 
-Advanced variants may use Alien Biomaterial.
+Alien Biomaterial is reserved for advanced medical research/finished treatments rather than the standard Medical Compound recipe.
 
 ## 8. Process Unlocking
 
@@ -412,9 +441,6 @@ This specification depends on Resource Catalog, station Manufacturing, Power, Th
 
 ## 21. Open Questions
 
-Two recipe feedstock details remain intentionally cross-domain dependent:
+None in the current processing baseline.
 
-- exact non-water input used for Fusion Fuel Pellet;
-- exact base feedstock for Nutrient Mix and Medical Compound.
-
-These must be resolved during GDS-4 cross-validation rather than left to implementation.
+The document remains Draft until machine catalog, progression, economy, and balance values are cross-validated.

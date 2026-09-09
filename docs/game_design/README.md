@@ -60,4 +60,4 @@ Implementation of a subsystem may begin only when:
 
 The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
 
-The project is currently completing **GDS-0** and **GDS-1** before detailed **GDS-2 Home Space Station** work.
+The project has completed first-pass design for **GDS-2 Home Space Station** and **GDS-3 Survivors and Crew**. The next dependency-driven design phase is **GDS-4 Resources, Processing, Crafting, and Research**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.

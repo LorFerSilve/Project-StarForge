@@ -409,13 +409,13 @@ GDS-9 now defines combat encounter resolution primitives, exact combat-objective
 
 GDS-8 remains authoritative for mission/extraction state transitions.
 
-### GDS-10 Robots
+### GDS-10 Robots — First-Pass Resolved
 
-Required for:
-- robot mission deployment;
-- squad mission objectives;
-- repair/support robots;
-- finale robot capability.
+**Result: PASS**
+
+GDS-10 now defines physical robot mission deployment, Tactical Control Capacity, squad composition, support/repair/hacking/breaching/demolition roles, robot extraction/loss, and finale-ready squad capability.
+
+GDS-8 remains authoritative for Mission Instance and extraction/failure state.
 
 ### GDS-11 Raids
 

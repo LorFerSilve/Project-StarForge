@@ -313,3 +313,46 @@ A reload performed while ammunition remains loaded, preserving existing loaded r
 ## Clear Area
 
 A combat-objective resolution condition in which no qualifying hostile actor capable of immediate combat remains inside the defined objective area under that objective's explicit rules.
+
+
+## Robot ID
+
+A persistent unique identifier for one player-owned robot and its physical configuration, condition, energy, location, assignment, squad membership, and destruction/loss state.
+
+## Tactical Control Capacity — TCC
+
+A non-currency command-system capability limiting the combined Command Load of actively commanded field robots.
+
+## Command Load
+
+The Tactical Control Capacity cost contributed by one active robot class/configuration.
+
+## Robot Rack Unit
+
+The standard spacecraft transport-footprint unit used by Light and Medium robots in compatible Robot Racks.
+
+## Heavy Robot Bay
+
+A dedicated spacecraft transport/service capability required for Heavy-class robots that cannot use ordinary Robot Rack capacity.
+
+## Internal Energy Reserve
+
+A robot's finite electrical charge state used for movement, control, sensors, communication, tools, shields, and weapons where applicable.
+
+It is not a separate crafting currency.
+
+## Class-Incapable
+
+A robot state in which the unit remains physically operational/mobile but has lost the mandatory hardware capability required to perform its declared robot class role.
+
+## Lost Robot
+
+A player-owned Robot ID that is no longer available for normal deployment because it was abandoned or became unrecoverable, while not necessarily having been physically Destroyed.
+
+## Robot Wreck
+
+The non-operational physical remains of a Destroyed robot, potentially containing salvageable components/materials but no longer repairable into the same Robot ID.
+
+## Rules of Engagement — ROE
+
+A configured robot combat-authorization policy such as Hold Fire, Defensive, Engage Hostiles, or Engage Designated Target Only.

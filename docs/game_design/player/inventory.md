@@ -1,17 +1,19 @@
 # Player Inventory
 
-> **Status:** Draft  
-> **Authority:** Portable physical ownership, backpack storage, carried mass/volume, stack behavior, quick access, transfer rules, overflow prevention, and field resource state
+> **Status:** Design Complete  
+> **Authority:** Portable physical ownership, backpack storage, carried Mass/Volume, stack behavior, quick access, transfer rules, auto-pickup eligibility, overflow prevention, and mission-security state
 
 ## 1. Purpose
 
-Player inventory supports exploration, salvage, mining, combat supplies, tools, and mission objectives while preventing unrealistic unlimited carrying.
+Player Inventory supports exploration, salvage, mining, combat supplies, tools, and mission objectives while preserving physical ownership and finite carrying capacity.
 
 ## 2. Ownership
 
-Inventory is a physical ownership location under the GDS-4 Resource Model.
+Player Inventory is a physical ownership location under the GDS-4 Resource Model.
 
-An item/resource in Player Inventory does not simultaneously exist in station storage, ship cargo, or the world.
+A quantity/item owned by Player Inventory does not simultaneously exist in station storage, ship cargo, another container, or the world.
+
+All transfers are atomic ownership changes.
 
 ## 3. Inventory Structure
 
@@ -21,263 +23,328 @@ The player's portable inventory consists of:
 - Backpack Storage;
 - Quick Slots.
 
-Equipped items remain owned by the player but are not counted as backpack slots.
+Equipped items remain player-owned. They do not consume backpack Volume when their equipment slot says so, but their Mass always contributes to carried Mass.
 
-They still count toward carried mass.
+Quick Slots are references to eligible player-owned inventory/equipment objects and never duplicate them.
 
 ## 4. Capacity Model
 
-Backpack capacity uses both:
+Backpack acceptance uses both:
 
 - **Mass Capacity**;
 - **Volume Capacity**.
 
-An item/resource can be accepted only if both resulting limits remain within hard capacity.
-
-This prevents dense/bulky resources from all behaving identically.
+A normal pickup/transfer commits only when the resulting inventory remains within both hard limits and all containment rules pass.
 
 ## 5. Hard Capacity
 
-The player cannot exceed hard Mass or Volume Capacity through normal pickup/transfer.
+The player cannot exceed hard Mass or Volume Capacity through normal gameplay transfer.
 
-When transfer would exceed either limit:
+For a divisible stack:
 
-- transfer is rejected or partially accepted where stack splitting is possible;
-- remainder stays at source.
+- the maximum valid quantity may transfer;
+- all remainder stays at the source.
 
-## 6. Soft Load Threshold
+For an indivisible item:
 
-A configurable fraction of Mass Capacity defines Heavy Load.
+- the whole transfer either commits or does not commit.
 
-Heavy Load affects Movement but does not block carrying until hard capacity.
+## 6. Heavy Load Threshold
 
-Volume has no separate soft-load penalty; it is a hard packing abstraction.
+Backpack/equipment data defines a tuneable soft Mass threshold below hard Mass Capacity.
+
+At or above that threshold the player enters `LoadState::Heavy`.
+
+Heavy Load effects are authoritative in Movement:
+
+- no sprint;
+- no normal jump;
+- no mantle;
+- reduced walking/crouching acceleration/speed.
+
+Volume has no soft penalty; it is a hard packing limit.
 
 ## 7. Backpack Progression
 
-Backpacks are equipment.
-
-Different backpacks can change:
+Backpacks are Equipment and may differ through explicitly authored:
 
 - Mass Capacity;
 - Volume Capacity;
-- specialized storage;
-- hazard containment;
-- quick-access capability.
+- containment classes;
+- quick-access features;
+- durability/Condition;
+- specialized storage.
 
-Progression is equipment-driven.
+No backpack gains hidden capacity from generic Player Level.
 
 ## 8. Stackable Resources
 
-Bulk resources/components can stack according to Resource Catalog data.
-
-Stacks preserve:
+A stack preserves all gameplay-relevant compatibility data including:
 
 - Resource ID;
 - quantity;
-- perishability state where relevant;
-- reservation/mission ownership flags.
+- ownership;
+- quality/state fields explicitly defined by that Resource;
+- perishability batch/state where applicable;
+- mission/security flags;
+- reservation/protection flags where applicable.
+
+Only compatible stacks merge.
 
 ## 9. Finished Items
 
-Finished items generally occupy individual inventory entries because they can have:
+Finished durable items normally remain individual inventory objects when they carry unique mutable state such as:
 
-- condition;
-- ammunition;
-- installed modifications;
-- unique identity.
+- Condition;
+- ammunition/charge;
+- modifications;
+- Unique Item ID;
+- mission identity.
 
-Identical pristine consumables may stack where content rules permit.
+Identical consumables may stack only when their item definition declares stackability and all relevant state is compatible.
 
 ## 10. Quick Slots
 
-The player has four Quick Slots.
+There are exactly four Quick Slots.
 
-Quick Slots reference eligible carried consumables/gadgets and do not duplicate items.
+A Quick Slot references an eligible carried consumable/gadget/item.
 
-Using the item consumes/activates the same authoritative inventory object.
+When the referenced final quantity/object is consumed, transferred away, or destroyed, the Quick Slot clears automatically.
 
 ## 11. Equipped Items
 
-Equipped objects occupy Equipment slots rather than backpack volume where their slot definition says so.
+Equipped Slots are owned by Player Inventory/Equipment authority but are separate from Backpack Storage capacity accounting as defined by the item's slot.
 
-Their mass still contributes to total carried mass.
+Equipped Mass remains included in total carried Mass.
 
-## 12. Mission Ownership State
+## 12. Mission Security States
 
-Portable mission inventory distinguishes origin/security state:
+Portable mission ownership distinguishes:
 
-- Secured Loadout — physical gear/resources that were already owned and committed from station/ship storage before mission deployment;
-- Field-Unsecured — resources/items acquired during the current external mission and not yet secured;
-- Vehicle/Extraction-Secured — mission-acquired resources successfully committed to an authorized extraction/vehicle store;
-- Station-Secured — resources already returned to persistent station ownership.
+- `SecurityState::SecuredLoadout` — owned before deployment and committed into the deployed loadout;
+- `SecurityState::FieldUnsecured` — acquired during the external mission and not yet secured;
+- `SecurityState::VehicleExtractionSecured` — successfully secured to a valid extraction/vehicle ownership path;
+- `SecurityState::StationSecured` — committed into persistent station ownership.
 
-A pickup acquired in the field enters Field-Unsecured unless a mission rule explicitly commits it directly to a valid secure extraction owner.
+Pickup alone normally creates Field-Unsecured state.
 
 ## 13. Ordinary Mission-Defeat Inventory Transaction
 
-On ordinary external-mission defeat:
+On ordinary external defeat:
 
-- persistent Secured Loadout equipment returns with the player, subject to condition damage;
-- unconsumed Secured Loadout ammunition and consumables return with the player;
-- ammunition/consumables already consumed during the mission remain consumed;
-- Field-Unsecured resources/items are lost unless the specific mission defines a recoverable post-defeat state;
-- Vehicle/Extraction-Secured resources remain secured and are not lost merely because the player is later defeated;
+- recoverable Secured Loadout equipment remains player-owned, subject to documented Condition damage;
+- unconsumed Secured Loadout ammunition/consumables remain owned and follow Recovery Transit with the player where mission rules permit;
+- consumed quantities remain consumed;
+- Field-Unsecured items/resources are lost unless a specific persistent recovery cache/world owner is authored;
+- Vehicle/Extraction-Secured cargo follows the actual surviving extraction owner rather than the defeated player;
 - Station-Secured resources are unaffected.
 
-This transaction is deterministic and occurs exactly once.
+The transaction executes exactly once.
 
-## 14. Deliberately Dropped Loadout
+## 14. Deliberately Dropped Secured Gear
 
-A Secured Loadout item deliberately dropped into the world remains a persistent owned item only while the mission/location persistence system still tracks that object as recoverable.
+Dropping an owned item transfers it to a world/container owner.
 
-If the mission ends in ordinary defeat while that item remains abandoned outside the player's recovered loadout, the item is treated as lost unless a mission-specific recovery rule preserves it.
+A formerly Secured Loadout item is not protected merely because it was once equipped.
 
-This prevents deliberate dropping from duplicating protected gear.
+If the current Mission/World persistence does not preserve its dropped owner through defeat/resolution, it can be lost.
 
-## 15. Transfer to Station
+This prevents duplication through deliberate pre-defeat dropping.
 
-At the home station, inventory can transfer to reachable station storage/logistics.
+## 15. Transfer to Horizon Storage
 
-Transfer follows physical/logistics access rather than global teleportation unless a compatible intake interface exists.
+Player-to-station transfer requires a valid reachable storage/logistics intake or another explicitly supported physical interface.
 
-## 16. Transfer to Ship
+Opening an inventory menu does not globally merge Player and Horizon inventories.
 
-Inventory can transfer to compatible spacecraft cargo at an accessible cargo interface.
+## 16. Transfer to Spacecraft
 
-Ship cargo ownership is separate.
+Player-to-ship transfer requires an accessible compatible cargo/storage interface.
+
+After commit the item/quantity belongs to that spacecraft cargo owner and no longer occupies Player Inventory.
 
 ## 17. World Drop
 
-The player may drop eligible items.
+Eligible items may be dropped at a valid nearby world position/container.
 
-Dropping transfers ownership from Player Inventory to a world pickup/container at a valid nearby position.
+The target Mission/World persistence determines how long that owner remains recoverable.
 
-Mission/world persistence determines how long dropped objects persist.
+Protected items may expose `DropPolicy::Forbidden`; this is explicit authored data, not hidden logic.
 
-## 18. Protected Items
+## 18. Containment Model
 
-Some mission/narrative items may be non-droppable while required.
+An item/resource may declare a `ContainmentRequirement`.
 
-The UI explicitly marks this.
+The carrying container/backpack/equipment either satisfies that requirement or the item's authored `UncontainedBehavior` applies.
 
-"Non-droppable" does not mean duplicated or massless unless the item definition says so.
+Canonical `UncontainedBehavior` values are:
 
-## 19. Hazardous Materials
+- `BlockPickup` — transfer cannot commit;
+- `PermitWithExposure` — transfer commits only after explicit danger confirmation and applies the defined exposure/hazard state.
 
-Hazard-tagged resources can require:
+Implementation may not arbitrarily choose between these outcomes.
 
-- compatible container;
-- specialized backpack compartment;
-- protective equipment.
+## 19. Fluids and Gases
 
-Without required containment, pickup can be blocked or cause explicit exposure consequences.
+Bulk fluid/gas resources cannot exist loose in ordinary Backpack Storage.
 
-## 20. Fluids and Gases
+They require a compatible container item. That container owns the physical quantity and contributes its full resulting Mass/Volume.
 
-Bulk fluids/gases cannot normally be carried loose in backpack storage.
+## 20. Mining and Salvage Output
 
-They require a compatible portable container item.
+Portable extraction output enters Player Inventory/container only while all capacity/containment rules pass.
 
-The container owns the fluid quantity.
+There is no automatic station teleportation.
 
-## 21. Mining Output
+If output cannot be accepted, extraction pauses/redirects/drops output according to the owning Mining/Salvage target rule rather than deleting the excess.
 
-Portable mining output enters a compatible backpack/container only while capacity exists.
+## 21. Auto Pickup
 
-No automatic station teleportation occurs.
+The baseline includes user-configurable **Auto Pickup**, default **On**, for objects explicitly tagged `AutoPickupEligible`.
 
-## 22. Auto-Pickup
+Only these content categories may receive that tag in baseline:
 
-The baseline permits small automatic pickup convenience only for explicitly low-impact nearby consumables/ammunition where combat design later approves it.
+- ordinary loose ammunition compatible with the player's carried/equipped weapons;
+- ordinary low-impact stackable consumables explicitly approved by their item definition.
 
-Resources, strategic items, artifacts, and large components require explicit pickup/transfer.
+The tag is forbidden for:
 
-## 23. Sorting
+- raw resources/ore;
+- equipment/weapons/tools;
+- artifacts/Research carriers;
+- mission-critical/strategic/unique items;
+- hazardous materials;
+- fluid/gas containers;
+- robot/ship/station components;
+- large cargo.
 
-Inventory UI can sort/filter by:
+Auto Pickup requires:
 
-- category;
-- mass;
-- value when economy exists;
-- mission status;
-- resource/item type.
+- valid physical proximity;
+- unobstructed pickup eligibility equivalent to normal pickup;
+- ownership permission;
+- Mass/Volume/containment capacity.
 
-Sorting changes presentation, not ownership.
+It commits the same ownership transaction as manual pickup and cannot pull items through walls or from remote containers.
 
-## 24. Split Stack
+Pickup radius is tuneable.
 
-The player can split stackable quantities for:
+## 22. Sorting and Filtering
 
-- transfer;
-- dropping;
-- storage.
+Inventory UI provides sorting/filtering by:
 
-Splitting conserves total quantity.
+- category/type;
+- Mass;
+- known Credit value where applicable;
+- mission/security state;
+- Condition;
+- quantity/name as appropriate.
 
-## 25. Merge Stack
+Sorting/filtering changes presentation only.
 
-Compatible stacks can merge when all gameplay-relevant stack properties are compatible.
+## 23. Stack Split
 
-Incompatible perishability/condition states do not silently overwrite data.
+The player can split a stack into two quantities whose sum equals the original.
 
-## 26. Reserved Items
+The split itself does not change owner until a subsequent transfer/drop commits.
 
-Items reserved for a station/manufacturing job cannot normally be moved into Player Inventory unless reservation is explicitly released.
+## 24. Stack Merge
 
-## 27. Inventory During Incapacitation
+Compatible stacks may merge while conserving total quantity.
 
-The inventory cannot be rearranged while Incapacitated unless a specific recovery UI permits management after mission resolution.
+Incompatible state/batches never overwrite one another merely to simplify UI.
 
-## 28. Inventory UI
+## 25. Reservations
 
-The interface shows:
+An object/quantity reserved by construction/manufacturing/research/another authoritative job cannot be transferred into Player Inventory unless the reservation is first explicitly released or the owning system authorizes transfer.
 
-- carried Mass / Capacity;
-- used Volume / Capacity;
+## 26. Inventory While Incapacitated
+
+While Incapacitated the player cannot perform ordinary live inventory rearrangement.
+
+Post-resolution/recovery UI may show outcomes and permit management only after the owning recovery state explicitly allows direct control.
+
+## 27. Backpack Replacement
+
+A Backpack cannot be unequipped/replaced when the destination backpack configuration cannot legally contain current Backpack Storage.
+
+The player must first transfer/drop/reconfigure contents.
+
+No overflow bag or hidden temporary storage is created automatically.
+
+## 28. UI / Feedback
+
+Inventory presentation communicates:
+
+- carried Mass / hard capacity / Heavy threshold;
+- used Volume / capacity;
 - equipped gear;
-- backpack contents;
-- mission-security state;
-- hazards;
-- item condition;
+- contents;
+- security state;
+- containment/hazard state;
+- Condition;
 - stack quantity;
-- blockers.
+- reservation/protection;
+- transfer blocker;
+- ownership-transfer completion only after commit.
 
 ## 29. Persistence
 
-Inventory ownership, quantities, stack state, item condition, quick-slot references, and mission flags persist.
+Save state preserves:
 
-Save/load cannot duplicate split/transfer states.
+- exact owner/location;
+- quantities/stacks/batches;
+- unique IDs;
+- item state/Condition;
+- equipped/Quick Slot references;
+- mission/security state;
+- containers and contained resources;
+- reservations relevant to the item.
+
+Save/load cannot duplicate a split/transfer/Auto Pickup transaction.
 
 ## 30. Edge Cases
 
-If a stack partially fits, only the maximum valid quantity transfers.
+- A partially fitting stack transfers only its maximum legal quantity.
+- An indivisible item that does not fit remains completely at source.
+- A dropped fluid container keeps ownership of its contents.
+- Auto Pickup ignores an eligible item that currently does not fit; it does not repeatedly spam the player.
+- If a Quick Slot's stack is partly consumed, it continues referencing the surviving stack/object.
+- If a reserved item is force-released by its owning system, Inventory sees it as movable only after release commits.
+- If Backpack Condition degrades below a capacity-affecting threshold, the item definition must provide an explicit safe overflow policy; baseline backpack models do **not** lose hard capacity solely from Condition unless such a policy is defined.
 
-If removing the backpack would make current contents exceed replacement capacity, backpack removal is blocked until inventory is reduced.
+## 31. Tuneable Parameters
 
-If a container holding fluid is dropped, the fluid remains owned by that container.
+Tuneable values include:
 
-If a Quick Slot item is consumed completely, the slot becomes empty rather than referencing a nonexistent item.
+- backpack Mass/Volume capacities;
+- Heavy Load threshold;
+- stack limits;
+- item Mass/Volume;
+- containment/container capacity;
+- Auto Pickup proximity radius;
+- UI sorting defaults.
 
-## 31. Explicit Non-Goals
+Ownership conservation, dual-capacity enforcement, Quick Slot reference semantics, and Auto Pickup eligibility restrictions are fixed.
 
-Inventory does not provide:
+## 32. Explicit Non-Goals
+
+The baseline does not include:
 
 - unlimited carrying;
-- weightless tonnes of ore;
-- global station inventory access in the field;
-- duplicate Quick Slot items;
-- loose backpack storage of arbitrary gases/fluids;
-- mission failure refund of consumed supplies.
-
-## 32. Tuneable Parameters
-
-Tuneable values include base backpack mass/volume, soft-load threshold, stack limits, item mass/volume, and specialty container capacity.
+- weightless bulk ore;
+- global station inventory access from the field;
+- duplicated Quick Slot items;
+- loose backpack gases/fluids;
+- automatic strategic-resource pickup;
+- defeat refund of consumed supplies;
+- hidden overflow storage;
+- ownership duplication.
 
 ## 33. Dependencies
 
-This specification depends on GDS-4 Resource Model/Catalog, Equipment, Movement, Interaction, Missions, Spacecraft Cargo, Station Logistics, and Economy.
+Depends on GDS-4 Resource Model/Catalog, Equipment, Movement, Interaction, Missions/Extraction/Failure, Spacecraft Cargo, Station Logistics, Economy, Save/Persistence, and GDS-13 UI/Accessibility.
 
 ## 34. Open Questions
 
-None in the portable-inventory baseline.
+None.

@@ -6,13 +6,13 @@ A gameplay rule, mechanic, interaction, failure state, visual requirement, or pr
 
 ## Current Status
 
-The project remains in the **pre-implementation design/governance phase**.
+The project has completed **GDS-0 through GDS-14**. The authoritative gameplay and presentation specification is formally **Design Complete** under [Design Authority](00_design_authority.md).
 
-First-pass design through GDS-13 is complete and the GDS-14 whole-project cross-system audit has been executed.
+The GDS-14 promotion sweep traversed **156 authoritative owning specifications**: **156/156 are Design Complete**, all **14 authoritative domains** are synchronized, and the final hard-blocker count is **0**.
 
-The cross-system audit is green after documented corrections, but the complete GDS is **not yet formally Design Complete**, because authoritative child specifications still require an explicit per-file maturity/status promotion sweep under [Design Authority](00_design_authority.md).
+Historical first-pass `CROSS_VALIDATION.md` files remain audit evidence and do not override the promoted owning contracts.
 
-No gameplay development is authorized yet.
+Gameplay implementation has **not** begun. The closed design gate now permits the separate **technical architecture and implementation-roadmap phase** before C++/OpenGL gameplay construction begins.
 
 ## Core Documents
 
@@ -78,20 +78,11 @@ Cross-system authority, compound scenarios, transactions/persistence, failure/so
 
 See [`audit/FINAL_REPORT.md`](audit/FINAL_REPORT.md).
 
-## Why Development Still Does Not Start
+## Post-GDS Handoff
 
-[Design Authority](00_design_authority.md) defines **Draft**, **Under Review**, **Design Complete**, and **Implementation Locked** as meaningful specification states.
+The former specification-maturity blocker is closed. Every authoritative owning specification now meets the project-defined `Design Complete` standard.
 
-Many authoritative child documents still explicitly carry Draft/Under Review status.
-
-Therefore a directory-level green audit cannot silently convert those files into implementation contracts.
-
-The remaining design-governance task is the **GDS-14 Design Complete Promotion Sweep** documented in:
-
-- [`audit/SPECIFICATION_MATURITY_AUDIT.md`](audit/SPECIFICATION_MATURITY_AUDIT.md);
-- [GDS Roadmap](GDS_ROADMAP.md).
-
-That sweep must inspect each authoritative child specification, resolve remaining implementation-relevant ambiguous/stale Draft wording, normalize cross-cutting terminology, and promote only passing files to **Design Complete**.
+`Design Complete` is intentionally distinct from `Implementation Locked`. The next phase translates approved gameplay behavior into technical architecture, subsystem boundaries, data contracts, implementation sequencing, and engineering validation gates. Specific contracts become `Implementation Locked` only when they are explicitly handed to implementation under change control.
 
 ## Implementation Gate
 
@@ -110,9 +101,11 @@ Current state:
 
 GDS-0 through GDS-13  
 → first-pass complete  
-→ GDS-14 cross-system audit **complete**  
-→ five cross-system findings **resolved**  
-→ Design Complete Promotion Sweep **next**  
-→ only after that: technical architecture / implementation roadmap / scaffolding / development.
+→ GDS-14 cross-system audit complete  
+→ cross-system findings resolved  
+→ Design Complete Promotion Sweep **PASS**  
+→ authoritative GDS **DESIGN COMPLETE**  
+→ **next: technical architecture and implementation roadmap**  
+→ after those gates: C++/OpenGL scaffolding and gameplay implementation.
 
-**Gameplay implementation has not begun and must not begin at the current project state.**
+**Gameplay implementation has not begun.**

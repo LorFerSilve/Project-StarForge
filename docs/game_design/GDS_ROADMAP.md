@@ -21,7 +21,7 @@ Established:
 
 ## GDS-1 — Global Game Rules
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines project-wide invariants including:
 
@@ -43,7 +43,7 @@ GDS-14 corrected the time and defeat-recovery wording without changing the proje
 
 ## GDS-2 — Home Space Station
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Authoritative domain for:
 
@@ -65,7 +65,7 @@ Authoritative domain for:
 
 ## GDS-3 — Survivors and Crew
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Authoritative domain for:
 
@@ -81,7 +81,7 @@ Authoritative domain for:
 
 ## GDS-4 — Resources, Processing, Crafting, and Research
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -95,7 +95,7 @@ Defines:
 
 ## GDS-5 — Player Character
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -112,7 +112,7 @@ GDS-14 added a cross-cutting Recovery Transit/destination authority and reconcil
 
 ## GDS-6 — Spacecraft
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -128,7 +128,7 @@ Defines:
 
 ## GDS-7 — World, Galaxy, Narrative, and Factions
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -143,7 +143,7 @@ Defines:
 
 ## GDS-8 — Missions and Exploration
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -158,7 +158,7 @@ Defines:
 
 ## GDS-9 — Combat
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -174,7 +174,7 @@ Defines:
 
 ## GDS-10 — Robots
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -188,7 +188,7 @@ Defines:
 
 ## GDS-11 — Raids and Station Defense
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -204,7 +204,7 @@ Defines:
 
 ## GDS-12 — Economy, Progression, Difficulty, and Cross-Cutting Systems
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -234,7 +234,7 @@ It also reconciled Time/Dynamic Event semantics so Simulation Time is the sole g
 
 ## GDS-13 — Presentation, Onboarding, and Accessibility
 
-**Status:** First-Pass Complete — GDS-14 Audited
+**Status:** Design Complete — GDS-14 Promoted
 
 Defines:
 
@@ -252,7 +252,7 @@ GDS-14 validates that critical cross-system states remain readable under color-i
 
 ## GDS-14 — Cross-System Consistency Audit
 
-**Status:** Audit Complete — Design Complete Promotion Pending
+**Status:** Complete — Design Complete Promotion Passed
 
 GDS-14 audited the complete first-pass specification across domains.
 
@@ -291,40 +291,29 @@ All five cross-system problems now have authoritative resolutions.
 
 ### Formal Maturity Result
 
-**Pending.**
+**PASS.**
 
-Many authoritative child specifications remain explicitly `Draft` or newly `Under Review`.
+All **156 authoritative owning specifications** were traversed, normalized against current cross-domain contracts, checked for implementation-critical open questions and stale dependencies, and promoted to `Design Complete` only after the hard maturity gate passed.
 
-Under [`00_design_authority.md`](00_design_authority.md), those files cannot silently be treated as `Design Complete`.
+### GDS-14 Closure Action — Design Complete Promotion Sweep
 
-### Required GDS-14 Closure Action — Design Complete Promotion Sweep
+**COMPLETE.**
 
-Before technical architecture or implementation planning:
-
-1. traverse every authoritative child specification;
-2. resolve remaining implementation-relevant ambiguity in Draft wording;
-3. remove stale future-dependency language;
-4. normalize gameplay timing terminology to Simulation Time;
-5. verify fixed rules vs tuneable values;
-6. promote each passing authoritative spec individually to `Design Complete`;
-7. run targeted regression checks after promotion edits;
-8. update final domain/root status only when the child specs agree.
-
-This is still **game-design documentation/governance**, not development.
+The sweep performed the required per-spec traversal, gameplay-time and dependency normalization, semantic ambiguity review, status promotion, domain synchronization, and regression validation. Evidence is recorded in [`audit/DESIGN_COMPLETE_PROMOTION_REPORT.md`](audit/DESIGN_COMPLETE_PROMOTION_REPORT.md).
 
 ## Current Project Gate
 
-The project has completed the planned GDS-14 **cross-system audit**, but the complete GDS has **not yet passed formal Design Complete promotion**.
+The complete authoritative GDS is **Design Complete**. The design-governance blocker that previously prohibited technical handoff is closed.
 
-Therefore the next project action is the GDS-14 Design Complete Promotion Sweep.
+The next project action is **technical architecture**, followed by an implementation roadmap. This status does not claim that gameplay implementation has already started.
 
 ## After Formal GDS Completion
 
-Only after the promotion sweep succeeds and the relevant design is formally Design Complete may the project proceed to:
+The project may now proceed, in order, to:
 
 1. technical architecture;
 2. implementation roadmap;
 3. C++/OpenGL project scaffolding;
 4. gameplay implementation.
 
-**No gameplay development begins before that gate is satisfied.**
+`Implementation Locked` remains a later governance status applied when a Design Complete contract is explicitly handed to implementation and change-control expectations are active.

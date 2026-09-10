@@ -1,6 +1,6 @@
 # Design Decisions
 
-> **Status:** Draft  
+> **Status:** Active Accepted-Decision Log  
 > **Purpose:** Record major accepted design decisions and their rationale.
 
 This file records decisions whose rationale is important to preserve.
@@ -1242,3 +1242,46 @@ Project StarForge uses believable engineering function, material response, scale
 ### Rationale
 
 The style supports gameplay readability, modular environments, technical feasibility for the custom C++/OpenGL project, and a coherent identity without making photoreal asset production a core dependency.
+
+
+---
+
+## DD-081 — Repeated Severity and Priority Labels Are Typed by Domain
+
+**Status:** Accepted
+
+### Decision
+
+Same-spelled labels from different systems are distinct typed values. In particular, `PowerLoadPriority`, `AlarmPriority`, and `AutomationReportSeverity` are separate domains and must not be serialized, compared, or routed as one universal severity/priority enum.
+
+### Rationale
+
+This prevents cross-system collisions while preserving concise player-facing labels such as P0/P1 and Critical.
+
+---
+
+## DD-082 — Baseline Gameplay Has One Simulation Rate
+
+**Status:** Accepted
+
+### Decision
+
+Baseline gameplay, including strategic transit, runs at 1.0x Simulation Time. There is no player-controlled fast-forward, slow-motion, selective subsystem acceleration, or transit-only time compression. Adding such behavior later requires a formal design change.
+
+### Rationale
+
+A single rate preserves the cross-system time authority established by DD-069 and prevents divergence between travel, Horizon simulation, hazards, events, recovery, and combat.
+
+---
+
+## DD-083 — Design Complete Modal Language Must Encode a Defined Choice Source
+
+**Status:** Accepted
+
+### Decision
+
+Words such as `may`, `can`, `possible`, and `optional` are valid in a Design Complete contract only when the source of variation is explicit: player choice, authored content/data, equipment/capability state, physical/world condition, tuneable value, or explicitly excluded future scope. They cannot delegate gameplay behavior to implementer preference.
+
+### Rationale
+
+Semantic governance is stricter and more useful than a keyword ban: it preserves legitimate conditional systems while preventing hidden unresolved design decisions.

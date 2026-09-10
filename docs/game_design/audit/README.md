@@ -2,8 +2,8 @@
 
 > **Audit Status:** Complete  
 > **Cross-System Consistency:** PASS after corrections  
-> **Design Complete Promotion:** Pending  
-> **Implementation:** Not Authorized
+> **Design Complete Promotion:** PASS  
+> **Technical Handoff:** Authorized; gameplay implementation not yet started
 
 This directory contains the whole-project GDS-14 audit performed after first-pass design through GDS-13.
 
@@ -14,7 +14,8 @@ This directory contains the whole-project GDS-14 audit performed after first-pas
 - [`TRANSACTION_AND_PERSISTENCE_AUDIT.md`](TRANSACTION_AND_PERSISTENCE_AUDIT.md) — ownership, identity, timers, atomic commits, save/load and anti-duplication;
 - [`PRESENTATION_AND_ACCESSIBILITY_AUDIT.md`](PRESENTATION_AND_ACCESSIBILITY_AUDIT.md) — truthful/readable state under GDS-13 presentation and accessibility configurations;
 - [`SPECIFICATION_MATURITY_AUDIT.md`](SPECIFICATION_MATURITY_AUDIT.md) — formal readiness check against `../00_design_authority.md`;
-- [`FINAL_REPORT.md`](FINAL_REPORT.md) — consolidated verdict and required next action.
+- [`FINAL_REPORT.md`](FINAL_REPORT.md) — consolidated final GDS-14 verdict;
+- [`DESIGN_COMPLETE_PROMOTION_REPORT.md`](DESIGN_COMPLETE_PROMOTION_REPORT.md) — per-spec maturity promotion and closure evidence.
 
 ## Blocking Findings Discovered and Resolved
 
@@ -45,10 +46,10 @@ Corrected:
 
 ## Current Gate
 
-Cross-system behavior is coherent after those corrections.
+Cross-system behavior is coherent and the Design Complete Promotion Sweep has passed.
 
-The full authoritative design is **not yet formally Design Complete**, because many individual child specs still carry Draft/Under Review status under the project's governance.
+All **156 authoritative owning specifications** are `Design Complete`; the authoritative GDS is therefore formally **DESIGN COMPLETE**.
 
-The next action is therefore a **Design Complete Promotion Sweep**, still part of design-document governance.
+Historical audit and `CROSS_VALIDATION.md` material remains evidence of earlier phases and does not override the promoted owning specifications.
 
-No C++/OpenGL implementation, engine scaffolding, or gameplay development may begin from this audit state.
+The project may now enter **technical architecture and implementation-roadmap design**. No C++/OpenGL gameplay implementation was performed by GDS-14.

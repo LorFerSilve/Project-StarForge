@@ -1,7 +1,7 @@
 # Dynamic Events
 
-> **Status:** Draft  
-> **Authority:** Dynamic Event identity, generation, eligibility, concurrency, lifecycle, active-time scheduling, event families, Horizon attack creation, market/world effects, cooldown/grace, persistence, and anti-frustration rules
+> **Status:** Under Review — GDS-14 Corrected  
+> **Authority:** Dynamic Event identity, generation, eligibility, concurrency, lifecycle, Simulation-Time scheduling, event families, Horizon attack creation, market/world effects, cooldown/grace, persistence, and anti-frustration rules
 
 ## 1. Purpose
 
@@ -9,9 +9,7 @@ Dynamic Events make the galaxy respond to active play without creating random un
 
 ## 2. Dynamic Event ID
 
-Every generated dynamic event has a persistent **Dynamic Event ID**.
-
-It records:
+Every generated dynamic event has a persistent **Dynamic Event ID** recording:
 
 - event type;
 - stable seed;
@@ -19,7 +17,7 @@ It records:
 - involved faction(s);
 - eligibility snapshot;
 - lifecycle state;
-- timers;
+- Strategic Timers;
 - generated mission/market/world effects;
 - resolution state.
 
@@ -27,7 +25,7 @@ It records:
 
 The event seed is fixed at creation.
 
-Reloading does not reroll:
+Reloading the same committed event does not reroll:
 
 - event type;
 - key actors;
@@ -45,43 +43,49 @@ Candidate
 → Active  
 → Resolved / Expired / Cancelled.
 
-Not every event uses an Offered state; a world incident can be Scheduled directly.
+Not every event requires Offered; a committed world incident can enter Scheduled directly.
 
 ## 5. Candidate
 
-A Candidate is evaluated against eligibility but is not yet committed to the world.
+A Candidate is evaluated against eligibility but is not yet committed to world state.
 
-Rejected candidates leave no player-visible event.
+Rejected candidates create no player-visible/persistent event.
 
 ## 6. Offered
 
-An optional opportunity is visible/known to the player through a valid information source.
+An optional opportunity is committed and visible to the player only through a valid information/communication source.
 
-It may expire after Active Game Time.
+It can expire after a persisted Simulation-Time duration.
 
 ## 7. Scheduled
 
-A committed event is expected to begin/arrive later, such as a convoy or hostile force already dispatched.
+A committed event is expected to activate/arrive later.
+
+Examples:
+
+- convoy already dispatched;
+- hostile force en route;
+- target recovery operation scheduled.
 
 ## 8. Active
 
-The event currently affects world/market/station/mission state.
+The event currently affects world, market, station, mission, or faction state.
 
 ## 9. Resolved
 
-Its terminal outcome has committed.
+The terminal outcome has committed.
 
 One-time rewards/consequences cannot fire again.
 
 ## 10. Expired
 
-An optional opportunity elapsed without acceptance/interaction.
+An optional opportunity elapsed without required player acceptance/action.
 
-Expiration does not count as mission failure unless an authored accepted obligation says otherwise.
+Expiration is not mission failure unless an accepted obligation explicitly makes it so.
 
 ## 11. Cancelled
 
-The event became invalid before activation due to a legitimate world-state change.
+The event became invalid before activation due to a legitimate committed world-state change.
 
 The reason is recorded.
 
@@ -99,87 +103,105 @@ Baseline families:
 8. Anomaly / Research Event;
 9. Station Emergency;
 10. Horizon Station Defense Event;
-11. NPC Raid/Conflict Opportunity;
+11. NPC Raid / Conflict Opportunity;
 12. Recovery / Follow-Up Event.
 
 ## 13. Mission-Producing Events
 
-An event can create a GDS-8 Mission Offer.
+A Dynamic Event can create a GDS-8 Mission Offer.
 
-Once that Mission ID is generated, GDS-8 lifecycle/seed/objectives are authoritative.
+Once a Mission ID is committed, GDS-8 owns that mission's lifecycle, objectives, seed, deployment, extraction, and resolution.
 
-The Dynamic Event does not create a parallel mission state machine.
+Dynamic Events does not create a second mission state machine.
 
 ## 14. Horizon Defense Event Creation
 
-Dynamic Events owns **when** a GDS-11 Horizon Defense Event is generated.
+Dynamic Events owns **when** a procedural GDS-11 Horizon Defense Event is created.
 
-GDS-11 owns its execution after `Defense Event ID` creation.
+GDS-11 owns execution after Defense Event ID creation.
 
 ## 15. Horizon Attack Eligibility
 
 A procedural Horizon attack candidate requires all of:
 
-- an attacker faction/group with plausible hostility/motive;
-- a valid route/reach to Aster's Rest;
-- a world source for the attacking force;
-- Horizon Station currently existing/operational enough to be a meaningful target;
-- no protected recovery/grace blocker;
-- no conflicting campaign-authored state that forbids the attack.
+- plausible hostile/motivated attacker;
+- valid world source for the force;
+- valid strategic reach/route to Aster's Rest;
+- Horizon exists and remains a meaningful target;
+- no active Recovery Grace blocker;
+- no conflicting authored campaign state forbids it;
+- no other active/scheduled Critical Horizon Station Event under the concurrency rule.
 
 ## 16. No Threat From Nothing
 
-An attack cannot generate because a hidden random timer decided so if no faction/world source can plausibly mount it.
+A Horizon attack cannot be generated by a free-floating punishment timer without a plausible world/faction source.
 
 ## 17. Attack Motivation
 
-Generated attacker objectives can be weighted by known world state:
+Attacker objectives can be weighted by known world state:
 
-- resource theft;
+- physical resource theft;
 - retaliation;
 - strategic sabotage;
-- recover/capture asset;
+- asset recovery/capture;
 - route conflict;
-- Blackwake opportunism.
+- Blackwake opportunism;
+- explicit faction/world objective.
 
-Attackers do not omnisciently target hidden stock they have no intelligence about.
+Attackers cannot select hidden stock or hidden infrastructure using information they do not possess.
 
-## 18. Recovery Grace
+## 18. Recovery Grace Trigger
 
-After a **Major or Severe** Horizon defense outcome, procedural Horizon attack generation enters a **Recovery Grace** state.
+Every resolved **ordinary procedural Horizon Defense Event** starts or refreshes Recovery Grace according to `horizon_recovery_state.md`.
 
-During Recovery Grace, no new ordinary procedural Horizon raid can be created.
+This is the canonical trigger.
 
-Baseline initial target: **30 minutes of Active Game Time**, with the timer extending while Horizon remains in a defined Critical Recovery state.
+The previous ambiguous `Major/Severe outcome` wording is removed.
 
-The exact duration is tuneable; the existence of recovery protection is fixed.
+## 19. Recovery Grace Timing
 
-## 19. Authored Exception
+Recovery Grace uses Simulation Time.
 
-A main-story crisis can override normal procedural Recovery Grace only when explicitly authored and telegraphed.
+Initial design target:
 
-Procedural events cannot.
+- 30 minutes remaining after an ordinary procedural Defense Event resolves.
 
-## 20. Event Concurrency
+While Horizon is in Critical Recovery:
+
+- grace remains active;
+- grace countdown pauses;
+- no ordinary procedural follow-up Horizon raid can be created.
+
+When Critical Recovery ends, the remaining grace duration resumes.
+
+## 20. Authored Grace Exception
+
+A main-story crisis can override normal procedural Recovery Grace only when explicitly authored, telegraphed through a valid information path, and compatible with campaign softlock protection.
+
+Procedural generation cannot override it.
+
+## 21. Event Concurrency
 
 Baseline player-facing limits:
 
 - maximum **3** concurrently Offered optional external Dynamic Events;
 - maximum **1** active/scheduled Critical Horizon Station Event;
-- generated ordinary offers do not count canonical story missions against this cap.
+- canonical story missions do not consume the optional-offer cap.
 
 Excess candidates wait/reject rather than flooding the player.
 
-## 21. One External Deployment Rule
+## 22. One External Deployment Rule
 
-Multiple Event/Mission offers may exist, but the player still has only one GDS-8 external Deployed Mission Instance at a time.
+Multiple Event/Mission offers can exist, but only one GDS-8 external Deployed Mission Instance can be active at once.
 
-## 22. Eligibility Inputs
+A Horizon Defense Event remains a Home Station Event and can coexist with that one external deployment.
+
+## 23. Eligibility Inputs
 
 Generation can consider:
 
 - current Reach access;
-- canonical system/route;
+- canonical location/route state;
 - story phase;
 - faction relationship;
 - previous event history;
@@ -187,74 +209,80 @@ Generation can consider:
 - target persistence;
 - station capability/vulnerability;
 - known discoveries;
-- current event concurrency;
-- cooldown/grace.
+- event concurrency;
+- cooldown/grace;
+- authored world conditions.
 
-It does not directly inspect player gear to scale the galaxy to the player.
+It does not inspect player gear to universally match world power to the player.
 
-## 23. No Universal Player-Power Matching
+## 24. Threat Envelope
 
-Dynamic Events are drawn from world-valid threat envelopes.
+Dynamic Events use world-valid threat envelopes.
 
-An event can be too dangerous for the current player.
+An offered event may be too dangerous for the current player.
 
-Threat/recommendation communicates that risk under GDS-8.
+GDS-8 presentation communicates known threat without altering it to guarantee parity.
 
-## 24. Geographic Validity
+## 25. Geographic Validity
 
-Events must attach to actual GDS-7 Strategic Locations/routes or valid procedural side locations.
+Events attach to actual GDS-7 Strategic Locations/routes or explicitly valid procedural side locations.
 
-They cannot relocate canonical factions/story sites.
+They cannot move canonical factions/story sites to random locations.
 
-## 25. Information and Discovery
+## 26. Information and Discovery
 
-The player learns of an event only through a valid source such as:
+The player learns of an event only through a valid source/path such as:
 
-- station/ship communications;
+- station/ship communication;
 - faction message;
 - distress beacon;
 - sensor contact;
 - physical encounter;
-- market/news contact.
+- market/news contact;
+- recorded/queued communication.
 
-An undiscovered event need not appear magically on the map.
+`communications_and_remote_control.md` owns strategic delivery availability.
 
-## 26. Distress Event
+## 27. Distress Event
 
-Can generate a Rescue/Repair/Escort mission with stable survivor/ship/location identity.
+Can create Rescue/Repair/Escort opportunities with stable survivor/ship/location identity.
 
-Ignoring it can lead to authored expiration/resolution, but it cannot delete mandatory campaign progress.
+Ignoring the optional event can produce its authored natural outcome but cannot delete mandatory campaign progress.
 
-## 27. Salvage Event
+## 28. Salvage Event
 
-Can represent a newly detected wreck, post-battle debris field, or temporary safe salvage window.
+Can represent:
 
-Loot is generated once and physically conserved.
+- newly detected wreck;
+- post-battle debris;
+- temporary access/safety window.
 
-## 28. Resource Event
+Physical salvage is generated once and conserved under GDS-4.
 
-Can reveal a temporary-access deposit/site.
+## 29. Resource Event
 
-The deposit remains finite under GDS-4.
+Can reveal a finite temporary-access deposit/site.
 
-## 29. Trader / Convoy Event
+No event creates infinite deposits.
 
-A convoy is a world supply source that can:
+## 30. Trader / Convoy Event
 
-- temporarily add market stock;
-- create escort/trade opportunity;
+A convoy is a physical/world supply source that can:
+
+- add finite market stock;
+- create trade/escort opportunity;
 - be attacked by valid factions;
-- depart after active-time schedule.
+- depart after a Simulation-Time schedule.
 
-It is not a menu-only stock reset.
+It is not merely a menu stock reset.
 
-## 30. Market Event
+## 31. Market Event
 
-Shortage/Surplus changes market modifiers/stock through Economy rules.
+Shortage/Surplus changes finite market state through Economy rules.
 
-It cannot create negative-price loops or duplicate stock.
+It cannot create negative-price loops or duplicate physical stock.
 
-## 31. Faction Conflict
+## 32. Faction Conflict
 
 Can create:
 
@@ -265,106 +293,113 @@ Can create:
 - patrol;
 - negotiation opportunity.
 
-Faction reputation consequences use existing faction authority.
+Consequences use existing faction/reputation authority.
 
-## 32. Route Event
+## 33. Route Event
 
-A route disruption can affect access/risk only when a plausible route condition exists.
+A route disruption affects access/risk only through a plausible world route condition.
 
-Mandatory campaign routes cannot be permanently removed without an alternate recovery path.
+A mandatory campaign path cannot become permanently impossible without a valid alternate/recovery route.
 
-## 33. Anomaly Event
+## 34. Anomaly Event
 
 Can create Research Evidence opportunity or hazardous survey mission.
 
 It cannot award generic Science Points.
 
-## 34. Station Emergency
+## 35. Station Emergency
 
-Internal station emergencies remain GDS-2 execution authority.
+GDS-2 owns actual station-emergency execution.
 
-Dynamic Events can trigger them from valid state/world causes.
+Dynamic Events can schedule/trigger one only through valid event/world causes.
 
-## 35. Event Expiration
+## 36. Event Expiration
 
-Expiration uses Active Game Time.
+Offer expiration uses a persisted Strategic Timer based on Simulation Time.
 
-True Pause/offline time stops the timer.
+True Pause, Construction Mode, applicable cinematic hold, and application shutdown stop it.
 
-## 36. Scheduled Arrival
+## 37. Scheduled Arrival
 
-A Scheduled event such as convoy/attack has a persistent ETA.
+Scheduled arrivals use Simulation Time.
 
-Destroying its originating communication after dispatch does not retroactively cancel a committed force unless the event's rules provide a recall path.
+Once dispatch/call transaction commits, destroying the origin communication later cannot retroactively unsend the force unless a valid recall path exists.
 
-## 37. Cooldowns
+## 38. Cooldowns
 
-Event families can use Active-Time cooldowns to prevent repetition.
+Event-family cooldowns use Simulation Time.
 
-The same exact event type/location should not repeatedly fire without world justification.
+They prevent repetitive firing without changing physical combat difficulty.
 
-Exact cooldown durations are tuneable.
+Exact durations are tuneable.
 
-## 38. Anti-Frustration Weighting
+## 39. Anti-Frustration Weighting
 
-Generation must consider unresolved severe player setbacks.
+Generation considers unresolved severe setbacks.
 
 Examples:
 
-- do not repeatedly generate Horizon raids during Critical Recovery;
-- avoid stacking multiple ordinary high-pressure station emergencies without an authored crisis;
-- avoid offering only unreachable missions.
+- no procedural Horizon raids during Recovery Grace;
+- no stacking ordinary high-pressure station emergencies onto Critical Recovery without authored crisis rules;
+- avoid offering only currently unreachable content;
+- avoid rapid repetition of the same location/event family without world justification.
 
-This affects event eligibility/weights, not hidden combat scaling.
+This changes eligibility/weight, not hidden HP/damage scaling.
 
-## 39. No Mandatory Story Softlock
+## 40. Campaign Softlock Protection
 
-A procedural Dynamic Event cannot permanently destroy/steal the sole required object, character, route, or Knowledge Asset needed to continue the main campaign.
+A procedural Dynamic Event cannot permanently eliminate the sole required:
 
-## 40. Target Recovery Integration
+- item;
+- route;
+- character;
+- ship capability;
+- station capability;
+- committed Knowledge Asset
 
-Persistent NPC Raid Targets can receive recovery events/processes:
+needed for the main campaign.
+
+## 41. Persistent Raid-Target Recovery
+
+NPC Raid Targets can receive recovery/replenishment processes:
 
 Damaged/Depleted  
 → Recovery Scheduled  
-→ repair/replenishment progresses during Active Game Time  
-→ recovered components/stock commit.
+→ Simulation-Time repair/replenishment  
+→ committed recovered state.
 
-Recovery uses plausible faction/economic support and cannot restore unique stolen objects.
+Recovery requires plausible faction/economic/world support.
 
-## 41. Target Recovery Rate
+## 42. Target Recovery Invariants
 
-Exact repair/replenishment times are tuneable by target/faction/scale.
-
-The fixed rule is that recovery:
+Target recovery:
 
 - is not instantaneous;
-- is persistent;
-- does not happen offline;
-- cannot duplicate stolen unique items;
-- can be interrupted by new valid events.
+- does not happen while game is closed;
+- uses Simulation Time;
+- cannot duplicate stolen unique objects;
+- does not erase explicitly persistent story damage unless authored;
+- can be interrupted by another valid event.
 
-## 42. Event Rewards
+## 43. Event Rewards
 
-Rewards use GDS-8 and Loot/Reward Rules.
+Rewards use GDS-8 plus Loot/Reward authority.
 
-Each event outcome reward commits once.
+Each reward transaction commits exactly once.
 
-## 43. Ignoring Optional Events
+## 44. Ignoring Optional Events
 
-Optional events are not chores.
+Ignoring an Offered optional event can change only its explicitly defined local/world/economic outcome.
 
-Ignoring an Offered event may change local world/economic state only where the event explicitly defines a natural outcome.
+There is no generic global punishment for declining procedural content.
 
-The player is not globally penalized simply for not accepting procedurally generated content.
+## 45. Deterministic Off-Screen Resolution
 
-## 44. Deterministic Resolution
+Any event that legitimately resolves/progresses off-screen during Simulation Time uses its saved ID/seed/state.
 
-Off-screen event resolution that legitimately proceeds during Active Game Time uses the saved event seed/state.
+Save/load cannot reroll the same committed event outcome.
 
-Save/load cannot reroll its outcome.
-
-## 45. Save/Persistence
+## 46. Save/Persistence
 
 Persist:
 
@@ -372,31 +407,41 @@ Persist:
 - seed;
 - lifecycle;
 - source/location;
-- timers;
-- generated mission link;
+- Strategic Timers;
+- generated Mission ID link;
 - committed world/economic effects;
-- cooldown/grace state.
+- cooldown state;
+- Recovery Grace state/source.
 
-## 46. Explicit Non-Goals
+## 47. Pause
+
+True Pause freezes all Dynamic Event timing and off-screen resolution.
+
+The station cannot be attacked or lose assets while the player is in true pause.
+
+## 48. Explicit Non-Goals
 
 Dynamic Events do not provide:
 
 - real-world daily events;
-- offline attacks;
+- offline attacks/progression;
 - endless event spam;
-- gear-matched world scaling;
-- arbitrary threats without world source;
+- gear-matched global scaling;
+- threats without world source;
 - procedural permanent campaign softlocks;
-- reload rerolling.
+- reload-based rerolling;
+- undefined `Major/Severe` defense classifications as a hidden grace trigger.
 
-## 47. Tuneable Parameters
+## 49. Tuneable Parameters
 
-Generation weights, offer duration, cooldowns, recovery grace duration, attack frequency, target recovery rates, concurrency caps, and event-specific probabilities are tuneable except where an initial baseline cap is explicitly stated.
+Generation weights, offer duration, cooldowns, Recovery Grace duration, attack frequency, target recovery rates, concurrency caps, and event-specific probabilities are tuneable.
 
-## 48. Dependencies
+Clock ownership, Recovery Grace trigger/behavior, persistent IDs/seeds, and world-source requirements are fixed.
 
-This specification depends on GDS-2 Station Events, GDS-7 World/Factions, GDS-8 Missions, GDS-11 Defense Events, Economy, Loot, Time, Persistence, Failure/Recovery, and Progression.
+## 50. Dependencies
 
-## 49. Open Questions
+Depends on GDS-2 Station Events, GDS-7 World/Factions, GDS-8 Missions, GDS-11 Defense Events, Economy, Loot, `time_and_simulation.md`, `save_and_persistence.md`, `failure_recovery_rules.md`, `horizon_recovery_state.md`, `communications_and_remote_control.md`, and Progression.
 
-None in the Dynamic Event baseline.
+## 51. Open Questions
+
+None after GDS-14 time/recovery reconciliation.

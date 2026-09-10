@@ -19,72 +19,31 @@ Authoritative design domain for manufactured robotic units.
 
 ## Authority Boundary
 
-This domain owns:
+This domain owns persistent Robot IDs, manufacturing/commissioning, classes/components, Internal Energy Reserve, bounded player-robot AI, Tactical Control Capacity/Command Load, squads/deployment, tactical commands/ROE, robot damage/repair/recovery/loss, and station robot roles.
 
-- persistent player-owned Robot IDs;
-- robot manufacturing/commissioning;
-- canonical robot classes;
-- robot component architecture;
-- Internal Energy Reserve;
-- player robot AI;
-- Tactical Control Capacity and Command Load;
-- squad composition/deployment;
-- tactical commands and ROE;
-- robot-specific damage/subsystem consequences;
-- repair/recovery/loss;
-- station robot roles and physical automation behavior.
-
-GDS-2 owns station task scheduling, manufacturing infrastructure, power, logistics, and security orchestration.
-
-GDS-3 owns human crew professions/supervision.
-
-GDS-4 owns physical resources, crafting, Blueprint, Research, and salvage.
-
-GDS-6 owns spacecraft robot racks/bays and transport/service capability.
-
-GDS-8 owns mission deployment/extraction/failure.
-
-GDS-9 owns generic hit/damage/weapon/shield/armor/status combat mathematics.
-
-GDS-11 owns raid and station-defense orchestration.
-
-GDS-12 owns robot-facing economy, bounded TCC progression, difficulty constraints, persistence, replacement pacing, and finale readiness thresholds.
+GDS-2 owns station task scheduling/infrastructure. GDS-3 owns human crew. GDS-4 owns Resources/Crafting/Research. GDS-6 owns spacecraft racks/bays. GDS-8 owns mission deployment/extraction/failure. GDS-9 owns generic combat math. GDS-11 owns raid/defense orchestration. GDS-12 owns economy/TCC progression/Difficulty/persistence/finale thresholds. GDS-13 owns robot/squad UI, feedback, visual class language, audio/VFX, onboarding, and accessibility.
 
 ## Core Baseline
 
-GDS-10 establishes:
-
-- robots as physical manufactured persistent units rather than troop cards;
-- routine permanent robot destruction, unlike human crew;
-- eight canonical field classes;
-- Light/Medium/Heavy robot sizes;
-- finite Tactical Control Capacity;
-- separate transport and command constraints;
-- physical Robot Rack Units and Heavy Robot Bay requirements;
-- finite robot energy and ammunition;
-- component-based progression rather than generic robot levels/rarity;
-- bounded non-omniscient robot AI;
-- explicit ROE and tactical command state machine;
-- Disabled versus Destroyed semantics;
-- field repair, towing, wreck recovery, and Lost state;
-- station Maintenance, Logistics, Agriculture, Security, and Utility robot roles;
-- physical station automation without teleporting work/resources.
+GDS-10 establishes physical manufactured persistent robots; routine permanent robot destruction unlike human crew; eight canonical field classes; Light/Medium/Heavy sizes; finite TCC; separate transport/command constraints; Robot Rack/Heavy Bay requirements; finite energy/ammunition; component progression rather than rarity/levels; non-omniscient AI; ROE/commands; Disabled vs Destroyed; repair/towing/wreck/Lost state; and physical station automation roles.
 
 ## Downstream Resolution
 
-GDS-11 has resolved raid/defense integration.
+GDS-11 and GDS-12 are first-pass resolved.
 
-GDS-12 has resolved:
+GDS-13 now resolves:
 
-- TCC progression;
-- component/replacement economy context;
-- robot attrition/recovery pacing;
-- final save semantics;
-- robot-related difficulty constraints;
-- finale minimum TCC/squad requirements.
+- distinct class silhouettes/tool profiles;
+- Robot ID/Class/condition/energy/ammo/assignment presentation;
+- simultaneous TCC and transport-capacity UX;
+- command-state/communications/fallback feedback;
+- Disabled/Destroyed/Lost readability;
+- permanent-destruction onboarding before meaningful risk;
+- robot audio/VFX tied to actual tools, energy and damage;
+- accessible command/target presentation without hidden-information leakage.
 
 ## Completion State
 
 GDS-10 is not yet Design Complete.
 
-Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

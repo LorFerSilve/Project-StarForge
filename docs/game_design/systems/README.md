@@ -58,7 +58,7 @@ GDS-12 establishes:
 
 The GDS-12 first-pass audit found no blocking contradiction against GDS-1 through GDS-11.
 
-Presentation-specific dependencies remain for GDS-13.
+GDS-13 has now first-pass defined and cross-validated economy/trade UI, loot/value feedback, Difficulty presentation, Dynamic Event signaling, save/Stable Save Boundary feedback, failure summaries, and relevant accessibility behavior without changing GDS-12 semantics.
 
 ## Completion State
 
@@ -66,4 +66,4 @@ Cross-Cutting Systems are:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-They are not yet Design Complete because GDS-13 must define and validate their UI/feedback/accessibility presentation, and GDS-14 must perform the final full-project consistency audit.
+Their GDS-13 presentation dependency is first-pass resolved. The remaining dependency is GDS-14 final whole-project consistency audit before Design Complete status.

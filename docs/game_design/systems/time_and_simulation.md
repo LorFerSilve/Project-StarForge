@@ -1,63 +1,110 @@
 # Time and Simulation
 
-> **Status:** Draft  
-> **Authority:** Active game time, simulation advancement, True Pause, interface-time rules, strategic timers, off-screen simulation, offline behavior, and deterministic elapsed-time handling
+> **Status:** Under Review — GDS-14 Corrected  
+> **Authority:** Real Time, Active Game Time, Simulation Time, True Pause, interface-time rules, Strategic Timers, off-screen simulation, offline behavior, and deterministic elapsed-time handling
 
 ## 1. Purpose
 
-Every timed system must agree on when time advances and when it does not.
+Every timed system must agree on exactly which clock advances it and when that clock stops.
 
 ## 2. Canonical Time Concepts
 
-The design distinguishes:
+The design distinguishes three clocks/concepts:
 
-- **Real Time** — wall-clock time outside the game simulation;
-- **Active Game Time** — elapsed time while gameplay simulation is running;
-- **Simulation Time** — authoritative time consumed by systems during Active Game Time;
-- **Strategic Timer** — a persisted simulation-time countdown/ETA used by missions, travel, research, production, events, reinforcements, recovery, and markets.
+- **Real Time** — operating-system/wall-clock time outside gameplay authority;
+- **Active Game Time** — cumulative unpaused playable time used primarily for player-facing playtime/UX statistics;
+- **Simulation Time** — the authoritative gameplay clock consumed by all world, actor, production, travel, event, hazard, recovery, and economy systems.
 
-## 3. No Real-World Offline Progression
+In the baseline, normal Simulation Time advances at **1.0x** while gameplay is unpaused. Therefore Active Game Time and Simulation Time normally accumulate at the same rate, but **only Simulation Time is authoritative for gameplay outcomes**.
 
-Real-world time while the application is closed does not advance gameplay.
+## 3. Real Time Is Never Gameplay Authority
 
-It does not:
+Changing the system clock, leaving the game closed, or waiting outside the application cannot:
 
 - produce resources;
 - grow crops;
-- finish research;
+- finish Research;
 - manufacture items/robots;
 - heal crew/player;
 - recharge systems;
 - replenish markets;
 - generate/advance raids;
-- expire mission offers;
+- expire mission/event offers;
 - move reinforcements;
-- repair NPC targets.
+- repair NPC targets;
+- complete travel.
 
-## 4. True Pause
+Real-world timestamps may be stored as informational save metadata only.
 
-**True Pause** freezes Simulation Time.
+## 4. Simulation Time
+
+Simulation Time owns every gameplay-relevant duration or ETA.
+
+Examples:
+
+- production;
+- Research;
+- construction work;
+- farming;
+- healing/recovery;
+- strategic travel;
+- mission timers;
+- status-effect duration;
+- reinforcement arrival;
+- market replenishment;
+- Dynamic Event expiration/cooldown;
+- Recovery Grace;
+- raid-target recovery;
+- crew work/training;
+- robot work/charging.
+
+A subsystem may expose a friendly duration label, but the underlying authoritative timer uses Simulation Time.
+
+## 5. Active Game Time
+
+Active Game Time is a cumulative player-facing measure of unpaused gameplay participation.
+
+It may be used for:
+
+- save metadata;
+- statistics;
+- periodic autosave cadence;
+- non-gameplay UX analytics.
+
+It must not independently decide a gameplay state transition.
+
+## 6. True Pause
+
+**True Pause** freezes Simulation Time and Active Game Time.
 
 While True Pause is active:
 
 - actors stop;
+- AI stops;
 - projectiles stop;
 - hazards stop;
-- production/research stop;
-- travel/event timers stop;
-- market/recovery timers stop.
+- station/ship simulation stops;
+- production/Research stop;
+- travel stops;
+- market/event/recovery timers stop;
+- Horizon Defense Events stop;
+- reinforcement timers stop.
 
-## 5. Entering True Pause
+## 7. Entering True Pause
 
-The explicit Pause command always attempts to enter True Pause in baseline single-player gameplay except during a short non-interruptible atomic transition that must first reach its stable boundary.
+The explicit Pause command always attempts to enter True Pause in baseline single-player gameplay except during a short non-interruptible atomic transition that must first reach its Stable Save Boundary.
 
-If pause is requested during such a transaction, it activates immediately after that transaction commits.
+If Pause is requested during such a transition:
 
-## 6. Gameplay Interfaces Are Live by Default
+1. the request is retained;
+2. the atomic transaction completes;
+3. True Pause activates before the next ordinary Simulation Time step.
 
-Opening ordinary in-world interfaces does **not** pause the simulation unless the interface explicitly enters True Pause.
+## 8. Gameplay Interfaces Are Live by Default
 
-Live interfaces include by default:
+Opening an ordinary gameplay interface does **not** pause Simulation Time unless that interface explicitly invokes True Pause.
+
+Live by default:
 
 - inventory;
 - station management;
@@ -65,206 +112,242 @@ Live interfaces include by default:
 - mission briefing while physically in world;
 - robot squad management;
 - trade terminal;
-- research/manufacturing terminal;
+- Research/manufacturing terminal;
 - tactical station interfaces.
 
-The player can use the explicit Pause command when they want the single-player simulation frozen.
+The UI must visibly distinguish **Simulation Running** from **Paused** where ambiguity is possible.
 
-## 7. Construction Exception
+## 9. No Partial-Pause Gameplay Interface
 
-Existing GDS-2 Construction Mode explicitly freezes station simulation while editing/building according to its own authority.
+A normal baseline interface may not freeze only one gameplay subsystem while unrelated Simulation Time continues merely for convenience.
 
-That mode is therefore treated as a specialized True-Pause-equivalent design state for affected simulation.
+If an accessibility or planning option pauses gameplay, it invokes global True Pause.
 
-It does not allow construction during an invalid combat state.
+This prevents hidden exploits such as freezing a local hazard while station production or a remote attack continues.
 
-## 8. Authored Cinematic/Conversation Hold
+## 10. Construction Mode
 
-An authored noninteractive sequence may explicitly request a **Cinematic/Conversation Hold** when gameplay would otherwise interrupt mandatory communication/presentation.
+GDS-2 Construction Mode is a specialized global True-Pause state while open.
 
-This hold freezes relevant Simulation Time like True Pause unless the sequence explicitly declares live action.
+It freezes the complete gameplay simulation, not only station machinery.
 
-No dialogue is assumed to pause by default merely because text is on screen.
+Construction Mode still cannot be entered during active station combat under its owning rules.
 
-## 9. Active Time Source
+## 11. Cinematic / Conversation Hold
 
-Systems advance from authoritative Simulation Time rather than operating-system wall clock.
+An authored noninteractive sequence may invoke a **Cinematic/Conversation Hold**.
 
-This prevents clock changes and save/load from creating progression.
+When invoked, it freezes Simulation Time equivalently to True Pause unless the authored sequence explicitly declares itself live gameplay.
 
-## 10. Simulation Rates
+Ordinary radio chatter never pauses merely because dialogue is playing.
 
-Normal simulation rate is 1.0x.
+## 12. Simulation Rate
 
-The baseline does not require player-controlled fast-forward or slow-motion.
+Baseline gameplay Simulation Rate is 1.0x.
 
-If added later, it requires a formal design change because it affects production, combat, hazards, events, and timing.
+Player-controlled fast-forward, slow-motion, or selective time acceleration is not part of the baseline.
 
-## 11. Frame-Rate Independence
+Adding one later requires a formal design change because it changes the interaction of combat, station simulation, travel, hazards, events, and recovery.
 
-Timed gameplay results are based on elapsed Simulation Time, not rendered frame count.
+## 13. Frame-Rate Independence
 
-Damage-over-time, production, AI timers, market recovery, and movement-related timers must not become stronger/faster solely because FPS changes.
+Gameplay results use elapsed Simulation Time, not rendered frame count.
 
-## 12. Fixed/Variable Technical Ticks
+Changing FPS cannot alter the real gameplay rate of:
 
-Implementation may use different technical tick rates for different systems.
+- damage over time;
+- production;
+- AI reaction timers;
+- market cycles;
+- travel;
+- status duration;
+- cooling/heating;
+- resource consumption.
 
-Gameplay equivalence is mandatory: lower-detail/off-screen simulation must integrate the same authoritative elapsed time and preserve causal state.
+## 14. Technical Tick Rates
 
-## 13. Strategic Timers
+Implementation may use different fixed/variable/coarse technical ticks for different systems.
 
-A Strategic Timer stores at minimum:
+Every implementation must integrate the same authoritative Simulation Time and produce gameplay-equivalent causal results.
 
-- owning object/event ID;
-- duration/remaining Simulation Time;
-- state;
-- completion transaction identity where needed.
+## 15. Strategic Timer
 
-It does not store only a wall-clock completion timestamp.
+A **Strategic Timer** stores at minimum:
 
-## 14. Pause and Strategic Timers
+- owning entity/event/transaction ID;
+- remaining Simulation Time or Simulation-Time deadline;
+- current state;
+- completion transaction identity where required.
 
-All normal Strategic Timers stop during True Pause and while the application is closed.
+It never relies solely on a future wall-clock timestamp.
 
-## 15. Travel
+## 16. Timer Pause Rule
 
-Strategic travel advances through Active Game Time according to GDS-6.
+All Strategic Timers stop during:
 
-Travel does not complete while the application is closed.
+- True Pause;
+- Construction Mode;
+- Cinematic/Conversation Hold when that hold pauses gameplay;
+- application shutdown.
 
-## 16. Missions
+## 17. Strategic Travel
 
-Mission timing and hazards advance only while the relevant simulation is active.
+GDS-6 strategic travel consumes Simulation Time.
+
+While In Transit:
+
+- Horizon continues simulating;
+- Dynamic Events can progress/generate if eligible;
+- player ship systems/events can progress;
+- the application being closed does not advance travel.
+
+## 18. Missions
+
+Mission timers, hazards, objectives with durations, and local encounter timing consume Simulation Time.
 
 True Pause freezes them.
 
-## 17. Reinforcements
+## 19. Reinforcements
 
-GDS-11 reinforcement ETA uses Strategic Timer semantics.
+GDS-11 reinforcement ETA uses Strategic Timer semantics and therefore Simulation Time.
 
-Save/load preserves the remaining ETA.
+Destroying communications after a Reinforcement Call has committed does not rewind elapsed or committed state unless the raid rule provides a valid recall/cancellation path.
 
-## 18. Research and Manufacturing
+## 20. Research, Manufacturing and Construction Work
 
-Research, crafting, processing, construction work, and robot manufacturing consume Active Game Time.
+Research, crafting, processing, construction work, and robot manufacturing consume Simulation Time.
 
-Being away from Horizon Station during active gameplay may allow valid station work to progress through off-screen simulation.
+They may progress while the player is away from Horizon during active unpaused gameplay if all physical/automation requirements remain valid.
 
-Closing the game stops it.
+## 21. Crew Work and Training
 
-## 19. Crew Work and Training
+Crew work, training, treatment, and recovery consume Simulation Time.
 
-Crew can work/train while off-screen during active gameplay if their actual assignment and systems remain valid.
+No work/training/healing accrues during True Pause or while the application is closed.
 
-No XP/training accrues offline.
+## 22. Markets
 
-## 20. Market Replenishment
+Market replenishment, liquidity recovery, convoy-linked stock changes, and authored economic timers consume Simulation Time.
 
-Economic cycles use Active Game Time.
+There are no wall-clock vendor resets.
 
-No vendor refresh occurs because the player quit the game for a day.
+## 23. Dynamic Events
 
-## 21. Dynamic Events
+Dynamic Event:
 
-Event eligibility, expiration, scheduled arrival, and recovery grace use Active Game Time.
+- eligibility scheduling;
+- offer expiration;
+- scheduled arrival;
+- cooldown;
+- Recovery Grace;
+- target recovery/replenishment
 
-## 22. NPC/Raid Target Recovery
+all consume Simulation Time.
 
-Persistent target repair/replenishment can progress during Active Game Time through abstract world/economic simulation.
+## 24. Horizon Station While Player Is Away
 
-It does not happen offline and must respect the target's recovery state/rules.
+During an active external mission/travel state, Horizon continues through the same Simulation Time for:
 
-## 23. Horizon Station While Player Away
-
-Horizon Station continues during active external missions:
-
+- power/thermal/atmosphere;
 - production;
 - farming;
 - repairs;
 - crew tasks;
 - robot tasks;
-- events/defense
+- Dynamic Events;
+- Defense Events.
 
-according to actual capability.
+Off-screen technical resolution may be coarser but cannot invent free throughput/resources or different elapsed time.
 
-Off-screen resolution can be coarser but cannot invent free throughput/resources.
+## 25. Remote Station Attack + True Pause
 
-## 24. True Pause During Remote Station Attack
+True Pause freezes both:
 
-True Pause freezes both the player's current local mission and simultaneous Home Station Defense Event.
+- the player's current local mission/travel context; and
+- a simultaneous Horizon Defense Event.
 
-The station is not allowed to continue losing while the player is in the pause menu.
+The player is never losing station assets while reading the true pause menu.
 
-## 25. Save/Load
+## 26. Recovery Transit
 
-Saving records authoritative timer state.
+Any GDS-14-defined Recovery Transit consumes Simulation Time.
 
-Loading resumes from the recorded Simulation Time/remaining timers.
+During Recovery Transit, other valid world systems continue unless True Pause is active.
+
+Recovery therefore cannot function as zero-time strategic teleportation.
+
+## 27. Save/Load
+
+Saving records authoritative Simulation Time and every Strategic Timer's state.
+
+Loading resumes exactly from that recorded state.
 
 Elapsed real-world time between save and load is ignored.
 
-## 26. Transaction Completion
+## 28. Timer Completion
 
-When a timer reaches completion, its completion transaction commits once.
+When a timer reaches completion, its completion transaction commits exactly once.
 
 Examples:
 
-- manufacturing output;
-- research completion;
+- Work Order output;
+- Research completion;
 - training advancement;
 - market replenishment;
-- reinforcement arrival.
+- reinforcement arrival;
+- Dynamic Event transition.
 
-Save/load cannot trigger completion twice.
+## 29. Simultaneous Timer Completion
 
-## 27. Simultaneous Timers
+If several timers complete in one Simulation Time step, deterministic stable event ordering resolves their transactions.
 
-If multiple timers complete in one simulation step, deterministic event ordering resolves them.
+The result cannot depend on container/hash iteration order, render frame rate, or reload timing.
 
-The order must be stable for the same save state/seed.
+## 30. Information Boundary
 
-## 28. Player Notifications
+A timer completing does not automatically grant the player knowledge of it.
 
-A timer/event finishing does not imply omniscient player knowledge.
+Notification still requires the owning system's valid sensor/communication/information path.
 
-Remote notification still requires the owning system's information/communication rules.
+## 31. World Calendar
 
-## 29. World Calendar
+An in-world calendar/time counter can be derived from Simulation Time for setting/presentation.
 
-The setting can expose an in-world calendar/time counter based on Active Game Time.
+It does not use Real Time as gameplay authority.
 
-It is presentation/world flavor unless a system explicitly uses it.
+## 32. Autosave Cadence
 
-Real-world date is never gameplay authority.
+Periodic autosave may use Active Game Time because it is a user-safety cadence rather than a world-state mechanic.
 
-## 30. No AFK Exploit Requirement
+The current first-pass target remains every 10 minutes of Active Game Time when a Stable Save Boundary exists.
 
-The baseline does not require anti-AFK systems.
+## 33. AFK Behavior
 
-If the simulation is actively running, systems may progress normally even if the player is standing still, subject to danger/events/resource limits.
+No anti-AFK system is required.
 
-## 31. Explicit Non-Goals
+If gameplay is unpaused and Simulation Time is advancing, all relevant systems continue even when the player provides no input.
 
-Time rules do not include:
+## 34. Explicit Non-Goals
 
-- mobile-style offline progress;
-- wall-clock vendor resets;
-- real-world daily login rewards;
-- FPS-dependent production/damage;
-- hidden interfaces that arbitrarily pause only one subsystem;
-- baseline fast-forward.
+The baseline contains no:
 
-## 32. Tuneable Parameters
+- offline progression;
+- wall-clock gameplay timer;
+- real-world daily reset;
+- FPS-dependent gameplay rate;
+- hidden partial-pause interface;
+- baseline fast-forward/slow-motion system.
+
+## 35. Tuneable Parameters
 
 Durations, timer cadence, off-screen tick granularity, production/recovery time, and event intervals are tuneable.
 
-The conditions under which Simulation Time advances are fixed.
+Clock ownership and pause semantics are fixed rules.
 
-## 33. Dependencies
+## 36. Dependencies
 
-This specification coordinates all timed systems and depends on Global Rules, GDS-2 Construction/Automation, GDS-3 Crew, GDS-4 Production/Research, GDS-6 Travel, GDS-8 Missions, GDS-11 Raids, Economy, Dynamic Events, and Persistence.
+This specification coordinates every timed gameplay domain and depends on Global Rules, Construction, Crew, Resources/Research, Spacecraft Travel, Missions, Raids, Economy, Dynamic Events, Persistence, Recovery, and Presentation.
 
-## 34. Open Questions
+## 37. Open Questions
 
-None in the time/simulation baseline.
+None after GDS-14 time-authority reconciliation.

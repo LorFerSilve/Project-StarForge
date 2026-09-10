@@ -6,9 +6,13 @@ A gameplay rule, mechanic, interaction, failure state, visual requirement, or pr
 
 ## Current Status
 
-The specification is in the **pre-implementation design phase**.
+The project remains in the **pre-implementation design/governance phase**.
 
-No subsystem is considered implementation-ready merely because its concept is mentioned. Each subsystem must progress through the design states defined in [Design Authority](00_design_authority.md).
+First-pass design through GDS-13 is complete and the GDS-14 whole-project cross-system audit has been executed.
+
+The cross-system audit is green after documented corrections, but the complete GDS is **not yet formally Design Complete**, because authoritative child specifications still require an explicit per-file maturity/status promotion sweep under [Design Authority](00_design_authority.md).
+
+No gameplay development is authorized yet.
 
 ## Core Documents
 
@@ -17,6 +21,7 @@ No subsystem is considered implementation-ready merely because its concept is me
 - [Global Game Rules](02_global_game_rules.md)
 - [GDS Roadmap](GDS_ROADMAP.md)
 - [Structure Audit](STRUCTURE_AUDIT.md)
+- [GDS-14 Audit](audit/)
 - [Glossary](GLOSSARY.md)
 - [Design Decisions](DESIGN_DECISIONS.md)
 - [Subsystem Specification Template](SPECIFICATION_TEMPLATE.md)
@@ -38,36 +43,76 @@ No subsystem is considered implementation-ready merely because its concept is me
 - [Cross-Cutting Systems](systems/)
 - [Presentation](presentation/)
 
-Historical, superseded design material is preserved under [`history/`](history/) and is not authoritative.
+Historical/superseded design material remains under [`history/`](history/) and is not authoritative.
 
 ## Documentation Rule
 
 Every rule has exactly **one authoritative home**.
 
-Other documents may reference that rule but must not redefine it. This prevents contradictory specifications and documentation drift.
+Other documents may reference that rule but must not independently redefine it.
+
+GDS-14 additionally establishes that generic repeated terms/states are domain-qualified. For example, `PowerLoadPriority::P1` and `AlarmPriority::P1` are not one universal priority value.
+
+## GDS-14 Result
+
+The final cross-system audit is indexed under [`audit/README.md`](audit/README.md).
+
+It includes:
+
+- project-wide authority/namespace validation;
+- 25 compound multi-system scenarios;
+- transaction/persistence/anti-duplication validation;
+- presentation/accessibility validation;
+- specification-maturity validation;
+- a consolidated final report.
+
+The audit discovered five cross-system issues and resolved them in authoritative design:
+
+1. **Time authority:** Simulation Time is now the sole gameplay-progression clock;
+2. **Horizon recovery:** Critical Recovery and Recovery Grace now have explicit state/trigger semantics;
+3. **Communications:** Strategic communication and remote control now have one authoritative infrastructure/knowledge contract;
+4. **External defeat:** Recovery Transit/destination rules prevent unsafe/instant defeat teleport behavior;
+5. **Namespaces:** repeated generic state/priority names are explicitly typed/qualified.
+
+Cross-system authority, compound scenarios, transactions/persistence, failure/softlock behavior, economy/progression/difficulty, presentation/accessibility, and orphan-mechanic checks all pass after those corrections.
+
+See [`audit/FINAL_REPORT.md`](audit/FINAL_REPORT.md).
+
+## Why Development Still Does Not Start
+
+[Design Authority](00_design_authority.md) defines **Draft**, **Under Review**, **Design Complete**, and **Implementation Locked** as meaningful specification states.
+
+Many authoritative child documents still explicitly carry Draft/Under Review status.
+
+Therefore a directory-level green audit cannot silently convert those files into implementation contracts.
+
+The remaining design-governance task is the **GDS-14 Design Complete Promotion Sweep** documented in:
+
+- [`audit/SPECIFICATION_MATURITY_AUDIT.md`](audit/SPECIFICATION_MATURITY_AUDIT.md);
+- [GDS Roadmap](GDS_ROADMAP.md).
+
+That sweep must inspect each authoritative child specification, resolve remaining implementation-relevant ambiguous/stale Draft wording, normalize cross-cutting terminology, and promote only passing files to **Design Complete**.
 
 ## Implementation Gate
 
 Implementation of a subsystem may begin only when:
 
-1. its authoritative specification has status **Design Complete** or **Implementation Locked**;
+1. its authoritative specification is **Design Complete** or **Implementation Locked**;
 2. all required dependencies are sufficiently specified;
-3. no unresolved design question can force the implementer to invent gameplay behavior;
-4. known edge cases and failure states are specified;
-5. tuneable balancing parameters are clearly separated from fixed game rules.
+3. no unresolved design question forces gameplay invention during coding;
+4. relevant edge cases/failure states/persistence/presentation are defined;
+5. tuneable balancing values are distinguished from fixed rules;
+6. the GDS-14 maturity/promotion gate has passed for that contract.
 
 ## Current Sequence
 
-The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
+Current state:
 
-The project has completed first-pass design through **GDS-13 Presentation, Onboarding, and Accessibility**.
+GDS-0 through GDS-13  
+→ first-pass complete  
+→ GDS-14 cross-system audit **complete**  
+→ five cross-system findings **resolved**  
+→ Design Complete Promotion Sweep **next**  
+→ only after that: technical architecture / implementation roadmap / scaffolding / development.
 
-GDS-13 now contains the complete planned first-pass presentation set under [`presentation/`](presentation/) together with [`presentation/CROSS_VALIDATION.md`](presentation/CROSS_VALIDATION.md), which performs 107 checks against GDS-1 through GDS-12 and found no blocking contradiction or implementation-critical open question inside the GDS-13 scope.
-
-The next and final pre-implementation design phase is **GDS-14 — Cross-System Consistency Audit**.
-
-GDS-14 must test the entire specification under combined multi-system scenarios and close contradictions, duplicated authority, orphan mechanics, missing presentation paths, and remaining implementation-critical ambiguity.
-
-Gameplay implementation has **not** begun and must not begin merely because GDS-13 is first-pass complete.
-
-Only after GDS-14 satisfies the Design Authority gate may the project move to technical architecture, implementation roadmap, C++/OpenGL scaffolding, and gameplay development.
+**Gameplay implementation has not begun and must not begin at the current project state.**

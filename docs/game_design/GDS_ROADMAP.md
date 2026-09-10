@@ -29,9 +29,9 @@ Exit criteria:
 
 ## GDS-1 — Global Game Rules
 
-**Status:** In Progress
+**Status:** First-Pass Complete — Cross-Validation Pending
 
-Define project-wide rules that constrain multiple systems, including:
+Defines project-wide rules that constrain multiple systems, including:
 
 - gameplay perspectives;
 - primary game mode;
@@ -47,9 +47,11 @@ Define project-wide rules that constrain multiple systems, including:
 - difficulty philosophy;
 - multiplayer scope.
 
-Exit criteria:
+First-pass closure:
 
-- downstream subsystem designers do not need to invent conflicting global assumptions.
+- global baseline has no open gameplay question;
+- GDS-2 through GDS-13 have been designed under these constraints;
+- GDS-14 must perform the final whole-project validation before Design Complete status.
 
 ## GDS-2 — Home Space Station
 
@@ -94,7 +96,7 @@ Authoritative specifications for:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - resource taxonomy;
 - acquisition;
@@ -110,7 +112,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - movement;
 - interaction;
@@ -128,7 +130,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - ship classes;
 - modular configuration;
@@ -146,7 +148,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - setting;
 - galaxy topology;
@@ -164,7 +166,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - mission lifecycle;
 - mission generation;
@@ -180,7 +182,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - combat loop;
 - damage model;
@@ -194,7 +196,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - manufacturing;
 - robot classes;
@@ -210,7 +212,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - intelligence;
 - raid preparation;
@@ -227,7 +229,7 @@ Define:
 
 **Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
 - trading;
 - economy;
@@ -260,34 +262,64 @@ Remaining dependency:
 
 ## GDS-13 — Presentation, Onboarding, and Accessibility
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
-Define:
+Defines:
 
-- visual direction;
-- station visual language;
+- project-wide visual direction;
+- environment art direction;
+- Horizon Station visual language;
 - faction visual language;
-- UI/UX;
-- HUD;
-- interaction feedback;
-- VFX;
-- audio;
-- alarms;
-- onboarding;
-- tutorials;
+- UI/UX information architecture;
+- adaptive HUD;
+- interaction and transaction feedback;
+- VFX language;
+- audio direction;
+- alarms and signaling;
+- onboarding/tutorial sequencing;
 - accessibility.
 
-Exit criteria:
+First-pass closure establishes:
 
-- every gameplay-critical state and blocker defined by GDS-1 through GDS-12 has an explicit presentation/feedback path;
-- onboarding teaches the required systemic concepts without contradicting progression rules;
-- accessibility options are defined without silently changing authoritative world/progression semantics.
+- stylized grounded science-fiction visual direction;
+- hybrid diegetic/non-diegetic presentation;
+- functional/silhouette readability before color-only identification;
+- presentation knowledge boundaries that prevent hidden-information leakage;
+- adaptive HUD without an omniscient minimap or generic XP/gear-score layer;
+- truthful Preview/Commit and transaction feedback;
+- visual/audio/VFX state tied to authoritative gameplay state;
+- P0–P3 alarm priority and category signaling;
+- campaign-integrated tutorials using the real game rules;
+- explicit onboarding for extraction ownership, robot attrition, raids, station defense, economy, saves, and capability progression;
+- accessibility independent from Difficulty/rewards;
+- remappable controls, motion reduction, photosensitivity protection, UI/text scaling, subtitle/caption/audio support, navigation support, and bounded aim assistance;
+- a combined GDS-13 cross-validation with 107 checks against GDS-1 through GDS-12;
+- no remaining implementation-critical open gameplay/presentation question inside GDS-13 scope.
+
+Remaining dependency:
+
+- GDS-14 must perform the final whole-project cross-system consistency audit and resolve any contradictions/orphan states before implementation planning.
 
 ## GDS-14 — Cross-System Consistency Audit
 
-**Status:** Planned
+**Status:** Next
 
 The complete specification is tested against complex scenarios involving several systems simultaneously.
+
+The audit must include at minimum:
+
+- simultaneous station power/thermal/atmosphere/security failures;
+- Horizon defense while the player is deployed elsewhere;
+- robot/crew response under damaged logistics and communication;
+- mission failure with mixed secured/unsecured ownership;
+- spacecraft damage during extraction/docking/travel boundaries;
+- raid sabotage, theft, reinforcements, robot loss and withdrawal;
+- economy/reputation/progression consequences after persistent world changes;
+- save/load at transactional boundaries;
+- Dynamic Event overlap/recovery grace;
+- finale readiness and all three finale resolutions;
+- presentation/readability of simultaneous failures;
+- accessibility configurations including reduced motion/effects, color-independent presentation, subtitles/captions, remapped inputs, UI scaling and aim assistance.
 
 Example audit scenario:
 
@@ -300,14 +332,19 @@ Exit criteria:
 - no unresolved cross-system contradictions;
 - no duplicated authoritative rules;
 - no orphan mechanics;
+- no gameplay-critical state without a valid presentation path;
+- no accessibility configuration that silently changes knowledge/progression semantics;
 - no dependency cycle with undefined ownership;
-- all implementation-critical open questions resolved.
+- all implementation-critical open questions resolved;
+- relevant domain statuses can be promoted according to `00_design_authority.md`.
 
 ## After GDS Completion
 
-Only after the relevant design is sufficiently complete does the project proceed to:
+Only after GDS-14 passes and the relevant design is sufficiently complete does the project proceed to:
 
 1. technical architecture;
 2. implementation roadmap;
 3. C++/OpenGL project scaffolding;
 4. gameplay implementation.
+
+**No gameplay development begins before that gate is satisfied.**

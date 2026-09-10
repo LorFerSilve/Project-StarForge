@@ -1,383 +1,366 @@
 # Audio Direction
 
-> **Status:** Draft  
-> **Authority:** Project-wide audio identity, ambience, machinery, weapons, UI feedback, spatial audio, vacuum handling, music behavior, dialogue intelligibility, and audio accessibility
+> **Status:** Design Complete  
+> **Authority:** Project-wide audio identity, ambience, machinery, weapons, UI feedback, spatial audio, vacuum handling, Pilot Telemetry Mix, protagonist-voice boundary, music behavior, dialogue intelligibility, and audio accessibility
 
 ## 1. Purpose
 
-Audio must communicate physical space, machine operation, danger, interaction, faction/location identity, and player action while supporting—not replacing—visual feedback.
+Audio communicates physical space, machine operation, danger, interaction, faction/location identity, and player action while remaining a truthful companion to—not a replacement for—visual/system feedback.
 
 ## 2. Core Audio Pillars
 
-1. **Mechanical Causality:** sounds come from understandable physical/system events.
-2. **Spatial Readability:** the player can localize relevant threats and machinery.
-3. **Dynamic State:** ambience changes when power, pressure, combat, or station state changes.
-4. **Restraint:** silence and low-density ambience are used deliberately.
-5. **Redundancy:** gameplay-critical audio has a non-audio presentation route.
+1. **Mechanical Causality** — audible state corresponds to a real source/system/event.
+2. **Spatial Readability** — localizable cues remain spatially meaningful when physics/knowledge permits them.
+3. **Dynamic State** — power, pressure, damage, combat, and station state change the mix.
+4. **Restraint** — silence and low-density ambience are intentional tools.
+5. **Redundancy** — critical audio always has a non-audio presentation path.
+6. **Knowledge Integrity** — music/captions/UI audio cannot reveal hidden state beyond legitimate player knowledge.
 
-## 3. Station Ambience
+## 3. Horizon Station Ambience
 
-Horizon Station baseline ambience can include:
+When corresponding physical sources are present/operational, the Horizon sound palette includes:
 
-- ventilation;
-- pumps;
-- transformer/reactor hum;
+- ventilation and pumps;
+- reactor/transformer/electrical hum;
 - machinery cycles;
-- distant cargo movement;
-- footsteps;
+- cargo/logistics motion;
+- player/crew footsteps;
 - robots;
-- crew activity;
+- localized crew activity;
 - docking/mechanical impacts;
-- public-address announcements.
+- PA/alarm announcements.
 
-The soundscape should make the station feel inhabited and operational.
+The ambience is source-driven. A missing/disabled source contributes no normal operating loop.
 
 ## 4. System-State Audio
 
-Station sounds respond to actual state.
+System sounds change with authoritative state. Examples:
 
-Examples:
+- unpowered machinery loses its powered loop;
+- degraded/faulted equipment uses its documented degraded signature;
+- atmosphere loss reduces air-carried local sound;
+- emergency power has a distinct limited-operation signature;
+- thermal stress can alter machinery audio before protective shutdown where the owning system exposes that state.
 
-- unpowered module loses machinery hum;
-- degraded pump develops unstable mechanical rhythm;
-- atmosphere loss reduces air-carried sound locally;
-- emergency power has a distinct lower-capacity electrical signature;
-- overloaded cooling/industrial equipment becomes audibly stressed.
+## 5. Vacuum
 
-## 5. No False Machinery
+Open vacuum carries no ordinary distant air sound.
 
-A disabled reactor, fan, pump, or turret cannot continue playing a normal operating loop purely for ambience.
+The player may hear only valid mediated/conducted cues such as:
 
-## 6. Vacuum Audio
+- own suit breathing/life support;
+- boot/tool/impact conduction through contacted structure;
+- internal weapon/tool mechanism conducted through the player/equipment;
+- radio/telemetry;
+- suit-generated warning tones;
+- structure-borne vibration while physically coupled.
 
-External vacuum does not carry ordinary environmental sound.
+A distant external explosion or engine does not create ordinary atmospheric sound for an EVA player.
 
-The player can still hear physically transmitted or suit-mediated cues such as:
+## 6. Spacecraft Interior / Cockpit Mix
 
-- own suit/foot contact;
-- internal breathing/life support;
-- structure-borne vibration when physically coupled;
-- radio communication;
-- weapon/internal mechanism where conducted to the player;
-- intentionally synthesized suit warning cues.
+Inside a pressurized ship/cockpit, the mix includes valid:
 
-No normal distant explosion/engine sound propagates through open vacuum as air sound.
-
-## 7. Spacecraft Interior Audio
-
-Inside a pressurized ship, the player hears:
-
-- engine/drive structure vibration;
-- thrusters through hull conduction;
+- structure-transmitted engine/thruster vibration;
 - life support;
-- power systems;
-- weapon recoil/launch mechanisms;
+- power/electrical systems;
+- weapon mechanism/recoil/launch conduction;
+- impacts;
 - docking capture;
-- alarms;
-- impacts transmitted through structure.
+- alarms/comms.
 
-## 8. Spacecraft Exterior Camera Audio
+Pressure/compartment changes affect air-carried interior sound where the ship simulation supports them.
 
-Third-person ship view may use a stylized **pilot telemetry mix** rather than literal external-vacuum silence.
+## 7. Third-Person Pilot Telemetry Mix
 
-This mix represents information available to the pilot through ship sensors and structure and can include restrained synthesized weapon/thruster/impact cues.
+The baseline third-person spacecraft camera **uses a Pilot Telemetry Mix**.
 
-It must remain clearly less like atmospheric cinema sound than interior/cockpit audio.
+This is a deliberate synthesized pilot-feedback layer, not literal sound propagating through vacuum.
 
-## 9. Footsteps
+It may represent legitimately known ship/sensor/structure events through restrained:
 
-Footsteps vary by:
+- thruster/engine feedback;
+- own weapon firing;
+- detected weapon impacts;
+- shield/hull impacts;
+- detected nearby explosions;
+- warning/target telemetry.
+
+The mix must:
+
+- never expose an undetected external event;
+- never imply atmosphere-dependent occlusion/reverb in open space;
+- remain more restrained/synthetic than pressurized cockpit audio;
+- preserve the same mechanical capability in first- and third-person views.
+
+## 8. Footsteps and Contact
+
+Footsteps/contact vary by:
 
 - surface material;
-- suit/footwear;
+- footwear/Suit;
 - gravity;
-- movement speed;
-- interior/exterior state.
+- movement state;
+- atmosphere/exterior context.
 
-They are useful for both player embodiment and AI hearing where GDS-9 uses audible cues.
+Where GDS-9 AI hearing uses them, a corresponding gameplay sound event has an authored audibility/propagation profile.
 
-## 10. AI Hearing Boundary
+## 9. AI Hearing Boundary
 
-A sound used by enemy AI hearing must correspond to a gameplay sound event with an authored audibility radius/propagation rule.
+Player audio-volume/mix accessibility settings never change AI hearing.
 
-Audio mix volume settings do not change AI hearing.
+AI hearing uses gameplay sound events and their physical/abstract propagation data, independent of how loud the user mixes them.
 
-## 11. Weapon Families
+## 10. Weapon Audio Families
 
-Weapon audio uses distinct mechanical/energy signatures:
+Canonical presentation differentiates at least:
 
-- ballistic: pressure/transient/mechanical action;
-- shotgun: heavier transient and action;
-- rail: electromagnetic charge/discharge + impact character;
-- laser: sharp coherent energy signature, not generic gunpowder report;
-- plasma: charged thermal/energy pulse;
-- explosive launcher: launch/backblast + delayed impact;
-- melee: material/contact-driven.
+- ballistic;
+- shotgun/heavy ballistic;
+- rail/electromagnetic;
+- laser;
+- plasma;
+- explosive launcher;
+- melee/contact.
 
-## 12. Suppression and Distance
+Each weapon model's audio follows its actual architecture and firing/reload state rather than a generic gunshot layer.
 
-Weapon sound changes with:
+## 11. Distance, Enclosure and Medium
+
+Where atmosphere exists, weapon/impact sound may respond to:
 
 - distance;
-- enclosure;
-- atmosphere;
+- enclosure/reverb;
 - occlusion;
-- weapon architecture.
+- medium/pressure;
+- source architecture.
 
-No single sample at constant loudness represents every range.
+Vacuum follows Section 5/7 instead.
 
-## 13. Impact Audio
+## 12. Impact Audio
 
-Impacts differ across:
+Impact presentation differentiates, when legitimately observed:
 
-- shield;
-- armor/metal;
-- rock;
+- shield absorption;
+- armor/metal impact;
+- structural hull;
+- rock/geology;
 - glass;
 - biological target;
 - energy/electronics;
-- hull/structure.
+- explosion/debris.
 
-Shield hit confirmation should sound distinct from armor penetration or unshielded impact.
+Audio never confirms penetration/damage before the gameplay result commits.
 
-## 14. Reload and Weapon-State Audio
+## 13. Reload / Ready Audio
 
-Reload timing audio aligns with actual transaction stages where meaningful.
+Reload and weapon-state audio aligns with the authoritative GDS-9 reload transaction stages.
 
-Examples:
+A `ready`/reload-complete cue occurs only when the weapon has committed to the fire-ready state.
 
-- magazine/round manipulation;
-- chamber/bolt action;
-- energy-cell insertion;
-- capacitor ready tone;
-- overheat warning.
+Empty/blocked/overheated firing has distinct feedback from a valid shot.
 
-A completed-ready sound cannot occur before the gameplay state is ready.
+## 14. Player Health and Shield Audio
 
-## 15. Low/Empty Ammo
+Audio may communicate actual:
 
-Low ammo can use restrained UI/weapon cues.
+- shield hit/collapse;
+- armor/equipment impact;
+- biological damage;
+- Critical Health;
+- Incapacitation;
+- treatment/recovery;
+- explicit Status Effects.
 
-Empty/failed fire must clearly differ from normal firing.
+There is no hidden low-Health audio mechanic that changes gameplay. Heartbeat/tinnitus/distortion are presentation only and individually reducible/disableable under Accessibility.
 
-## 16. Player Health and Shield
+## 15. Environmental Hazard Audio
 
-Player feedback uses distinct audio for:
+Physically/audio-plausible hazards use source-driven cues such as:
 
-- shield hit;
-- shield depleted;
-- health damage;
-- critical health;
-- medical stabilization;
-- status effects where useful.
-
-Persistent heartbeat/tinnitus effects are optional and must be reducible/disableable.
-
-## 17. Environmental Hazards
-
-Hazards can use characteristic audio where physically plausible:
-
-- electrical arcing;
-- pressure leak;
+- arcing;
+- atmospheric leak;
 - structural stress;
-- radiation detector telemetry;
-- thermal system warning;
-- chemical corrosion/failure;
-- storm/weather.
+- radiation instrument telemetry;
+- thermal alarms;
+- corrosive machinery reaction;
+- storms/weather.
 
-Silent hazards require visual/instrument feedback.
+A silent hazard remains mechanically valid and must rely on sensors/visual/UI where available.
 
-## 18. Pressure Leaks
+## 16. Pressure Leak and Fire
 
-In atmosphere, pressure leaks can produce directional rushing/hissing sound.
+A pressure leak produces air-flow sound only while local atmosphere supports it; the air-carried component diminishes toward vacuum while alarms/conduction may remain.
 
-As local atmosphere approaches vacuum, air-carried leak sound reduces while suit/structure alarms remain.
+Fire sound/intensity follows actual fuel/atmosphere state and does not continue as unchanged atmospheric crackle in vacuum.
 
-## 19. Fire
+## 17. Robot Audio
 
-Fire audio depends on atmosphere and fuel.
+Robot audio communicates actual class/body/system state through:
 
-No ordinary crackling fire loop continues unchanged in vacuum.
+- locomotion mass/type;
+- tool/weapon operation;
+- energy warning;
+- damage/Disabled state;
+- communication state;
+- command acknowledgement.
 
-## 20. Robots
+Heavy units use materially heavier mechanical presentation than Light units, without giving hidden combat information.
 
-Robot class audio communicates:
+## 18. Robot Command Acknowledgement
 
-- locomotion type/weight;
-- tool operation;
-- weapon system;
-- low energy;
-- damage;
-- command acknowledgement;
-- communication loss/reconnect.
+Baseline command acknowledgement uses:
 
-Heavy Mech should sound materially heavier than a Recon Drone.
+- one concise synthetic acknowledgement tone per accepted group command; and
+- HUD confirmation.
 
-## 21. Robot Command Acknowledgement
+A robot model may additionally use a short authored voice-code, but group commands aggregate such presentation so multiple units do not create simultaneous voice spam.
 
-Acknowledgement is concise and nonspammy.
+Rejected/blocked commands use a distinct failure tone and textual/icon reason where known.
 
-Possible channels:
+## 19. Faction Audio Language
 
-- synthetic tone;
-- short voice-code;
-- HUD sound.
+Faction content may distinguish itself through authored:
 
-Repeated group orders aggregate rather than producing eight simultaneous full voice lines.
+- UI/terminal tones;
+- PA/radio processing;
+- machinery maintenance character;
+- ship/weapon technology sound;
+- ambient/music instrumentation.
 
-## 22. Faction Audio Identity
+Shared identical technology remains recognizably related; faction identity cannot contradict physical source state.
 
-Factions can differ through:
+## 20. Continuance and Anomaly Language
 
-- UI/terminal sound palette;
-- PA style;
-- machinery condition;
-- weapon/ship technology;
-- music/ambient instrumentation;
-- radio processing.
+Continuance favors sparse machine-control rhythms, legacy infrastructure tones, synthetic signaling, and unusual nonhuman timing.
 
-Audio identity cannot contradict shared human technology where systems are genuinely identical.
+Fracture/Anomaly presentation uses restrained unstable harmonics/filtering/spatial interference tied to actual anomaly state.
 
-## 23. Continuance Audio
+Neither language defaults to painful high-frequency content or horror noise unrelated to gameplay state.
 
-Continuance presentation favors:
+## 21. Player Protagonist Voice
 
-- machine-control rhythms;
-- sparse synthesized signaling;
-- legacy system tones;
-- distributed infrastructure activity;
-- nonhuman timing/phrasing.
+The baseline has **no voiced conversational player dialogue**.
 
-It should not default to horror screeches for every machine interaction.
+The player avatar may produce non-linguistic sounds:
 
-## 24. Anomaly Audio
+- breathing;
+- exertion;
+- pain;
+- impact reaction;
+- Suit-mediated nonverbal cues.
 
-Fracture/Anomaly phenomena use a distinct restrained language:
+These are presentation/embodiment only and do not speak dialogue choices or establish fixed narrative wording.
 
-- unstable harmonic relationships;
-- phase-like filtering;
-- spatially unusual but localizable textures;
-- sub/ultrasonic implication through audible design;
-- interference with electronics/radio where gameplay state supports it.
+## 22. Music States
 
-Avoid painful high-frequency tones and uncontrolled loudness.
+Music supports authored states including:
 
-## 25. Music Philosophy
-
-Music supports:
-
+- Horizon calm/recovery;
 - exploration;
-- station calm;
 - tension;
 - combat;
 - raid escalation;
 - major discovery;
 - narrative/finale.
 
-It should not run at maximum intensity continuously.
+The baseline does not run maximum-intensity score continuously.
 
-## 26. Adaptive Music
+## 23. Adaptive Music Knowledge Boundary
 
-Music state can react to:
+Music transitions may react only to state the presentation is permitted to telegraph.
 
-- exploration vs combat;
-- raid escalation;
-- critical Horizon defense;
-- anomaly proximity;
-- story state.
+Combat music does not begin solely because an undiscovered hostile exists nearby.
 
-Transitions should avoid revealing hidden enemy presence earlier than gameplay knowledge allows unless the music itself is intentionally a permitted dramatic telegraph.
+A mission may intentionally use music as an authored warning only when that warning itself is a legitimate player-facing signal.
 
-## 27. Combat Music Boundary
+## 24. Horizon Musical Development
 
-Combat music should not function as an omniscient detector for an enemy the player/AI state has not yet legitimately engaged/recognized.
+Horizon ambience/music can gain additional authored warmth/complexity as the station becomes inhabited/stable, but this is a presentation response to known station/world state—not a hidden numeric Base Level meter.
 
-## 28. Station Music
+The baseline implementation must support state-layering; individual musical assets/layers are content production.
 
-Horizon uses sparse ambient musical layers rather than constant heroic score.
+## 25. Dialogue Intelligibility
 
-As the station becomes stable/inhabited, musical warmth/complexity may subtly increase without acting as a literal progression meter.
+Critical spoken dialogue remains intelligible through:
 
-## 29. Dialogue
-
-Critical dialogue remains intelligible over machinery/combat through:
-
-- priority ducking;
+- dialogue-priority ducking;
 - subtitles;
-- repeat/log support where appropriate;
-- radio processing kept intelligible.
+- communication log/replay where applicable;
+- restrained radio processing.
 
-## 30. Radio Communication
+Dialogue volume and subtitle availability are independent.
 
-Radio/helmet communication is spatially distinct from world speech.
+## 26. Radio / Communication
 
-Signal degradation can be communicated with filtering/dropout only when communication gameplay state supports degradation.
+Radio audio is distinct from local world speech.
 
-## 31. PA Announcements
+Filtering/dropouts/delay occur only when the actual Strategic Communication Link or local radio state provides that degradation.
 
-Horizon station announcements can communicate:
+Audio effects cannot fabricate a communication failure that gameplay does not have.
 
-- critical alarms;
-- docking events;
-- major system restoration/failure;
-- security lockdown;
-- evacuation.
+## 27. PA / Alarm Audio
 
-Routine low-priority work completion should not generate constant PA spam.
+Horizon PA can communicate actual:
 
-## 32. UI Audio
+- P0/P1 AlarmPriority incidents;
+- boarding/lockdown;
+- evacuation;
+- docking where relevant;
+- major system restoration/failure.
 
-UI sounds are concise and semantically consistent:
+Routine low-priority work completion stays in notification/UI channels rather than constant PA announcements.
 
-- focus/navigation;
+## 28. UI Audio
+
+Canonical semantic UI cues exist for:
+
+- navigation/focus;
 - confirm;
 - cancel;
-- invalid/block;
+- blocked/invalid;
 - warning;
-- transaction complete;
-- save complete;
+- transaction committed;
+- save queued;
+- save committed;
 - objective update.
 
-A confirmation tone cannot play on a failed transaction.
+A success cue never precedes the authoritative commit.
 
-## 33. Economy Audio
+## 29. Economy and Reward Audio
 
-Credits/item trade uses a restrained transaction confirmation.
+Ordinary Credits/item transactions use restrained confirmation.
 
-No casino-like celebratory sound is baseline for ordinary purchases/rewards.
+The baseline avoids casino/loot-box-style audiovisual reward escalation for normal purchases, loot, or mission rewards.
 
-## 34. Save Audio
+## 30. Failure Audio
 
-Save complete has a subtle confirmation sound.
+Routine setbacks use clear restrained feedback rather than humiliating/exaggerated punitive stingers.
 
-Queued/waiting save is distinct from successful save.
+Major story/finale scenes may use authored score/stingers consistent with the committed outcome.
 
-## 35. Failure Audio
+## 31. Loudness Priority
 
-Failure presentation avoids exaggerated punitive stingers for routine setbacks.
+Mix priority during contention is:
 
-Major story/finale outcomes can use authored music/stingers.
-
-## 36. Loudness Hierarchy
-
-Priority during normal play:
-
-1. critical warnings/essential dialogue;
-2. direct threat/weapon/impact cues;
-3. interaction feedback;
+1. critical warnings and mandatory dialogue;
+2. immediate threat/weapon/impact cues;
+3. interaction/action feedback;
 4. local machinery/footsteps;
 5. ambience;
 6. decorative distant detail.
 
-Music dynamically yields to critical information when needed.
+Music yields dynamically to higher priorities.
 
-## 37. Dynamic Range
+## 32. Dynamic Range and Categories
 
-Baseline supports meaningful dynamic range while providing a reduced-dynamic-range option for players/environments where quiet/loud extremes are undesirable.
+The game provides dynamic-range presets:
 
-## 38. Audio Categories
+- Full;
+- Standard;
+- Night / Reduced Range.
 
-Independent volume categories:
+Independent user volume categories include:
 
 - Master;
 - Music;
@@ -386,59 +369,74 @@ Independent volume categories:
 - UI;
 - Ambience;
 - Voice/Radio where separated;
-- Accessibility warning cues where practical.
+- Accessibility warning cues where technically separated.
 
-## 39. Subtitles
+## 33. Subtitles / Closed Captions
 
-All gameplay-relevant spoken dialogue has subtitles.
+All gameplay-relevant speech supports subtitles.
 
-Subtitles can identify speaker and radio/source context.
+Closed Captions may describe important audible non-speech events only when they are legitimately audible/known, e.g. hull-breach alarm, nearby footsteps, pressure leak, robot command rejection.
 
-## 40. Closed Captions
+Captions never reveal an event outside actual player information range.
 
-Optional closed captions can communicate important non-speech sounds such as:
+## 34. Spatial-Audio Accessibility
 
-- `[Alarm: Hull Breach]`;
-- `[Hostile footsteps nearby]` where legitimately audible;
-- `[Pressure leak hissing]`;
-- `[Robot: command rejected]`.
+Important directional sound can have optional visual direction indicators where the event is legitimately audible/known.
 
-Captions cannot reveal sounds outside actual audible/sensor state.
+This preserves event range/existence and changes only accessibility presentation.
 
-## 41. Spatial Audio Accessibility
+## 35. Tinnitus / Damage Distortion
 
-Important direction-dependent audio can have optional visual indicators where gameplay permits.
+Tinnitus, muffling, heartbeat, and damage distortion are:
 
-This provides alternate access without changing event existence/range.
+- bounded in duration/intensity;
+- reducible/disableable;
+- never the sole communication channel;
+- never allowed to obscure mandatory dialogue/warnings irrecoverably.
 
-## 42. Tinnitus/Low-Health Effects
+## 36. Haptics
 
-Any tinnitus, muffling, heartbeat, or auditory distortion used for damage is:
+Audio may coordinate with haptics, but haptics are optional and never the sole carrier of critical state.
 
-- short;
-- bounded;
-- separately reducible/disableable.
+## 37. Persistence
 
-It cannot prevent understanding mandatory dialogue/warnings.
+Audio settings persist at profile/application level.
 
-## 43. Haptics Boundary
+Gameplay incidents that drive audio persist in their owning systems; audio state reconstructs from those incidents after load rather than becoming a separate gameplay authority.
 
-Audio can coordinate with haptics but haptics remain optional.
+Music may persist enough presentation state to avoid jarring restart, but cannot alter gameplay.
 
-Neither system is the sole carrier of critical information.
+## 38. Edge Cases
 
-## 44. Explicit Non-Goals
+- Muting Master audio does not hide critical state because GDS-13 supplies visual/text alternatives.
+- In vacuum, closed captions do not caption distant air sounds that the player could not receive; suit/radio/conduction cues may still be captioned.
+- Switching spacecraft camera changes the mix representation but not ship simulation or detection.
+- If a robot command is issued while communication is lost, no accepted-command cue plays unless/when the robot actually accepts it.
+- If a transaction fails after confirmation input but before commit, a blocked/failure cue replaces success.
 
-No normal atmospheric sound propagation in open vacuum, no casino-style reward audio, no omniscient combat-music enemy detector, no constant station PA spam, no mandatory tinnitus, and no audio-only critical mechanics.
+## 39. Tuneable Parameters
 
-## 45. Tuneable Parameters
+Tuneable values include mix levels, propagation/occlusion, reverb, sample variation, music transition timing, telemetry intensity, ducking, dynamic range, radio filtering, and nonverbal avatar vocalization frequency.
 
-Mix levels, propagation/occlusion values, reverb, music transition timing, sample variation, PA frequency, ducking strength, dynamic range, and radio filtering are tuneable.
+Vacuum behavior, Pilot Telemetry Mix existence, no-voiced-protagonist baseline, knowledge/commit boundaries, and critical redundancy are fixed.
 
-## 46. Dependencies
+## 40. Explicit Non-Goals
 
-References Station, Combat, Spacecraft, Robots, World/Factions, Raids, Interaction Feedback, Alarms, and Accessibility.
+The baseline does not include:
 
-## 47. Open Questions
+- ordinary atmospheric sound propagation through open vacuum;
+- omniscient combat music;
+- audio-only critical mechanics;
+- voiced player conversational lines;
+- casino-style ordinary reward audio;
+- false machinery loops from disabled equipment;
+- mandatory tinnitus;
+- constant PA spam.
 
-None in the audio-direction baseline.
+## 41. Dependencies
+
+References Station, Combat, Spacecraft, Robots, World/Factions, Narrative Dialogue, Raids, Strategic Communications, Interaction Feedback, Alarms/Signaling, and Accessibility.
+
+## 42. Open Questions
+
+None.

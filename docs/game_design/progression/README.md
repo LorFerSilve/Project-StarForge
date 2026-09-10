@@ -83,7 +83,7 @@ No single human faction is a mandatory finale dependency.
 
 The combined GDS-12 cross-validation found no blocking contradiction between this progression model and GDS-1 through GDS-11.
 
-GDS-13 remains necessary for presentation/onboarding/accessibility, especially progression blockers and finale readiness UX.
+GDS-13 has now first-pass defined and validated capability-blocker presentation, route/Reach feedback, TCC/transport visibility, early-game teaching sequence, and complete MS-F01 readiness/support-channel UX.
 
 ## Completion State
 
@@ -91,4 +91,4 @@ Progression is:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-It is not yet Design Complete until GDS-13 presentation dependencies and GDS-14 final cross-system audit are resolved.
+Its GDS-13 presentation/onboarding/accessibility dependency is first-pass resolved. The remaining dependency is GDS-14 final cross-system consistency audit before Design Complete status.

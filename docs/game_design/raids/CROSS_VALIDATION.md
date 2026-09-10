@@ -1,753 +1,205 @@
 # Raids and Station Defense Cross-Validation
 
 > **Status:** Active Audit  
-> **Authority:** GDS-11 consistency review only  
-> **Purpose:** Validate offensive raids, target intelligence, preparation, external assault, boarding, interior attack, sabotage, looting, escalation, extraction, outcomes, story integration, and Horizon Station defense against all established upstream domains.
+> **Authority:** GDS-11 consistency review  
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-11 against:
-
-- Global Game Rules;
-- GDS-2 Home Station;
-- GDS-3 Crew;
-- GDS-4 Resources/Crafting;
-- GDS-5 Player;
-- GDS-6 Spacecraft;
-- GDS-7 World/Factions/Narrative;
-- GDS-8 Missions/Exploration;
-- GDS-9 Combat;
-- GDS-10 Robots.
+This audit validates offensive raids, target intelligence, preparation, external assault, boarding/breaching, interior attack, sabotage, looting, escalation, extraction, outcomes, story integration, and Horizon Station defense against GDS-1 through GDS-12.
 
 ## 2. Raid as Specialized Mission — Result: PASS
 
-Offensive raids reuse GDS-8:
-
-- Mission ID;
-- Mission Instance;
-- lifecycle;
-- deterministic seed;
-- objective graph;
-- Threat;
-- extraction;
-- failure/abandonment;
-- rewards.
-
-GDS-11 adds raid phases rather than creating a second mission engine.
+Offensive raids remain specialized GDS-8 Missions and reuse Mission ID, lifecycle, objectives, stable seed, Threat, extraction, failure, and reward transactions.
 
 ## 3. Single-Player Core — Result: PASS
 
-GDS-11 defines complete single-player raid/defense gameplay against NPC/faction targets.
+No synchronous or asynchronous PvP raid system is required. GDS-12 Multiplayer Position confirms single-player PvE as the complete baseline.
 
-No synchronous or asynchronous PvP is required.
+## 4. No Offline Raids — Result: PASS
 
-This preserves DD-010.
+Raids and Defense Events advance only through active Simulation Time. Real-world time while the game is closed cannot create, progress, resolve, repair, or replenish a raid state.
 
-## 4. No Offline Progression — Result: PASS
+## 5. Persistent Raid Targets — Result: PASS
 
-Offensive raids and Horizon Station attacks advance only during active game time.
+Committed damage, breaches, storage depletion, removed components, sabotage, security compromise, and unique-object removal remain persistent until an explicit world recovery/replenishment process changes them.
 
-Real-world time while the application is closed does not:
+## 6. Target Recovery — Result: PASS
 
-- create;
-- progress;
-- resolve
+The previously unresolved long-term recovery dependency is now owned by GDS-12.
 
-raids.
+Recovery:
 
-This preserves DD-012.
+- uses Simulation Time;
+- depends on target/faction/economic capability;
+- cannot recreate a unique stolen object;
+- cannot instantly restore a pristine target at mission end;
+- may make prior Intel Stale when actual state changes.
 
-## 5. One External Mission Instance — Result: PASS
+## 7. No Raid Farming Reset — Result: PASS
 
-A hostile attack on Horizon Station while the player is on another mission is treated as a persistent Home Station Event, not a second player-deployed Mission Instance.
+A depleted target cannot be repeatedly re-entered as a fresh stockpile. A later raid uses current persistent target state plus legitimate recovery/replenishment.
 
-Therefore GDS-8's one-Deployed-Mission rule remains intact.
+## 8. Intelligence — Result: PASS
 
-## 6. Physical Target Model — Result: PASS
+Unknown/Suspected/Confirmed/Stale remains authoritative. GDS-12 Economy may allow purchase of specific intel from valid contacts but does not provide a universal buy-all-intel button or omniscient target state.
 
-Raid targets use real raid-relevant:
+## 9. Preparation — Result: PASS
 
-- geometry;
-- defenses;
-- shield zones;
-- access;
-- security;
-- power/control dependencies;
-- atmosphere;
-- storage;
-- communication;
-- reinforcement links.
+Preparation validates real ship, Reach, player loadout, robots/TCC, transport, tools, cargo, survival, and extraction capability. Credits cannot substitute for missing physical capability.
 
-No global Raid HP bar exists.
+## 10. External Attack/Boarding — Result: PASS
 
-## 7. Target Persistence — Result: PASS
+Station shields, defenses, power, sensors, access, docking, authored breach points, and spacecraft combat remain physical/systemic. No global station HP or automatic boarding trigger is introduced.
 
-Committed target changes can persist:
+## 11. Interior Combat/Sabotage — Result: PASS
 
-- destroyed defenses;
-- depleted storage;
-- breach;
-- disabled systems;
-- stolen components;
-- hacked access;
-- faction/security state.
+Interior control remains local and causal. Hacking/sabotage affects only reached and connected systems. GDS-12 Difficulty does not grant enemies omniscient tracking or hidden station-wide buffs.
 
-Raid resolution does not automatically restore a pristine target.
+## 12. Looting — Result: PASS
 
-## 8. Procedural Determinism — Result: PASS
+Raid loot remains physical finite ownership transfer. The player keeps only what is found, carried/transferred, secured, and extracted.
 
-One Raid/Mission ID has stable:
+GDS-12 Loot/Rewards introduces no percentage theft or duplicate reward copy.
 
-- major target layout;
-- loot;
-- defenders;
-- access routes;
-- reinforcement seed;
-- objective placement.
+## 13. Raid Economic Value — Result: PASS
 
-Reload does not reroll a weaker/easier target.
+GDS-12 now resolves raid profitability context through:
 
-## 9. Intelligence — Result: PASS
+- target finite stock;
+- item/resource market value;
+- physical cargo constraints;
+- ammunition/fuel/repair costs;
+- robot attrition;
+- reputation consequences;
+- target recovery time.
 
-Raid Intelligence uses:
+A raid is not guaranteed to be profitable.
 
-- Unknown;
-- Suspected;
-- Confirmed;
-- Stale.
+## 14. Horizon Defensive Theft — Result: PASS
 
-Information comes from valid sensors/recon/hacking/contacts/history.
+Hostile raiders must still physically reach, load, transport, and extract stolen resources. Permanent player loss occurs only after Hostile Extraction Commit.
 
-No omniscient target map or exact hidden loot count is provided by default.
+## 15. Knowledge Protection — Result: PASS
 
-## 10. Intelligence vs Exploration — Result: PASS
+Committed Research, Blueprint Unlocks, Research Evidence, and route knowledge cannot be stolen from player memory. Physical unanalyzed carriers may be stolen/destroyed according to ownership rules.
 
-GDS-11 Intelligence specializes GDS-8 discovery for strategic raid planning.
+## 16. Reinforcements — Result: PASS
 
-GDS-8 remains authoritative for local exploration states.
+Reinforcements require a valid source, committed call, route, and finite force. GDS-12 Dynamic Events/Time do not create infinite waves or reset reinforcement ETAs on reload.
 
-No contradictory discovery model is introduced.
+## 17. Escalation — Result: PASS
 
-## 11. Preparation — Result: PASS
+Escalation remains finite and deterministic from actual target/world capability. Difficulty does not replace it with endless stronger spawns.
 
-Preparation validates actual:
+## 18. Horizon Attack Generation — Result: PASS
 
-- ship;
-- Reach;
-- loadout;
-- robots/TCC;
-- rack/bay space;
-- tools;
-- survival;
-- cargo;
-- extraction.
+GDS-12 now owns when a Defense Event becomes a candidate/created event based on world/faction/economic/current-station state.
 
-It does not create supplies.
+Once created, GDS-11 owns execution.
 
-## 12. Hard Requirements — Result: PASS
+## 19. Recovery Grace — Result: PASS
 
-Deployment blocks only confirmed physical impossibility.
+After qualifying Major/Severe Horizon defense outcomes, ordinary severe follow-up attacks are suppressed for a bounded Recovery Grace period in active Simulation Time.
 
-Incomplete/unknown target Intel produces warnings/Unknown Risk rather than revealing secret counters.
+Initial design target: 30 active-game minutes; exact value remains tuneable.
 
-This preserves non-omniscient design.
+Recovery Grace does not repair damage or pause unrelated events.
 
-## 13. Player Loadout — Result: PASS
+## 20. Off-Screen Horizon Defense — Result: PASS
 
-GDS-5 remains authoritative for player inventory, equipment, suit energy, life support, and interaction.
+When the player is away during active gameplay, lower-detail deterministic resolution still consumes actual station/attacker state. No opaque global Defense Score becomes authoritative.
 
-GDS-11 references those states without redefining them.
+## 21. Player Return — Result: PASS
 
-## 14. Spacecraft Integration — Result: PASS
+Returning to Horizon joins the current Defense Event state. The attack does not restart or rewind, and abandoning an external mission retains normal GDS-8 consequences.
 
-GDS-6 remains authoritative for:
+## 22. Difficulty — Result: PASS
 
-- local flight;
-- docking;
-- power;
-- thermal;
-- fuel/propellant;
-- cargo;
-- module state;
-- strategic travel;
-- player ship recovery.
+Difficulty may alter only documented pressure axes. It cannot change raid target inventory, progression requirements, Reach, TCC, reputation reward entitlement, unique loot, or AI knowledge.
 
-GDS-11 defines how those capabilities are used during a raid.
+## 23. Failure/Retreat — Result: PASS
 
-## 15. External Space Attack — Result: PASS
+Raid failure or retreat does not impose a universal tax. Consequences remain actual:
 
-External raid combat reuses GDS-2 defense architecture and GDS-9 ship combat.
+- consumed ammunition/fuel;
+- ship/equipment damage;
+- destroyed/lost robots;
+- Field-Unsecured loot loss;
+- target changes;
+- reputation/world effects.
 
-Attackers can target actual:
+## 24. Routine Horizon Failure — Result: PASS
 
-- shield emitters;
-- turrets;
-- sensors;
-- communications;
-- power dependencies;
-- docking control;
-- defender craft.
+A procedural defense failure may cause severe physical setbacks but cannot routinely:
 
-No base-wide HP abstraction is added.
+- delete Horizon Station/Command Core;
+- erase Knowledge Assets;
+- permanently kill recruited crew.
 
-## 16. Shield Zones — Result: PASS
+Robot attrition and physical resource theft/destruction remain real.
 
-GDS-11 preserves GDS-2 local station shield zones.
+## 25. Save/Persistence — Result: PASS
 
-Destroying/depleting one emitter affects only its actual coverage/dependencies.
+GDS-12 now resolves the final save policy for Raid/Defense Event ID, seed, target damage, loot ownership, breaches, reinforcement calls, escalation, robot losses, stolen cargo, and recovery state.
 
-No single station-wide shield value is introduced.
+Saving is allowed during raids at Stable Save Boundaries.
 
-## 17. Station Defense Ammunition — Result: PASS
+## 26. Atomic Raid Transactions — Result: PASS
 
-Defenses consume finite ammunition/power/thermal capacity.
+Save/load cannot half-apply:
 
-Isolation of supply affects sustained fire while already loaded magazines remain until consumed/damaged.
+- loot transfer;
+- hostile theft extraction;
+- player extraction;
+- mission reward;
+- robot destruction/recovery;
+- final story commit.
 
-This preserves GDS-2/GDS-4/GDS-9.
+A save requested during an atomic transaction queues until it completes.
 
-## 18. Boarding — Result: PASS
+## 27. Story Raid Integration — Result: PASS
 
-Boarding requires a valid physical route:
+GDS-11 remains explicitly bound to:
 
-- dock;
-- hacked/spoofed port;
-- maintenance route;
-- existing opening;
-- authored breach.
+- hostile MS-A301 Rook's Wake when it becomes a fortified assault;
+- MS-A302 only when an escalated access branch becomes a true fortified assault;
+- MS-F02 fortified access/control-path phases.
 
-No automatic boarding occurs because shields reach zero.
+## 28. MS-F01 Finale Readiness — Result: PASS
 
-## 19. Breaching — Result: PASS
+The previously unresolved GDS-12 coalition threshold is now defined before MS-F02 can deploy.
 
-Breaching applies only to explicitly breachable/destructible targets.
+Readiness includes actual Reach IV ship capability, player loadout, Horizon support, departure resources, robot TCC/squad minimums, and four Support Channels.
 
-It respects:
+## 29. Finale Raid Robot Capacity — Result: PASS
 
-- tools;
-- explosives;
-- geometry;
-- pressure;
-- alarms;
-- robot size.
+The finale requires at least 6 base Field TCC and a Tactical Squad of combined Command Load >= 4, while temporary coalition support can add +2 subject to cap 12.
 
-No unrestricted destructibility is introduced.
+This does not bypass transport/service requirements.
 
-## 20. Atmosphere / Pressure — Result: PASS
+## 30. Faction Consequences — Result: PASS
 
-A hull breach into a pressurized compartment can cause actual decompression/hazards.
+GDS-11 records attributable raid facts; GDS-7/GDS-12 apply reputation/economic consequences. Low-signature play can affect attribution but cannot erase facts known by valid witnesses/sensors.
 
-The raid does not suspend GDS-2/GDS-5 environmental rules.
+## 31. Postgame — Result: PASS
 
-## 21. Heavy Robot Geometry — Result: PASS
+Persistent raid targets, faction hostility, damage, stock, and compatible Defense Events continue in P5 according to the chosen ending and GDS-12 world/economy/event rules.
 
-GDS-10 Heavy Mechs cannot pass through narrow airlocks/service corridors merely because they are selected for the squad.
+No target reset occurs because the campaign finale completed.
 
-Raid access/pathing respects actual clearance.
+## 32. Remaining Downstream Dependency — GDS-13
 
-## 22. Interior Combat — Result: PASS
+GDS-13 remains responsible for raid briefing/intel presentation, escalation feedback, squad/ship readiness UX, looting feedback, station alarms, defense status, failure/reward summaries, and accessibility.
 
-Interior raid play uses:
+## 33. Conclusion
 
-- real corridors;
-- doors;
-- lifts;
-- security;
-- local control;
-- atmosphere;
-- defender entry paths.
+The previously pending **GDS-12 Economy/Dynamic Events/Difficulty/Persistence/Recovery/Progression** dependencies are now first-pass resolved.
 
-Cleared rooms are not permanently safe by hidden checkpoint rule.
+No blocking contradiction exists between GDS-11 and GDS-1 through GDS-12.
 
-## 23. Enemy AI — Result: PASS
-
-Defenders reuse GDS-9 non-omniscient perception.
-
-Security/sensor infrastructure can provide legitimate tracking.
-
-Destroying sensors reduces future information but does not erase already observed Last Known Position immediately.
-
-## 24. Robot Commands — Result: PASS
-
-GDS-10 tactical commands remain valid during raids.
-
-Hacking, breaching, repair, shield, demolition, and attack orders require actual:
-
-- capability;
-- target;
-- path;
-- communication;
-- energy/ammo.
-
-No raid-specific command magic is introduced.
-
-## 25. Tactical Control Capacity — Result: PASS
-
-Raids do not override GDS-10 TCC/Command Load.
-
-Reserve robots still require actual transport and free command capacity before activation.
-
-## 26. Sabotage Causality — Result: PASS
-
-Sabotage affects only connected systems.
-
-Examples:
-
-- cut local power → connected loads;
-- disable comms → dependent calls/data;
-- remove component → target loses that component;
-- disable cooling → heat accumulates through normal system behavior.
-
-No whole-base switch exists by default.
-
-## 27. Reactor Sabotage — Result: PASS
-
-GDS-11 explicitly rejects "shoot reactor = instant station explosion."
-
-Reactor catastrophe requires authored physical/system conditions and respects safeguards/cooling/containment.
-
-## 28. Hacking Boundary — Result: PASS
-
-Hacking grants only the capability exposed by the compromised interface/network segment.
-
-One terminal does not provide universal station control.
-
-This preserves GDS-2 Security and GDS-10 Hacker boundaries.
-
-## 29. Resource Ownership — Result: PASS
-
-Raid loot uses the GDS-4 single-owner rule.
-
-Physical transfer is always:
-
-Source  
-→ Carrier/Player/Robot  
-→ Ship/Extraction Owner  
-→ later station storage.
-
-No resource duplication occurs through objective/UI state.
-
-## 30. Looting — Result: PASS
-
-Player raids do not grant an abstract percentage of target resources.
-
-The player must physically recover and extract loot.
-
-Target inventories remain depleted after transfer.
-
-## 31. Defensive Theft — Result: PASS
-
-Enemy raids on Horizon Station must physically:
-
-- reach storage;
-- load goods;
-- carry them out;
-- secure them in attacker transport;
-- successfully extract.
-
-Resources are not permanently removed before hostile extraction commit.
-
-## 32. Knowledge Assets — Result: PASS
-
-Already committed Research, Blueprints, Research Evidence, and route knowledge cannot be stolen from player memory.
-
-Only physical unanalyzed data/hardware can be stolen/destroyed.
-
-## 33. Reward Boundary — Result: PASS
-
-Field raid loot remains separate from GDS-8 mission Resolution Rewards.
-
-No duplicate reward copy is created because a raid succeeded.
-
-## 34. Reinforcement Source — Result: PASS
-
-Reinforcements require:
-
-- valid source;
-- valid communication/call;
-- route;
-- actual finite force.
-
-No arbitrary infinite spawning exists.
-
-## 35. Reinforcement Call Transaction — Result: PASS
-
-Call lifecycle is explicit:
-
-Not Requested  
-→ Calling  
-→ Committed  
-→ Responding  
-→ Arrived
-
-with Disrupted/Cancelled branches.
-
-Destroying communications after call commit does not automatically erase the dispatched force.
-
-## 36. Active-Time ETA — Result: PASS
-
-Reinforcement ETA progresses only during active simulation and persists through save/load.
-
-No reload timer reset exists.
-
-## 37. Finite Escalation — Result: PASS
-
-Raid-wide escalation has a ceiling based on target/world resources.
-
-The system does not spawn progressively stronger infinite waves as a hidden punishment for looting time.
-
-## 38. Defender Repair — Result: PASS
-
-NPC station repair requires:
-
-- worker/robot/automation;
-- access;
-- parts;
-- power;
-- time.
-
-Destroyed/disabled systems do not simply respawn when off camera.
-
-## 39. Evacuation — Result: PASS
-
-Defenders can evacuate people/loot/objectives only through real transport/logistics.
-
-Nothing teleports because alert state changed.
-
-## 40. Extraction — Result: PASS
-
-Raid extraction uses GDS-8 and requires physical withdrawal.
-
-The player ship is not a safe zone until actual extraction commit.
-
-Extraction under fire is possible where valid.
-
-## 41. Robot Extraction — Result: PASS
-
-Owned robots are safe only when actually secured through GDS-10/GDS-8.
-
-No magical squad recall occurs.
-
-## 42. Retreat — Result: PASS
-
-Retreat is a physical behavior and can occur before/after success/failure/abandonment.
-
-It does not refund consumed resources or undo committed target damage.
-
-## 43. Victory — Result: PASS
-
-Raid success is objective-based.
-
-Kill count does not replace:
-
-- theft;
-- sabotage;
-- rescue;
-- capture;
-- hack;
-- extraction.
-
-## 44. Target Capture — Result: PASS
-
-Capture of a command node/person/asset is allowed where objective says so.
-
-Baseline raids do not automatically turn enemy stations into additional fully managed player Home Stations.
-
-This prevents an undeclared multi-base simulation dependency.
-
-## 45. Horizon Station Attack — Result: PASS
-
-Created hostile station attacks use actual:
-
-- attacker force;
-- target objective;
-- station defenses;
-- security;
-- robots;
-- crew;
-- power;
-- ammo;
-- geometry;
-- cargo.
-
-No opaque global Defense Score determines the result.
-
-## 46. Player Away From Horizon — Result: PASS
-
-During active gameplay elsewhere, lower-detail station combat can run deterministically.
-
-Outcomes must map back to actual state:
-
-- ammo spent;
-- shields changed;
-- modules damaged;
-- robots lost;
-- cargo moved/stolen;
-- breaches created.
-
-## 47. Player Notification — Result: PASS
-
-Remote attack warning requires a valid communications/information path.
-
-No in-world omniscient alert is assumed.
-
-## 48. Player Return — Result: PASS
-
-Returning from another mission does not restart the station attack.
-
-The Defense Event continues in active time and the player joins its current state.
-
-GDS-8 resolves abandonment/extraction from the external mission.
-
-## 49. Crew Permanence — Result: PASS
-
-Routine raids can wound/incapacitate human crew but cannot permanently kill them.
-
-This preserves DD-013/GDS-3.
-
-## 50. Robot Attrition — Result: PASS
-
-Robots can be permanently Destroyed during offensive or defensive raids.
-
-No post-raid restoration is granted.
-
-This preserves GDS-10.
-
-## 51. Horizon Core Protection — Result: PASS
-
-Routine procedural raids cannot permanently delete Horizon Station or campaign-critical Command Core identity.
-
-Attackers can still cause serious physical/system setbacks.
-
-This prevents ordinary dynamic events from hard-bricking campaign progression.
-
-## 52. Station Recovery — Result: PASS
-
-After a raid, damage/hazards/security compromise persist.
-
-Recovery requires real:
-
-- repair;
-- parts;
-- power;
-- crew/robots;
-- time.
-
-There is no free one-click reset.
-
-## 53. Station Defenses — Result: PASS
-
-GDS-11 completes the pending raid interface for GDS-2 Defenses:
-
-- attacker target selection;
-- suppression;
-- saturation;
-- boarding transition;
-- off-screen use;
-- physical defensive failure.
-
-GDS-2 remains owner of the defense hardware itself.
-
-## 54. Station Security — Result: PASS
-
-GDS-11 completes the pending boarding/raid interface for GDS-2 Security:
-
-- hostile access;
-- lockdown;
-- local hacking;
-- boarder tracking;
-- internal response;
-- recovery.
-
-Security remains bounded by sensors/access infrastructure.
-
-## 55. Story Integration — Result: PASS
-
-GDS-11 now explicitly binds full raid mechanics to:
-
-- MS-A301 hostile Rook's Wake branch;
-- MS-A302 only when a forced fortified assault occurs;
-- MS-F02 Crownless access/assault phases.
-
-GDS-7/GDS-8 story objectives/outcomes remain unchanged.
-
-## 56. Rook's Wake — Result: PASS
-
-Rook's Wake remains a mobile/fortified Blackwake base in Kestrel.
-
-The hostile story path requires archive recovery and extraction, not destruction of the base.
-
-Negotiation remains a valid non-raid branch.
-
-## 57. Sealed Authority — Result: PASS
-
-Authorized/service access remains ordinary mission play.
-
-Only an escalated forced fortified assault uses GDS-11.
-
-The required archive cannot be substituted by destroying its storage.
-
-## 58. Second Cascade — Result: PASS
-
-GDS-11 owns fortified access/control-path fighting during Crownless.
-
-It cannot choose or redefine the final Stabilize/Sever/Contain decision.
-
-## 59. Faction Reputation Boundary — Result: PASS
-
-GDS-11 records facts such as:
-
-- identification;
-- casualties;
-- sabotage;
-- theft;
-- destruction;
-- negotiated betrayal.
-
-GDS-7/GDS-12 remain authoritative for reputation/economic consequences.
-
-## 60. World Geography — Result: PASS
-
-Raid targets remain attached to GDS-7 Strategic Locations and routes.
-
-GDS-11 does not move canonical story geography.
-
-## 61. No Automatic Player Scaling — Result: PASS
-
-Raid targets/defenders retain world threat capability.
-
-GDS-11 does not reduce/raise them to match current player equipment.
-
-This preserves DD-015.
-
-## 62. No Full Destruction Requirement — Result: PASS
-
-GDS-11 supports strategic subsystem attacks while preserving the project rule against unrestricted world destruction.
-
-Only authored breach/destruction targets can be destroyed.
-
-## 63. Persistence — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-GDS-11 defines persistable state for:
-
-- Raid/Defense Event ID;
-- target damage;
-- loot ownership;
-- escalation/calls;
-- breaches;
-- robot losses;
-- security compromise;
-- station aftermath.
-
-GDS-12 still owns final save-slot/autosave transaction policy and long-term target recovery timing.
-
-## 64. Economy / Dynamic Events — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-GDS-12 must still define:
-
-- target stock/economic values;
-- raid profitability balance;
-- attack generation frequency;
-- recovery/replenishment pace;
-- service/repair costs;
-- anti-frustration event pacing.
-
-No GDS-11 rule requires a currently undefined currency.
-
-## 65. Difficulty — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-GDS-12 may tune:
-
-- AI reaction;
-- damage modifiers if formally adopted;
-- reinforcement timing;
-- event pressure.
-
-It may not create:
-
-- omniscience;
-- infinite waves;
-- percentage theft;
-- physical rule violations.
-
-## 66. Presentation — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-GDS-13 must define:
-
-- raid briefing/intel UI;
-- approach warnings;
-- alarm/escalation feedback;
-- squad/Bridgehead controls;
-- objective/system overlays;
-- loot/extraction warnings;
-- Horizon remote attack alerts;
-- after-action report.
-
-Underlying rules are already fixed.
-
-## 67. Internal GDS-11 Consistency — Result: PASS
-
-### Intelligence vs Preparation
-
-Intel describes known target state; Preparation validates only legitimate known/intrinsic constraints.
-
-### External Attack vs Boarding
-
-External attack creates/opens physical access; Boarding traverses it.
-
-### Boarding vs Interior
-
-Boarding owns entry/Bridgehead; Interior owns movement/control after entry.
-
-### Sabotage vs Station Systems
-
-Sabotage chooses/changes target state; GDS-2/target systems own resulting physical network behavior.
-
-### Looting vs Extraction
-
-Looting moves ownership; Extraction determines secure departure.
-
-### Escalation vs Spawning
-
-Escalation activates/requests real finite forces; it does not create arbitrary enemies.
-
-### Offensive vs Defensive Raids
-
-Both use the same physical principles for access, sabotage, looting, withdrawal, and extraction.
-
-## 68. Dependencies Preventing Design Complete
-
-GDS-11 remains first-pass pending:
-
-### GDS-12 Economy, Progression, Difficulty, Dynamic Events, Persistence
-
-Required for:
-
-- raid availability/generation pacing;
-- profitability/reward economics;
-- target recovery/replenishment;
-- Horizon attack frequency;
-- final save/retry transaction policy;
-- coalition/support economics;
-- difficulty tuning.
-
-### GDS-13 Presentation
-
-Required for:
-
-- final raid UX/HUD;
-- intelligence visualization;
-- tactical command presentation;
-- remote station-attack feedback;
-- alarms/audio/VFX;
-- onboarding/accessibility.
-
-## 69. First-Pass Conclusion
-
-No blocking contradiction was found.
-
-GDS-11 can be marked:
+GDS-11 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The next dependency-driven phase is GDS-12 Economy, Progression, Difficulty, and Cross-Cutting Systems.
+Its remaining scheduled downstream design dependency is GDS-13, followed by GDS-14 final audit.

@@ -46,6 +46,8 @@ GDS-10 owns player robot classes, squad control, manufacturing, and robot persis
 
 GDS-11 owns raid/defense orchestration.
 
+GDS-12 owns economy/progression context, global Difficulty, loot/reward coordination, and save/persistence semantics.
+
 ## Core Baseline
 
 GDS-9 establishes:
@@ -69,4 +71,6 @@ GDS-9 establishes:
 
 GDS-9 is not yet Design Complete.
 
-Robots are now first-pass cross-validated against GDS-9. Raids, Economy/Progression/Difficulty/Persistence, and Presentation remain downstream combat dependencies.
+Robots, Raids, and GDS-12 Economy/Progression/Difficulty/Persistence are now first-pass cross-validated against GDS-9.
+
+Remaining downstream dependencies are GDS-13 Presentation/Accessibility and GDS-14 whole-project consistency audit.

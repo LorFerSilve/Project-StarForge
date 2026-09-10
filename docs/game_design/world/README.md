@@ -35,22 +35,21 @@ World documents define what exists and where it exists. Gameplay mechanics owned
 
 ## Downstream Resolution
 
-Missions and Combat have been first-pass cross-validated against World/Factions.
+Missions, Combat, Raids, and GDS-12 Economy/Progression/Persistence are first-pass cross-validated against World/Factions.
 
-GDS-11 has resolved fortified-target raids, sabotage, persistent target state, and Horizon-defense world interaction.
+GDS-13 has now resolved the remaining first-pass presentation dependency through:
 
-GDS-12 has resolved:
-
-- regional economy/trade access;
-- reputation cross-system consequences;
-- progression/Reach pacing;
-- Dynamic Event world-state integration;
-- raid-target recovery/replenishment;
-- finale support/access softlock prevention;
-- world-state persistence and postgame continuation.
+- environment and biome readability;
+- bounded-zone visual language;
+- faction architecture/material/signage identity;
+- color-independent faction recognition;
+- galaxy-map/route knowledge presentation;
+- unknown-information boundaries;
+- Fracture/Anomaly visual and audio language;
+- accessibility-compatible world signaling.
 
 ## Completion State
 
 World/Factions are not yet Design Complete.
 
-Their remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

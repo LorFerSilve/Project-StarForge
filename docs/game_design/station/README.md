@@ -24,10 +24,29 @@ Authoritative design domain for the player's persistent home space station.
 
 ## Authority Boundary
 
-Crew behavior is authoritative under `../crew/`.
+This domain owns Horizon Station construction, structure, connected utilities, farming, storage/logistics, manufacturing, damage/repair, automation, defenses, security, and station-local events.
 
-This domain specifies how station systems expose work, infrastructure, hazards, automation requirements, and physical facilities to crew.
+Crew behavior is authoritative under `../crew/`. Resource recipes are authoritative under `../resources/`. Robot bodies/capability belong under `../robots/`. Raid/defense-event orchestration belongs under `../raids/`. Cross-cutting economy/progression/save/simulation belongs under `../systems/` and `../progression/`. GDS-13 owns station visual language, overlays/UI, interaction feedback, VFX/audio, alarms, onboarding and accessibility.
 
-Resource recipes are authoritative under `../resources/`.
+## Downstream Resolution
 
-Cross-cutting save and simulation rules are authoritative under `../systems/` and `../02_global_game_rules.md`.
+Crew, Resources, Player, Spacecraft, Missions, Combat, Robots, Raids, and GDS-12 cross-cutting systems have first-pass defined their station-facing boundaries.
+
+GDS-13 now resolves:
+
+- functional module/network visual language;
+- construction preview/validity feedback;
+- power/atmosphere/thermal/logistics diagnostic overlays;
+- operational/degraded/damaged state readability;
+- physical manufacturing/farming/storage activity presentation;
+- crew/robot station presence;
+- damage/repair persistence visuals;
+- P0–P3 alarm hierarchy and cascading-failure aggregation;
+- station restoration/construction/automation/emergency/defense onboarding;
+- color-independent, scalable and reduced-motion/effects accessibility.
+
+## Completion State
+
+GDS-2 is not yet Design Complete.
+
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

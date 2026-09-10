@@ -1,98 +1,116 @@
 # Player Role and Identity
 
-> **Status:** Draft  
-> **Authority:** Narrative identity of the player character, fixed backstory limits, commander status, station ownership context, and roleplaying freedom
+> **Status:** Design Complete  
+> **Authority:** Narrative identity of the player character, fixed backstory limits, commander status, station ownership context, Callsign, protagonist dialogue-voice baseline, and roleplaying freedom
 
 ## 1. Purpose
 
-The player requires enough fixed narrative context to participate coherently in the story without erasing character customization.
+The player receives enough fixed narrative context to participate coherently in the campaign while preserving roleplaying freedom and avoiding an unnecessarily expensive fixed protagonist production burden.
 
 ## 2. Fixed Narrative Role
 
-The player is an **independent recovery operator** active in the Recovery Sector.
+The player is an **independent recovery operator** active in the Recovery Sector before the opening mission.
 
-Before the game begins, the player works small salvage, repair, transport, and recovery contracts.
+Their ordinary work includes small salvage, repair, transport, and recovery contracts.
 
-## 3. No Famous Origin
+## 3. Starting Status
 
 At game start the player is not:
 
 - a famous admiral;
-- faction leader;
-- legendary scientist;
-- secret heir;
-- known Fracture survivor.
+- a faction leader;
+- a legendary scientist;
+- a secret hereditary heir;
+- a known historical Fracture survivor;
+- formally sworn to a major faction.
 
-Their importance is earned during play.
+Their strategic importance is earned through play.
 
-## 4. Personal Identity
+## 4. Callsign / Display Name
 
-The player can define cosmetic identity such as:
+During new-game setup the player chooses a **Callsign/display name**.
 
-- name;
-- appearance;
-- voice/presentation where supported.
+The Callsign is used by UI, logs, manifests, and dialogue text where a dynamic player identifier is appropriate.
 
-Narrative dialogue normally addresses the player through role/context rather than requiring one fixed canonical name.
+Spoken NPC dialogue does not require recording every possible Callsign; NPCs normally address the player through contextual titles such as Commander, Administrator, Operator, or equivalent relationship-specific wording.
 
-## 5. Backstory Scope
+Changing a Callsign later, if the UI permits it, changes presentation only and does not rewrite narrative history or reputation.
 
-The baseline fixed history is intentionally narrow:
+## 5. Character-Appearance Baseline
+
+The baseline does not require a face/body character creator.
+
+The gameplay avatar uses the standardized player body defined by GDS-5 and is visually characterized primarily by equipped Suit, Helmet, gloves, weapons, tools, and gear.
+
+Any later cosmetic expansion is non-statistical and must preserve the same collision/reach/gameplay body contract.
+
+## 6. Fixed Backstory Scope
+
+The only mandatory personal history is:
 
 - the player is an adult;
-- they are legally/operationally independent;
-- they have practical recovery/spaceflight experience;
-- they are not currently sworn to a major faction.
+- the player is legally/operationally independent;
+- the player has practical recovery/tool/spaceflight experience sufficient for ordinary baseline operation;
+- the player is not currently sworn to a major faction;
+- no mandatory spouse, child, parent, sibling, birthplace, ethnicity, religion, or inherited political identity is fixed by the main campaign.
 
-More detailed childhood/family history is not required by the main campaign.
+The story may allow the player to express attitudes but does not invent missing family trauma to force motivation.
 
-## 6. Starting Contract
+## 7. Starting Contract
 
 The inciting event begins when the player investigates a low-power emergency/transponder signal from an abandoned pre-Fracture station.
 
-The signal is initially treated as a salvage/recovery opportunity.
+The signal is initially approached as a legitimate salvage/recovery opportunity.
 
-## 7. Station Claim
+## 8. Horizon Station Claim
 
-The player gains legitimate operational control when the station's surviving emergency authority accepts them as **Acting Recovery Administrator** after they restore the minimum Command Core.
+The station's surviving emergency authority grants the player legitimate operational control as **Acting Recovery Administrator** after minimum Command Core recovery requirements are satisfied.
 
-This is a technical emergency authorization, not hereditary ownership.
+This is an emergency technical/legal authorization, not hereditary ownership or a faction appointment.
 
-## 8. Long-Term Commander Role
+## 9. Long-Term Commander Role
 
-As the station grows, the player's functional role becomes:
+As Horizon grows, the player's functional identity becomes:
 
-- station commander;
+- station commander/administrator;
 - expedition leader;
-- independent diplomatic actor;
 - ship owner/operator;
+- independent diplomatic actor;
 - strategic decision-maker.
 
-## 9. Station Independence
+This role is earned through accumulated physical capability, relationships, knowledge, and story state rather than a Commander Level.
 
-No faction automatically inherits station control because it financed a mission, granted technology, or reached Allied reputation.
+## 10. Station Independence
 
-## 10. Faction Background Choice
+No faction automatically gains ownership/control of Horizon because it:
 
-The baseline does not ask the player to choose a permanent faction origin during character creation.
+- financed a mission;
+- sold/granted technology;
+- supplied assistance;
+- reached Allied reputation;
+- supported the finale.
 
-Faction relationships are earned through play.
+Any specific control/ownership concession would require an explicit consequential narrative choice. None is mandatory in the baseline campaign.
 
-## 11. Player Voice
+## 11. No Permanent Faction-Origin Choice
 
-The player may use a voiced or selectively voiced presentation later.
+Character creation does not ask the player to choose a fixed faction origin/class.
 
-Narrative design must remain compatible with either:
+Faction reputation and alliances emerge from gameplay.
 
-- full player voice;
-- limited contextual lines;
-- silent protagonist with dialogue selection.
+## 12. Conversational Protagonist Voice
 
-Presentation owns the final production choice.
+The baseline protagonist is **unvoiced for conversational dialogue**.
 
-## 12. Dialogue Personality
+Player dialogue is represented through selectable written choices/intents.
 
-Dialogue options may support roleplay styles such as:
+NPCs may be fully/partially voiced according to content production.
+
+Non-linguistic avatar sounds such as breathing, exertion, pain, and suit vocal reactions are permitted and do not establish a fixed spoken personality.
+
+## 13. Dialogue Choice Styles
+
+Where context supports them, choices may express styles such as:
 
 - pragmatic;
 - compassionate;
@@ -100,70 +118,122 @@ Dialogue options may support roleplay styles such as:
 - assertive;
 - technical.
 
-These are not permanent personality stats.
+These are authored response tones, not permanent personality stats or dialogue-class points.
 
-## 13. Technical Competence
+## 14. Mechanical Consequence Boundary
 
-The player is assumed competent enough to use ordinary tools/ships.
+A dialogue option changes persistent state only when it is explicitly classified as consequential/operational under `dialogue_and_communication.md`.
 
-Advanced knowledge still requires:
+Choosing a tone does not secretly modify generic hidden personality attributes.
 
-- research;
-- equipment;
+## 15. Technical Competence
+
+The player is narratively competent with ordinary recovery tools and ships.
+
+Advanced capability still requires the actual:
+
+- Research;
+- Blueprint;
+- equipment/tool;
+- facility;
 - specialist support;
-- discovered information.
+- discovered information;
+- authorization
 
-Narrative competence does not bypass gameplay requirements.
+specified by the owning gameplay system.
 
-## 14. Moral Agency
+Narrative competence never bypasses mechanics.
 
-The player can make decisions such as:
+## 16. Moral Agency
 
-- whom to support;
-- whether to expose sensitive records;
-- whether to restore dangerous infrastructure;
-- whether to negotiate or attack.
+The player can make persistent decisions including, where authored:
 
-## 15. No Forced Faction Membership
+- faction support/opposition;
+- evidence disclosure;
+- restoring/severing dangerous infrastructure;
+- negotiation vs assault;
+- distribution of scarce strategic assets;
+- final Stabilize / Sever / Contain resolution.
 
-The player may become Allied with a faction but remains an independent commander.
+The game does not collapse these into one morality meter unless a future accepted design change introduces one.
 
-## 16. Major Narrative Motivation
+## 17. Faction Membership Boundary
 
-The baseline motivation evolves:
+The player may become Allied with a faction but remains an independent Horizon commander in the baseline.
+
+There is no mandatory oath that replaces the player's independent role.
+
+## 18. Motivation Arc
 
 ### Early
 
-Survive and restore a viable station.
+Recover survivable infrastructure and establish Horizon as a viable base.
 
 ### Mid
 
-Secure resources, allies, and knowledge needed to expand.
+Secure resources, survivors, technology, routes, and relationships needed to expand operations.
 
 ### Late
 
-Understand The Fracture and prevent a second cascade.
+Understand The Fracture, prepare a cross-domain response, and prevent the Second Cascade.
 
-## 17. Personal Stakes
+### Postgame
 
-The home station and recruited crew become the player's primary personal stakes.
+Continue operating Horizon in the persistent world shaped by the chosen final resolution.
 
-The narrative does not require inventing a kidnapped family member to force engagement.
+## 19. Personal Stakes
 
-## 18. Death/Failure
+Horizon Station, recruited crew, accumulated ships/robots, relationships, and the recovered regional network are the player's principal long-term stakes.
 
-Routine defeat follows GDS-5.
+The main narrative does not require a prewritten kidnapped/dead relative as its emotional hook.
 
-Narrative does not reinterpret ordinary player incapacitation as canonical death.
+## 20. Failure and Death
 
-## 19. Explicit Non-Goals
+Routine defeat follows GDS-5/GDS-8/GDS-12 Recovery Transit.
 
-The player is not a chosen one, fixed faction loyalist, mandatory prewritten family character, or supernatural protagonist.
+Narrative does not reinterpret ordinary Incapacitation as canonical death.
 
-## 20. Dependencies
+The baseline has no authored permanent player-character death ending.
 
-This specification depends on Player Character, Setting, Main Story, Factions, Home Station, and Dialogue.
+## 21. Persistence
 
-## 21. Open Questions
+The save preserves:
 
-None in the player-role baseline.
+- Callsign;
+- committed player-role/story flags;
+- consequential dialogue choices;
+- station claim/commander status;
+- faction/reputation consequences through their owning systems.
+
+Changing presentation preferences does not rewrite committed narrative state.
+
+## 22. Presentation and Accessibility
+
+Dialogue UI identifies player choices clearly and supports text scaling/navigation/accessibility under GDS-13.
+
+Because player conversational lines are unvoiced, no gameplay information may depend on hearing the protagonist speak.
+
+## 23. Edge Cases
+
+- If the player changes Callsign after an old log was authored as an immutable quoted historical artifact, the artifact may preserve its recorded prior name if its narrative data explicitly stores that value; ordinary dynamic UI uses the current Callsign.
+- Faction hostility cannot erase the station claim unless an explicit authored world event changes physical control under the established campaign-protection rules.
+- A dialogue choice cannot grant advanced technical operation if gameplay prerequisites are absent; it can only choose an outcome the target system says is feasible.
+- A later cosmetic DLC/content update cannot require save migration that changes gameplay body scale/statistics.
+
+## 24. Tuneable / Content Parameters
+
+Authored dialogue wording, contextual titles, bark frequency, and cosmetic suit/avatar content are content parameters.
+
+The fixed identity/backstory scope, Callsign model, independent-faction role, and unvoiced conversational protagonist are fixed baseline decisions.
+
+## 25. Explicit Non-Goals
+
+The player is not a chosen-one archetype, hereditary ruler, fixed faction loyalist, mandatory prewritten family character, generic morality-score avatar, or voiced conversational protagonist in the baseline.
+
+## 26. Dependencies
+
+Depends on GDS-5 Player Character, Setting, Main Story, Factions/Reputation, Horizon Station, Dialogue/Communication, Recovery/Failure, and GDS-13 Presentation/Accessibility.
+
+## 27. Open Questions
+
+None.

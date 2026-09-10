@@ -71,7 +71,6 @@ A numerical or data-driven value intended to be adjustable during balancing with
 
 Examples include damage, duration, capacity, range, production speed, and resource yield.
 
-
 ## Assignment
 
 A persistent crew responsibility linking one crew member to a compatible facility, zone, network, or station-wide professional duty.
@@ -99,7 +98,6 @@ Temporary Guests consume applicable station support but cannot hold permanent cr
 The finite amount of professional supervision or assigned work a crew member can support at one time.
 
 Workload Capacity depends on relevant skill, traits, health, and applicable automation infrastructure.
-
 
 ## Blueprint
 
@@ -143,7 +141,6 @@ A property of a resource deposit describing the amount of canonical resource rec
 
 Yield Grade is not a separate inventory-quality tier.
 
-
 ## Field-Unsecured
 
 A physical resource or item acquired during an external mission that has not yet been committed to an authorized secure extraction owner.
@@ -175,7 +172,6 @@ Finite electrical energy available to active player-suit systems such as thermal
 ## Incapacitated
 
 A player or crew health state in which normal movement, work, and direct action are unavailable until rescue, stabilization, or recovery occurs.
-
 
 ## Ship Hull Class
 
@@ -211,7 +207,6 @@ A spacecraft state in which the ship is Disabled and lacks normal active operato
 
 A mission-acquired physical resource or item that has been successfully committed to an authorized secure extraction owner such as valid spacecraft cargo but has not necessarily yet been transferred to Station-Secured ownership.
 
-
 ## The Fracture
 
 The interstellar infrastructure collapse at 0 AF that disrupted the Transit Lattice, isolated regions, fragmented political authority, and produced the post-collapse world of Project StarForge.
@@ -246,7 +241,6 @@ The player's persistent home station located in the Aster's Rest System of the R
 
 The persistent world-state outcome created after the campaign finale, including whether the player chose Stabilize, Sever, or Contain and the resulting route/faction/epilogue consequences.
 
-
 ## Mission ID
 
 A persistent unique identifier for one authored or procedural mission and its lifecycle, objectives, generation data, outcomes, and reward state.
@@ -278,7 +272,6 @@ A persistent non-physical entitlement representing a physical mission-resolution
 ## Extraction Required
 
 A mission rule stating that completing primary objectives alone is insufficient for Success and that an authorized extraction transaction must also commit.
-
 
 ## Damage Packet
 
@@ -313,7 +306,6 @@ A reload performed while ammunition remains loaded, preserving existing loaded r
 ## Clear Area
 
 A combat-objective resolution condition in which no qualifying hostile actor capable of immediate combat remains inside the defined objective area under that objective's explicit rules.
-
 
 ## Robot ID
 
@@ -356,3 +348,39 @@ The non-operational physical remains of a Destroyed robot, potentially containin
 ## Rules of Engagement — ROE
 
 A configured robot combat-authorization policy such as Hold Fire, Defensive, Engage Hostiles, or Engage Designated Target Only.
+
+## Raid Target
+
+A persistent fortified Strategic Location or installation with raid-relevant defenses, access routes, storage, security, system dependencies, intelligence, damage, and prior raid state.
+
+## Raid Intelligence
+
+Persistent information about a Raid Target classified as Unknown, Suspected, Confirmed, or Stale and acquired through legitimate reconnaissance, sensing, hacking, observation, or other world sources.
+
+## Bridgehead
+
+A temporarily secured tactical entry area during boarding that can support rallying, resupply, robot deployment/recovery, and access to the player's extraction route without becoming an invulnerable safe zone.
+
+## Escalation State
+
+The raid-wide strategic response state of a fortified target, progressing through states such as Quiet, Suspicious, Alerted, Mobilized, Reinforcements En Route, Reinforced/Full Response, and Withdrawal/Evacuation.
+
+## Reinforcement Call
+
+A persistent raid transaction through which a valid target requests external help, including Calling, Committed, Responding, and Arrived states plus explicit disruption/cancellation branches.
+
+## Secured Entry
+
+A raid entry route whose immediate physical access obstruction has been resolved and which is currently traversable, without implying permanent safety or ownership.
+
+## Attacker-Controlled
+
+A temporary interior tactical state in which qualifying local defenders are not immediately contesting an area and the attacker has valid access; it can become Contested again.
+
+## Defense Event ID
+
+A persistent unique identifier for one hostile raid against Horizon Station and its attacker composition, objectives, phase, damage, stolen cargo, withdrawal, and resolution state.
+
+## Hostile Extraction Commit
+
+The transaction point at which a hostile raid carrier or ship successfully departs with stolen physical assets, permanently removing those assets from the player's current ownership unless a later world event explicitly recovers them.

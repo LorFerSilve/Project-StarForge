@@ -1,6 +1,6 @@
 # Global Game Rules
 
-> **Status:** Under Review  
+> **Status:** First-Pass Complete — Cross-Validation Pending  
 > **Authority:** Project-wide gameplay invariants and scope rules
 
 This document defines rules that apply across multiple gameplay domains.
@@ -19,9 +19,7 @@ No core progression reward may require multiplayer participation.
 
 Synchronous multiplayer is not part of the initial authoritative product scope.
 
-The design may later support asynchronous player-station raiding, but the complete first implementation of raiding is against AI-controlled stations.
-
-Future multiplayer must adapt to the established single-player rules rather than forcing the core game to depend on network availability.
+The baseline contains no synchronous or asynchronous PvP station-raiding system. Any future multiplayer design must be treated as a later explicit scope addition and adapt to the established single-player rules rather than becoming a dependency of the core game.
 
 ## 3. On-Foot Perspective
 
@@ -429,4 +427,4 @@ The intended game remains implementable through the project's custom C++/OpenGL 
 
 None at the global-rule level for the current design baseline.
 
-Subsystems may reveal contradictions that require an explicit revision to this document during review.
+Subsystems may reveal contradictions that require an explicit revision to this document during GDS-14 final audit.

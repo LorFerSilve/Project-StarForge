@@ -1,15 +1,15 @@
 # Player Movement
 
-> **Status:** Draft  
-> **Authority:** On-foot locomotion states, gravity movement, jumping, sprinting, crouching, falling, mantling, ladders, zero-gravity/EVA locomotion boundary, and movement failure states
+> **Status:** Design Complete  
+> **Authority:** On-foot locomotion states, gravity movement, jumping, sprinting, crouching, falling, mantling, ladders/shafts, zero-gravity/EVA locomotion, load restrictions, and movement failure states
 
 ## 1. Purpose
 
-Movement should feel responsive and readable while supporting interiors, planetary terrain, boarding, EVA, and station emergencies.
+Movement is responsive and readable while supporting station interiors, planetary terrain, boarding, EVA, hazards, and combat without introducing a generic traversal-stamina loop.
 
-## 2. Standard Locomotion States
+## 2. Canonical Locomotion States
 
-The player can be:
+The player occupies exactly one primary locomotion state from the applicable set:
 
 - Grounded Standing;
 - Walking;
@@ -17,192 +17,316 @@ The player can be:
 - Crouched;
 - Airborne;
 - Mantling;
-- Ladder/Shaft Traversal;
+- Ladder / Shaft Traversal;
 - Zero-G Free Movement;
 - Incapacitated.
 
+Independent modifiers such as Heavy Load, environmental exposure, or explicit injury/status effects may further constrain a state.
+
 ## 3. Walking
 
-Walking is default grounded movement with forward/back, strafing, and diagonal motion.
+Walking is the default grounded locomotion with forward/backward movement and strafing.
 
-Direction is camera-relative on normal horizontal surfaces.
+Direction is camera-relative on ordinary walkable surfaces.
+
+Diagonal input is normalized so combining axes does not increase maximum ground speed.
 
 ## 4. Sprinting
 
 Sprint increases grounded movement speed.
 
-Sprint requires valid grounded locomotion and no explicit movement restriction.
+Sprint is valid only when:
 
-The baseline has **no general stamina bar** limiting ordinary sprint duration.
+- the player is in a sprint-compatible grounded state;
+- the player is not Crouched;
+- Heavy Load or another explicit restriction has not disabled sprint;
+- Player Health has not disabled sprint;
+- required traversal clearance remains valid.
 
-## 5. No Stamina Bar
+Ordinary sprint has no stamina cost and no maximum duration.
 
-Traversal challenge should come from environment, gear, combat, gravity, hazards, and terrain rather than periodically forcing basic movement to stop.
-
-## 6. Crouching
+## 5. Crouching
 
 Crouch reduces collision height and movement speed.
 
-Standing is blocked if overhead clearance is insufficient.
+The player cannot stand until the standing collision volume is clear.
 
-## 7. Jump
+Entering/exiting crouch uses a short tuneable transition but collision validity is authoritative throughout.
 
-The player can jump while grounded unless current state/equipment blocks it.
+## 6. Jump
 
-Jump does not consume stamina.
+Jump is allowed while grounded when no explicit movement restriction blocks it.
 
-## 8. Air Control
+Jump consumes no stamina.
 
-Limited air control exists for responsiveness but is weaker than grounded directional control.
+Heavy Load and Critical Player Health disable normal jumping.
 
-## 9. Falling
+## 7. Air Control
 
-Impact severity derives from landing velocity and gravity context.
+Airborne directional control exists for responsiveness and is weaker than grounded acceleration/control.
 
-Health/combat integration owns damage values.
+Air control cannot reverse momentum as strongly as grounded movement.
 
-## 10. Fall Protection
+Exact coefficients are tuneable.
 
-Equipment may improve safe-fall thresholds through suit dampening or propulsion assist.
+## 8. Falling and Impact
 
-## 11. Mantling
+Landing impact severity derives from relative landing velocity and local gravity.
 
-The player can mantle valid reachable ledges within authored height/clearance limits.
+Movement reports the impact to Player Health/Combat after applicable movement/equipment protection has been evaluated.
 
-Mantling is not universal wall climbing.
+## 9. Fall Protection
 
-## 12. Mantle Validation
+An equipment definition may explicitly provide fall-protection capability through a documented safe-impact threshold/modifier.
 
-A mantle requires a reachable ledge, valid destination volume, valid surface, and an allowed player state.
+No fall protection exists merely because equipment is high tier.
 
-## 13. Ladders and Shafts
+## 10. Mantling
 
-Compatible ladders/maintenance shafts use an explicit traversal state with valid entry and exit points.
+The player can mantle authored/reachable ledges when all conditions are valid:
 
-## 14. Elevators
+- ledge height is within the configured mantle range;
+- the approach surface/ledge is mantle-compatible;
+- destination collision volume is clear;
+- the movement path is unobstructed;
+- the player state permits mantling;
+- Heavy Load and Critical Player Health are not blocking it.
 
-Elevators move the physical player through station/ship space.
+Mantling is not universal climbing.
 
-They are not teleporters unless a later fast-travel system explicitly defines one.
+## 11. Ladders and Maintenance Shafts
 
-## 15. Doors
+Compatible ladders/shafts use an explicit traversal state with authored entry/exit points.
 
-Closed doors block movement until actual collision/state permits traversal.
+The player cannot enter that state through arbitrary nearby geometry.
 
-## 16. Moving Platforms
+Losing a valid traversal path transitions to Airborne/Zero-G according to local gravity.
 
-Player movement inherits valid moving-platform transform/velocity sufficiently to prevent normal platform motion from sliding the player incorrectly.
+## 12. Elevators
 
-## 17. Gravity
+Elevators physically move the player through the current station/ship environment.
 
-Playable environments expose:
+Baseline elevators are **not fast-travel teleporters**.
 
-- Standard/Local Gravity;
+If a future fast-travel mechanic is added, it requires a separate accepted design change and does not retroactively redefine elevator movement.
+
+## 13. Doors and Dynamic Geometry
+
+Closed/blocked solid doors prevent traversal.
+
+Movement follows current authoritative collision state and never assumes a visual door opening before collision permits passage.
+
+## 14. Moving Platforms
+
+The player inherits enough supporting-platform motion/velocity to remain stable during ordinary platform movement.
+
+Leaving the platform preserves physically appropriate inherited velocity according to the movement model.
+
+## 15. Gravity Contexts
+
+Playable environments expose one of:
+
+- Standard / Local Gravity;
 - Reduced Gravity;
 - Zero Gravity.
 
 Exact acceleration is location data.
 
-## 18. Reduced Gravity
+Gravity changes jump arcs, fall velocity, grounded availability, and locomotion response rather than changing player identity/stat progression.
 
-Reduced gravity changes jump arc, fall velocity, airtime, and movement feel while preserving controlled grounded movement.
+## 16. Reduced Gravity
 
-## 19. Zero Gravity
+Reduced gravity keeps normal grounded locomotion on valid surfaces but changes jump/fall timing and traction response according to location parameters.
 
-Without contact/magnetic support, grounded locomotion is unavailable.
+## 17. Zero Gravity
 
-Zero-g movement uses suit maneuvering thrusters when equipped and operational.
+Without magnetic/contact support, grounded locomotion is unavailable.
 
-## 20. Zero-G Momentum
+Zero-G Free Movement uses compatible powered suit maneuvering thrusters.
 
-Thrusters accelerate and decelerate rather than setting velocity instantly.
+Thrusters apply acceleration/deceleration rather than directly setting velocity.
 
-A stabilization mode can counter drift when enabled.
+## 18. Zero-G Stabilization Mode
 
-## 21. EVA
+A compatible powered EVA-thruster system includes a player-toggleable **Stabilization Mode**.
 
-EVA uses zero-g/low-gravity locomotion in vacuum/exterior environments and additionally requires field-survival protection.
+When enabled it applies counter-thrust toward zero relative velocity within the suit's actual thrust and energy limits.
 
-## 22. Magnetic Boots
+It cannot stop the player instantly, operate without energy/functioning thrusters, or negate external forces beyond its capability.
 
-Compatible suits can use Magnetic Boots on supported surfaces.
+## 19. EVA
 
-When enabled, the player is constrained to the local surface and uses grounded movement rules.
+EVA uses Zero-G or local low-gravity movement plus all GDS-5 Field Survival requirements.
 
-## 23. Carried Load
+Movement does not itself grant pressure, oxygen, thermal, or radiation protection.
 
-Inventory can create a Heavy Load state when carried mass exceeds a soft-load threshold but remains below absolute capacity.
+## 20. Magnetic Boots
 
-Heavy Load reduces sprint/jump capability.
+A compatible suit may include Magnetic Boots.
 
-## 24. Equipment Restrictions
+When enabled on a supported surface:
 
-Heavy equipment can define visible movement modifiers.
+- the player is constrained to that surface;
+- grounded movement rules apply in the local tangent frame;
+- detaching returns the player to the appropriate gravity/Zero-G state.
 
-## 25. Health Restrictions
+Magnetic Boots require the equipment capability defined by the equipped suit and cannot attach to incompatible surfaces.
 
-Health states may reduce speed or disable sprint/jump.
+## 21. Carried Load
 
-Health owns the restriction; Movement executes it.
+Inventory defines carried Mass and Heavy Load.
 
-## 26. Collision
+While Heavy Load:
 
-The player uses a stable humanoid collision volume and cannot move through solid geometry.
+- sprint is disabled;
+- normal jump is disabled;
+- mantle is disabled;
+- walking/crouching remain available at reduced tuneable speed/acceleration.
 
-## 27. Step Handling
+The hard Mass/Volume capacities still prevent impossible pickup beyond absolute limits.
 
-Small height differences auto-step within a tuneable limit.
+## 22. Equipment Movement Modifiers
 
-Larger obstacles require jump, mantle, or another route.
+Equipment may define explicit movement modifiers.
 
-## 28. Slopes
+Only documented equipment properties affect movement; there are no hidden tier/rarity movement bonuses.
 
-Surfaces above the maximum walkable angle become non-walkable or cause sliding/fall.
+## 23. Player Health Restrictions
 
-## 29. Hazardous Surfaces
+Player Health owns health-band restrictions.
 
-Movement detects hazard surfaces; damage/effect is owned by hazard/combat systems.
+The fixed baseline is:
 
-## 30. Swimming
+- Healthy — no health-band movement restriction;
+- Wounded — no inherent movement restriction;
+- Critical — sprint, normal jump, and mantle disabled;
+- Incapacitated — all direct locomotion disabled;
+- Recovering — locomotion follows the current Health band plus any explicit injury/recovery status.
 
-Swimming is not part of the initial baseline.
+Independent combat/status/injury effects can impose additional documented restrictions.
 
-## 31. Prone
+## 24. Collision
+
+The player uses a stable humanoid gameplay collision volume and cannot move through authoritative solid geometry.
+
+Cosmetic appearance does not alter collision dimensions.
+
+## 25. Step Handling
+
+Small ledges within a tuneable step height are traversed automatically when destination clearance exists.
+
+Larger obstacles require jump, mantle, ladder/shaft traversal, or another route.
+
+## 26. Slopes
+
+Surfaces at or below the configured walkable-angle limit can support grounded locomotion.
+
+Steeper surfaces are non-walkable and transition the player to slide/fall behavior according to local gravity/collision.
+
+## 27. Hazardous Surfaces
+
+Movement reports physical contact with hazard surfaces.
+
+The owning hazard/Combat/Field Survival system applies the consequence.
+
+Movement never invents damage solely from a material label.
+
+## 28. Swimming
+
+Swimming is not part of the baseline.
+
+Liquid mission spaces therefore require authored alternatives such as avoidance, suit traversal where explicitly supported, platforms, or vehicles; implementation must not invent a swimming controller.
+
+## 29. Prone
 
 Prone is not part of the baseline.
 
-## 32. Dash/Dodge
+## 30. Dash / Dodge
 
-No universal dash/dodge exists in the baseline.
+No universal dash or dodge exists in the baseline.
 
-## 33. Technical Unstuck
+## 31. Technical Unstuck
 
-If a physics defect places the player in invalid geometry, technical recovery can restore the nearest recently valid safe location.
+If a technical collision defect places the player in invalid geometry, Unstuck may return the character to the nearest recently valid safe position.
 
-It cannot bypass legitimate locked/hazard boundaries for gameplay advantage.
+The recovery search cannot:
 
-## 34. Save/Load
+- cross a legitimate locked/security boundary;
+- bypass mission gating;
+- escape an authored hazard merely for advantage;
+- duplicate/alter inventory.
 
-Player location restores to a valid logical position.
+Unstuck is technical recovery, not fast travel.
 
-Version migration can use nearby safe-position recovery where required.
+## 32. Save / Load
 
-## 35. Camera Collision
+Persistent player location/orientation/current locomotion-compatible state is restored deterministically.
 
-Camera behavior cannot permit gameplay-relevant peeking through opaque solid walls.
+If version migration or invalid geometry makes the exact saved transform unusable, the safe-position recovery rule may relocate to the nearest valid position inside the same legitimate gameplay region.
+
+Transient interpolation/animation phase may be reconstructed without changing authoritative position/state.
+
+## 33. Camera Collision
+
+First-person camera behavior cannot reveal gameplay-relevant visibility through opaque solid geometry.
+
+Camera presentation may clip cosmetic held geometry where required, but world visibility/interaction/hit authority still respects solid boundaries.
+
+## 34. Presentation
+
+Movement feedback follows GDS-13 and communicates at minimum:
+
+- current movement restriction when a requested action is blocked;
+- Heavy Load restriction;
+- Zero-G/Magnetic Boots state;
+- mantle/ladder availability when relevant;
+- environmental locomotion context.
+
+Motion-reduction settings may reduce head bob/camera shake to zero without changing movement physics.
+
+## 35. Edge Cases
+
+- Attempting to stand below low clearance keeps the player Crouched.
+- A mantle target becoming blocked before commit cancels the mantle into the physically valid fallback state.
+- Suit energy reaching zero in Zero-G disables powered thrust/stabilization but preserves current momentum.
+- Magnetic-boot surface destruction/detachment transitions immediately to the correct gravity state.
+- Becoming Critical during sprint ends sprint and transitions to Walking at the next legal movement update.
+- Becoming Incapacitated during ladder/mantle traversal ends direct control and hands position/rescue handling to Health/mission rules.
 
 ## 36. Tuneable Parameters
 
-Tuneable values include speeds, acceleration, jump impulse, air control, gravity, fall thresholds, mantle height, step height, slope angle, zero-g thrust, and load penalties.
+Tuneable values include:
+
+- ground/crouch/heavy-load speeds;
+- acceleration/deceleration;
+- jump impulse;
+- air control;
+- gravity per environment;
+- fall thresholds;
+- mantle height/reach;
+- step height;
+- maximum walkable angle;
+- Zero-G thrust/stabilization strength;
+- crouch transition duration.
+
+The available locomotion set and restriction relationships are fixed.
 
 ## 37. Explicit Non-Goals
 
-Movement does not require stamina-limited sprint, prone, universal wall climbing, swimming, universal dash, or camera clipping through walls.
+The baseline does not include:
+
+- stamina-limited ordinary sprint;
+- prone;
+- swimming;
+- universal wall climbing;
+- universal dash/dodge;
+- elevator teleportation;
+- camera peeking through walls.
 
 ## 38. Dependencies
 
-This specification depends on controls, health, equipment, inventory, field survival, combat, spacecraft/interiors, world environments, and presentation.
+Depends on Controls, Player Health, Equipment, Inventory, Field Survival, Combat, Spacecraft/Station geometry, World environments, and GDS-13 Presentation/Accessibility.
 
 ## 39. Open Questions
 
-None in the baseline locomotion set.
+None.

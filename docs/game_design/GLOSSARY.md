@@ -448,3 +448,45 @@ The complete cross-domain validation performed through MS-F01 before MS-F02 beco
 One of the four finale preparation capability categories: Navigation and Route Support, Engineering and Recovery Support, Combat and Security Support, or Analysis and Containment Support.
 
 A Support Channel can be fulfilled only by a valid external commitment or an explicitly defined self-sufficient capability path.
+
+## Hybrid Presentation
+
+The Project StarForge presentation model that combines physical/diegetic world communication with non-diegetic HUD, panels, maps, overlays, captions, and alerts when needed for reliable gameplay readability.
+
+## Presentation Knowledge Boundary
+
+The rule that UI, HUD, markers, audio, VFX, tutorials, and accessibility aids may communicate only information the player has legitimately perceived, discovered, scanned, received, or otherwise learned through authoritative gameplay state.
+
+## Presentation Commit Boundary
+
+The rule that presentation may acknowledge an input request immediately but may report success/completion only after the corresponding authoritative gameplay transaction commits.
+
+## Alarm Priority
+
+The GDS-13 presentation severity used for player-facing alerts: P0 Critical, P1 Severe, P2 Warning, or P3 Advisory.
+
+Alarm Priority is a communication priority and does not replace the underlying gameplay severity/state.
+
+## Objective Guidance
+
+A presentation/accessibility setting controlling how explicitly already-known objective and route information is explained or marked.
+
+Objective Guidance cannot reveal hidden objectives, secret routes, or unknown actors.
+
+## Photosensitivity Safe Mode
+
+An accessibility mode that reduces or removes rapid flashes, strobing, repeated high-contrast pulses, aggressive emissive flashes, and similar presentation while preserving the same gameplay warning through safer alternative channels.
+
+## Reduced Effects Mode
+
+An accessibility mode that reduces nonessential particles, smoke density, debris, sparks, bloom, distortion, and screen overlays while retaining all gameplay-critical hazard and interaction information.
+
+## Aim Assistance
+
+Optional bounded input assistance that can apply reticle slowdown/friction or mild camera rotation toward legitimately visible targets.
+
+Aim Assistance cannot bend projectiles, create hidden hit chance, target through walls, reveal unknown enemies, or automatically select weak points.
+
+## Closed Captions
+
+Optional textual presentation of gameplay-relevant non-speech audio cues, constrained by the same audibility and knowledge rules as the underlying sound event.

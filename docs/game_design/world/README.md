@@ -15,7 +15,7 @@ Authoritative design domain for the setting, navigable galaxy, locations, factio
 - [`factions.md`](factions.md) — **Draft**
 - [`reputation_and_relations.md`](reputation_and_relations.md) — **Draft**
 - [`lore.md`](lore.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Core Baseline
 
@@ -33,8 +33,24 @@ GDS-7 World establishes:
 
 World documents define what exists and where it exists. Gameplay mechanics owned elsewhere are referenced rather than redefined.
 
+## Downstream Resolution
+
+Missions and Combat have been first-pass cross-validated against World/Factions.
+
+GDS-11 has resolved fortified-target raids, sabotage, persistent target state, and Horizon-defense world interaction.
+
+GDS-12 has resolved:
+
+- regional economy/trade access;
+- reputation cross-system consequences;
+- progression/Reach pacing;
+- Dynamic Event world-state integration;
+- raid-target recovery/replenishment;
+- finale support/access softlock prevention;
+- world-state persistence and postgame continuation.
+
 ## Completion State
 
 World/Factions are not yet Design Complete.
 
-Missions, Combat, Raids, Economy/Progression and Presentation must still cross-validate their world-facing mechanics.
+Their remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

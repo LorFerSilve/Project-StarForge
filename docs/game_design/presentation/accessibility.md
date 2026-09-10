@@ -1,188 +1,144 @@
 # Accessibility
 
-> **Status:** Draft  
-> **Authority:** Accessibility options and invariants for controls, motion, vision, color, text, audio, subtitles, captions, timing, interaction, aiming, navigation, cognitive load, and difficulty separation
+> **Status:** Design Complete  
+> **Authority:** Accessibility options and invariants for controls, motion, vision, color, text, audio, captions, interaction, navigation, cognitive load, aiming, pause access, and difficulty separation
 
 ## 1. Purpose
 
-Accessibility options make the same authoritative game state perceivable and controllable by more players without silently replacing the underlying world, economy, progression, or simulation rules.
+Accessibility makes the same authoritative game state perceivable and controllable by more players without silently replacing world, economy, progression, ownership, knowledge, or simulation rules.
 
-## 2. Core Principle
+## 2. Core Invariant
 
-Accessibility is not a reward penalty and is not a separate campaign mode.
-
-Using accessibility settings does not:
+Accessibility settings do not:
 
 - reduce rewards;
-- disable achievements by default;
-- alter story access;
-- alter Research/Blueprint access;
+- disable progression;
+- alter story/Research/Blueprint access;
 - alter loot ownership;
-- change faction reputation rules;
-- invalidate saves.
+- change faction-reputation logic;
+- invalidate saves;
+- reveal information the player does not legitimately know.
+
+Accessibility and Difficulty are separate systems.
 
 ## 3. Accessibility vs Difficulty
 
-Accessibility settings and Difficulty profiles are independent.
+Any accessibility configuration can be used with Assisted, Standard, Veteran, Extreme, or Custom Difficulty.
 
-A player can use:
+Gameplay-pressure changes belong to Difficulty. Accessibility changes input/presentation/support unless a setting is explicitly listed as an Assisted/Custom Difficulty axis.
 
-- Extreme difficulty + extensive accessibility support;
-- Assisted difficulty + minimal accessibility changes;
-- any other combination.
+## 4. First-Launch Access
 
-Difficulty changes permitted gameplay pressure. Accessibility changes control/presentation/support unless a setting explicitly overlaps an Assisted gameplay aid.
+Before starting a new game, the player can configure at minimum:
 
-## 4. Settings Organization
+- subtitles/Closed Captions;
+- UI/text scale;
+- color/readability preset;
+- motion reduction;
+- photosensitivity mode;
+- key/controller remapping;
+- aim-assistance baseline;
+- master/dialogue volume.
 
-Accessibility options are grouped into:
+The setup can be reopened later without restarting progression.
 
-- Controls/Input;
-- Camera/Motion;
-- Visual/Color;
-- Text/UI;
-- Audio/Dialogue;
-- Interaction/Timing;
-- Navigation/Orientation;
-- Combat/Aiming;
-- Cognitive/Notification;
-- Presets.
+## 5. Full Input Remapping
 
-## 5. First-Launch Access
+All normal gameplay actions defined by `../player/controls_and_input.md` are remappable for keyboard/mouse and controller.
 
-Accessibility and subtitle settings are reachable before starting a new game.
+The UI warns on same-context hard conflicts and essential unbound actions. Tutorials/prompts always show the effective binding.
 
-The first-launch flow provides a short accessible setup without forcing the player through gameplay first.
+## 6. Input Device Switching
 
-## 6. Full Input Remapping
+Keyboard/mouse and controller may switch during play without restart. Presentation updates glyphs according to the current input-family rule.
 
-Keyboard/mouse and controller gameplay actions are remappable.
+## 7. Hold / Toggle Alternatives
 
-The system detects hard conflicts and warns when essential actions become unbound.
-
-Tutorial prompts always display the current binding.
-
-## 7. Input Device Switching
-
-Where supported, the game can switch between keyboard/mouse and controller without restarting.
-
-Prompts update to the currently active input family.
-
-## 8. Toggle/Hold Options
-
-Actions that normally require sustained input provide toggle alternatives where mechanically safe, including:
+User-selectable Hold/Toggle is supported for:
 
 - Aim Down Sights;
 - Sprint;
 - Crouch;
-- Scan mode;
-- selected continuous tools;
-- hold interactions.
+- Scan Mode;
+- other continuous actions whose owning mechanic declares toggle-safe operation.
 
-## 9. Hold Interaction Alternative
+For non-precision sustained interactions, a press-to-start / press-to-cancel alternative is available while keeping the same Simulation-Time duration and interruption rules.
 
-For non-precision hold interactions, accessibility can convert `hold input for duration` into:
+## 8. No Mandatory Button Mashing
 
-Press once to start
-→ Press again/Cancel to stop.
+The baseline contains no mandatory rapid-button-mashing/QTE mechanic.
 
-The actual interaction time and interruption rules remain unchanged.
+Any later authored repeated-input interaction requires a hold/automatic equivalent and formal design update.
 
-## 10. Rapid Pressing
+## 9. Auto-Sprint
 
-The baseline design avoids mandatory rapid-button-mashing/QTE mechanics.
+Optional Auto-Sprint can request Sprint after sustained valid forward movement.
 
-If a later authored interaction uses repeated input, it must support a hold/automatic alternative.
+It obeys all Movement restrictions including Heavy Load, Critical Health, crouch, invalid terrain, and explicit equipment/status blockers.
 
-## 11. Auto-Sprint
+## 10. Controller Deadzones and Sensitivity
 
-Optional Auto-Sprint can engage ordinary sprint from sustained forward movement according to current movement legality.
-
-It does not bypass Heavy Load/environmental restrictions.
-
-## 12. Controller Deadzones
-
-Controller settings expose:
+Settings expose:
 
 - left-stick inner deadzone;
 - left-stick outer response;
 - right-stick inner deadzone;
 - right-stick outer response;
-- trigger threshold where needed.
-
-Values are user-adjustable within safe valid ranges.
-
-## 13. Sensitivity
-
-Separate sensitivity controls exist for:
-
-- first-person look;
+- trigger threshold where relevant;
+- first-person sensitivity;
 - ADS/zoom multiplier;
-- spacecraft flight camera/aim;
-- construction/strategic camera;
-- controller and mouse where appropriate.
+- spacecraft sensitivity;
+- construction/strategic camera sensitivity.
 
-## 14. Axis Inversion
+Values are user-adjustable within technically safe bounds.
 
-Horizontal/vertical look inversion is independently configurable where relevant, including spacecraft camera controls.
+## 11. Axis Inversion
 
-## 15. Camera FOV
+Horizontal and vertical look inversion are independently configurable where the camera/control mode supports them, including spacecraft camera/aim.
 
-First-person Field of View is adjustable over a broad safe range.
+## 12. First-Person FOV
 
-Initial design target:
+Initial target:
 
 - default vertical FOV: **75°**;
-- adjustable vertical FOV: **60°–100°**.
+- supported vertical adjustment target: **60°–100°**.
 
-Exact final safe bounds can be technically validated without changing the accessibility requirement.
+Technical validation may narrow/extend safe bounds without changing the requirement that first-person FOV be broadly adjustable.
 
-## 16. Camera Shake
+## 13. Camera Shake / Head Bob / Motion Blur
 
-Camera shake uses a global **0–100% intensity** control.
+- Camera Shake: 0–100%, with **0% fully supported**.
+- Head Bob: 0–100%, with **0% fully supported**.
+- Motion Blur: optional and **Off by default**.
 
-At 0%, gameplay state/impact remains communicated through HUD/audio/haptics/animation without mandatory viewpoint displacement.
+At zero/reduced motion, impact/state remains communicated through other channels.
 
-## 17. Head Bob
+## 14. Cosmetic Weapon Sway
 
-Head bob has a separate **0–100% intensity** control.
+Purely cosmetic first-person weapon sway may be reduced.
 
-It may be fully disabled.
+Mechanically authoritative spread/recoil/aim displacement remains represented by reticle/weapon behavior and is not silently removed by a presentation setting.
 
-## 18. Weapon Sway
+## 15. Screen Distortion
 
-Cosmetic first-person weapon sway can be reduced without changing actual aim/spread mechanics.
+Chromatic aberration, strong full-screen refraction, damage warping, and anomaly distortion have a reduction setting.
 
-If a sway is mechanically authoritative, the presentation cannot simply hide its gameplay effect; it must be represented by reticle/aim feedback.
+Any critical state they represent also has non-distortion cues.
 
-## 19. Motion Blur
+## 16. Photosensitivity Safe Mode
 
-Motion blur is optional and **Off by default** in the baseline.
+This preset/mode reduces or removes:
 
-If implemented, it can be independently disabled.
+- rapid flashing/strobing;
+- high-contrast repetitive pulses;
+- aggressive full-screen flicker;
+- high-frequency lightning/emissive flashes.
 
-## 20. Screen Distortion
+Equivalent semantics use steady/slow visual cues, icon/text, audio, and optional haptics.
 
-Chromatic aberration, strong refraction overlays, damage warping, and anomaly distortion can be reduced through a Screen Distortion setting.
+## 17. Reduced Effects Mode
 
-Critical anomaly state remains visible through alternate cues.
-
-## 21. Photosensitivity Safe Mode
-
-A dedicated mode reduces or removes:
-
-- rapid flashing;
-- strobing alarms;
-- repeated high-contrast pulses;
-- lightning frequency/intensity;
-- full-screen flicker;
-- aggressive emissive flashes.
-
-It preserves warning semantics through steady light, icon, text, audio, and haptic alternatives.
-
-## 22. Reduced Effects Mode
-
-Reduced Effects decreases nonessential:
+Reduced Effects lowers nonessential:
 
 - particles;
 - smoke density;
@@ -190,129 +146,96 @@ Reduced Effects decreases nonessential:
 - sparks;
 - bloom;
 - distortion;
-- screen overlays.
+- decorative screen overlays.
 
-Gameplay-critical hazard boundaries/telegraphs remain perceivable.
+Gameplay-critical hazard boundaries, attack telegraphs, objective state, and interaction cues remain legible.
 
-## 23. Brightness/Gamma
+## 18. Brightness / Gamma
 
-Display settings provide brightness/gamma calibration using reference imagery so dark environments remain intentional while shadow detail is not unintentionally crushed.
+Brightness/gamma calibration uses reference imagery so dark environments retain intended contrast while supported displays do not unintentionally crush gameplay-relevant shadow detail.
 
-## 24. High Contrast
+## 19. High Contrast Gameplay
 
-Optional High Contrast Gameplay presentation strengthens separation of:
+Optional High Contrast strengthens presentation of already known/eligible:
 
 - interactables;
 - player squad;
-- hostile identified actors;
+- identified hostile/friendly/neutral actors;
 - objective-relevant targets;
 - hazards;
 - critical UI.
 
-It does not reveal unknown actors/objects.
+It never reveals unknown targets/routes/items.
 
-## 25. Interaction Highlight
+## 20. Interaction Highlight
 
-Interaction highlight strength is adjustable.
-
-Options can include:
+Highlight strength supports:
 
 - Subtle;
 - Standard;
-- Strong;
-- Persistent-on-focus-range where valid.
+- Strong.
 
-The setting never highlights undiscovered/inaccessible objects without a legitimate detection path.
+An optional persistent-in-focus-range behavior may keep an already valid interactable highlighted while it remains legitimately targetable. No highlight passes through opaque barriers or reveals undiscovered targets.
 
-## 26. Color Independence
+## 21. Color Independence
 
-No gameplay-critical state relies only on hue.
+No gameplay-critical semantic relies solely on hue.
 
-States combine at least one additional channel such as:
+Every critical color meaning also uses at least one of:
 
 - icon;
 - shape;
 - pattern;
 - text;
-- animation;
-- audio.
+- animation/state;
+- audio/caption.
 
-## 27. Color-Vision Presets
+## 22. Color-Vision Support
 
-The game provides semantic color palette presets suitable for common color-vision differences, including support for:
+Semantic color presets support common red/green and blue/yellow differentiation difficulties plus a low-saturation/monochrome-readable configuration.
 
-- red/green differentiation difficulty;
-- blue/yellow differentiation difficulty;
-- low-saturation/monochrome readability.
+Where practical, key semantic colors are independently customizable for Friendly, Hostile, Neutral, Interactive, Objective, Warning, and Critical.
 
-The design favors remapping semantic UI colors rather than merely applying a full-screen simulation filter.
+Icons/shapes remain authoritative secondary cues.
 
-## 28. Custom Semantic Colors
+## 23. UI and Text Scale
 
-Where practical, players can customize key HUD semantic colors such as:
+Initial supported target:
 
-- Friendly;
-- Hostile;
-- Neutral;
-- Interactive;
-- Objective;
-- Warning;
-- Critical.
+- global UI scale: **80%–150%**;
+- default: **100%**.
 
-Shape/icon semantics remain intact.
+Body/subtitle text provides an additional scale control where feasible.
 
-## 29. UI Scale
+Layouts must reflow rather than clip critical information throughout the supported range.
 
-UI supports scalable presentation.
+## 24. Font Readability
 
-Initial target:
+Functional UI/body text uses a high-legibility sans-serif family.
 
-- global UI scale **80%–150%**;
-- default **100%**.
+Decorative faction fonts are not used for long critical text.
 
-Layouts must reflow/avoid clipping across supported range.
+A high-legibility/dyslexia-friendly alternative may replace functional text without changing terminology/layout semantics.
 
-## 30. Text Scale
+## 25. Subtitles
 
-Body/subtitle text has an additional readable scale control independent from some icon/HUD elements where feasible.
+Gameplay-relevant spoken dialogue supports subtitles.
 
-## 31. Minimum Legibility
+First-launch setup asks for subtitle preference; baseline recommended/default configuration is **On**.
 
-Critical text cannot be made so small by UI customization that it becomes unreadable at the supported reference resolution.
-
-## 32. Font Readability
-
-Default UI uses a high-legibility sans-serif family for functional text.
-
-Decorative/faction typography is not used for long critical UI text.
-
-## 33. Dyslexia-Friendly Option
-
-An alternate high-legibility/dyslexia-friendly font option can replace functional UI/body text while preserving layout and terminology.
-
-## 34. Subtitle Defaults
-
-Spoken critical story/gameplay dialogue always supports subtitles.
-
-First-launch setup explicitly asks whether subtitles should be enabled.
-
-Recommended baseline default is **On**.
-
-## 35. Subtitle Options
-
-Configurable:
+Configurable options include:
 
 - text size;
 - background opacity;
 - speaker name;
 - speaker color as secondary cue;
-- maximum line width;
-- closed captions;
-- directional/source indicator where useful.
+- line width;
+- Closed Captions;
+- direction/source cue where legitimately known.
 
-## 36. Closed Captions
+## 26. Closed Captions
 
-Optional captions communicate relevant non-speech sounds without revealing inaudible/unknown events.
+Closed Captions can describe relevant non-speech audio only when that event is legitimately audible/known.
 
 Examples:
 
@@ -321,287 +244,217 @@ Examples:
 - `[Hostile footsteps: right]` when actually audible;
 - `[Robot command rejected]`.
 
-## 37. Dialogue Priority
+Captions do not reveal inaudible hidden enemies/events.
 
-Critical dialogue can automatically duck Music/SFX to improve intelligibility.
+## 27. Dialogue Intelligibility / Audio
 
-A Dialogue Boost setting increases dialogue relative to noncritical audio.
+Critical dialogue can duck Music/SFX.
 
-## 38. Audio Categories
+A Dialogue Boost setting raises dialogue relative to other categories.
 
-Players can independently adjust major audio categories defined in Audio Direction.
+Major audio categories are independently adjustable; critical state always has a non-audio route.
 
-No critical state becomes inaccessible when one category is muted because visual alternatives exist.
+## 28. Mono Audio / Directional Alternative
 
-## 39. Mono Audio
+Mono output is supported.
 
-Mono audio output is supported.
+Direction-dependent gameplay audio has an optional visual direction indicator when the sound/event is legitimately known.
 
-Direction-dependent gameplay cues gain optional visual direction indicators.
+## 29. Dynamic Range / Tinnitus
 
-## 40. Dynamic Range Presets
-
-At minimum:
+Dynamic Range presets:
 
 - Full;
 - Standard;
-- Night/Reduced Range.
+- Night / Reduced Range.
 
-This changes mix dynamics, not gameplay audibility to AI.
+Tinnitus/high-frequency damage effects can be fully disabled independently.
 
-## 41. Tinnitus Reduction
-
-Tinnitus/high-frequency damage effects can be disabled independently.
-
-## 42. Haptics
+## 30. Haptics
 
 Haptics have:
 
 - master enable;
-- intensity control 0–100%;
-- optional separation of camera/impact/alert haptics where feasible.
+- 0–100% intensity;
+- optional category separation where practical.
 
 No mechanic requires haptics.
 
-## 43. Notification Duration
+## 31. Notification Duration / Tutorial Timing
 
-Noncritical notification duration can be increased.
+Noncritical notification duration is adjustable.
 
-Critical state remains available through persistent alert panels until resolved/acknowledged according to Alarm rules.
+Tutorial explanations support:
 
-## 44. Tutorial Timing
-
-Tutorial messages can use:
-
-- pause-on-explanation;
-- extended display duration;
+- global True Pause while reading when the tutorial invokes pause;
+- extended duration;
 - manual dismiss;
-- contextual hints on/off.
+- contextual hints on/off;
+- revisit/history.
 
-No important tutorial disappears permanently because reading speed was slower than a fixed short timer.
+No required tutorial permanently disappears because reading took longer than a fixed short timer.
 
-## 45. Menu Time Behavior
+## 32. Pause Semantics
 
-Interfaces clearly indicate whether simulation is:
+Accessibility does **not** create any partial-pause state.
 
-- Paused;
-- Running.
+The explicit Pause action invokes the same global `True Pause` defined by `../systems/time_and_simulation.md` during ordinary gameplay, combat, missions, raids, station events, and management.
 
-Accessibility can optionally make selected complex planning screens pause in single-player **only where doing so does not create a gameplay exploit or contradict the owning system**.
+A complex planning/accessibility screen may provide a `Pause While Viewing` convenience only by invoking **global True Pause**. It cannot freeze a local hazard while allowing production, travel, Dynamic Events, or Horizon attacks to continue.
 
-True Pause always remains available.
+If an atomic transaction briefly cannot be interrupted, the Pause request is retained and activates immediately after the stable boundary.
 
-## 46. Navigation Assistance
+## 33. Navigation Assistance
 
-Optional Navigation Assistance can strengthen legitimate route guidance through:
+Navigation Assistance may strengthen legitimate known-route guidance through:
 
-- clearer tracked objective direction;
-- breadcrumb/path hints in explored/known areas;
-- stronger door/route highlighting;
-- distance indication.
+- tracked-objective direction;
+- breadcrumb/path hints in explored/known traversable areas;
+- stronger eligible door/route highlighting;
+- distance display.
 
-It cannot reveal undiscovered objectives, secret routes, or hidden enemies.
+It cannot reveal secret routes, unexplored objective locations, hidden enemies, or unavailable access knowledge.
 
-## 47. Objective Detail
+## 34. Objective Guidance
 
-Players can choose Objective Guidance:
+Three levels:
 
 - Minimal;
 - Standard;
 - Detailed.
 
-Detailed provides more explicit wording based on already known information, not new world knowledge.
+Detailed rewrites/expands already known instructions and blockers; it does not add world knowledge.
 
-## 48. Interaction Assistance
+## 35. Interaction Assistance
 
-Optional settings can:
+Options may:
 
-- increase interactable focus range modestly;
-- strengthen highlight;
-- keep prompt visible longer;
-- enable aim/focus snapping for noncombat small controls.
+- strengthen highlights;
+- keep valid prompts visible longer;
+- modestly increase target-focus tolerance within the authoritative maximum interaction range;
+- provide focus snapping for small noncombat controls when line/range validity already passes.
 
-They cannot activate objects through walls or beyond physical interaction range.
+They cannot interact through walls or extend physical reach beyond the owning interaction's allowed accessibility envelope.
 
-## 49. Controller Aim Assist
+## 36. Aim Assistance
 
-Controller users can enable bounded aim assistance.
+Aim Assist supports Off, Low, Standard, High.
 
-Permitted baseline assistance:
+Permitted assistance:
 
-- reticle slowdown/friction near a legitimately visible hostile target;
-- mild camera rotational assistance while tracking a target already under/near the reticle.
+- reticle slowdown/friction near a legitimately visible eligible target;
+- mild camera rotation toward a target already under/near the reticle.
 
-It does not:
+Forbidden:
 
-- bend bullets;
-- create hidden hit chance;
+- bullet/projectile magnetism;
+- hidden hit chance;
 - snap through walls;
-- reveal unknown enemies;
-- auto-target weak points.
+- detection of unknown enemies;
+- automatic weak-point selection.
 
-## 50. Mouse Aim Assist
+GDS-9 physical hit resolution remains authoritative.
 
-Mouse aim assistance is Off by default.
+Mouse Aim Assist is Off by default but may use the same bounded assistance when explicitly enabled.
 
-Accessibility may allow the same bounded visible-target assistance if explicitly enabled by the player, without changing physical hit resolution.
+## 37. Reticle and Damage Presentation
 
-## 51. Aim Assist Strength
+Reticle options include size, thickness, opacity, center dot, outline, and semantic color.
 
-Aim Assist strength supports:
+They do not change spread.
 
-- Off;
-- Low;
-- Standard;
-- High.
+Players can reduce damage vignette, screen flash, camera kick, and low-Health pulse while Health/status remains available through HUD/icon/text/audio alternatives.
 
-The exact slowdown/rotation coefficients are tuneable.
+## 38. Cognitive Load
 
-## 52. Reticle Options
+Noncritical notification categories are filterable.
 
-Reticle supports:
+P0/P1 AlarmPriority safety warnings cannot be completely hidden without an explicit high-risk warning and a remaining accessible route to the state.
 
-- size;
-- thickness;
-- opacity;
-- center dot;
-- high-contrast outline;
-- semantic color preset/custom color.
-
-Reticle changes do not modify spread.
-
-## 53. Target Identification Assistance
-
-An accessibility setting can display clearer labels/icons for already identified actors.
-
-It cannot identify unknown actors earlier than sensors/perception allow.
-
-## 54. Combat Damage Feedback
-
-Players can reduce:
-
-- damage vignette;
-- screen flash;
-- camera kick;
-- low-health pulse.
-
-Health/status remains visible through HUD/icon/audio alternatives.
-
-## 55. Difficulty-Assisted Combat
-
-If the player wants reduced gameplay pressure rather than presentation support, use Assisted Difficulty or Custom Difficulty axes.
-
-Accessibility UI should explain the difference rather than hiding combat modifiers inside visual options.
-
-## 56. Pause Anywhere
-
-Because the baseline is single-player, true pause is available during ordinary gameplay, combat, missions, and raids except during unavoidable technical transitions where input is not active.
-
-Pause does not advance Simulation Time.
-
-## 57. Save Accessibility
-
-Manual Save/Quick Save remain available under GDS-12 rules.
-
-If a Stable Save Boundary is temporarily unavailable, the game queues the request and communicates that state.
-
-This supports players who need to stop unexpectedly without inventing an unsafe mid-transaction snapshot.
-
-## 58. Cognitive Load — Alert Filtering
-
-Players can adjust noncritical notification categories.
-
-P0/P1 safety-critical warnings cannot be completely hidden without an explicit high-risk warning in settings.
-
-## 59. Cognitive Load — Information Density
-
-HUD presets:
+HUD information-density presets:
 
 - Minimal;
 - Standard;
 - Expanded;
-- Custom
+- Custom.
 
-allow players to reduce or increase routine visible information while mandatory critical state remains accessible.
+Mandatory critical state remains accessible in every preset.
 
-## 60. Cognitive Load — Management Views
+## 39. Management-View Readability
 
-Complex station/ship/robot interfaces use:
+Complex interfaces provide consistent hierarchy plus appropriate:
 
-- consistent hierarchy;
 - filtering;
-- search;
-- one dominant diagnostic overlay at a time;
+- search where lists warrant it;
 - explicit blocker lists;
-- no unexplained abbreviations where avoidable.
+- one dominant diagnostic overlay at a time;
+- expanded terminology/tooltips for abbreviations.
 
-## 61. Reading Support
+## 40. Save Accessibility
 
-Codex/log/tutorial text supports:
+Manual/Quick Save follow GDS-12 Stable Save Boundary rules.
 
-- text scaling;
-- scroll speed independent from simulation;
-- pause context;
-- revisit/history.
+If the snapshot cannot commit immediately, the request is queued and its waiting state is clearly communicated.
 
-## 62. Failure Readability
+This allows users to stop unexpectedly without creating an unsafe half-transaction save.
 
-Failure summaries use direct causal language and can remain on screen until dismissed.
+## 41. Presets
 
-They do not require reading during live simulation.
-
-## 63. Accessibility Presets
-
-Optional presets provide starting configurations such as:
+Baseline accessibility presets include:
 
 - Reduced Motion;
 - High Readability;
 - Hearing Support;
 - Photosensitivity Safe.
 
-Presets only modify the documented settings and remain individually editable afterward.
+Presets modify documented individual settings only. Every setting remains independently editable afterward.
 
-## 64. No Forced Accessibility Labeling
+## 42. Persistence / Reset
 
-The game does not characterize players using accessibility settings as playing an invalid or lesser version.
+Accessibility/input/subtitle/display/audio preferences persist at profile/application level where appropriate.
 
-## 65. Persistence
+Difficulty persists according to GDS-12.
 
-Accessibility, controls, subtitle, and display preferences persist at profile/application level where appropriate and apply across saves.
+Each category supports reset-to-default. Resetting accessibility never resets campaign progression.
 
-Difficulty remains save/campaign state according to GDS-12.
+## 43. Testing Invariants
 
-## 66. Reset
-
-Every accessibility category has a reset-to-default action; presets can be reapplied without resetting campaign progression.
-
-## 67. Testing Requirement
-
-GDS-14 must include cross-system cases using:
+Every implementation regression pass must verify critical gameplay with combinations including:
 
 - color-independent presentation;
-- subtitles/captions only;
-- camera shake 0%;
-- reduced effects;
+- subtitles/Closed Captions with reduced/muted audio;
+- Camera Shake 0%;
+- Head Bob 0%;
+- Reduced Effects;
+- Photosensitivity Safe Mode;
 - remapped inputs;
 - Detailed Objective Guidance;
-- aim assist;
-- UI scaling.
+- UI scale at supported extremes;
+- Aim Assist at High without altered hit resolution.
 
-The specification must still communicate all required gameplay state.
+## 44. Edge Cases
 
-## 68. Explicit Non-Goals
+- Muting audio never makes a critical known alarm inaccessible.
+- High Contrast/Aim Assist never highlights or tracks an unknown actor.
+- Setting Camera Shake to 0 never removes authoritative recoil/spread—only viewpoint displacement presentation.
+- A Pause While Viewing option freezes the whole Simulation, including Horizon Defense and strategic timers.
+- UI at 150% must provide reflow/scroll rather than clipping an irreversible confirmation or blocker.
+- Closed Captions do not caption events outside valid hearing/information state.
 
-No reward penalties for accessibility, no bullet magnetism requirement, no accessibility wallhacks, no mandatory rapid presses, no unremappable core controls, no audio-only/color-only critical information, and no inaccessible save restriction during ordinary play.
+## 45. Tuneable Parameters
 
-## 69. Tuneable Parameters
+Tuneable/technical-validation values include safe FOV/UI ranges, deadzone ranges, aim-assist coefficients, caption timing, highlight tolerance, and reduced-effect intensity.
 
-Exact UI-scale bounds, FOV safe limits, aim-assist coefficients, deadzone ranges, caption timing, highlight strength, and reduced-effect intensity can be tuned after technical validation while preserving the fixed option semantics.
+The feature semantics, knowledge boundary, no-reward-penalty rule, global pause semantics, and physical-hit boundary are fixed.
 
-## 70. Dependencies
+## 46. Explicit Non-Goals
 
-References GDS-1 Pause/Difficulty philosophy, GDS-5 controls/movement, GDS-9 combat, GDS-12 Difficulty/Save, and all GDS-13 presentation specifications.
+No accessibility reward penalty, wallhack, bullet magnetism, hidden hit chance, mandatory button mash, unremappable core action, audio-only/color-only critical state, partial-pause exploit, or save invalidation exists in the baseline.
 
-## 71. Open Questions
+## 47. Dependencies
 
-None in the accessibility baseline.
+References GDS-1 Pause/Knowledge, GDS-5 Controls/Movement/Interaction, GDS-9 Combat, GDS-12 Difficulty/Time/Save, and all GDS-13 presentation specifications.
+
+## 48. Open Questions
+
+None.

@@ -18,7 +18,7 @@ Authoritative design domain for structured expeditions, exploration, objectives,
 - [`rewards.md`](rewards.md) — **Draft**
 - [`failure_and_abandonment.md`](failure_and_abandonment.md) — **Draft**
 - [`story_mission_execution.md`](story_mission_execution.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
 
@@ -52,7 +52,7 @@ GDS-10 owns robot mechanics.
 
 GDS-11 owns full fortified-station raid mechanics.
 
-GDS-12 owns economy, global difficulty, dynamic-event balance, and final persistence semantics.
+GDS-12 owns economy, global difficulty, Dynamic Events, progression pacing, and final persistence/failure coordination.
 
 ## Core Baseline
 
@@ -72,8 +72,22 @@ GDS-8 establishes:
 - deterministic failure/abandonment transactions;
 - fixed execution contracts for all canonical main-story missions.
 
+## Downstream Resolution
+
+Combat, Robots, and Raids are first-pass cross-validated against GDS-8.
+
+GDS-12 has additionally resolved:
+
+- Credit/reward economy boundary;
+- global Difficulty interaction with mission Threat;
+- Dynamic Event mission creation/pacing;
+- Stable Save Boundary and anti-reroll persistence;
+- failure/recovery coordination;
+- long-term raid-target recovery context;
+- exact MS-F01 finale capability/readiness thresholds.
+
 ## Completion State
 
 GDS-8 is not yet Design Complete.
 
-Combat and Robots are now first-pass cross-validated against GDS-8. Raids, Economy/Progression/Difficulty/Persistence, and Presentation remain downstream mission dependencies.
+Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

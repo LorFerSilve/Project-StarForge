@@ -19,7 +19,7 @@ Authoritative design domain for offensive raids against fortified targets and de
 - [`victory_failure_and_retreat.md`](victory_failure_and_retreat.md) — **Draft**
 - [`station_defense_resolution.md`](station_defense_resolution.md) — **Draft**
 - [`story_raid_integration.md`](story_raid_integration.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
 
@@ -52,7 +52,7 @@ GDS-9 owns direct combat, weapons, hit/damage, shields/armor, and combat AI.
 
 GDS-10 owns robot bodies, TCC, squads, commands, repair, and robot loss.
 
-GDS-12 owns economy, progression, dynamic-event generation/pacing, difficulty, long-term target recovery, and final persistence policy.
+GDS-12 owns economy, progression, Dynamic Event generation/pacing, difficulty, long-term target recovery, and final persistence policy.
 
 ## Core Baseline
 
@@ -78,8 +78,21 @@ GDS-11 establishes:
 - explicit GDS-11 integration for Rook's Wake, forced Sealed Authority assault, and Crownless finale access;
 - no baseline synchronous or asynchronous PvP raid system.
 
+## Downstream Resolution
+
+GDS-12 has now cross-validated and resolved:
+
+- target stock/value and raid-profitability context;
+- attack-generation pacing;
+- Recovery Grace after severe Horizon setbacks;
+- long-term target recovery/replenishment;
+- reputation/economic consequences;
+- Difficulty constraints;
+- final save/atomic transaction semantics;
+- MS-F01/MS-F02 finale readiness integration.
+
 ## Completion State
 
 GDS-11 is not yet Design Complete.
 
-GDS-12 Economy/Progression/Difficulty/Dynamic Events/Persistence and GDS-13 Presentation must still cross-validate raid-facing behavior.
+Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

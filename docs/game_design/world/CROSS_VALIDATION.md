@@ -2,221 +2,187 @@
 
 > **Status:** Active Audit  
 > **Authority:** GDS-7 world/faction consistency review only  
-> **Purpose:** Validate setting, galaxy topology, locations, factions, reputation, and lore against established global, resource, player, crew, and spacecraft rules.
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks World/Factions against:
-
-- Global Game Rules;
-- GDS-3 Survivors/Crew;
-- GDS-4 Resources/Research;
-- GDS-5 Player/Field Survival;
-- GDS-6 Spacecraft/Navigation/Propulsion;
-- Home Station identity.
+This audit validates setting, galaxy topology, locations, factions, reputation, lore, missions, combat, raids, economy, progression, Difficulty, Dynamic Events, and persistence against GDS-1 through GDS-12.
 
 ## 2. Bounded World Structure — Result: PASS
 
-Galaxy Structure uses:
+Galaxy structure remains:
 
 Sector → System/Cluster → Strategic Location → Local/Mission Zone.
 
-Planetary surfaces remain bounded mission zones.
+Planetary surfaces and local space remain bounded gameplay zones rather than seamless galaxy/planet simulation.
 
-No seamless galaxy or full planet simulation was introduced.
+## 3. Fixed Geographic Backbone — Result: PASS
 
-## 3. No Universal Level Scaling — Result: PASS
+Canonical sectors, systems, story locations, and Reach I–IV campaign routes remain fixed. Procedural side content may expand around the backbone without relocating mandatory story geography.
 
-Sectors and locations have intended threat bands.
+## 4. No Universal Level Scaling — Result: PASS
 
-Threat does not automatically scale to player progression.
+Locations retain intended threat ranges. GDS-12 Difficulty does not make world threat automatically match Player Level/Gear Score because neither is an authoritative progression model.
 
-This preserves Global Game Rule 20.
+## 5. Strategic Reach — Result: PASS
 
-## 4. Propulsion Reach — Result: PASS
+World route requirements map to GDS-6 Reach I–IV and GDS-12 progression phases:
 
-World route structure maps directly to GDS-6 Reach I–IV.
+- Recovery Sector — Reach I;
+- Inner Frontier — Reach I–II;
+- Contested Reach — Reach II–III;
+- Outer Expanse — Reach III;
+- Fracture Verge — Reach IV.
 
-Baseline progression:
+World defines topology; ship/navigation systems execute travel.
 
-- Recovery Sector → Reach I;
-- Inner Frontier → I–II;
-- Contested Reach → II–III;
-- Outer Expanse → III;
-- Fracture Verge → IV.
+## 6. Galaxy Access Progression — Result: PASS
 
-World defines route topology/requirements; Navigation executes travel.
+Travel requires legitimate route knowledge/state plus actual ship Reach and operational navigation/propulsion. A story/progression phase alone cannot make an incapable ship traverse a route.
 
-## 5. Resource Catalog — Result: PASS
+## 7. Resources — Result: PASS
 
-Planets, moons, asteroid fields, and space locations only distribute canonical GDS-4 resources.
+World locations distribute only canonical GDS-4 resources. GDS-12 Economy changes availability/value, not Resource IDs or physical ownership.
 
-No new physical Resource ID was introduced.
+## 8. Research/Lore — Result: PASS
 
-Examples remain compatible:
+World discoveries support Research Evidence, samples, data carriers, Ancient structures, anomaly sites, and Continuance archives. Credits cannot substitute for unique mandatory evidence.
 
-- Water Ice → frozen bodies;
-- Uraninite → irradiated/mineral bodies;
-- Helium-3 → specialized extraction locations;
-- Voltaic Crystal → anomalous sites;
-- Ancient Technology Core → Ancient Structures.
+## 9. Environmental State — Result: PASS
 
-## 6. Research/Lore — Result: PASS
+World supplies gravity, atmosphere/pressure, temperature, radiation/contamination, and other local environment metadata. GDS-5/GDS-8 remain authoritative for player/mission consequences.
 
-World lore supports GDS-4 Research Evidence through:
+## 10. Faction Identity — Result: PASS
 
-- data records;
-- physical samples;
-- anomaly sites;
-- Ancient Structures;
-- Continuance archives.
-
-Lore does not invent generic Science Points.
-
-## 7. Player Survival — Result: PASS
-
-World provides environmental state:
-
-- gravity;
-- pressure/atmosphere;
-- temperature;
-- radiation/contamination tags.
-
-GDS-5 Field Survival remains authoritative for player protection/exposure.
-
-## 8. Spacecraft Landing — Result: PASS
-
-Planet/Moon design respects GDS-6 landing capability.
-
-Not every ship can land, and landing occurs at mission-approved sites rather than arbitrary coordinates.
-
-## 9. Survivor Encounters — Result: PASS
-
-World location classes support established survivor sources:
-
-- colonies;
-- derelicts;
-- distress sites;
-- pirate captivity;
-- stations.
-
-GDS-3 remains authoritative for survivor persistence/recruitment.
-
-## 10. Faction Resource Compatibility — Result: PASS
-
-All factions use canonical resources.
-
-Faction identity comes from doctrine, access, technology, layout, and specialization rather than incompatible crafting materials.
+Helios, Meridian, Asterion, Freehold, Blackwake, and the Continuance retain their established identities/doctrines/technology profiles. GDS-12 does not redefine faction canon.
 
 ## 11. Reputation — Result: PASS
 
-Standard human factions use independent -100 to +100 reputation with fixed tiers.
+Major human factions retain independent -100 to +100 reputation. The Continuance retains node/authentication relationships rather than human-style reputation.
 
-Reputation is not a universal morality score and does not decay passively.
-
-The Continuance deliberately uses node-state relations rather than human reputation.
+GDS-12 owns cross-system economic/event consequences without creating a universal morality score.
 
 ## 12. Faction Independence — Result: PASS
 
-The player can become Allied but remains commander of an independent station.
+The player remains commander of Horizon Station. Alliance/reputation does not transfer Home Station ownership or force permanent membership in one faction.
 
-No faction relation automatically transfers home-station ownership.
+## 13. Economy — Result: PASS
 
-## 13. Continuance — Result: PASS
+The previously pending GDS-12 economy dependency is resolved.
 
-The Continuance is defined as a distributed legacy machine-infrastructure network.
+World/faction-controlled hubs can expose markets/services with:
 
-It does not duplicate GDS-10 player robot authority.
+- finite physical stock;
+- finite liquidity;
+- regional price differences;
+- faction/reputation access;
+- route/logistics constraints.
 
-Future GDS-10 can define specific Continuance combat machines as enemy/neutral robot actors without changing Continuance faction identity.
+All factions use the canonical resource universe.
 
-## 14. Historical Consistency — Result: PASS
+## 14. Trade Access — Result: PASS
 
-The Fracture explains:
+Market access can depend on location, reputation, security, story state, and service infrastructure. Credits alone do not bypass closed routes, hostile access, Research, Blueprint, or fitting requirements.
 
-- route collapse;
-- derelicts;
-- technology fragmentation;
-- isolated settlements;
-- Continuance fragmentation;
-- faction emergence;
-- advanced research scarcity.
+## 15. Dynamic Events — Result: PASS
 
-No established GDS-2–6 system requires a contradictory historical premise.
+GDS-12 Dynamic Events can react to:
 
-## 15. Home Station — Result: PASS
+- faction relations/conflict;
+- route state;
+- market shortage/surplus;
+- station state;
+- anomalies;
+- distress/salvage opportunities.
 
-The home station is a damaged pre-Fracture facility recovered in the starting region.
+Created events use persistent IDs/seeds and cannot rewrite mandatory world geography.
 
-World does not redefine station mechanics.
+## 16. No Offline World Evolution — Result: PASS
 
-Narrative owns the acquisition event.
+Markets, Dynamic Events, raids, target recovery, and other active world-state changes do not advance because real-world time passes while the game is closed.
 
-## 16. Internal World Consistency — Result: PASS
+## 17. Missions — Result: PASS
 
-### Galaxy vs Star Systems
+GDS-8 uses world biome/faction/route/resource/geography constraints for mission generation and fixed story execution. Procedural content cannot randomize away mandatory campaign locations.
 
-Systems are selective containers for gameplay-relevant locations.
+## 18. Combat — Result: PASS
 
-### Systems vs Mission Zones
+GDS-9 remains authoritative for combat behavior and damage. World/faction identity determines plausible actors/equipment/doctrine without introducing a second combat formula.
 
-Strategic systems do not imply seamless local simulation.
+## 19. Raids — Result: PASS
 
-### Factions vs Territory
+The previously pending GDS-11 dependency is resolved.
 
-Control is location-specific and can overlap within systems.
+GDS-11 now defines territory/fortified-target assault, sabotage, persistent target state, physical looting, reinforcements, and Horizon defense while GDS-7 remains authority for who owns the location and why it matters.
 
-### Lore vs Factions
+## 20. Raid Target Recovery — Result: PASS
 
-Each faction interpretation is compatible with the same hidden canonical truth.
+GDS-12 now defines long-term recovery/replenishment pacing for persistent targets through active Simulation Time and faction/economic capability.
 
-### Ancient Structures vs Alien Life
+Unique stolen story objects do not respawn merely because a target repairs.
 
-Ancient technology does not imply a mandatory active spacefaring alien empire.
+## 21. Reputation Consequences of Raids — Result: PASS
 
-## 17. Dependencies Preventing Design Complete
+Raids record attributable facts; GDS-7/GDS-12 apply relation/world consequences using actual identification/evidence. There is no global automatic hostility simply because a hidden raid occurred.
 
-World/Factions remain first-pass pending:
+## 22. Progression — Result: PASS
 
-### GDS-8 Missions — First-Pass Resolved
+The previously pending GDS-12 progression dependency is resolved through P0–P5 capability phases and actual Reach/Research/route gates.
 
-**Result: PASS**
+Campaign phases do not relocate or auto-unlock world locations without satisfying their real route/story requirements.
 
-GDS-8 now defines bounded instance generation, Mission Zones, local environmental hazards, mission persistence, exploration/POI states, and stable procedural survivor placement.
+## 23. Faction Softlock Prevention — Result: PASS
 
-Generated content is constrained by GDS-7 biome, faction, route, resource, and canonical-story geography.
+Convergent campaign progression and GDS-12 finale Support Channels provide alternate faction/Continuance/self-sufficient paths. Ordinary hostility with one human faction cannot permanently brick the main campaign.
 
-### GDS-9 Combat — First-Pass Resolved
+## 24. Finale Geography — Result: PASS
 
-**Result: PASS**
+Crownless/Fracture Verge remains fixed GDS-7 geography. GDS-12 MS-F01 validates actual Reach IV expedition capability and support before GDS-8/GDS-11 executes MS-F02.
 
-GDS-9 now defines generic faction/hostile combat behavior, non-omniscient perception, local engagement/disengagement, human/machine/wildlife combat-actor boundaries, and damage/weapon behavior.
+## 25. Postgame — Result: PASS
 
-GDS-7 remains authoritative for faction identity and world placement.
+Stabilize, Sever, or Contain may change explicit route/faction/anomaly/event states while preserving the same persistent world where still valid. No automatic world reset follows the finale.
 
-### GDS-11 Raids
-- territory assaults;
-- station capture/sabotage;
-- hostile-faction infrastructure.
+## 26. Persistence — Result: PASS
 
-### GDS-12 Economy/Progression
-- prices;
-- trade access;
-- territory dynamics;
-- route/resource pacing;
-- exact reputation rewards.
+GDS-12 Stable Save Boundaries preserve committed:
 
-### GDS-13 Presentation
+- location discovery;
+- route state;
+- faction reputation;
+- story/world flags;
+- Dynamic Events;
+- raid target state;
+- market/world-state changes.
+
+Save/load cannot reroll a persistent mission/event/target into a different world history.
+
+## 27. Difficulty — Result: PASS
+
+Difficulty does not alter canonical geography, faction identity, reputation scale, route requirements, resource IDs, story access, or ending availability.
+
+## 28. Remaining Downstream Dependency — GDS-13
+
+GDS-13 remains responsible for:
+
 - faction visual language;
-- galaxy-map UX;
-- environmental art/audio identity.
+- galaxy/star-map UX;
+- reputation/economy presentation;
+- world/environment readability;
+- Dynamic Event notification;
+- route/threat feedback;
+- accessibility.
 
-## 18. First-Pass Conclusion
+These are presentation dependencies, not unresolved GDS-7 world rules.
 
-No blocking contradiction was found.
+## 29. Conclusion
 
-World/Factions can be marked:
+The previously pending **GDS-11 Raids** and **GDS-12 Economy/Progression** dependencies are now first-pass resolved.
+
+No blocking contradiction exists between GDS-7 and GDS-1 through GDS-12.
+
+World/Factions remain:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The canonical campaign system/route backbone is now fixed in `canonical_region_map.md`. Side-content node counts, optional procedural locations, and balance distributions remain tuneable content data within that fixed framework.
+Their remaining scheduled downstream design dependency is GDS-13, followed by the GDS-14 whole-project audit.

@@ -98,7 +98,7 @@ Example tuneable values:
 
 Tuneable values may be modified through balancing and playtesting without redesigning the underlying mechanic.
 
-## 7. Uncertainty Language
+## 7. Uncertainty and Modal Language
 
 Words such as the following are not acceptable in Design Complete rules when they represent unresolved behavior:
 
@@ -110,6 +110,19 @@ Words such as the following are not acceptable in Design Complete rules when the
 - to be decided;
 - something like;
 - optional, unless optionality itself is explicitly part of the design.
+
+A Design Complete specification **may** still use modal words such as `can`, `may`, `possible`, or `optional` when they have one of these precise meanings:
+
+1. **Player choice** — the player is explicitly permitted, but not required, to perform the action;
+2. **authored data variation** — a concrete item, target, mission, location, faction, component, or content definition selects which listed behavior/capability applies;
+3. **configuration/policy variation** — an explicit setting, loadout, automation policy, or installed capability determines the result;
+4. **conditional physical possibility** — the action is available only when documented prerequisites are true;
+5. **tuneable presentation/balance variation** — the rule is fixed while an explicitly named tuneable value or presentation parameter varies;
+6. **explicit non-baseline future scope** — the text states that a feature is not part of the baseline and requires a later accepted design change before implementation.
+
+In every case, modal wording describes **designed variability**. It never grants the implementer discretion to choose an unspecified gameplay behavior.
+
+If a sentence containing modal wording does not identify or inherit a deterministic owner for that variation, it remains unresolved and blocks Design Complete status.
 
 During Draft status, unresolved questions must be recorded explicitly rather than hidden behind vague wording.
 
@@ -174,7 +187,19 @@ The specification must explicitly identify non-goals where ambiguity could cause
 
 A feature is not implicitly required because a similar commercial game contains it.
 
-## 14. Final Principle
+## 14. Design-Complete Interpretation Rule
+
+For a specification marked **Design Complete**:
+
+- omitted capabilities are absent unless another authoritative specification explicitly owns them;
+- examples illustrate existing rules and do not create additional mechanics by implication;
+- implementation may choose algorithms, data structures, rendering techniques, optimization strategies, and other technical details only when those choices preserve every observable gameplay rule;
+- authored content may choose among explicitly permitted variants, but content authors may not invent a new gameplay rule without extending the appropriate authoritative specification;
+- tuneable values may change through balancing without changing their semantic relationship or state-transition rule.
+
+This rule prevents ambiguity from being reintroduced merely because a specification cannot enumerate every future content instance.
+
+## 15. Final Principle
 
 A programmer implementing an approved subsystem should be able to answer:
 

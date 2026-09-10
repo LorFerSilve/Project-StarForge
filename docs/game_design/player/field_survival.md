@@ -1,392 +1,391 @@
 # Player Field Survival
 
-> **Status:** Draft  
-> **Authority:** Player environmental protection, suit sealing, life-support reserve, pressure/oxygen/contaminant/temperature/radiation exposure, EVA safety, and environmental failure behavior
+> **Status:** Design Complete  
+> **Authority:** Player environmental protection, suit sealing, Life-Support Reserve, pressure/oxygen/contaminant/temperature/radiation exposure, EVA safety, and environmental failure behavior
 
 ## 1. Purpose
 
-Field Survival defines how the player's equipment interacts with dangerous environments.
+Field Survival defines how the player's physical equipment interacts with hazardous environments.
 
-Survival is preparation and engineering, not a constant hunger/thirst loop.
+Survival is based on preparation, protection, endurance, and engineering. It is not a constant hunger/thirst/sleep loop.
 
 ## 2. Environmental Inputs
 
-The environment can report:
+Field Survival consumes authoritative environmental values/states including:
 
 - total pressure;
-- oxygen availability;
-- carbon-dioxide/contaminant state;
+- breathable oxygen availability;
+- CO2/contaminant state;
 - temperature;
-- radiation;
+- radiation intensity;
 - vacuum;
 - fire/thermal hazard;
-- special mission hazards.
+- explicitly authored special mission hazards.
 
-## 3. Survival Layers
+It does not duplicate station/world atmosphere or hazard simulation.
+
+## 3. Evaluation Order
 
 Player environmental safety is evaluated through:
 
-1. external environment;
-2. suit/helmet seal;
-3. suit protection ratings;
-4. Suit Life-Support Reserve;
-5. suit energy for active protection;
-6. biological exposure consequences.
+1. external environment state;
+2. Suit/Helmet seal validity;
+3. passive protection ratings;
+4. Life-Support Reserve when independent atmosphere is needed;
+5. Suit Energy for active protection/processing;
+6. accumulated exposure states;
+7. biological Health/status consequences.
 
-## 4. Breathable External Atmosphere
+## 4. Breathable Environment
 
-An environment is externally breathable only when its atmosphere is within safe pressure, oxygen, contaminant, and temperature limits.
+External atmosphere counts as breathable only when all relevant conditions are within the owning environment's safe thresholds:
 
-Field Survival consumes the atmosphere system's classification rather than redefining gas simulation.
+- pressure;
+- oxygen partial availability;
+- CO2;
+- contaminants;
+- temperature for unprotected ordinary breathing/occupancy.
 
-## 5. Suit Seal
+Radiation safety is evaluated separately: breathable air does not imply a radiation-safe location.
 
-A pressure suit is environmentally sealed only when:
+## 5. Valid Environmental Seal
 
-- compatible Suit is equipped;
-- compatible Helmet is equipped and closed;
-- both retain sufficient seal condition;
-- no explicit breach is active.
+The player is sealed only when:
 
-## 6. Automatic Environmental Mode
+- a compatible pressure Suit is equipped;
+- a compatible Helmet is equipped and closed;
+- both retain sufficient declared seal Condition;
+- no active breach exceeds emergency sealing capability.
 
-The suit automatically chooses between:
+Seal validity is derived from equipment state and is not a separate invulnerability flag.
 
-- External-Air Mode;
-- Sealed Life-Support Mode.
+## 6. Suit Atmosphere Modes
 
-External-Air Mode is preferred when the environment is safely breathable.
+The suit has two atmosphere modes:
 
-Sealed Mode activates when external air is unsafe and the suit can protect the player.
+- `SuitAtmosphereMode::ExternalAir`;
+- `SuitAtmosphereMode::SealedLifeSupport`.
 
-The player can manually force Sealed Mode to avoid contamination exposure.
+Automatic mode selection follows this rule:
 
-## 7. Suit Life-Support Reserve
+- use ExternalAir only after available sensors/known environment state verifies it is safe;
+- switch to SealedLifeSupport when external atmosphere becomes unsafe and the suit can seal;
+- remain SealedLifeSupport when safety cannot be verified;
+- the player may force SealedLifeSupport manually;
+- the player may force opening/unsealing only through an explicit dangerous override when equipment physically permits it.
 
-A sealed suit has a finite **Life-Support Reserve**.
+## 7. Life-Support Reserve
 
-This abstraction represents the combined consumable capacity required to maintain breathable internal atmosphere, including stored breathing gas and scrubbing capability.
+A sealed Suit has a finite **Life-Support Reserve** representing its combined stored breathable atmosphere/scrubbing consumable endurance.
 
-The HUD presents remaining endurance under current conditions.
+While independent atmosphere is required, the reserve decreases on Simulation Time according to the Suit's defined consumption profile.
 
-## 8. Reserve Consumption
+The HUD shows remaining endurance using current known consumption rate.
 
-Life-Support Reserve decreases while Sealed Mode is providing independent atmosphere.
+## 8. Life-Support Consumption
 
-Consumption can vary with:
+Consumption rate may be parameterized by documented inputs such as:
 
-- activity;
-- suit technology;
-- damage;
-- environment;
+- player activity class;
+- Suit model/efficiency;
+- seal damage/leak severity;
 - emergency operating mode.
 
-Exact rates are tuneable.
+Those coefficients are tuneable item data. No hidden difficulty-independent random consumption exists.
 
-## 9. Reserve Refill
+## 9. Life-Support Refill
 
-Life-Support Reserve can be restored at compatible:
+Reserve can be replenished only through a compatible source:
 
-- station life-support interface;
+- Horizon life-support interface;
 - spacecraft life-support interface;
 - field refill station;
-- portable life-support canister where defined.
+- physical portable canister accepted by the Suit.
 
-Refill transfers real consumable capacity from the source.
+Refill consumes/transfers the actual stored capacity/resource from the source and obeys throughput/capacity limits.
 
-## 10. No Infinite Suit Oxygen
-
-A sealed suit cannot support indefinite EVA without resupply.
-
-When reserve reaches critical thresholds, the player receives escalating warnings.
-
-## 11. Reserve Depletion
+## 10. Reserve Depletion
 
 At zero usable Life-Support Reserve in an unbreathable environment:
 
-- suit can no longer maintain breathable internal atmosphere;
-- biological exposure begins;
-- Health receives consequences.
+- the Suit can no longer maintain breathable internal atmosphere;
+- exposure begins immediately on Simulation Time;
+- biological consequences increase through the owning exposure/Health model.
 
-The suit does not instantly kill the player at the exact zero boundary; exposure severity progresses according to environment and tuneable timing.
+The exact zero boundary is not instant death. Health loss/incapacitation follows tuneable exposure rates so warnings/recovery remain meaningful.
 
-## 12. Pressure Protection
+## 11. Pressure Protection
 
-A sealed pressure-rated suit protects against vacuum/low pressure within its rating.
+A valid sealed Suit protects against vacuum/low pressure only within its authored pressure rating.
 
-If pressure protection is absent or seal fails:
+Absent/failed protection produces pressure exposure and passes the resulting biological consequence to Player Health.
 
-- decompression exposure begins;
-- Health receives pressure-related consequences.
+## 12. Suit Breach
 
-## 13. Suit Breach
-
-Damage can create a suit breach.
-
-A breach can:
+A breach has a defined severity and can:
 
 - increase Life-Support Reserve loss;
-- reduce pressure protection;
-- expose the player to contaminants.
+- lower/disable pressure protection;
+- admit contaminants;
+- trigger known alarms.
 
-A compatible emergency patch can temporarily stabilize the breach.
+Breach state persists until repaired/stabilized.
 
-## 14. Emergency Seal Patch
+## 13. Emergency Seal Patch
 
-The Engineering Multitool/field repair item can apply an emergency seal patch when:
+An eligible accessible Suit breach may receive an emergency patch when:
 
-- breach is accessible;
-- patch consumable exists;
-- interaction completes.
+- the required repair tool/mode is available;
+- a compatible patch consumable exists;
+- the sustained interaction completes.
 
-A patch restores temporary seal capability but does not count as full equipment repair.
+The patch restores only the temporary seal capability declared by the repair profile. It never counts as full equipment restoration unless the item explicitly says so.
 
-## 15. Temperature Protection
+## 14. Temperature Protection
 
-Suit defines safe external temperature range.
+Each Suit declares a passive safe external temperature envelope and any active thermal-regulation capability.
 
-Outside that range:
+Outside passive range:
 
-- active thermal regulation uses Suit Energy;
-- exposure severity increases if regulation is insufficient;
-- extreme conditions can damage equipment/Health.
+- active regulation consumes Suit Energy when available;
+- protection remains bounded by the Suit's capacity;
+- residual exposure can create equipment/Health consequences.
 
-## 16. Thermal Energy Priority
+## 15. Thermal Energy Priority
 
-Thermal regulation is a high-priority suit consumer.
+Environmental life-support/thermal protection uses the Equipment low-energy priority system and is protected above Personal Shield, scanning, and discretionary tools unless an explicit dangerous override changes policy.
 
-Low energy can force shutdown of lower-priority systems such as shield/scanner before environmental regulation is sacrificed.
+## 16. Contaminants
 
-## 17. Contaminants
+A valid sealed Suit blocks external contaminants up to its authored compatibility/rating.
 
-A sealed suit protects from external contaminants while seal integrity is valid.
+An unsealed player or an incompatible/damaged protection setup receives the owning contaminant exposure.
 
-An unsealed player uses external atmosphere classification and can suffer contaminant exposure.
+A pressure suit is not automatically chemical-proof.
 
-## 18. Radiation
+## 17. Radiation Dose
 
-Suit defines radiation protection rating.
+Radiation exposure accumulates persistent **Radiation Dose** on Simulation Time after protection mitigation.
 
-Radiation exposure accumulates a **Radiation Dose** during hazardous exposure.
-
-Dose is not a constantly decreasing health bar.
-
-## 19. Radiation Dose States
-
-Baseline states:
+Dose uses `RadiationDoseState`:
 
 - Nominal;
 - Elevated;
 - High;
 - Critical.
 
-Higher dose can produce temporary health/recovery consequences.
+State thresholds are tuneable; state behavior is fixed.
 
-Exact long-term medical effects are tuneable and later medical content may refine them.
+## 18. Radiation Dose Behaviors
 
-## 20. Radiation Recovery
+### Nominal
 
-Radiation Dose decreases through:
+- no radiation-specific capability penalty;
+- ordinary background/fully managed exposure.
 
-- time in safe environment;
-- medical treatment;
-- advanced medication/technology.
+### Elevated
 
-It does not instantly reset when leaving the hazard.
+- visible warning/diagnostic state when the player has valid detection;
+- no direct movement/combat penalty;
+- further exposure continues accumulating dose.
+
+### High
+
+- applies `StatusEffect::RadiationSickness`;
+- while dose remains High or Critical, Radiation Sickness produces tuneable gradual biological Health loss/recovery burden;
+- it does not alter aim/recoil invisibly;
+- new external deployment is allowed only if mission preparation verifies protection appropriate to the known hazard and the player is otherwise medically deployable.
+
+### Critical
+
+- retains Radiation Sickness at the stronger authored Critical rate;
+- blocks starting a new external deployment from a safe staging location until dose falls below Critical;
+- does not instantly set Health to zero;
+- triggers highest applicable known medical/environmental warning.
+
+## 19. Radiation Sickness
+
+`RadiationSickness` is an explicit persistent Status Effect linked to dose state.
+
+It is applied at entry to High and remains while dose is High/Critical.
+
+Its biological Health-damage rate and medical recovery burden are tuneable.
+
+It is removed when dose falls below High and any authored immediate treatment completion has committed.
+
+## 20. Radiation Dose Recovery
+
+Dose decreases only on Simulation Time through one or both valid processes:
+
+- slow natural clearance while in a radiation-safe environment;
+- explicit medical treatment/medication/technology that increases/removes dose according to its authored effect.
+
+No offline reduction occurs.
+
+Leaving the hazard does not instantly reset dose.
 
 ## 21. Radiation Detection
 
-The player receives radiation information only if:
+Exact radiation state/intensity is presented only when a valid suit/helmet/scanner/other sensor source provides it.
 
-- suit/helmet sensor supports it; or
-- another valid sensor source provides it.
+Without detection the physical exposure still occurs, but UI cannot reveal hidden source/intensity merely because the player is being affected. Symptoms/Health consequences may themselves become legitimate information.
 
-Unknown radiation can remain a hazard until detected.
+## 22. Fire and Thermal Hazards
 
-## 22. Fire
+Suit fire/thermal protection reduces exposure only according to its explicit rating.
 
-Suit thermal/fire protection can reduce exposure to fire.
+Fire simulation and resulting damage/status are owned by Station/Mission/Combat hazard rules.
 
-Fire damage itself is resolved by Health/Combat/Hazard systems.
+## 23. Corrosive / Chemical Contact Hazards
 
-## 23. Liquid/Corrosive Hazards
+Special hazards declare a Protection Requirement/compatibility tag.
 
-Special mission environments may define corrosive or chemical contact hazards.
+If current Equipment lacks it, the hazard applies its explicit exposure state. Generic vacuum sealing does not satisfy unrelated chemical/corrosive protection.
 
-Protection requires explicitly compatible suit rating.
-
-There is no generic assumption that a vacuum suit resists every hazard.
-
-## 24. Suit Energy
-
-Active systems can depend on Suit Energy:
-
-- thermal regulation;
-- zero-g thrusters;
-- personal shield;
-- scanners/tools;
-- selected filters/pumps.
-
-Life-support safety has priority according to Equipment rules.
-
-## 25. Energy Depletion
+## 24. Suit Energy Failure
 
 At zero Suit Energy:
 
-- passive armor/seal remains if physically intact;
-- active shield stops;
+- passive armor remains according to Equipment;
+- passive physical seal remains if Condition supports it;
+- powered Personal Shield stops;
 - active thermal regulation stops;
-- thrusters stop;
+- Zero-G thrusters stop;
 - powered scanning/tools stop;
-- passive life-support reserve can continue only if the suit model supports passive operation.
+- powered life-support machinery stops if the Suit requires power;
+- the baseline starting sealed Suit retains a documented finite passive emergency Life-Support Reserve path even at zero Suit Energy.
 
-The baseline starting sealed suit supports passive emergency life support for a limited reserve period even at zero energy.
+## 25. EVA Eligibility
 
-## 26. EVA
+Normal EVA requires:
 
-EVA requires:
+- valid pressure sealing;
+- nonzero sufficient Life-Support Reserve for the configured safety threshold;
+- compatible locomotion capability, such as powered thrusters or Magnetic Boots for the intended route;
+- protection adequate for known environmental hazards;
+- Equipment Condition above the relevant hard failure threshold.
 
-- sealed pressure protection;
-- Life-Support Reserve;
-- compatible locomotion such as suit thrusters or Magnetic Boots;
-- sufficient environment protection.
+## 26. Airlock Preflight Check
 
-The player is warned before leaving a safe airlock if critical EVA requirements are missing.
+Before a normal player-controlled external airlock cycle, the system checks known:
 
-## 27. Airlock Preflight Check
-
-Before normal external airlock cycling, the suit system checks:
-
-- Suit equipped;
-- Helmet sealed;
+- Suit equipped/compatible;
+- Helmet equipped and sealed;
 - pressure protection valid;
-- Life-Support Reserve above minimum safe-launch threshold;
-- suit condition not Critical/Disabled.
+- Life-Support Reserve above the configured minimum launch threshold;
+- Suit/Helmet not in a Condition state that invalidates required protection;
+- required EVA locomotion for the intended exit when known.
 
-The player can only bypass a failed safety check via an explicit dangerous override.
+A failed check blocks the normal cycle. A dangerous override is available only where the airlock/equipment rules permit one and must clearly state known risk.
 
-## 28. Mission Preparation
+## 27. Mission Preparation
 
-Mission briefing/loadout can display known environment requirements such as:
+Mission briefing/loadout shows only known environmental requirements and uncertainties.
 
-- vacuum;
-- radiation;
-- extreme cold;
-- toxic atmosphere.
+Known hazards can create hard preparation requirements when the mission physically cannot be survived/executed without them. Unknown hazards remain unknown and cannot leak through validation.
 
-Unknown hazards remain legitimately unknown.
+## 28. No Personal Hunger, Thirst, or Fatigue
 
-## 29. No Hunger/Thirst
+There is no global continuous player hunger, thirst, sleep, or fatigue system.
 
-The player has no routine personal hunger or thirst meter.
+Any long-duration authored provisioning objective is an explicit mission/resource rule rather than hidden metabolism.
 
-Long-duration mission provisioning can use authored mission consumables, but it is not a global always-running metabolism system.
+## 29. Environmental HUD
 
-## 30. No Sleep/Fatigue Meter
-
-The baseline has no personal sleep/fatigue meter.
-
-Mission pacing and health consequences should not require the player to stop playing to sleep.
-
-## 31. Environmental HUD
-
-The HUD can communicate:
+When information is legitimately known, the HUD communicates:
 
 - external atmosphere safety;
-- suit seal;
-- Life-Support Reserve;
+- Suit/Helmet seal;
+- Life-Support Reserve/endurance;
 - Suit Energy;
-- temperature warning;
-- radiation dose;
-- contaminant warning;
-- current EVA state.
+- temperature exposure;
+- radiation dose/state;
+- contaminants;
+- EVA locomotion/support state.
 
-## 32. Warning Priority
+Critical warnings outrank routine loot/tool notifications.
 
-Critical environmental warnings override noncritical tool/loot notifications.
+## 30. Safety Overrides
 
-Warnings escalate before protection is fully exhausted when sensor data exists.
+Opening the Helmet, unsealing Equipment, or disabling protection in known dangerous conditions requires explicit confirmation where physical design allows the action.
 
-## 33. Environmental Interaction
+The confirmation does not grant immunity; environmental state applies immediately after commit.
 
-Opening helmet, removing suit, or disabling protection in a hazardous environment uses explicit confirmation/safety interlock.
+## 31. Health Boundary
 
-## 34. Health Integration
+Field Survival owns environmental protection/exposure state.
 
-Field Survival reports exposure severity/state.
+Player Health owns biological Health bands, Incapacitation, treatment, and defeat/recovery.
 
-Health owns:
+GDS-9 owns applicable Damage/Status resolution where a hazard uses Combat damage semantics.
 
-- biological damage;
-- incapacitation;
-- recovery.
+## 32. Persistence
 
-The same environmental exposure rules apply whether the danger comes from a station breach or mission world.
+Save state preserves:
 
-## 35. Persistence
+- Suit atmosphere mode where consequential;
+- Life-Support Reserve;
+- Suit Energy through Equipment;
+- Radiation Dose and RadiationSickness;
+- Suit breach/patch state;
+- persistent exposure state needed to resume deterministically.
 
-Life-Support Reserve, Suit Energy, Radiation Dose, suit breach state, and relevant protective condition persist.
+Save/load never refills, cools, heals, or normalizes these values automatically.
 
-Save/load cannot refill environmental consumables.
+## 33. Edge Cases
 
-## 36. Edge Cases
+- When unsafe external air becomes verified-safe, Auto mode switches to ExternalAir after validation unless the player manually forced SealedLifeSupport.
+- When verified-safe air becomes unsafe, Auto mode seals immediately if equipment is capable; if not, exposure starts.
+- Helmet seal failure during EVA immediately updates reserve loss/pressure exposure from the actual breach state.
+- Suit Energy reaching zero while drifting stops thrust/stabilization but preserves momentum.
+- Entering breathable but radioactive atmosphere changes no radiation rule.
+- Crossing High/Critical radiation thresholds in the same step as treatment resolves through deterministic transaction ordering; state is derived from final committed Dose.
+- True Pause freezes dose accumulation/recovery and all exposure timers.
 
-If external air becomes breathable while sealed, Auto Mode can switch to External-Air Mode after safety validation.
+## 34. Progression
 
-If external air becomes unsafe, Auto Mode seals automatically if gear is capable.
+Progression improves field capability through authored Equipment/Research such as:
 
-If the helmet is damaged below sealing capability during EVA, reserve loss/exposure begins immediately according to breach severity.
+- greater Life-Support endurance;
+- stronger pressure seal/repair resilience;
+- Magnetic Boots/Zero-G mobility;
+- broader thermal/radiation/chemical protection;
+- better environmental sensing;
+- more efficient active regulation.
 
-If Suit Energy reaches zero while drifting in zero-g, thrusters stop; momentum persists and rescue/physical contact may be required.
+Progression does not remove environmental rules globally.
 
-If the player enters a breathable room with high radiation, breathable-air status does not imply radiation safety.
+## 35. Tuneable Parameters
 
-## 37. Progression
+Tuneable values include:
 
-Early game:
+- Life-Support capacity/consumption;
+- refill rate;
+- seal/leak rates;
+- pressure/temperature protection values;
+- exposure/Health-damage rates;
+- radiation thresholds/accumulation/clearance rates;
+- Radiation Sickness rates;
+- EVA safety thresholds.
 
-- short Life-Support Reserve;
-- basic thermal protection;
-- limited radiation protection;
-- short EVA range.
+State semantics and protection dependencies are fixed.
 
-Mid game:
+## 36. Explicit Non-Goals
 
-- longer endurance;
-- stronger seal;
-- Magnetic Boots;
-- improved radiation/thermal protection;
-- better sensors.
+The baseline does not include:
 
-Late game:
+- personal hunger/thirst/sleep/fatigue bars;
+- infinite EVA oxygen;
+- one universal hazard-proof Suit;
+- instant radiation reset;
+- random unexplained environmental damage;
+- instant death at Life-Support zero;
+- safety warnings that secretly reveal unknown hazards.
 
-- extended EVA;
-- advanced hazardous-environment protection;
-- efficient regulation;
-- strong radiation shielding;
-- specialized expedition suits.
+## 37. Dependencies
 
-## 38. Explicit Non-Goals
+Depends on Equipment, Player Health, Movement, Tools/Inventory, Station Atmosphere/Thermal, Missions/Hazards, World environment data, Spacecraft life support, Combat Status/Damage, Time/Simulation, and GDS-13 HUD/Alarms/Accessibility.
 
-Field Survival does not require:
+## 38. Open Questions
 
-- personal hunger/thirst;
-- sleep/fatigue;
-- infinite oxygen;
-- one suit protecting against every hazard;
-- instant environmental death without readable exposure;
-- safety checks that cannot be deliberately overridden when the design permits dangerous action.
-
-## 39. Tuneable Parameters
-
-Tuneable values include Life-Support Reserve capacity/consumption, refill rate, seal-loss rate, exposure thresholds, temperature ranges, radiation rates, dose recovery, and safety-check thresholds.
-
-## 40. Dependencies
-
-This specification depends on Equipment, Health, Movement, Tools, Inventory, station atmosphere/thermal, Missions, World hazards, Spacecraft life support, and Combat damage.
-
-## 41. Open Questions
-
-None in the environmental-survival baseline.
-
-Exact content values and exotic hazard types remain future tuneable/content definitions.
+None.

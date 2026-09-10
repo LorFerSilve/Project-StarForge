@@ -364,18 +364,23 @@ GDS-9 remains authoritative for generic hit, Damage Packets, EMP, armor/shields,
 
 No authority is duplicated.
 
-## 36. Raids — Result: PASS WITH DOWNSTREAM DEPENDENCY
+## 36. Raids — Result: PASS
 
-GDS-9 provides direct fighting and subsystem damage.
+GDS-11 now defines:
 
-GDS-11 still owns:
-- intelligence;
-- external assault flow;
-- breach;
-- sabotage;
-- escalation;
-- raid extraction;
-- station capture/defense outcome.
+- raid intelligence and preparation;
+- external assault and defense suppression;
+- physical boarding/breaching;
+- interior raid control;
+- causal sabotage;
+- finite reinforcement escalation;
+- raid withdrawal/extraction;
+- surrender/capture boundaries;
+- deterministic Horizon Station defensive raids.
+
+GDS-9 remains authoritative for the direct combat layer used by those phases: weapons, hit resolution, Damage Packets, shields/armor, status effects, and generic combat AI.
+
+No raid-specific second combat formula is introduced.
 
 ## 37. Difficulty — Result: PASS WITH DOWNSTREAM DEPENDENCY
 
@@ -444,11 +449,11 @@ GDS-9 remains first-pass pending:
 
 Robot combat roles, hit-zone/subsystem consequences, squad AI, and repair/loss are now first-pass defined under GDS-10.
 
-### GDS-11 Raids
-- station-defense combat orchestration;
-- boarding escalation;
-- raid surrender/capture;
-- sabotage target integration.
+### GDS-11 Raids — First-Pass Resolved
+
+**Result: PASS**
+
+GDS-11 now defines raid/defense orchestration, boarding escalation, sabotage integration, physical looting/extraction, and raid capture/surrender boundaries while reusing GDS-9 direct-combat rules.
 
 ### GDS-12 Economy / Progression / Difficulty / Persistence
 - ammunition/equipment economic costs;
@@ -470,8 +475,8 @@ Robot combat roles, hit-zone/subsystem consequences, squad AI, and repair/loss a
 
 No blocking contradiction was found.
 
-GDS-9 can be marked:
+GDS-9 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The next dependency-driven phase is GDS-10 Robots.
+Its remaining downstream dependencies are GDS-12 and GDS-13.

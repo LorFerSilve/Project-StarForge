@@ -1138,3 +1138,107 @@ The baseline does not force New Game+, prestige, seasonal reset, or a campaign w
 ### Rationale
 
 The player's station and interstellar operation are long-term constructed assets; preserving them makes the ending a world-state resolution rather than deletion of the progression fantasy.
+
+---
+
+## DD-074 — Presentation Uses a Hybrid Diegetic/Non-Diegetic Model
+
+**Status:** Accepted
+
+### Decision
+
+Project StarForge communicates physical state through world geometry, animation, lighting, sound, actors, and equipment where practical, while also using conventional HUD, panels, overlays, maps, captions, and alerts for critical systemic information.
+
+Diegetic purity cannot hide information required to understand or operate an authoritative gameplay system.
+
+### Rationale
+
+The game contains interconnected engineering, combat, mission, raid, and management systems. A hybrid model preserves physical immersion without sacrificing reliable information access.
+
+---
+
+## DD-075 — Presentation Cannot Reveal Hidden State or Report Uncommitted State
+
+**Status:** Accepted
+
+### Decision
+
+UI, HUD, markers, audio, VFX, tutorials, and accessibility aids may communicate only information the player legitimately knows and may report a transaction as complete only after its authoritative commit.
+
+### Rationale
+
+Presentation must remain a truthful view of the simulation. Hidden-information leakage would undermine reconnaissance and exploration, while premature success feedback would make transaction/persistence semantics ambiguous.
+
+---
+
+## DD-076 — Critical Information Is Never Color-Only or Audio-Only
+
+**Status:** Accepted
+
+### Decision
+
+Gameplay-critical states use redundant presentation channels. Color and audio can reinforce meaning but must have at least one suitable text, icon, shape, pattern, visual, caption, or other nonexclusive alternative.
+
+### Rationale
+
+Redundant semantics improve accessibility and also make complex simultaneous failures more readable for every player.
+
+---
+
+## DD-077 — Tutorials Teach the Real Authoritative Game
+
+**Status:** Accepted
+
+### Decision
+
+Primary onboarding is integrated into the real campaign and uses the same inventory, combat, resource, mission, extraction, station, robot, economy, and persistence rules as normal play.
+
+Temporary tutorial safety may constrain unrelated events, but it cannot replace the demonstrated mechanic with a fake tutorial-only rule.
+
+### Rationale
+
+A player should not need to unlearn tutorial behavior when the systemic game begins.
+
+---
+
+## DD-078 — Accessibility Is Independent From Difficulty and Rewards
+
+**Status:** Accepted
+
+### Decision
+
+Accessibility settings do not reduce rewards, invalidate progression, change story access, or mark a save as lesser.
+
+Difficulty profiles and accessibility options are independently configurable.
+
+### Rationale
+
+Presentation/input access and gameplay pressure are different concerns. Linking accessibility support to penalties would make the same game unnecessarily inaccessible.
+
+---
+
+## DD-079 — Aim Assistance Cannot Override Physical Hit Resolution
+
+**Status:** Accepted
+
+### Decision
+
+Optional aim assistance can provide bounded camera/reticle friction or mild rotational assistance toward legitimately visible targets, but cannot bend projectiles, add hidden hit chance, snap through walls, reveal unknown enemies, or automatically select weak points.
+
+### Rationale
+
+Accessibility/controller support can reduce input precision burden without invalidating GDS-9's physical hit model.
+
+---
+
+## DD-080 — The Canonical Visual Target Is Stylized Grounded Science Fiction
+
+**Status:** Accepted
+
+### Decision
+
+Project StarForge uses believable engineering function, material response, scale, wear, and environmental logic with deliberate stylization, strong silhouettes, and restrained detail rather than pursuing photorealism.
+
+### Rationale
+
+The style supports gameplay readability, modular environments, technical feasibility for the custom C++/OpenGL project, and a coherent identity without making photoreal asset production a core dependency.

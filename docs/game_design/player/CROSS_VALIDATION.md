@@ -1,403 +1,145 @@
 # Player Character Cross-Validation
 
 > **Status:** Active Audit  
-> **Authority:** GDS-5 consistency review only  
-> **Purpose:** Validate player-character, controls, movement, interaction, health, inventory, equipment, tools, and field-survival rules against established global, station, crew, and resource design.
+> **Authority:** GDS-5 consistency review  
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-5 against:
+This audit validates GDS-5 Player Character, Controls, Movement, Interaction, Health, Inventory, Equipment, Tools, and Field Survival against GDS-2 through GDS-12.
 
-- Global Game Rules;
-- GDS-4 Resource Model and acquisition rules;
-- Station Atmosphere and Oxygen;
-- Station Thermal Systems;
-- Station Construction;
-- Station Security;
-- Crew Injury/Medical rules;
-- Crew Presence;
-- Resource Mining and Salvage;
-- Station Damage and Repairs.
+## 2. Perspective and Direct Participation — Result: PASS
 
-## 2. First-Person Perspective — Result: PASS
+Normal on-foot gameplay remains first-person. The player directly explores, fights, repairs, mines, salvages, interacts, boards, and manipulates objectives while automation supports rather than replaces player agency.
 
-Player Character and Movement preserve the global rule that normal on-foot gameplay is first-person.
+## 3. Capability-Based Player Progression — Result: PASS
 
-Construction and future spacecraft modes use separate control contexts without redefining normal on-foot perspective.
+GDS-12 preserves the no-Player-Level rule. Player advancement comes from equipment, tools, suit capability, preparation, Research, ship/station/robot support, and access.
 
-## 3. Direct Participation — Result: PASS
+There is no universal RPG attribute tree, Gear Score, or phase-derived hidden stat multiplier.
 
-The player directly performs:
+## 4. Inventory Ownership — Result: PASS
 
-- exploration;
-- mining;
-- salvage;
-- repair;
-- interaction;
-- combat;
-- boarding;
-- objective manipulation.
+Player Inventory remains one physical owner under GDS-4 and is constrained by Mass + Volume. GDS-12 trade, loot, rewards, and progression do not create duplicate portable items.
 
-Automation supports but does not replace player action.
+## 5. Mission Security States — Result: PASS
 
-This matches Global Game Rule 24.
+Secured Loadout, Field-Unsecured, Vehicle/Extraction-Secured, and Station-Secured remain compatible with GDS-8/GDS-12 persistence and failure transactions.
 
-## 4. No Generic Player-Level Conflict — Result: PASS
+## 6. Economy — Result: PASS
 
-GDS-5 intentionally avoids a universal Player Level and passive RPG stat tree.
+GDS-12 now defines item/resource purchase and sale behavior.
 
-Progression comes primarily from:
+Physical purchases require valid market stock, Credits, access, and a valid physical destination. Sales remove the actual physical item/resource from player ownership.
 
-- equipment;
-- tools;
-- research;
-- station capability;
-- ship access;
-- robots;
-- preparation.
+Credits are ledger state and do not occupy inventory Mass/Volume.
 
-This is consistent with the global progression philosophy favoring capability over pure numerical inflation.
+## 7. Equipment Value vs Rarity — Result: PASS
 
-## 5. Player Failure — Result: PASS
+Player equipment remains differentiated by actual model, technology, modifications, condition, protection, energy, and role. GDS-12 does not introduce random Common/Rare/Epic/Legendary stat tiers or a generic affix treadmill.
 
-Ordinary incapacitation:
+## 8. Difficulty — Result: PASS
 
-- does not permanently delete the player;
-- does not roll back station/crew/research progression;
-- applies a deterministic mission-inventory transaction;
-- preserves recovered persistent loadout ownership;
-- can apply equipment condition and medical consequences.
+GDS-12 Difficulty does not change player unlocks, inventory capacity rules, Reach, Research requirements, loot eligibility, or progression.
 
-This matches the Global Game Rules player-failure baseline.
+Allowed pressure modifiers do not create a separate player-stat progression system.
 
-## 6. Mission Inventory Security — Result: PASS
+## 9. Combat Boundary — Result: PASS
 
-GDS-5 and GDS-4 now use compatible states:
+GDS-9 remains authoritative for combat hit/damage/protection/weapon rules. GDS-5 owns player biological Health, Incapacitation, equipment state, and recovery.
 
-- Secured Loadout;
-- Field-Unsecured;
-- Vehicle/Extraction-Secured;
-- Station-Secured.
+## 10. Field Survival — Result: PASS
 
-Physical ownership remains singular.
+Atmosphere, pressure, temperature, radiation, Suit Energy, Life-Support Reserve, seal state, and environmental equipment remain the meaningful survival systems. Hunger/thirst/fatigue meters are not introduced by GDS-12.
 
-Mission defeat cannot duplicate or refund already-consumed ammunition/resources.
+## 11. Player Failure — Result: PASS
 
-Mission-specific extraction will later define the exact commit moment between Field-Unsecured and Vehicle/Extraction-Secured.
+Ordinary defeat does not permanently delete the player.
 
-## 7. Player Inventory vs Resource Model — Result: PASS
+GDS-12 confirms the deterministic failure transaction:
 
-Player Inventory is one physical owner under GDS-4.
+- consumed ammunition/consumables stay consumed;
+- recovered Secured Loadout remains protected according to GDS-5/GDS-8;
+- Field-Unsecured loot can be lost;
+- Vehicle/Extraction-Secured cargo follows its actual owner;
+- equipment/medical consequences can persist;
+- no arbitrary percentage Credit death tax is applied.
 
-Mass + Volume capacity prevents unrestricted carrying.
+## 12. Save During Combat/Incapatitation — Result: PASS
 
-Stack split/merge conserves quantity.
+The game may save during combat, missions, raids, or player incapacity whenever the state is at a Stable Save Boundary.
 
-Quick Slots reference actual inventory rather than creating copies.
+A save request during an atomic ownership/reward/extraction transaction queues until the transaction commits.
 
-Hazardous fluids/gases require compatible containers.
+## 13. Save/Load Anti-Duplication — Result: PASS
 
-No conflict exists with GDS-4 ownership or conservation rules.
+Reload cannot:
 
-## 8. Mining and Salvage — Result: PASS
+- refund consumed ammunition;
+- duplicate inventory stacks;
+- re-award secured loot;
+- reverse committed extraction inside the loaded save state;
+- re-trigger one-time knowledge/reputation rewards.
 
-The Player tool layer owns:
+## 14. Player Equipment Persistence — Result: PASS
 
-- equipped tool;
-- input;
-- energy/heat;
-- interaction.
+Equipped-slot assignment, condition, energy, life-support reserve, modifications, and ammunition state remain persistable.
 
-GDS-4 Mining owns:
+Routine mission defeat does not create a second pristine copy of damaged equipment.
 
-- deposit;
-- reserve;
-- Yield Grade;
-- extraction output.
+## 15. Spacecraft Interface — Result: PASS
 
-GDS-4 Salvage owns:
+GDS-6 ship control/cargo/EVA/docking and GDS-12 Reach progression remain compatible with player inventory, equipment, movement, and field survival.
 
-- valid salvage target;
-- recoverable yield.
+## 16. Robot Interface — Result: PASS
 
-No duplicate acquisition formula was introduced.
+GDS-10 robot squads remain separate physical assets. GDS-12 TCC progression and finale robot requirements do not change player movement/equipment authority.
 
-## 9. Station Atmosphere — Result: PASS
+## 17. Finale Player Readiness — Result: PASS
 
-Station Atmosphere owns external pressure and gas state.
+GDS-12 `endgame.md` now resolves the previous progression/persistence dependency.
 
-Player Field Survival consumes the atmosphere classification and owns:
+MS-F01 validates actual player capability tags for:
 
-- suit seal;
-- Life-Support Reserve;
-- suit protection;
-- player exposure.
+- sealed environmental protection;
+- Life-Support Reserve/refill path;
+- engineering interaction/repair;
+- scanner/anomaly interaction;
+- combat-capable weapon/ammunition;
+- inventory headroom for required mission equipment.
 
-The player does not redefine compartment gas simulation.
+No Player Level is used.
 
-## 10. Thermal Systems — Result: PASS
+## 18. Progression Phase Boundary — Result: PASS
 
-Station/World systems own environmental temperature.
+P0–P5 describe campaign maturity but do not grant free player stats or equipment. A player missing required gear remains physically unable to perform the corresponding action regardless of phase label.
 
-Equipment/Field Survival owns player thermal protection and Suit Energy use.
+## 19. No Difficulty-Exclusive Ending — Result: PASS
 
-Health owns biological consequence.
+All finale choices and player progression paths remain available on all Difficulty profiles.
 
-This cleanly separates environment, protection, and injury.
+## 20. Remaining Downstream Dependency — GDS-13
 
-## 11. EVA / Zero-G — Result: PASS
+GDS-13 remains required for:
 
-Movement owns zero-gravity locomotion.
-
-Field Survival owns vacuum protection.
-
-Equipment owns the Suit/Magnetic Boots/thruster capability.
-
-Future spacecraft owns exterior ship context and airlock/docking behavior.
-
-No assumption grants zero-g mobility without compatible equipment.
-
-## 12. Construction Mode — Result: PASS
-
-Controls explicitly switches to Construction context.
-
-Station Construction remains authoritative that:
-
-- simulation pauses;
-- construction is unavailable during active combat;
-- the physical player remains at their prior station location.
-
-GDS-5 does not create a second construction system.
-
-## 13. Crew Medical Interaction — Result: PASS
-
-Crew health defines crew injury separately.
-
-Player Health defines player health.
-
-Both use compatible medical principles:
-
-- finite medical resources;
-- medbay capability;
-- Medic support;
-- active-game recovery;
-- no routine permadeath.
-
-The player is not added to crew assignment workload as a crew roster object.
-
-## 14. Station Damage and Manual Repair — Result: PASS
-
-Player Tools can perform eligible manual repair.
-
-Station Damage/Repairs remains authoritative for:
-
-- fault identity;
-- material requirement;
-- repair target state;
-- stabilization;
-- full restoration.
-
-The Engineering Multitool cannot bypass missing resources/access.
-
-## 15. Security and Interaction — Result: PASS
-
-Player Interaction respects:
-
-- door state;
-- security permission;
-- pressure safety;
-- explicit emergency overrides.
-
-Owning a tool does not create universal hacking permission.
-
-Security remains authoritative for access/intrusion behavior.
-
-## 16. Health vs Combat Boundary — Result: PASS
-
-GDS-5 defines:
-
-- Health states;
-- incapacitation;
-- recovery;
-- player shield/equipment existence.
-
-GDS-9 now defines:
-
-- physical hit detection;
-- combat damage channels;
-- attack resolution;
-- deterministic shield overflow;
-- armor penetration/mitigation;
-- weapon/ammunition behavior;
-- status effects.
-
-**Result: PASS**
-
-GDS-5 remains authoritative for biological Health, Incapacitation, equipment state, and recovery, so no damage authority is duplicated.
-
-## 17. Personal Shield vs Station Shield — Result: PASS
-
-Personal Shield is equipment attached to the player.
-
-Station Defenses owns station shield zones.
-
-Both may use similar conceptual capacity/regeneration behavior but are separate physical systems with separate energy sources and coverage.
-
-## 18. Suit Energy and Life Support — Result: PASS
-
-GDS-5 distinguishes:
-
-- Suit Energy: electrical energy for active systems;
-- Life-Support Reserve: finite consumable independent-atmosphere endurance.
-
-At zero Suit Energy, passive emergency life support can continue only if the Suit model supports it.
-
-This avoids the ambiguous rule that "battery zero instantly means no oxygen."
-
-## 19. Survival Scope — Result: PASS
-
-GDS-5 does not introduce:
-
-- hunger;
-- thirst;
-- fatigue;
-- sleep meters.
-
-Survival focuses on:
-
-- atmosphere;
-- pressure;
-- temperature;
-- radiation;
-- suit condition;
-- life-support reserve;
-- mission preparation.
-
-This matches Global Game Rule 15.
-
-## 20. Movement Scope — Result: PASS
-
-Baseline movement includes:
-
-- walk;
-- sprint;
-- crouch;
-- jump;
-- mantle;
-- ladders;
-- reduced gravity;
-- zero-g/EVA.
-
-It intentionally excludes:
-
-- stamina-limited sprint;
-- prone;
-- swimming;
-- universal dash;
-- wall climbing.
-
-No current game requirement depends on those excluded systems.
-
-## 21. Input Architecture — Result: PASS
-
-Controls are defined as named actions and contexts rather than engine-specific key polling.
-
-Keyboard/mouse defaults are provided while allowing full rebinding.
-
-This is compatible with a custom C++/OpenGL input implementation.
-
-## 22. Internal GDS-5 Consistency — Result: PASS
-
-### Equipment vs Inventory
-
-Equipped items are player-owned but separate from backpack capacity slots; their mass still counts.
-
-### Equipment vs Field Survival
-
-Suit/Helmet provide capabilities; Field Survival interprets environmental safety.
-
-### Equipment vs Movement
-
-Suit/thruster/Magnetic Boots expose capability; Movement executes locomotion.
-
-### Tools vs Interaction
-
-Tools provide action capability; Interaction validates target, range, and progress.
-
-### Health vs Field Survival
-
-Field Survival reports exposure; Health resolves biological consequence.
-
-### Health vs Inventory
-
-Mission defeat uses one deterministic inventory transaction.
-
-## 23. Dependencies Preventing Design Complete
-
-GDS-5 remains first-pass pending future cross-validation.
-
-### Spacecraft — First-Pass Resolved by GDS-6
-
-**Result: PASS**
-
-GDS-6 now defines cockpit/ship control context, ship cargo transfer, finite life-support refill, EVA ship-repair context, local flight, and docking/boarding physical preconditions.
-
-These rules are compatible with GDS-5 player inventory, controls, Field Survival, and zero-gravity movement.
-
-### World — First-Pass Resolved by GDS-7
-
-**Result: PASS**
-
-GDS-7 defines gravity bands, atmosphere/environment metadata, biome classes, landing-site boundaries, and the world-side ownership of hazard context.
-
-GDS-5 remains authoritative for player protection/exposure.
-
-### Missions — First-Pass Resolved by GDS-8
-
-**Result: PASS**
-
-GDS-8 now defines extraction commit atomicity, Field-Unsecured → Vehicle/Extraction-Secured transitions, recoverable incapacitation windows, objective interaction state, mission-instance dropped-item persistence, abandonment, and ordinary defeat resolution.
-
-These rules complete the mission-facing side of GDS-5 player failure and inventory security.
-
-### Combat
-
-Required for:
-- damage types;
-- shield overflow;
-- armor mitigation;
-- weapons;
-- ammunition;
-- status effects.
-
-### Economy
-
-Required for:
-- item monetary value;
-- purchase/sale behavior.
-
-### Presentation / Accessibility
-
-Required for:
 - final HUD;
-- controller defaults;
-- interaction visual hierarchy;
-- warning presentation.
+- equipment/inventory comparison presentation;
+- interaction feedback;
+- controller/input presentation;
+- survival warnings;
+- difficulty/accessibility options;
+- finale-readiness blocker UX.
 
-### Persistence
+These are presentation dependencies, not unresolved GDS-5 gameplay rules.
 
-Required for:
-- save boundaries during combat/incapacitation;
-- exact transient-state serialization.
+## 21. Conclusion
 
-## 24. First-Pass Conclusion
+The previously pending Economy and Persistence dependencies are now **resolved by GDS-12**.
 
-No blocking contradiction was found.
+No blocking contradiction exists between GDS-5 and GDS-1 through GDS-12.
 
-GDS-5 can be marked:
+GDS-5 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-GDS-6 Spacecraft has now been first-pass cross-validated.
-
-The next unresolved player-facing dependencies are Economy, Presentation/Accessibility, and Persistence.
+Its remaining scheduled downstream design dependency is GDS-13, followed by GDS-14 final audit.

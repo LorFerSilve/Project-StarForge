@@ -1,330 +1,137 @@
 # Resources, Crafting & Research Cross-Validation
 
 > **Status:** Active Audit  
-> **Authority:** GDS-4 consistency review only  
-> **Purpose:** Validate the first-pass resource, processing, crafting, blueprint, research, and production-chain design against established station and crew rules.
+> **Authority:** GDS-4 consistency review  
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-4 against:
+This audit validates GDS-4 Resource Model, Resource Catalog, Mining, Salvage, Processing, Crafting, Blueprints, Research, and Production Chains against GDS-2 through GDS-12.
 
-- Global Game Rules;
-- Station Storage and Logistics;
-- Station Manufacturing;
-- Station Water;
-- Station Farming and Food;
-- Station Power and Thermal Systems;
-- Crew Automation;
-- Crew Scientist/skills/progression;
-- Crew Needs.
+## 2. Physical Ownership — Result: PASS
 
-## 2. Resource Ownership vs Logistics — Result: PASS
+Every physical resource quantity retains one authoritative owner/location. Reservations, market UI, loot summaries, reward claims, and progression state never duplicate physical ownership.
 
-The Resource Model defines one authoritative physical owner for every quantity.
+## 3. Station Logistics and Manufacturing — Result: PASS
 
-Station Logistics owns movement between those owners.
+GDS-2 owns physical logistics and manufacturing execution. GDS-4 owns resource/recipe/process/Blueprint/Research definitions. The authority boundary remains clean.
 
-Reservations do not duplicate or teleport physical resources.
+## 4. Resource Conservation — Result: PASS
 
-This matches station rules for:
+Water, farming, processing, salvage, dismantling, recycling, batteries, and manufacturing do not create closed-loop net free material. GDS-12 Economy introduces no resource-conversion loophole.
 
-- accessible inventory;
-- isolated inventory;
-- transfer state;
-- local buffers;
-- construction/manufacturing reservations.
+## 5. Canonical Catalog — Result: PASS
 
-**Conclusion:** authority boundary is clean.
+Existing geological, industrial, operational, food, component, energy, and exotic resources remain the canonical physical vocabulary. GDS-12 does not introduce a generic economy material, Robot Point, Science Point, or other undefined crafting currency.
 
-## 3. Storage Categories — Result: PASS
+## 6. Credits Boundary — Result: PASS
 
-The Resource Catalog explicitly defines physical categories and hazards compatible with station storage policies.
+Credits (`Cr`) are a non-physical GDS-12 ledger currency and are **not** a GDS-4 Resource ID.
 
-Examples:
+Credits therefore have no Mass/Volume and cannot be used as crafting matter, Fuel, TCC, or Research Evidence.
 
-- Uraninite/Uranium Fuel Rod: Radioactive;
-- Helium-3/Deuterium: Pressurized/cryogenic abstraction;
-- Fresh Produce: Perishable;
-- Alien Biomaterial: Biohazard where uncontained;
-- Ancient Technology Core: Secure Strategic.
+## 7. Market Stock — Result: PASS
 
-The catalog does not redefine storage-network behavior.
+Physical purchases transfer actual finite Market Inventory into a valid physical owner. Selling transfers the physical item/resource to the market.
 
-## 4. Water System — Result: PASS
+The economy cannot create an additional copy merely because a transaction succeeds.
 
-Fresh Water and Wastewater are now canonical physical resources.
+## 8. Market Liquidity — Result: PASS
 
-The station water system remains authoritative for:
+Finite vendor liquidity prevents arbitrary stockpiles from being converted into unlimited Credits. Same-market buy/sell loops do not create profit under normal pricing.
 
-- recycling;
-- valves;
-- water-network distribution;
-- leakage;
-- reserve policy.
+## 9. Scarcity — Result: PASS
 
-GDS-4 owns only resource identity and industrial transformations such as:
+GDS-12 preserves resource scarcity through access, stock, geography, acquisition difficulty, processing, Research, Blueprints, and world state rather than Common/Rare/Epic material-quality tiers.
 
-- Water Ice → Fresh Water;
-- Fresh Water → Deuterium;
-- Fresh Water → Reaction Propellant;
-- Fresh Water + Polymer Resin → Industrial Coolant.
+## 10. Loot — Result: PASS
 
-**Conclusion:** no duplicate water-network authority.
+GDS-12 Loot/Reward rules preserve GDS-4 physicality:
 
-## 5. Farming and Food — Result: PASS
+source owner → carrier/player/robot/ship → extraction owner → station/market.
 
-Station Farming owns crop growth and farm operation.
+There is no abstract loot duplication or random rarity-based material inflation.
 
-GDS-4 owns:
+## 11. Raid Loot — Result: PASS
 
-- Fresh Produce identity;
-- Nutrient Mix identity;
-- Packaged Ration recipe;
-- Nutrient Mix processing inputs.
+GDS-11 physical looting remains authoritative. GDS-12 supplies economic value/target-stock/recovery context without changing ownership semantics.
 
-The Nutrient Mix loop is intentionally lossy and requires external Carbonaceous Feedstock, preventing infinite closed-loop resource creation.
+## 12. Blueprint Economy — Result: PASS
 
-## 6. Manufacturing — Result: PASS
+Blueprint knowledge remains distinct from technology Research.
 
-Station Manufacturing owns:
+A Blueprint may be purchased only where an eligible source offers it. Buying the Blueprint cannot bypass its technology prerequisite.
 
-- job queues;
-- reservations;
-- processing states;
-- machine operation;
-- output blocking;
-- interruption;
-- persistence.
+Duplicate integrated Blueprint/data does not grant duplicate knowledge progress; a physical duplicate carrier may retain economic/salvage value only where defined.
 
-GDS-4 owns:
+## 13. Research Economy — Result: PASS
 
-- process/recipe definitions;
-- required inputs;
-- outputs;
-- machine-class compatibility;
-- blueprint/research requirements.
+Research Evidence remains persistent, non-consumable knowledge and is not trade currency.
 
-No competing manufacturing state machine was introduced.
+Credits cannot directly purchase completion of a Research project. Markets/services may supply eligible physical inputs, data carriers, Blueprints, or access, but the actual evidence/lab/work/staffing rules still apply.
 
-## 7. Power and Thermal — Result: PASS
+## 14. Research Progression — Result: PASS
 
-Processing and crafting declare electrical/thermal requirements but do not redefine power or heat behavior.
+GDS-12 phase-bands Research from foundational systems through fusion, advanced robotics, quantum/anomaly, and Ancient Systems without auto-completing projects.
 
-Advanced material, nuclear, fusion, and quantum processing remain dependent on valid station support.
+All authoritative Evidence, prerequisite, physical input, laboratory, Scientist, and Research Work requirements remain intact.
 
-Resources such as Coolant are physical inputs where required, not abstract thermal points.
+## 15. Player Inventory — Result: PASS
 
-## 8. Crew Automation — Result: PASS
+GDS-5 Mass + Volume and hazardous containment remain compatible with all GDS-4 resources. GDS-12 trade/loot cannot bypass physical carrying/container requirements.
 
-Crew specialists can supervise:
+## 16. Spacecraft Cargo — Result: PASS
 
-- research;
-- manufacturing;
-- logistics;
-- repairs;
-- agriculture.
+GDS-6 Mass + Volume cargo, Fuel vs Propellant, and Vehicle/Extraction-Secured ownership remain compatible with resource trade, mission loot, and progression.
 
-They cannot create inputs, bypass technology, or ignore physical resource access.
+## 17. Robot Manufacturing — Result: PASS
 
-GDS-4 therefore preserves finite workload and physical production rules.
+GDS-10 robots require actual resources/components and manufacturing/service. GDS-12 defines economic/replacement pacing and TCC progression without adding a robot-training currency.
 
-## 9. Scientist and Research — Result: PASS
+## 18. Mission Rewards — Result: PASS
 
-Research uses:
+GDS-8 Resolution Rewards remain separate from field acquisitions. Physical sponsor rewards use Reward Delivery Claims until transferred into a valid owner; this prevents duplicate or weightless insertion.
 
-- persistent non-consumable Research Evidence;
-- specific physical sample requirements;
-- laboratory Research Work;
-- Scientist supervision where required.
+## 19. Difficulty — Result: PASS
 
-This matches crew rules:
+Difficulty does not alter resource identity, Blueprint/Research requirements, loot eligibility, material quality, or economic reward entitlement.
 
-- Scientist skill matters;
-- one Scientist cannot supervise unlimited work;
-- training/assignment state affects availability.
+## 20. Persistence — Result: PASS
 
-Research does not use a generic spendable Science Point currency.
+GDS-12 Stable Save Boundaries and atomic transactions protect:
 
-## 10. Blueprint vs Research — Result: PASS
+- ownership transfer;
+- crafting/processing reservations;
+- Blueprint integration;
+- Research completion;
+- trade;
+- extraction;
+- reward delivery.
 
-Authority is explicitly separated:
+Save/load cannot duplicate resources or knowledge.
 
-- Research = underlying technology understanding;
-- Blueprint = specific design knowledge;
-- Recipe = exact physical transformation.
+## 21. Failure/Recovery — Result: PASS
 
-Owning materials alone cannot bypass either requirement.
+Consumed/destroyed/stolen/Field-Unsecured physical resources remain genuinely lost according to their owner/state. There is no generic percentage resource tax or refund after defeat.
 
-This prevents ambiguous progression.
+Committed Research/Blueprint/Evidence knowledge remains persistent.
 
-## 11. Resource Catalog — Result: PASS
+## 22. Progression and Anti-Grind — Result: PASS
 
-The canonical baseline now includes:
+GDS-12 increasingly shifts common-resource acquisition toward automation, trade, recycling, and mature industry while reserving player effort for strategic resources/discoveries. Mandatory progression does not require an arbitrary generic XP/resource bar.
 
-- geological raw resources;
-- refined structural/industrial materials;
-- water and operational resources;
-- nuclear/fusion fuels;
-- food;
-- standard components;
-- exotic strategic materials.
+## 23. Remaining Downstream Dependency — GDS-13
 
-No current station or crew specification references an undefined physical resource category that must be invented during implementation.
+GDS-13 remains responsible for inventory/trade/crafting/Research UI, value presentation, warnings, and accessibility. These do not require new GDS-4 gameplay rules.
 
-## 12. Canonical Open-Loop Checks — Result: PASS
+## 24. Conclusion
 
-Potential exploit loops were reviewed.
+The previously pending Economy and Progression dependencies are now **resolved by GDS-12**.
 
-### Water
+No blocking contradiction exists between GDS-4 and GDS-1 through GDS-12.
 
-Wastewater recycling is intentionally below 100% under normal technology.
-
-### Farming
-
-Nutrient Mix production consumes Fresh Produce, Fresh Water, and external Carbonaceous Feedstock.
-
-### Processing
-
-Efficiency cannot exceed authored limits.
-
-### Salvage
-
-Recovered material cannot exceed the target's salvage envelope.
-
-### Crafting
-
-Disassembly does not return full recipe inputs by default.
-
-### Research
-
-Evidence is non-consumptive knowledge, not convertible back into physical resources.
-
-**Conclusion:** no defined infinite physical-resource loop exists.
-
-## 13. Fusion Chain — Result: PASS
-
-Canonical chain:
-
-Fresh Water → Deuterium  
-Helium-3 + Deuterium → Fusion Fuel Pellet
-
-Fusion systems also depend on Superconductive Materials/Coils where their future finished-system recipes require them.
-
-No placeholder fuel input remains.
-
-## 14. Quantum Chain — Result: PASS
-
-Canonical chain:
-
-Voltaic Crystal + Superconductive Material + Exotic Matter Sample  
-→ Quantum Substrate
-
-Quantum Substrate + Advanced Circuit + Platinum  
-→ Quantum Processor
-
-Research prerequisites:
-
-- Quantum Materials;
-- Quantum Computing;
-- analyzed Voltaic Crystal;
-- analyzed Exotic Matter Sample.
-
-No undefined exotic subcomponent remains.
-
-## 15. Sample Analysis — Result: PASS
-
-Canonical baseline:
-
-- Voltaic Crystal analysis: destructive;
-- Exotic Matter Sample analysis: destructive;
-- Alien Biomaterial analysis: destructive;
-- Ancient Technology Core analysis: non-destructive but reserved during analysis.
-
-This prevents implementation-time decisions about whether strategic samples disappear.
-
-## 16. No Resource-Rarity Conflict — Result: PASS
-
-Resources do not use random Common/Rare/Epic/Legendary material tiers.
-
-Deposit richness and acquisition difficulty provide scarcity.
-
-This is consistent with the crew decision to avoid loot-card rarity as a core quality model.
-
-## 17. Dependencies Preventing Design Complete
-
-GDS-4 remains first-pass rather than Design Complete because future domains must register or validate final content.
-
-### Player — First-Pass Resolved by GDS-5
-
-**Result: PASS**
-
-GDS-5 now defines Mass + Volume portable inventory, hard/soft carrying limits, mining/salvage tool interactions, hazardous-material containment, and limited field-crafting boundaries.
-
-These rules preserve GDS-4 physical ownership and conservation.
-
-### Spacecraft — First-Pass Resolved by GDS-6
-
-**Result: PASS**
-
-GDS-6 now defines ship cargo ownership, Mass + Volume capacity, Fuel vs Propellant behavior, canonical propulsion inputs, spacecraft configuration, and Vehicle/Extraction-Secured cargo commits.
-
-Ship construction explicitly reuses GDS-4 resources, Blueprints, Research, and production chains without introducing undefined generic ship materials.
-
-### World — First-Pass Resolved by GDS-7
-
-**Result: PASS**
-
-GDS-7 defines biome/location resource plausibility, canonical campaign systems, faction-controlled industrial hubs, and sector progression bands while using only existing GDS-4 Resource IDs.
-
-Exact numeric deposit weights remain tuneable content data.
-
-### Missions — First-Pass Resolved by GDS-8
-
-**Result: PASS**
-
-GDS-8 now defines mission loot persistence, mining/salvage objective use, Field-Unsecured ownership, Vehicle/Extraction-Secured transitions, mission reward claims, and failure/abandonment consequences.
-
-GDS-4 remains authoritative for physical resource identity, yield, ownership conservation, and Research/Blueprint knowledge.
-
-### Combat — First-Pass Resolved by GDS-9
-
-**Result: PASS**
-
-GDS-9 now defines finished ammunition classes, weapon/armor/shield equipment behavior, canonical ammunition manufacturing-input expectations, and the ownership boundary for combat loot.
-
-Exact per-model crafting recipes and enemy salvage quantities remain content/balance work under GDS-4/GDS-12 rather than unresolved combat rules.
-
-### Robots — First-Pass Resolved by GDS-10
-
-**Result: PASS**
-
-GDS-10 now defines robot chassis/component manufacturing inputs, physical component installation, repair consumption, dismantling, wreck recovery, and salvage ownership.
-
-Exact per-model recipe quantities and salvage yields remain GDS-4/GDS-12 content/balance data rather than unresolved robot rules.
-
-### Economy
-
-Required for:
-- prices;
-- trade availability;
-- economic scarcity;
-- duplicate blueprint/data value.
-
-### Progression
-
-Required for:
-- exact technology pacing;
-- resource access pacing;
-- balancing thresholds.
-
-## 18. First-Pass Conclusion
-
-No blocking contradiction was found between GDS-4 and the already established global, station, or crew design.
-
-All implementation-critical rules **inside the current GDS-4 scope** now have an authoritative first-pass definition.
-
-GDS-4 can therefore be marked:
+GDS-4 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-It must be revisited as future content domains register finished-system recipes and acquisition distributions.
+The remaining scheduled downstream design dependency is GDS-13, followed by GDS-14 final audit.

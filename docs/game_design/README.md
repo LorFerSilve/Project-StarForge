@@ -60,12 +60,14 @@ Implementation of a subsystem may begin only when:
 
 The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
 
-The project has completed first-pass design through **GDS-12 Economy, Progression, Difficulty, and Cross-Cutting Systems**.
+The project has completed first-pass design through **GDS-13 Presentation, Onboarding, and Accessibility**.
 
-GDS-12 now includes complete first-pass specification sets under [`systems/`](systems/) and [`progression/`](progression/), together with a combined cross-validation in [`systems/CROSS_VALIDATION.md`](systems/CROSS_VALIDATION.md). Its audit found no blocking contradiction against GDS-1 through GDS-11.
+GDS-13 now contains the complete planned first-pass presentation set under [`presentation/`](presentation/) together with [`presentation/CROSS_VALIDATION.md`](presentation/CROSS_VALIDATION.md), which performs 107 checks against GDS-1 through GDS-12 and found no blocking contradiction or implementation-critical open question inside the GDS-13 scope.
 
-The next dependency-driven design phase is **GDS-13 Presentation, Onboarding, and Accessibility**.
+The next and final pre-implementation design phase is **GDS-14 — Cross-System Consistency Audit**.
 
-Earlier domains remain cross-validation candidates until GDS-13 resolves their presentation dependencies and GDS-14 performs the final whole-project consistency audit.
+GDS-14 must test the entire specification under combined multi-system scenarios and close contradictions, duplicated authority, orphan mechanics, missing presentation paths, and remaining implementation-critical ambiguity.
 
-Gameplay implementation has therefore **not** begun and should not begin solely because GDS-12 is first-pass complete.
+Gameplay implementation has **not** begun and must not begin merely because GDS-13 is first-pass complete.
+
+Only after GDS-14 satisfies the Design Authority gate may the project move to technical architecture, implementation roadmap, C++/OpenGL scaffolding, and gameplay development.

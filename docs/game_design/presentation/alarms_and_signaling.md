@@ -1,306 +1,337 @@
 # Alarms and Signaling
 
-> **Status:** Draft  
-> **Authority:** Priority model, alarm categories, station/ship/mission signaling, visual/audio redundancy, acknowledgement, escalation, deduplication, and accessibility of critical warnings
+> **Status:** Design Complete  
+> **Authority:** Presentation alarm priority, categories, propagation, acknowledgement, escalation, deduplication, remote signaling, and accessibility of urgent warnings
 
 ## 1. Purpose
 
-Alarms must reliably communicate urgent state without becoming constant noise.
+Alarms communicate urgent known state without becoming constant noise. For every active alarm the player can determine, to the extent current sensors/communications permit:
 
-The player should be able to answer:
+- what class of incident exists;
+- where it is located;
+- how severe it is;
+- whether it is worsening or stabilizing;
+- whether a response is assigned;
+- whether the underlying condition remains active.
 
-- what happened;
-- where;
-- how severe;
-- whether it is worsening;
-- whether action is required;
-- whether the condition remains active.
+## 2. Typed Alarm Priority Namespace
 
-## 2. Alarm Priority
+Alarm severity uses the dedicated type `AlarmPriority`:
 
-Canonical priorities:
+- `AlarmPriority::P0` — Critical / immediate lethal or catastrophic risk;
+- `AlarmPriority::P1` — Severe / major system or security threat;
+- `AlarmPriority::P2` — Warning / degraded state requiring attention;
+- `AlarmPriority::P3` — Advisory / operational information.
 
-- **P0 — Critical / Immediate Lethal or Catastrophic Risk**;
-- **P1 — Severe / Major System or Security Threat**;
-- **P2 — Warning / Degraded State Requiring Attention**;
-- **P3 — Advisory / Operational Information**.
+These identifiers are **not** the same type as `PowerLoadPriority::P0–P4`, automation report severity, mission threat, Health bands, or any other similarly named state.
 
-This priority scale is presentation-only and not a replacement for gameplay severity values.
+Implementation, UI data, save data, and content authoring must keep the namespace/type explicit whenever ambiguity is possible.
 
 ## 3. P0 Critical
 
-Examples:
+P0 is reserved for known conditions requiring immediate attention because they threaten life, campaign-critical physical survival, or imminent catastrophic loss.
 
-- player life-support reserve critically low in unsafe environment;
-- imminent decompression in occupied compartment;
-- uncontrolled reactor/catastrophic system condition;
-- hostile boarding at Horizon;
-- ship state immediately threatening player survival;
-- active lethal environmental threshold.
+Examples include:
 
-P0 can interrupt lower-priority UI/audio.
+- critically low Life-Support Reserve in an unsafe environment;
+- imminent decompression affecting occupied space;
+- uncontrolled reactor/catastrophic energy state;
+- confirmed hostile boarding threatening Horizon critical areas;
+- ship state immediately threatening occupant survival;
+- an active lethal environmental threshold.
+
+P0 presentation can pre-empt lower-priority notification audio/banner space but cannot erase the lower-priority underlying incidents.
 
 ## 4. P1 Severe
 
-Examples:
+P1 represents major but not yet immediate-catastrophic state, including examples such as:
 
-- major hull breach in unoccupied/containable area;
-- critical power loss;
-- fire spreading;
-- defense line breached;
-- ship propulsion disabled under threat;
-- reinforcement force committed/arriving when known.
+- major containable hull breach;
+- critical power/cooling loss;
+- spreading fire;
+- defense line breach;
+- ship propulsion disabled under active threat;
+- known committed reinforcement force approaching.
 
 ## 5. P2 Warning
 
-Examples:
+P2 represents degraded operation needing attention, e.g.:
 
 - low ammunition;
-- thermal margin poor;
-- battery reserve low;
-- manufacturing blocked;
-- robot energy low;
+- poor thermal margin;
+- low battery reserve;
+- blocked manufacturing;
+- low robot energy;
 - storage near capacity;
-- equipment degraded.
+- degraded equipment.
 
 ## 6. P3 Advisory
 
-Examples:
+P3 is operational information, e.g.:
 
-- Work Order complete;
+- Work Order completed;
 - robot returned to dock;
-- market/event update;
-- research milestone;
+- known market/event update;
+- Research milestone;
 - routine docking status.
 
-Advisories must not sound like emergencies.
+Advisories never use the same urgency presentation as P0/P1.
 
-## 7. Alarm Channels
+## 7. Gameplay Severity to AlarmPriority Mapping
 
-Critical alarms use redundant combinations of:
+The owning gameplay system determines its own physical/gameplay severity. Presentation maps that state to an `AlarmPriority` through authored deterministic mapping data.
 
-- local/world indicator;
-- HUD/banner;
-- icon/symbol;
-- text/category;
-- audio tone/PA;
-- optional haptic;
-- map/overview marker.
+`AlarmPriority` never changes the underlying gameplay state.
 
-No critical alarm depends on one channel alone.
+For example, `PlayerHealthState::Critical` and `HorizonRecoveryState::CriticalRecovery` are distinct gameplay states whose presentation can each map to an appropriate AlarmPriority according to context.
 
 ## 8. Alarm Identity
 
-Different alarm families have distinct recognizable patterns.
+Every active alarm instance has an `Alarm ID` referencing:
 
-Canonical families:
+- owning incident/entity/event;
+- AlarmPriority;
+- alarm family;
+- scope/location when known;
+- acknowledgement state;
+- active/cleared state;
+- parent incident where deduplicated;
+- current response summary when known.
 
-- Fire/Heat;
-- Atmosphere/Pressure;
-- Power/Electrical;
-- Reactor/Critical Energy;
-- Security/Intrusion;
-- Structural/Hull;
-- Medical/Crew;
-- Ship Navigation/Flight;
+An Alarm ID is presentation state tied to an underlying incident; it is not a duplicate gameplay incident.
+
+## 9. Canonical Alarm Families
+
+- Fire / Heat;
+- Atmosphere / Pressure;
+- Power / Electrical;
+- Reactor / Critical Energy;
+- Security / Intrusion;
+- Structural / Hull;
+- Medical / Crew;
+- Ship Navigation / Flight;
 - Environmental Exposure;
-- Automation/Production;
-- Communication/Signal.
+- Automation / Production;
+- Communication / Signal.
 
-## 9. Color
+Each family has distinct icon/pattern/audio identity independent of color.
 
-Alarm colors reinforce semantic severity/category but do not replace icon/text/pattern.
+## 10. Alarm Scope
 
-Red is reserved primarily for P0/P1 critical danger/hostility rather than used for every minor unavailable action.
-
-## 10. Alarm Tone Design
-
-Each major family has a distinct rhythm/timbre.
-
-Priority can increase urgency without requiring extreme loudness.
-
-No high-volume repeated siren is the default response to every warning.
-
-## 11. Local vs Global Alarm
-
-An incident has a scope:
+Scope is one of:
 
 - Local;
-- Section/Deck;
-- Station/Ship Global;
-- Strategic/Remote.
+- Section / Deck;
+- Station / Ship Global;
+- Strategic / Remote.
 
-A minor fault in one workshop should not trigger full-station sirens.
+Scope follows the real incident and known propagation; a minor local fault does not automatically trigger a station-wide siren.
 
-## 12. Station Alarm Propagation
+## 11. Redundant Channels
 
-Horizon alarm propagation depends on functioning:
+P0/P1 conditions are represented by at least two suitable channels, including one non-audio and one independently perceivable fallback. Available channels include:
 
-- sensors/detection;
-- control/data links;
-- power;
-- local alarm hardware where relevant.
+- local/world indicator;
+- HUD/banner;
+- icon/pattern/text;
+- map/overview marker;
+- audio/PA;
+- Closed Caption;
+- optional haptics.
 
-If communications are damaged, some areas may have only local indication.
+No critical state depends only on color, audio, haptics, flashing, or camera motion.
 
-## 13. Player Knowledge
+## 12. Color
 
-Alarm text contains only known diagnostic detail.
+Color reinforces but never solely defines meaning.
 
-Example:
+Red is reserved primarily for P0/P1 danger/hostility. Icons, text, patterns, placement, and state labels remain sufficient under color-vision accessibility modes.
 
-Known:
+## 13. Audio
+
+Alarm families use distinct rhythms/timbres. Higher priority increases urgency without requiring extreme loudness.
+
+User volume settings do not alter gameplay state or AI sensing. Muted/reduced alarm audio retains equivalent visual/text/caption paths.
+
+## 14. Knowledge Boundary
+
+Alarm detail contains only legitimately known diagnostic information.
+
+When cause is known:
+
 `Coolant Pump B failed — Reactor Loop 2 temperature rising.`
 
-Unknown:
+When only symptoms are known:
+
 `Thermal fault detected — source unresolved.`
 
-No omniscient diagnostic message leaks inaccessible information.
+Presentation never names an undetected attacker, hidden subsystem, unknown reinforcement ETA, or inaccessible diagnostic cause.
 
-## 14. Location Signaling
+## 15. Detection and Propagation
 
-Where location is known, alarm includes:
+A gameplay incident creates/updates remote/global alarm presentation only when a valid detection/information path exists.
 
-- module/ship system;
-- deck/section;
-- map/overview marker;
-- directional route assistance if enabled.
+Horizon propagation can depend on actual:
 
-## 15. Acknowledgement
+- sensors;
+- local alarm hardware;
+- power/backups;
+- control/data links;
+- Strategic Communication Link for remote player delivery.
 
-The player can acknowledge an alarm to reduce repeated presentation.
+Local hardware may continue signaling while remote/global propagation is unavailable.
 
-Acknowledgement means:
+## 16. Location Signaling
 
-`Player has seen the alert.`
+When location is known, alarm presentation can identify:
 
-It does **not** mean:
+- module/system;
+- section/deck;
+- map/overview position;
+- directional guidance if Accessibility/Navigation permits and the route itself is known.
 
-- problem solved;
-- automation disabled;
-- alarm state cleared.
+Unknown location is represented as unknown rather than fabricated.
 
-## 16. Alarm Clear
+## 17. Acknowledgement
 
-An alarm clears only when its owning gameplay condition resolves or transitions to a lower severity.
+The player can acknowledge an alarm.
 
-Closing the UI does not clear the underlying incident.
+Acknowledgement means only:
 
-## 17. Escalation
+`The player has seen/acknowledged this presentation instance.`
 
-If an incident worsens, its alarm can transition upward in priority.
+It does not:
 
-Example:
+- repair the system;
+- clear the incident;
+- cancel automation;
+- change AlarmPriority by itself;
+- change gameplay severity.
 
-`Cooling Degraded (P2)`
-→ `Reactor Temperature Critical (P1)`
-→ `Containment Failure Imminent (P0)`
+Acknowledgement may suppress repeated non-escalated presentation according to tuneable repeat policy.
 
-Transitions follow actual gameplay state.
+## 18. Clear
 
-## 18. De-escalation
+An alarm clears only when its owning condition is resolved or when the deterministic mapping no longer classifies that condition as alarm-worthy.
 
-When emergency response stabilizes an incident, signaling can reduce priority while leaving a residual repair advisory.
+Closing a panel or acknowledging does not clear it.
 
-Example:
+Clearing can leave a lower-priority repair/inspection advisory when the physical aftermath persists.
 
-`Hull Breach — P0`
-→ emergency bulkhead seals
-→ `Compartment Isolated / Repair Required — P2`.
+## 19. Escalation and De-escalation
 
-## 19. Deduplication
-
-Multiple instances of the same low-priority event aggregate.
-
-Critical events remain individually locatable if separate response is required.
-
-## 20. Alarm Storm Control
-
-During cascading failures the system groups related alerts under a parent incident when causal relationship is known.
+When owning state changes, the AlarmPriority mapping updates deterministically.
 
 Example:
+
+`Cooling Degraded → AlarmPriority::P2`
+→ `Reactor Temperature Critical → P1`
+→ `Containment Failure Imminent → P0`.
+
+Stabilization can lower priority without pretending remaining damage is repaired.
+
+## 20. Deduplication and Parent Incidents
+
+Related alarms are grouped when their causal relationship is known.
+
+Example parent:
 
 `Primary Power Trunk Lost`
-with child consequences:
+
+Children:
+
 - Life Support B unpowered;
 - Dock 2 unpowered;
 - Defense Relay 4 unpowered.
 
-The player can inspect details without hearing three identical sirens.
+Grouping reduces alarm storms but cannot hide an urgent child consequence such as an occupied compartment becoming unbreathable.
 
-## 21. Causal Priority
+## 21. Stable Deduplication Rule
 
-When known, UI emphasizes root cause and critical consequences.
+Incidents are merged only when they share an authored causal/grouping key or the owning system explicitly reports the relationship.
 
-It must not hide urgent downstream danger merely because a root cause exists.
+Presentation does not guess causality from simultaneous timestamps.
 
-## 22. Automation Response
+Separate incidents requiring separate action remain separately locatable.
 
-Alarm presentation can show current response state:
+## 22. Automation Response Presentation
+
+Alarm UI can display the authoritative automation response state:
 
 - Unassigned;
 - Crew responding;
 - Robot dispatched;
 - Automated isolation active;
 - Blocked;
-- Player intervention required.
+- Escalated;
+- Player intervention required;
+- Completed.
 
-This is informational and follows GDS-2 automation task state.
+These labels reference GDS-2 task state and do not create a second task machine.
 
 ## 23. Blocked Response
 
-If automated response is blocked, alarm identifies known reason:
+When known, a blocked alarm response identifies the real blocker, e.g.:
 
 - no route;
 - no power;
 - no repair part;
 - no qualified worker;
 - robot unavailable;
-- compartment unsafe.
+- compartment unsafe;
+- communication unavailable;
+- protected resource authorization required.
 
-## 24. Station Security Alarms
+## 24. Automation Report Severity Boundary
 
-Security states distinguish:
+Station Automation's `AutomationReportSeverity` is separate from `AlarmPriority`.
 
-- suspicious activity;
-- confirmed intrusion;
-- external attack;
-- boarding;
-- local hostile presence;
-- lockdown.
+Automation information can be mapped into alarms/notifications as follows:
 
-Not every enemy detection triggers the highest station-wide alarm.
+- routine `Information` normally becomes a non-alarm notification or P3 advisory;
+- `Warning` maps to P2 when the underlying state requires player awareness;
+- `Critical` maps to P1 or P0 according to the actual owning incident severity;
+- `DecisionRequired` maps according to urgency and can be P3/P2/P1 rather than automatically P0.
 
-## 25. Raid Escalation Signaling
+The owning incident—not the automation word `Critical`—determines final AlarmPriority.
 
-Offensive raid presentation exposes only known escalation information.
+## 25. Security
 
-Examples:
+Security presentation distinguishes suspicious activity, confirmed intrusion, external attack, boarding, local hostile presence, lockdown, and recovery.
 
-- target suspicious;
-- alarm raised;
-- reinforcement call detected;
-- reinforcements committed;
-- arrival estimate when known.
+Not every contact is P0. Priority depends on actual confirmed threat/context.
 
-Unknown enemy response remains unknown.
+## 26. Offensive Raid Signaling
 
-## 26. Horizon Defense Signaling
+Raid UI exposes only known escalation state such as:
 
-When Horizon is attacked while the player is away, remote notification can communicate:
+- suspicion/alarm state;
+- detected reinforcement call;
+- Reinforcement Call committed;
+- arrival estimate when known;
+- known response posture.
 
-- attack detected;
-- current defense phase;
-- known severity;
-- critical damage;
+Unknown enemy reaction remains hidden.
+
+## 27. Horizon Defense Remote Signaling
+
+When Horizon is attacked while the player is away, remote alerts require a valid Strategic Communication Link.
+
+Delivered detail can include only currently known:
+
+- attack detection;
+- defense phase;
+- severity;
+- major damage;
 - boarding/theft state;
+- requested decision;
 - outcome.
 
-Remote detail depends on functioning communications/sensors.
+If the link is Unavailable, Horizon continues simulating without magical remote notification. Stored/delayed reports can arrive later under Strategic Communications.
 
-## 27. Ship Alarms
+## 28. Ship Warnings
 
-Ship alarm categories include:
+Ship alarm families cover actual detected states including:
 
 - collision/proximity;
 - hull/pressure;
@@ -308,122 +339,102 @@ Ship alarm categories include:
 - thermal;
 - propulsion;
 - life support;
-- weapon/ammo;
-- fuel/propellant;
-- missile/hostile targeting where detected;
+- weapon/ammunition;
+- Fuel/Reaction Propellant;
+- detected hostile targeting/missile;
 - docking.
 
-## 28. Missile Warning
+Fuel and Reaction Propellant are named separately when known.
 
-A missile warning requires valid detection/track.
+## 29. Missile Warning
 
-It can indicate:
+A missile warning exists only after valid detection/track.
 
-- incoming threat;
-- direction;
-- time-to-impact estimate when sensor solution supports it;
-- countermeasure/point-defense state.
+It can show direction, classification, time-to-impact estimate, and countermeasure/point-defense state only to the fidelity current sensors support.
 
-## 29. Fuel/Propellant Warning
+## 30. Player Survival Warnings
 
-Warnings distinguish Fuel from Propellant rather than using generic `Low Fuel` when the specific resource is known.
-
-## 30. Player Survival Alarms
-
-Suit warnings prioritize:
+Player/suit warning mapping prioritizes actual known:
 
 - Life-Support Reserve;
 - Suit Energy;
 - pressure seal;
 - temperature;
-- radiation/toxic exposure;
-- critical Health/Shield state.
+- radiation/contaminant exposure;
+- biological Health;
+- Personal Shield state.
 
-Warnings must remain distinguishable in combat.
+These remain distinguishable from weapon/combat feedback.
 
-## 31. Mission Alarms
+## 31. Mission Timers and Hazards
 
-Mission-specific timed/escalating hazards can use alarms only when the player has an in-world/system source for the warning.
+A mission countdown/hazard alarm is shown only when:
 
-The UI should not announce an unknown reactor countdown the player never detected.
+- the underlying timer/hazard exists;
+- the player has legitimately detected/learned it;
+- the owning Mission defines its player-facing warning state.
 
-## 32. Alarm Timers
+All gameplay countdowns use Simulation Time.
 
-If an actual countdown exists and is known, display its timebase clearly.
+## 32. Pause
 
-All gameplay countdowns use Simulation Time/mission state, not wall-clock real-world time.
+Global True Pause freezes the underlying gameplay incidents and Simulation Time.
 
-## 33. Save/Load
+The pause UI may show a static snapshot of already known active alarms. No new gameplay alarm state advances while paused.
 
-Active alarm state persists with its owning gameplay incident.
+## 33. Save / Load
 
-Loading cannot clear a persistent fire/boarding/failure condition simply because the alarm UI restarted.
+Alarm acknowledgement/presentation state may be persisted where needed for continuity, while the underlying incident persists under its owning system.
 
-## 34. Pause Behavior
+Loading cannot clear a fire, boarding event, leak, or other persistent gameplay condition merely because presentation reconstructs.
 
-When true pause is active, alarm simulation pauses with gameplay.
+If an incident has already cleared in the saved state, its alarm does not resurrect.
 
-The pause menu may preserve a static visible summary of critical active alerts.
+## 34. Photosensitivity
 
-## 35. Accessibility — Visual
+Baseline alarm lights avoid rapid high-contrast strobing.
 
-Alarms support:
+Photosensitivity Safe Mode replaces remaining flashing/pulsing presentation with safe steady/low-frequency alternatives while preserving icon/text/audio/caption semantics.
 
-- non-color icons;
-- text labels;
-- scalable warning size;
-- optional stronger contrast;
-- reduced flashing;
-- directional indicators.
+## 35. Haptics
 
-## 36. Accessibility — Audio
+Haptic warnings are optional and disableable. They never carry unique critical information.
 
-Players can adjust alarm volume separately enough that alarms remain usable without overwhelming other sound.
+## 36. Failure / Incident Summary
 
-Closed captions identify critical alarms by category/location where known.
+After a major incident/raid, the summary can consolidate committed known outcomes including:
 
-## 37. Accessibility — Haptics
-
-Haptic alarm pulses are optional and disableable.
-
-They cannot be the sole warning channel.
-
-## 38. Photosensitivity
-
-Alarm lights avoid rapid high-contrast strobing.
-
-Photosensitivity Safe mode replaces flashing with steady/pulsing low-frequency alternatives plus icon/text/audio.
-
-## 39. Notification vs Alarm
-
-Routine completion messages are notifications, not alarms.
-
-The design must avoid alert fatigue by reserving alarm language for states requiring awareness/action.
-
-## 40. Failure Summary
-
-After an emergency/raid resolves, a summary can consolidate:
-
-- cause;
+- root/primary cause when known;
 - major damage;
 - consumed resources;
 - injured crew;
 - destroyed robots;
-- stolen cargo;
-- unresolved repair tasks.
+- stolen/extracted cargo;
+- unresolved recovery/repair tasks.
 
-## 41. Explicit Non-Goals
+It never reports an uncommitted loss as final.
 
-No universal red alert for minor issues, no acknowledgement-as-fix behavior, no audio-only alarms, no full-screen flashing requirement, no omniscient diagnostics, and no real-world timer alarms.
+## 37. Tuneable Parameters
 
-## 42. Tuneable Parameters
+Tuneable parameters include:
 
-Tone, cadence, volume, repeat interval, banner duration, aggregation thresholds, priority escalation thresholds, and visual intensity are tuneable.
+- tones/cadence/volume;
+- repeat interval;
+- banner duration;
+- aggregation thresholds;
+- authored mapping thresholds from gameplay severity to AlarmPriority;
+- visual intensity.
 
-## 43. Dependencies
+The four-value AlarmPriority namespace, knowledge boundary, acknowledgement semantics, and critical redundancy are fixed.
 
-References Station Events/Automation/Security, Player Survival, Spacecraft, Missions, Raids, Robots, Dynamic Events, HUD, Audio, VFX, and Accessibility.
+## 38. Explicit Non-Goals
 
-## 44. Open Questions
+The baseline has no universal red alert for minor issues, acknowledgement-as-fix, color-only/audio-only critical state, omniscient diagnostics, wall-clock alarm timers, priority namespace sharing with power loads, or presentation-only severity that changes gameplay.
 
-None in the alarms/signaling baseline.
+## 39. Dependencies
+
+Depends on Station Events/Automation/Security/Power, Player Health/Survival, Spacecraft, Missions, Raids, Robots, Dynamic Events, Strategic Communications, HUD, Audio, VFX, and Accessibility.
+
+## 40. Open Questions
+
+None.

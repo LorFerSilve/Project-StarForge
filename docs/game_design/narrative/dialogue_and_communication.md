@@ -1,212 +1,339 @@
 # Dialogue and Communication
 
-> **Status:** Draft  
-> **Authority:** Dialogue delivery, communication channels, choice semantics, interruption rules, remote contact, information persistence, and faction/crew conversational state
+> **Status:** Design Complete  
+> **Authority:** Dialogue delivery, communication channels, player-choice semantics, pause/hold behavior, interruption, bribery/payment choices, knowledge boundaries, and conversational persistence
 
 ## 1. Purpose
 
-Dialogue communicates character, decisions, operational information, and world knowledge without stopping gameplay unnecessarily.
+Dialogue communicates character, operational information, choices, faction state, and discovered knowledge without creating a second hidden gameplay ruleset.
 
-## 2. Communication Channels
+## 2. Canonical Communication Channels
 
-Baseline channels:
+Dialogue/content uses these channels:
 
-- face-to-face dialogue;
-- station intercom;
-- ship comms;
-- live remote transmission;
-- recorded message;
-- text/data log.
+- Face-to-Face Dialogue;
+- Station Intercom / PA;
+- Ship Communications;
+- Live Remote Transmission;
+- Recorded Message;
+- Text/Data Log.
+
+Each channel obeys the physical/communication requirements below.
 
 ## 3. Face-to-Face Dialogue
 
-Used for:
+Face-to-Face requires the speaker/interaction target to be physically present and reachable under Player Interaction rules.
 
-- recruitment;
-- major character meetings;
-- personal crew conversations;
-- local decisions.
+It is used for recruitment, important local meetings, crew conversations, and direct decisions.
 
-The speaker must physically exist at the location.
+## 4. Live Remote Transmission
 
-## 4. Remote Transmission
+A Live Remote Transmission requires a valid Strategic Communication Link under `../systems/communications_and_remote_control.md`.
 
-Requires a valid communication path according to world/system state.
+Its delivered detail, latency, interruption, and degradation follow that link's current state.
 
-A remote character cannot call through a known complete communications blackout unless the story provides a specific alternate channel.
+A character cannot communicate live across an unavailable route merely because the narrative scene expects them to.
 
-## 5. Recorded Messages
+## 5. Recorded Messages and Logs
 
-Recorded content can be played after recovery from:
+Recorded content is persistent data recoverable from authored sources such as:
 
-- data carriers;
-- station archives;
-- ship logs.
+- physical data carrier;
+- ship/station archive;
+- mission terminal;
+- committed communications log.
 
-It does not require live communication.
+Playback does not require the original live sender to remain connected.
 
-## 6. Dialogue Choices
+## 6. Dialogue Choice Classes
 
-Choice types:
+Every player dialogue choice is classified as one of:
 
-- Informational;
-- Roleplay;
-- Operational;
-- Consequential.
+- **Informational** — asks/reveals available information without a hidden major state change;
+- **Roleplay** — expresses tone/personality without changing a core outcome unless explicitly displayed;
+- **Operational** — selects a practical executable plan/action/resource commitment;
+- **Consequential** — commits persistent narrative/faction/world/economic state.
 
-## 7. Informational Choice
+A single option may be both Operational and Consequential when clearly indicated by context.
 
-Asks for information.
+## 7. Informational Choices
 
-It should not secretly create major reputation effects.
+Informational choices do not secretly alter major reputation, mission access, faction hostility, or resource ownership.
 
-## 8. Roleplay Choice
+Minor authored conversational continuity can record that a topic was discussed.
 
-Expresses tone/personality without changing core outcome.
+## 8. Roleplay Choices
 
-## 9. Operational Choice
+Roleplay wording may influence local dialogue flavor, but there is no hidden personality stat, Charisma score, or morality meter in the baseline.
 
-Selects a practical action such as:
+Any persistent consequence beyond dialogue flavor must be presented/classified as Consequential.
+
+## 9. Operational Choices
+
+Operational choices can select:
 
 - destination;
-- plan;
-- resource commitment;
-- mission approach.
+- mission approach;
+- allocation/resource commitment;
+- support provider;
+- negotiation/assault branch;
+- withdrawal/response plan.
 
-## 10. Consequential Choice
+The owning gameplay subsystem validates whether the selected operation is physically/legal-state feasible before commit.
 
-Changes one or more persistent states such as:
+## 10. Consequential Choices
 
-- reputation;
+A Consequential choice may change explicitly authored state such as:
+
+- faction reputation/relations;
 - access;
-- world state;
-- character relationship;
-- story branch.
+- persistent world state;
+- character relationship/availability;
+- mission branch;
+- evidence disclosure;
+- final story resolution.
 
-Consequential choices must be clearly contextualized.
+The choice presentation communicates that the decision is consequential before irreversible commit when the player has enough contextual knowledge to understand that fact.
 
-## 11. No Timed Dialogue Baseline
+## 11. Protagonist Presentation
 
-The baseline does not require timed dialogue selection.
+The baseline player protagonist is unvoiced for conversational dialogue.
 
-Combat/mission-specific urgent decisions can use explicit timers if GDS-8 defines them.
+Player choices appear as written options/intents. NPC speech may be voiced and is always representable through subtitles/text.
 
-## 12. Dialogue and Pause
+## 12. Dialogue and Simulation Time
 
-Major full-screen dialogue can pause single-player simulation when classified as a true narrative pause.
+Dialogue sequences declare one of two time behaviors:
 
-In-world radio chatter does not pause gameplay.
+- `DialogueTimeMode::Live` — Simulation Time continues;
+- `DialogueTimeMode::Hold` — invokes the global Cinematic/Conversation Hold defined by Time/Simulation.
 
-## 13. Interruption
+There is no hidden partial pause.
 
-Noncritical dialogue can be interrupted by:
+Baseline rules:
+
+- face-to-face **major consequential/cinematic dialogue** uses `Hold` unless the authored scene is explicitly designed as live danger;
+- ordinary face-to-face informational/crew dialogue uses `Hold` while the dedicated conversation interface owns input;
+- routine radio chatter, PA announcements, short comm updates, and combat barks use `Live`;
+- urgent operational transmissions may use `Live` and present choices only when the owning mission has explicitly defined live-time consequences.
+
+The UI indicates whether Simulation is Running or Held where ambiguity is possible.
+
+## 13. No Timed Dialogue Baseline
+
+Ordinary dialogue selection has no countdown.
+
+A mission may create an explicitly timed urgent decision only when:
+
+- the timer is part of the owning mission/event state;
+- Simulation Time is live;
+- the timer is communicated clearly;
+- expiration result is authored.
+
+Timed dialogue is therefore a mission mechanic, not an implicit conversation default.
+
+## 14. Interruption
+
+A Live dialogue/communication can be interrupted by actual world conditions including:
 
 - combat;
-- decompression;
-- critical station emergency;
-- player departure.
+- loss of communication;
+- decompression/emergency;
+- target departure/incapacitation;
+- player leaving required range.
 
-Important information can resume or be stored in journal/log.
+A Hold dialogue does not advance those world conditions while Hold is active.
 
-## 14. Critical Choice Protection
+## 15. Critical Choice Protection
 
-A major irreversible choice cannot be accidentally skipped because an unrelated alarm interrupted dialogue.
+An irreversible choice cannot be lost because presentation is interrupted or closed before commit.
 
-The choice is resumed/re-presented when safe.
+Before confirmation:
 
-## 15. Player Knowledge
+- no consequence commits;
+- if interruption invalidates the scene, the choice is suspended and can be re-presented when its owning narrative state is valid again.
 
-Dialogue options can depend on persistent knowledge.
+After commit:
 
-Example:
-- discovered Fracture archive;
+- result persists;
+- interruption cannot revert it.
+
+## 16. Player Knowledge
+
+Available options may depend on persistent knowledge such as:
+
+- discovered archives;
+- analyzed Research Evidence;
 - known faction deception;
-- analyzed sample;
-- crew background.
+- survivor background;
+- route/intelligence state.
 
-## 16. Character Knowledge
+The UI cannot expose an option whose wording itself reveals knowledge the player has not legitimately obtained unless that option is intentionally a discovery from currently observable context.
 
-NPC dialogue is limited to what that character plausibly knows.
+## 17. NPC Knowledge
 
-## 17. Reputation
+NPC statements/actions are constrained by what that character/faction can plausibly know under authored narrative/world/communications state.
 
-Dialogue can reflect faction tier.
+NPC dialogue is not an omniscient debug channel.
 
-High reputation can unlock candid/sensitive options.
+## 18. Reputation and Relationship
 
-Low reputation can create suspicion/restriction.
+Dialogue can branch according to faction reputation tier and specific character relationship/history.
 
-## 18. Persuasion
+High reputation may unlock cooperation/candor; low reputation may create refusal/suspicion/hostility according to the owning Faction/Narrative rule.
 
-The baseline does not use a generic Charisma stat or random persuasion roll.
+There is no generic hidden persuasion percentage.
 
-Special dialogue outcomes depend on:
+## 19. Persuasion
+
+The baseline has no Charisma stat and no random persuasion roll.
+
+Special persuasive outcomes are deterministic from explicit contextual prerequisites such as:
 
 - known information;
-- prior actions;
-- reputation;
-- character relationship;
-- contextual leverage.
+- prior action;
+- faction reputation;
+- specific relationship;
+- possession/control of contextual leverage;
+- a valid payment/bribe option.
 
-## 19. Bribery
+The player is told a known hard blocker when presentation can legitimately diagnose it.
 
-Economic bribery can exist later under GDS-12 where appropriate.
+## 20. Bribery / Credit Payment
 
-It is not a universal dialogue bypass.
+Bribery is an **authored Consequential/Operational dialogue action**, not a universal `Pay to bypass` command.
 
-## 20. Repeatable Dialogue
+When available, the option declares:
 
-Routine crew/status dialogue can repeat.
+- exact Credit amount;
+- recipient/transaction owner;
+- explicitly promised immediate result;
+- any known reputation/legal consequence;
+- whether refusal is possible **before** payment.
 
-Major narrative dialogue records completion and does not replay as if new.
+Baseline transaction semantics:
 
-## 21. Communication During Travel
+1. dialogue validates sufficient Credits and current offer validity;
+2. the player confirms;
+3. Credit transfer and promised immediate dialogue/access result commit atomically where they belong to the same deal;
+4. if validation fails before commit, Credits remain unchanged;
+5. no random persuasion roll is performed after payment unless the offer explicitly described a wager/uncertain outcome, which ordinary bribery does not.
 
-Strategic transit can support:
+A bribe cannot bypass a physically impossible action or missing gameplay capability.
 
-- incoming messages;
+## 21. Repeatable Dialogue
+
+Routine status/crew lines may repeat under authored cooldown/context.
+
+Major narrative conversations record their completed state and never replay as new history solely because the player re-enters the area.
+
+## 22. Travel Communications
+
+Strategic transit may deliver valid:
+
 - crew updates;
 - faction transmissions;
-- distress signals.
+- distress signals;
+- event/mission offers;
+- Horizon alerts.
 
-## 22. Subtitles/Text Log
+Delivery obeys Strategic Communication and Dynamic Event/Mission knowledge rules.
 
-All important spoken dialogue must be representable in text/subtitles.
+## 23. Subtitle and Communication Log
 
-A communication log records important messages.
+All gameplay-relevant speech has subtitle/text representation.
 
-## 23. Skipping
+Important received messages enter a communication history/log after receipt so the player can revisit them.
 
-The player can skip previously seen non-interactive dialogue/cutscene content where technically safe.
+A log contains only messages legitimately delivered/recovered, not transmissions that failed to reach the player.
 
-Skipping cannot bypass a required consequential choice.
+## 24. Skipping
 
-## 24. Environmental Context
+The player may skip non-interactive dialogue/cinematic presentation after required state preparation is complete.
 
-Characters should acknowledge obvious major states where feasible:
+Skipping:
 
-- station attack;
+- never bypasses a consequential choice;
+- never grants unearned knowledge/reward;
+- commits the same authored noninteractive scene outcome as watching it;
+- cannot be used to ignore a live mission timer unless the scene uses Hold.
+
+## 25. Environmental Context
+
+Dialogue may react to known persistent states such as:
+
+- Horizon attack/recovery;
 - injured crew;
-- destroyed facility;
+- destroyed/repaired facility;
 - faction hostility;
-- major story discovery.
+- major discovery;
+- ending state.
 
-## 25. Explicit Non-Goals
+Such reaction is authored flavor/state acknowledgement and cannot contradict the owning gameplay state.
 
-Dialogue does not require:
+## 26. Persistence
+
+Save state records, where consequential:
+
+- completed major dialogues;
+- suspended critical choice state;
+- committed choices;
+- received/recovered messages;
+- dialogue-dependent character/faction/narrative flags;
+- authored repeat/cooldown state when gameplay relevant.
+
+A choice transaction obeys Stable Save Boundaries.
+
+## 27. Presentation / Accessibility
+
+GDS-13 owns:
+
+- subtitle/closed-caption display;
+- text scaling;
+- choice navigation/remapping;
+- speaker/source labels;
+- dialogue audio ducking;
+- communication-log UI.
+
+Accessibility changes presentation/control only and cannot expose unavailable choices/knowledge.
+
+## 28. Edge Cases
+
+- If a live remote link becomes Unavailable mid-conversation, unsent content is not received; the scene transitions to its authored disconnect state.
+- If an NPC becomes physically unavailable before a face-to-face choice commits, the stale choice cannot commit remotely.
+- If Credits change while a bribe confirmation is open, amount/eligibility is revalidated at commit.
+- If a critical alarm occurs during a Hold dialogue, world state is frozen; UI may still show the pre-existing critical alert but no new Simulation-Time incident progresses until resume.
+- If an authored Live dialogue is interrupted before a consequential commit, the consequence remains uncommitted.
+
+## 29. Tuneable / Content Parameters
+
+Tuneable/content values include:
+
+- line timing;
+- repeatable bark cooldowns;
+- bribe amounts;
+- local relationship thresholds;
+- subtitle timing owned by Presentation.
+
+Choice classes, no-random-persuasion rule, bribery atomicity, and time-mode semantics are fixed.
+
+## 30. Explicit Non-Goals
+
+The baseline does not include:
+
+- generic Charisma stat;
 - random persuasion dice;
-- mandatory timed choices;
-- every NPC having thousands of lines;
-- cinematic interruption for routine operational messages.
+- hidden reputation punishment from ordinary informational options;
+- mandatory timed dialogue;
+- universal bribery bypass;
+- communication through unavailable links;
+- voiced player conversational lines;
+- partial-pause dialogue.
 
-## 26. Tuneable Parameters
+## 31. Dependencies
 
-Tuneable values include subtitle timing, comm interruption delay, and repeatable bark cooldown.
+Depends on Player Role, Major Characters, Factions/Reputation, Crew, Missions, Economy/Credits, Strategic Communications, Time/Simulation, Save/Persistence, and GDS-13 Presentation/Accessibility.
 
-## 27. Dependencies
+## 32. Open Questions
 
-This specification depends on Player Role, Major Characters, Factions, Reputation, Crew, Missions, Presentation, and Communication infrastructure.
-
-## 28. Open Questions
-
-None in the dialogue-framework baseline.
+None.

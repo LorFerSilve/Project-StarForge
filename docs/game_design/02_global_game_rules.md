@@ -1,6 +1,6 @@
 # Global Game Rules
 
-> **Status:** First-Pass Complete — Cross-Validation Pending  
+> **Status:** Under Review — GDS-14 Corrected  
 > **Authority:** Project-wide gameplay invariants and scope rules
 
 This document defines rules that apply across multiple gameplay domains.
@@ -9,280 +9,320 @@ Subsystem documents may refine these rules for their own context but may not con
 
 ## 1. Primary Game Mode
 
-Project StarForge is designed first and foremost as a **single-player game**.
+Project StarForge is a **single-player game** in the authoritative baseline.
 
-All core progression, missions, station operation, raids, crafting, crew systems, and narrative must function completely without another human player.
+All core progression, missions, station operation, raids, crafting, crew systems, economy, and narrative function completely without another human player.
 
-No core progression reward may require multiplayer participation.
+No core progression reward requires multiplayer participation.
 
 ## 2. Multiplayer Scope
 
-Synchronous multiplayer is not part of the initial authoritative product scope.
+The baseline contains no synchronous or asynchronous PvP station-raiding system and no shared player economy.
 
-The baseline contains no synchronous or asynchronous PvP station-raiding system. Any future multiplayer design must be treated as a later explicit scope addition and adapt to the established single-player rules rather than becoming a dependency of the core game.
+Any future multiplayer design is a later explicit scope addition. It must adapt to the established single-player rules rather than becoming a hidden dependency of the core game.
 
 ## 3. On-Foot Perspective
 
-Normal on-foot gameplay uses a **first-person perspective**.
-
-This includes:
+Normal on-foot gameplay is first-person, including:
 
 - station traversal;
-- planetary exploration;
-- interior exploration;
+- planetary/interior exploration;
 - mining;
 - direct combat;
 - repairs;
 - interaction;
-- boarding actions.
+- boarding.
 
-A third-person on-foot mode is not an initial design requirement.
+A third-person on-foot mode is not a baseline requirement.
 
 ## 4. Spacecraft Perspective
 
 Normal spacecraft piloting supports:
 
-- a third-person chase camera as the primary flight view;
-- an optional first-person cockpit view where the current ship has a cockpit representation.
+- third-person chase camera as the primary flight view;
+- optional first-person cockpit view where the hull has an authored cockpit representation.
 
-Both views control the same ship simulation and must not provide different mechanical capabilities.
+Both control the same ship simulation and grant no different mechanical capability.
 
 ## 5. Strategic and Construction Cameras
 
-Interfaces that require spatial planning may temporarily use non-character cameras.
+Spatial planning interfaces can use dedicated non-character cameras, including:
 
-Examples include:
-
-- station construction mode;
+- station Construction Mode;
 - galaxy navigation;
 - tactical station overview;
 - selected raid-planning interfaces.
 
-These camera modes do not change the physical existence of the player character or station.
+These cameras do not change physical player/station existence.
 
 ## 6. World Structure
 
-Project StarForge does not simulate one seamless continuous galaxy.
+The game does not simulate one seamless continuous galaxy.
 
-The game world is divided into strategic locations and bounded playable environments.
+It uses:
 
-Space travel connects locations through an explicit navigation and travel system.
+- Strategic Locations and routes;
+- bounded mission/local-flight environments;
+- explicit navigation/travel transitions.
 
-Planetary surfaces are represented by mission zones rather than complete planet-scale spherical worlds.
+Planetary surfaces are bounded mission zones rather than full seamless planetary spheres.
 
-## 7. Home Station Persistence
+## 7. Horizon Station Persistence
 
-The home station is persistent.
+Horizon Station is a persistent physical home base.
 
-Its authoritative persistent state includes, subject to the dedicated persistence specification:
+Persistent state includes as applicable:
 
-- built structure;
-- installed modules;
-- infrastructure configuration;
-- stored resources;
+- built structure/modules;
+- infrastructure topology/configuration;
+- stored physical resources;
 - installed equipment;
+- damage/faults/repairs;
+- crew/assignments;
+- robots;
+- production/automation policies;
+- Research/Blueprint state;
+- defenses/security;
+- atmosphere/thermal/power/water state.
+
+Leaving Horizon never resets it.
+
+## 8. Off-Screen Active Simulation
+
+Horizon continues to simulate while the player is away during unpaused gameplay.
+
+Off-screen implementation may use lower detail, but outcomes must preserve the same:
+
+- Simulation Time;
+- physical ownership;
+- topology;
+- capacities;
+- resources;
 - damage;
-- repairs;
-- crew;
-- assignments;
-- production configuration;
-- research progress;
-- defenses;
-- automation settings.
+- policies;
+- deterministic event state.
 
-Leaving the station does not reset its state.
+## 9. Time Authority
 
-## 8. Active-Time Simulation
+**Simulation Time** is the sole gameplay-progression clock.
 
-Station systems continue to simulate while the player is away from the station **during active gameplay**.
+Real-world time while the application is closed never advances gameplay.
 
-The station therefore remains operational while the player is on:
+Active Game Time is player-facing unpaused playtime/UX cadence and does not independently decide gameplay state transitions.
 
-- missions;
-- raids;
-- space travel;
-- other active locations.
+See `systems/time_and_simulation.md`.
 
-Off-screen station simulation may use a lower-detail technical implementation, but it must produce gameplay-equivalent outcomes to the rules of the station systems.
+## 10. True Pause
 
-## 9. No Real-World Offline Progression
+True Pause freezes the complete baseline gameplay simulation, including:
 
-Closing the game stops game-world simulation.
+- local actors/combat;
+- Horizon off-screen simulation;
+- production/Research;
+- travel;
+- markets;
+- Dynamic Events;
+- raids/Defense Events;
+- recovery;
+- hazards/timers.
 
-Project StarForge does not use mobile-style real-world timers that continue production, research, attacks, farming, or resource consumption while the application is not running.
+Construction Mode is a specialized global True-Pause state under GDS-2.
 
-Save/load restores the recorded game state rather than calculating arbitrary hours of offline progression.
+No normal interface secretly pauses only one gameplay subsystem.
 
-## 10. Pause Semantics
+## 11. No Mandatory Real-World Waiting
 
-Because the core game is single-player, opening the true pause menu pauses gameplay simulation.
+Processes may require Simulation Time but never real-world hours/days while the application is closed.
 
-Interfaces explicitly classified as gameplay interfaces rather than pause interfaces do not automatically pause the game.
-
-Examples that may remain live include tactical or in-world interfaces when their subsystem specification says so.
-
-## 11. No Mandatory Real-Time Waiting
-
-Long-term progression may use in-game processing time, but the game must not require the player to wait real-world hours or days before continuing meaningful gameplay.
-
-Production, research, farming, repairs, and similar processes advance through active game time and can be improved through progression and automation.
+The game should provide meaningful parallel activity rather than requiring passive waiting for long mandatory progression.
 
 ## 12. Player Failure Philosophy
 
-Routine player defeat must be consequential without deleting major long-term progression.
+Routine player defeat is consequential without deleting the player identity or unrelated long-term progression.
 
-When the player is defeated during an external mission:
+For external defeat:
 
-1. the active mission is failed unless its specific rules define a recoverable incapacitation state;
-2. the player returns to the home station through the game's recovery fiction;
-3. persistent equipped gear is not permanently deleted by ordinary defeat;
-4. equipped gear may receive damage or durability consequences where defined;
-5. mission resources that were not secured before defeat are subject to mission-loss rules;
-6. permanent station construction, unlocked research, recruited crew, and previously banked resources are not rolled back.
+1. GDS-8 resolves mission objective/result and physical ownership/security exactly once;
+2. consumed ammunition/fuel/consumables remain consumed;
+3. Field-Unsecured loot follows mission-loss rules;
+4. established equipped gear is not routinely deleted, though condition consequences can remain;
+5. the player enters **Recovery Transit** when no local rescue keeps the mission active;
+6. `systems/recovery_transit_and_destination.md` selects a valid recovery destination from actual current world capability;
+7. Horizon is the normal preferred long-term recovery hub only when a valid safe recovery ingress/location exists;
+8. player recovery does not automatically teleport the Primary Ship, robots, cargo, crew, or Temporary Passengers.
 
-The exact recovery presentation and resource-loss model are owned by the relevant player and mission specifications.
+Intentional defeat cannot be used as zero-time strategic fast travel.
 
 ## 13. No Routine Permanent Crew Death
 
-Recruited station crew are long-term progression assets and persistent characters.
+Routine station failures, ordinary combat, raids, and off-screen simulation do not permanently delete recruited Crew IDs.
 
-Routine station failures, automated combat resolution, or ordinary accidents do **not** permanently delete recruited crew.
-
-Crew can become:
+Crew can be:
 
 - injured;
-- critically injured;
-- temporarily incapacitated;
-- unavailable for work.
+- Critical;
+- Incapacitated;
+- Stabilized;
+- Recovering;
+- temporarily unavailable.
 
-Permanent crew death is reserved for explicitly authored narrative cases or a future explicitly accepted design change.
+Permanent Narrative Death requires explicit authored narrative authority or a later accepted global design change.
 
 ## 14. Human Crew Are Not Disposable Troops
 
-Recruited human crew are not used as mass-consumable combat units.
+Human crew are persistent specialists, not mass-consumable assault units.
 
-The player's repeatable tactical assault force is primarily robotic.
+The repeatable tactical assault force is primarily robotic.
 
-Security personnel may defend the station and specialists may participate in authored or specially defined field situations, but the game does not treat recruited survivors as expendable equivalents of Clash of Clans troops.
+Security crew can defend Horizon and specialists can participate in authored field contexts, but they are not interchangeable with disposable robot troops.
 
-## 15. Survival Scope
+## 15. Robot Loss
 
-Survival mechanics exist where they create engineering or environmental decisions.
+Player robots are persistent physical manufactured units but **can** be permanently Destroyed through ordinary gameplay.
 
-The game does **not** use constant personal hunger and thirst bars as the primary on-foot gameplay loop.
+Destroyed Robot IDs are not resurrected for free.
 
-Food, water, oxygen, pressure, and temperature are important mainly through:
+Disabled robots can be repaired/recovered where physically possible.
+
+## 16. Primary Ship Persistence
+
+Established player ships are persistent progression assets.
+
+Ordinary defeat can leave them:
+
+- damaged;
+- Disabled;
+- Derelict;
+- stranded;
+- requiring tow/recovery.
+
+Routine failure does not automatically delete the established Primary Ship or teleport it with the player.
+
+## 17. Survival Scope
+
+Survival mechanics exist where they create engineering/environmental decisions.
+
+The game does not use constant personal hunger/thirst as its primary on-foot loop.
+
+Food, water, oxygen, pressure, temperature, radiation, contamination, and life support matter through:
 
 - station sustainability;
 - crew support;
-- environmental hazards;
-- suit requirements;
-- mission preparation;
-- infrastructure failure.
+- mission environments;
+- suit capability;
+- infrastructure failure;
+- preparation.
 
-## 16. Station Resource Philosophy
+## 18. Automation Philosophy
 
-Common station necessities should progressively become automatable.
+Common solved repetition should become increasingly automatable.
 
-The player may manage them directly in the early game, but late-game progression should reduce routine maintenance burden.
-
-Automation exists to remove solved repetition, not to remove strategic decisions.
-
-## 17. Automation Ceiling
-
-All routine, repeatable station operations can eventually be automated if the player has sufficient:
+Automation can perform repeatable work when actual:
 
 - infrastructure;
 - technology;
-- crew expertise;
-- robots;
-- resources.
+- qualified crew/robots;
+- access;
+- energy;
+- resources;
+- permissions
 
-Automation does not automatically make strategic decisions such as:
+exist.
 
-- choosing major construction expansion;
-- selecting research direction;
-- choosing missions;
-- initiating raids;
-- spending unique strategic resources;
-- changing diplomatic policy.
+Automation never creates missing physical capability.
 
-Those remain player decisions.
+## 19. Automation Ceiling
 
-## 18. Manual Override
+Automation does not independently choose:
 
-Where a station process is automated, the player retains explicit control over its configuration.
+- major station expansion;
+- Research direction;
+- missions;
+- raids;
+- diplomacy;
+- final story choices;
+- protected strategic-resource spending outside authorized policy.
 
-Automation may react to faults according to configured rules but does not silently override deliberate player shutdowns, locked priorities, or prohibited resource usage unless an explicit emergency rule says otherwise.
+These remain player decisions.
 
-## 19. Progression Philosophy
+## 20. Manual Override
 
-Progression should primarily unlock **new capability, reach, specialization, efficiency, and strategic options**.
+Deliberate player shutdowns, lockouts, priorities, and protected-resource policies override routine automation unless an explicitly configured emergency authority permits the exact exception.
 
-Pure numerical inflation may support balancing but should not be the main reason a later system is more valuable.
+## 21. Progression Philosophy
 
-Examples of preferred progression:
+Progression primarily unlocks:
 
-- a propulsion technology opens a new region;
-- a new reactor architecture supports a more demanding station;
-- an engineer enables automatic fault response;
-- a robot class enables breaching;
-- a research breakthrough unlocks a new production chain.
+- capability;
+- strategic Reach;
+- specialization;
+- automation;
+- resilience;
+- efficiency;
+- information/access;
+- strategic options.
 
-## 20. No Universal Level Scaling
+The game has no universal Player Level/Gear Score/Base Level/Ship Level/Robot Level replacing actual capability.
 
-The entire galaxy does not automatically scale to the player's current power.
+P0-P5 Capability Phases summarize state but grant nothing by themselves.
 
-Regions, factions, mission categories, and strategic targets have intended threat ranges.
+## 22. No Universal Level Scaling
 
-Dynamic encounter systems may vary composition within those ranges, but early weak enemies do not become arbitrarily powerful merely because the player progressed.
+The galaxy does not automatically scale to player power.
 
-This preserves the feeling of becoming stronger and creates dangerous areas that can initially exceed player capability.
+Locations, factions, missions, and targets have intended threat envelopes.
 
-## 21. Resource Scarcity Philosophy
+Dynamic composition can vary inside valid world ranges, but early enemies do not receive arbitrary late-game inflation solely because the player progressed.
 
-Basic resources become increasingly easy to acquire or automate.
+## 23. Resource Scarcity Philosophy
 
-Advanced progression depends more on:
+Basic resources become easier to acquire/automate over progression.
+
+Later challenge shifts toward:
 
 - specialized resources;
 - dangerous locations;
+- difficult access;
 - strategic targets;
-- research requirements;
-- rare components;
-- faction access;
-- difficult missions.
+- advanced components;
+- Research/Blueprint requirements;
+- faction/world conditions.
 
-Late-game challenge should not primarily consist of manually collecting enormous quantities of trivial early-game materials.
+Late game is not primarily manual grinding of enormous trivial early-game quantities.
 
-## 22. Mission Instancing
+## 24. Physical Ownership
 
-External missions occur in bounded mission instances or mission zones.
+Every physical resource/item quantity has exactly one authoritative physical owner/location at any moment.
 
-Entering a mission establishes a mission state with:
+UI aggregation, reservation, mission state, trade, extraction, raids, manufacturing, and save/load must not duplicate ownership.
 
-- location;
-- objectives;
-- threat configuration;
-- environmental state;
-- mission inventory state where applicable;
-- success/failure state.
+Credits are non-physical ledger currency and are not a substitute for crafting matter.
 
-Mission-specific persistence and regeneration rules are defined by the mission domain.
+## 25. Mission Instancing
 
-## 23. Extraction Principle
+External missions use persistent Mission IDs and bounded Mission Instances/Zones.
 
-A mission does not automatically convert all collected field resources into permanently stored station resources at the moment of pickup.
+Only one external Deployed Mission Instance can be active at a time.
 
-The mission and resource specifications must distinguish between resources currently carried in the field and resources successfully secured.
+A simultaneous Horizon Defense Event is a Home Station Event, not a second external player deployment.
 
-This makes extraction mechanically meaningful.
+## 26. Extraction Principle
 
-## 24. Direct Participation
+Field pickup is not permanent security.
 
-The player remains an active participant in core action gameplay.
+The design distinguishes:
 
-Strategic systems do not replace:
+- Field-Unsecured;
+- Vehicle/Extraction-Secured;
+- Station-Secured.
+
+Successful extraction is an explicit transaction and does not automatically teleport all mission loot to station storage.
+
+## 27. Direct Participation
+
+The player remains a direct participant in core action gameplay.
+
+Strategic/automation systems do not fully replace:
 
 - exploration;
 - combat;
@@ -290,141 +330,210 @@ Strategic systems do not replace:
 - resource acquisition;
 - emergency intervention.
 
-The intended experience combines direct action with long-term command rather than evolving into a pure management game.
+The experience evolves toward command without becoming a pure management game.
 
-## 25. Base Defense Philosophy
+## 28. Station Defense Philosophy
 
-Station defense must reward:
+Horizon defense rewards actual:
 
 - layout;
 - redundancy;
 - infrastructure protection;
-- defensive specialization;
-- power management;
-- security design.
+- sensors;
+- shields;
+- power/thermal design;
+- ammunition/logistics;
+- crew/robot response;
+- security segmentation.
 
-A defense should not be reducible to one global station-defense number.
+Outcome is never authoritative from one opaque Defense Score.
 
-## 26. Raid Philosophy
+## 29. Raid Philosophy
 
-Raids combine systemic sabotage with combat.
+Raids combine direct combat with systemic access/sabotage/theft.
 
-The most effective target is not always the enemy with the highest health.
-
-Players can gain advantage by identifying and attacking functional dependencies such as:
+Players can gain advantage by targeting real dependencies such as:
 
 - power;
 - shields;
+- sensors;
 - communications;
-- security control;
-- production;
+- security;
+- production/logistics;
 - storage;
 - access routes.
 
-## 27. Destruction Scope
+Raids remain specialized GDS-8 Missions rather than a parallel mission system.
 
-The game supports destruction where it has defined gameplay meaning.
+## 30. Destruction Scope
 
-It does not require unrestricted destruction of arbitrary world geometry.
+Destruction exists only where authored/systemically meaningful.
 
-Destructible targets include only objects or structures whose destruction rules are explicitly authored or systemically specified.
+The baseline does not require unrestricted destruction of arbitrary world geometry.
 
-## 28. Simulation Scope
-
-Project StarForge uses selective simulation.
+## 31. Selective Simulation
 
 A system is simulated when its state creates meaningful player decisions or cross-system consequences.
 
-The project does not attempt to simulate every physical, biological, economic, or social process merely for realism.
+The project does not simulate every physical, economic, biological, or social process for realism alone.
 
-## 29. Realism Philosophy
+## 32. Realism Philosophy
 
-The game uses internally consistent science-fiction rules rather than strict real-world simulation.
+The game uses internally consistent science-fiction rules rather than exact real-world simulation.
 
-Systems should feel mechanically credible and understandable.
+Mechanical credibility, consistency, and readable tradeoffs take precedence over unnecessary engineering detail.
 
-Gameplay clarity and meaningful tradeoffs take precedence over exact real-world engineering where the two conflict.
-
-## 30. Player Knowledge
-
-Important consequences must be reasonably learnable.
+## 33. Player Knowledge
 
 The game may hide:
 
 - unexplored locations;
 - enemy intelligence;
 - narrative mysteries;
-- unknown technology.
+- unknown technology;
+- events not delivered through valid information paths.
 
-It must not hide essential operational rules that the player is expected to reason about.
+It must not hide essential operational rules the player is expected to reason about.
 
-## 31. Failure Readability
+Presentation and accessibility never reveal information the player does not legitimately know.
 
-Critical failures must communicate:
+## 34. Communications
+
+Strategic live information/orders require a valid **Strategic Communication Link** under `systems/communications_and_remote_control.md`.
+
+There is no universal interstellar telemetry.
+
+A communication blackout does not stop remote systems from continuing to simulate.
+
+## 35. Failure Readability
+
+Critical failure presentation must communicate, subject to player knowledge:
 
 - what failed;
-- the immediate consequence;
-- what downstream systems are affected where the player has sufficient information;
-- what recovery actions are available.
+- where;
+- immediate consequence;
+- downstream consequences;
+- active response;
+- blockers;
+- available recovery actions.
 
 Complexity is acceptable; unexplained arbitrariness is not.
 
-## 32. Save Philosophy
+## 36. Save Philosophy
 
-The game supports persistent single-player saves.
+The game supports Manual Save, Quick Save, and Autosave.
 
-The final persistence specification must support:
+Saving during combat/missions/raids is allowed when a **Stable Save Boundary** exists.
 
-- reliable restoration of station state;
-- player progression;
-- crew state;
-- research;
-- world progression;
-- faction state;
-- ship state.
+A request during a short atomic transaction queues until the next stable boundary.
 
-Autosaves must occur at safe logical transitions.
+Save/load preserves authoritative ownership, identity, event seeds, timers, damage, world state, and committed choices without offline progression or reroll duplication.
 
-Manual saving is supported unless a later subsystem requires a narrowly defined restriction during an unsafe transient state.
+## 37. Dynamic Events
 
-## 33. No Monetization-Driven Design Requirements
+Dynamic Events have persistent IDs/stable seeds and use Simulation Time.
 
-The authoritative game design does not assume:
+They require plausible world sources/eligibility and cannot create arbitrary campaign softlocks.
+
+Procedural Horizon attacks obey Recovery Grace and Horizon Recovery State rules.
+
+## 38. Horizon Recovery Protection
+
+Horizon Recovery State is derived from actual subsystem conditions, not a global station-health number.
+
+Every resolved ordinary procedural Horizon Defense Event starts Recovery Grace.
+
+While Horizon is in Critical Recovery, ordinary procedural follow-up raids are blocked and the grace countdown is held according to `systems/horizon_recovery_state.md`.
+
+## 39. Difficulty
+
+Difficulty changes only documented execution-pressure axes.
+
+It does not change:
+
+- story access;
+- Reach;
+- Research/Blueprint prerequisites;
+- loot/reward eligibility;
+- TCC rules;
+- permanent-loss classification;
+- world threat ownership;
+- AI knowledge rules.
+
+## 40. Accessibility
+
+Accessibility is independent from Difficulty/reward validity.
+
+Accessibility can change presentation/control support but cannot create:
+
+- hidden hit chance;
+- bullet magnetism;
+- wallhacks;
+- new world knowledge;
+- free resources;
+- changed progression semantics.
+
+Critical information cannot depend solely on color, audio, haptics, or camera effects.
+
+## 41. Presentation Truthfulness
+
+UI, HUD, VFX, audio, alarms, captions, markers, and interaction feedback must follow authoritative gameplay state.
+
+They cannot present an uncommitted transaction as completed or leak unknown information.
+
+## 42. Priority Namespace
+
+Generic priority labels are domain-qualified.
+
+Examples:
+
+- `PowerLoadPriority::P0` is not `AlarmPriority::P0`;
+- their numeric/text labels cannot be treated as one shared severity enum.
+
+Likewise generic states such as `Critical` and `Disabled` remain qualified by their owning domain/type.
+
+## 43. No Monetization-Driven Design Requirements
+
+The authoritative design assumes no:
 
 - microtransactions;
-- paid timers;
 - loot boxes;
-- energy systems;
-- premium currencies;
-- pay-to-skip progression.
+- premium gameplay currency;
+- paid timers;
+- pay-to-skip progression;
+- daily-login mechanics.
 
-Economic distribution decisions made much later must not corrupt the core progression design.
+Later commercial/distribution decisions must not silently corrupt core design rules.
 
-## 34. Tunable Values
+## 44. Tuneable Values
 
 Exact numerical values such as:
 
 - damage;
-- health;
-- movement speed;
-- production duration;
+- Health;
+- speed;
+- capacities;
+- processing duration;
 - resource yield;
 - power output;
-- turret range;
-- mission reward quantity;
+- weapon range;
+- market price;
+- recovery duration
 
-are balancing parameters unless their exact value is itself structurally meaningful.
+are tuneable unless the specification explicitly classifies an exact value as structural.
 
-Subsystem specifications define the rules and valid relationships; playtesting can tune values.
+Tuneable values can change in balancing without redefining fixed rule semantics.
 
-## 35. Technical Independence
+## 45. Technical Independence
 
-No gameplay rule may assume the presence of a commercial game engine.
+No gameplay rule assumes a commercial game engine.
 
-The intended game remains implementable through the project's custom C++/OpenGL technology stack and purpose-built supporting systems.
+The intended game remains implementable through the project's custom C++/OpenGL technology stack and purpose-built systems.
 
-## 36. Open Questions
+This is a design constraint, not permission to begin implementation before design closure.
 
-None at the global-rule level for the current design baseline.
+## 46. Open Questions
 
-Subsystems may reveal contradictions that require an explicit revision to this document during GDS-14 final audit.
+None after the GDS-14 global-rule reconciliation.
+
+GDS-14 still owns the final whole-project consistency verdict and status promotion.

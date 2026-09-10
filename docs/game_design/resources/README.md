@@ -15,49 +15,37 @@ Authoritative design domain for physical resources, acquisition, processing, cra
 - [`blueprints.md`](blueprints.md) — **Draft**
 - [`research.md`](research.md) — **Draft**
 - [`production_chains.md`](production_chains.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
 
-This domain owns:
+This domain owns physical Resource identity/catalog, mining/salvage acquisition, processing, crafting recipes, Blueprint ownership, Research/Evidence and production dependency graphs.
 
-- physical resource identity;
-- canonical material/component catalog;
-- mining and salvage acquisition rules;
-- raw-to-refined processes;
-- crafting recipe rules;
-- blueprint ownership;
-- research/evidence rules;
-- production dependency graphs.
+Station machinery owns job execution/logistics. Player owns portable inventory/tools. Spacecraft owns ship cargo. Missions own extraction. GDS-12 owns economic value, pacing and persistence coordination. GDS-13 owns resource/crafting/research presentation and onboarding.
 
-Station machinery owns job execution and logistics under `../station/`.
-
-Player inventory/tools belong under `../player/`.
-
-Ship cargo belongs under `../spacecraft/`.
-
-Mission extraction belongs under `../missions/`.
-
-Economic value belongs under `../systems/`.
-
-Finished weapon, ship, robot, armor, and station-module definitions remain authoritative in their own future domains but must register recipes using canonical GDS-4 resources.
+Finished weapon, ship, robot, armor and station-module definitions remain authoritative in their own domains and register their recipes through canonical GDS-4 resources.
 
 ## Core Baseline
 
-The current first-pass establishes:
+GDS-4 establishes one authoritative owner for every physical quantity; no generic material rarity tiers; canonical resources; finite deposits/contextual salvage; explicit processing recipes; Blueprint knowledge separate from Research; persistent non-spendable Research Evidence; canonical industrial chains; and anti-duplication/anti-infinite-loop rules.
 
-- one authoritative owner for every physical quantity;
-- no generic material rarity tiers;
-- a canonical core resource catalog;
-- finite deposits and contextual salvage;
-- explicit processing recipes;
-- blueprint knowledge separate from research technology;
-- persistent non-spendable Research Evidence rather than generic Science Points;
-- canonical fusion, farming, medical, coolant, propellant, superconductive, and quantum chains;
-- anti-duplication and anti-infinite-loop rules.
+## Downstream Resolution
+
+Player, Spacecraft, World, Missions, Combat, Robots and GDS-12 Economy/Progression/Persistence are first-pass cross-validated against GDS-4.
+
+GDS-13 now resolves:
+
+- physical source/ownership/pickup/transfer feedback;
+- Mass/Volume and reservation presentation;
+- Work Order state/blocker UX;
+- Blueprint vs Technology Research vs Research Evidence presentation;
+- field-loot/extraction security feedback;
+- market value presentation without changing physical ownership;
+- onboarding for acquisition, processing, crafting and research;
+- accessible color-independent item/resource state communication.
 
 ## Completion State
 
 GDS-4 is not yet Design Complete.
 
-Player, Spacecraft, World, Missions, Combat, and Robots are now first-pass cross-validated against GDS-4. Economy/Progression/Persistence still owns final prices, pacing, and balance, while finished content recipes continue to register through the canonical resource authority.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

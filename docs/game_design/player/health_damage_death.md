@@ -1,6 +1,6 @@
 # Player Health, Damage and Defeat
 
-> **Status:** Draft  
+> **Status:** Under Review — GDS-14 Corrected  
 > **Authority:** Player health states, damage reception boundary, injury consequences, incapacitation, medical recovery, and ordinary defeat handling
 
 ## 1. Purpose
@@ -62,7 +62,7 @@ At zero Health:
 - direct movement/action stops;
 - normal combat interaction stops;
 - the player enters Incapacitated state;
-- owning location/mission rules determine recovery.
+- owning location/mission rules determine rescue or recovery.
 
 The player cannot continue shooting/mining while incapacitated.
 
@@ -74,40 +74,62 @@ Narrative permanent death is not part of the baseline.
 
 ## 10. External Mission Defeat
 
-Ordinary external-mission incapacitation normally results in:
+When external-mission incapacitation has no valid local rescue state, the canonical sequence is:
 
-1. mission failure;
-2. the deterministic inventory transaction defined in inventory.md;
-3. loss of unresolved Field-Unsecured physical resources;
-4. preservation of recovered Secured Loadout ownership, subject to condition damage;
-5. no refund of ammunition/consumables already consumed;
-6. return/recovery at the home station through mission recovery fiction;
-7. medical recovery cost/time where defined.
+1. GDS-8 mission failure commits according to its transaction ordering;
+2. the deterministic inventory/security transaction resolves once;
+3. unresolved Field-Unsecured physical resources are lost or persist only through an explicitly authored recovery cache/path;
+4. recovered Secured Loadout ownership is preserved, subject to condition damage;
+5. ammunition, fuel, propellant, medkits, and other supplies already consumed remain consumed;
+6. the player enters **Recovery Transit** under `../systems/recovery_transit_and_destination.md`;
+7. a valid recovery destination is selected from actual current world capability rather than assuming Horizon Station is always immediately safe/reachable;
+8. medical recovery cost/time applies where defined.
 
-Missions can define a local rescue window before final failure if they explicitly support it.
+External defeat is therefore **not** an instant teleport to Horizon Station.
 
-## 11. Home Station Incapacitation
+Horizon remains the normal preferred long-term recovery hub when a valid safe recovery ingress/location exists.
 
-At the home station:
+## 11. Recoverable Incapacitation
+
+A mission can explicitly support a local rescue window before final defeat.
+
+Examples:
+
+- allied rescue robot;
+- mission medical team;
+- nearby safe ship/crew.
+
+If local rescue succeeds:
+
+- mission can remain Active;
+- the external defeat transaction does not commit;
+- Recovery Transit does not begin.
+
+## 12. Home Station Incapacitation
+
+At Horizon Station:
 
 - local crew/medical automation can create a rescue task;
 - the player remains physically incapacitated until recovered;
-- the station continues simulation;
-- recovery transfers the player to a valid medical/recovery location.
+- station simulation continues while unpaused;
+- recovery transfers the player only through a physically valid local rescue/medical path.
 
-If no normal medical capability exists, protected Command Core emergency recovery provides the minimum path to avoid save hard-lock.
+If ordinary medical capability is unavailable, protected Command Core emergency capability provides or coordinates the minimum softlock-safe recovery path defined by GDS-12 failure/recovery.
 
-## 12. Rescue by Robots/Crew
+This emergency path does not create free full healing, resources, or invulnerability.
 
-Eligible crew or rescue robots may move the incapacitated player if:
+## 13. Rescue by Robots/Crew
+
+Eligible crew or rescue robots may move the incapacitated player only if:
 
 - they can physically reach the player;
-- hazard conditions permit;
-- transport capability exists.
+- hazard conditions permit their approach/protection;
+- transport/manipulation capability exists;
+- their own operational state allows it.
 
 The player is not teleported through blocked geometry.
 
-## 13. Environmental Damage
+## 14. Environmental Damage
 
 Field Survival reports exposures such as:
 
@@ -121,40 +143,40 @@ Field Survival reports exposures such as:
 
 Health resolves biological consequences.
 
-## 14. Fall Damage
+## 15. Fall Damage
 
 Movement reports impact severity.
 
-Health applies damage after equipment mitigation.
+Health applies resulting biological damage after the relevant equipment/protection rules.
 
-## 15. Combat Damage Boundary
+## 16. Combat Damage Boundary
 
 Combat defines:
 
 - hit detection;
-- damage type;
+- damage type/channel;
 - raw damage;
 - shield interaction;
-- armor penetration/mitigation rules.
+- armor penetration/mitigation.
 
-Health receives the resulting biological damage.
+Health receives resulting biological damage.
 
-This avoids duplicate combat authority.
+No duplicate combat formula exists here.
 
-## 16. Personal Shield
+## 17. Personal Shield
 
 A Personal Shield is optional equipment.
 
 Shield behavior includes:
 
 - finite capacity;
-- damage absorption according to GDS-9;
+- GDS-9 channel absorption/overflow;
 - temporary depletion;
-- regeneration after a delay if powered/operational.
+- regeneration after a delay only while powered/operational.
 
-A depleted shield does not remove equipped armor or Health.
+A depleted shield does not remove equipped armor or biological Health.
 
-## 17. Shield Power
+## 18. Shield Power
 
 Personal shields use suit/equipment energy capacity.
 
@@ -162,137 +184,182 @@ Regeneration can pause when:
 
 - energy is insufficient;
 - shield hardware is damaged;
-- an EMP/disruption effect applies.
+- EMP/disruption applies.
 
-Exact values belong to equipment/combat balancing.
+Exact values are tuneable equipment/combat data.
 
-## 18. Armor
+## 19. Armor
 
-Armor/protective suit components can mitigate damage.
+Armor/protective equipment can mitigate damage according to GDS-9.
 
-Armor is not a second health bar unless a specific armor component defines condition/durability.
+Armor is not a second biological Health bar.
 
-## 19. Equipment Condition
+## 20. Equipment Condition
 
 Damage can reduce equipment condition according to Equipment rules.
 
-Ordinary defeat does not delete the item.
+Ordinary defeat does not delete established equipped items.
 
-Destroyed/disabled condition requires repair before full use.
+Disabled/damaged items require actual repair before full use.
 
-## 20. Healing
+## 21. Healing
 
 Health recovery methods can include:
 
 - field medical consumable;
-- medkit/tool;
-- crew Medic assistance;
+- medical tool;
+- Crew Medic assistance;
 - medbay treatment;
-- protected station recovery.
+- protected emergency recovery.
 
-Field healing is finite and consumes actual medical resources.
+Field healing is finite and consumes actual medical resources where required.
 
-## 21. No Passive Full Regeneration
+## 22. No Passive Full Regeneration
 
-Biological Health does not regenerate to full automatically after waiting.
+Biological Health does not automatically regenerate to full merely through waiting.
 
-A small stabilization mechanic can stop worsening states where defined, but restoring lost Health requires treatment.
+Restoring lost Health requires a valid treatment/recovery process.
 
-## 22. Field Medical Consumables
+## 23. Field Medical Consumables
 
-Portable treatment may restore a bounded amount of Health or stabilize a condition.
+Portable treatment can restore a bounded amount of Health or stabilize an eligible condition.
 
-Use consumes the finished medical item/resource.
+Use consumes the actual finished item/resource at its authoritative transaction point.
 
-The exact recipe/item is registered through GDS-4 when equipment content is finalized.
+## 24. Treatment Time
 
-## 23. Treatment Time
+Medical actions can be sustained interactions.
 
-Some medical actions are sustained interactions.
+They can be interrupted by movement, damage, lost access, or target invalidation according to Interaction/Combat rules.
 
-They can be interrupted by movement, damage, or target invalidation according to Interaction rules.
-
-## 24. Recovery State
+## 25. Recovering State
 
 After serious incapacitation the player can enter Recovering.
 
 Recovery may temporarily:
 
-- reduce maximum active health capability;
+- reduce available Health capability;
 - limit deployment;
-- consume active game time.
+- require treatment;
+- consume Simulation Time.
 
-The baseline prefers short meaningful recovery over long forced waiting.
+The baseline prefers short meaningful recovery over long forced idle waiting.
 
-## 25. No Real-World Waiting
+## 26. No Real-World Waiting
 
-Recovery progresses only through active game time.
+Recovery progresses only on Simulation Time.
 
-The game must always provide meaningful alternative station activity rather than forcing the player to sit idle.
+Closing the application or entering True Pause does not advance it.
 
-## 26. Respawn Terminology
+The game should leave meaningful alternative activity available where the player's current medical state permits it.
 
-The game avoids arcade "respawn" as the default fiction.
+## 27. Recovery Transit Boundary
 
-Ordinary recovery is represented as rescue/medical recovery.
+Recovery Transit is owned by GDS-12/GDS-14 cross-cutting recovery authority.
 
-Technical checkpoints may still implement the transition.
+This Player domain supplies:
 
-## 27. Damage Feedback
+- Incapacitated state;
+- medical condition;
+- eligible player recovery requirements.
+
+It does not choose strategic destination or transport time by itself.
+
+## 28. Primary Ship Boundary
+
+Recovering the player does not automatically recover or relocate the Primary Ship.
+
+Ship location/damage/cargo remain GDS-6/GDS-8 authority and follow the Recovery Transit asset rules.
+
+## 29. Robot/Crew Boundary
+
+Player Recovery Transit does not recall robots, crew, or Temporary Passengers.
+
+Each persists at its actual owner/location under the relevant mission/robot/crew rules.
+
+## 30. Respawn Terminology
+
+The game avoids arcade `respawn` as default fiction.
+
+Ordinary recovery is represented as rescue, stabilization, transport, and medical recovery.
+
+Technical implementation may use scene/checkpoint transitions without changing this gameplay contract.
+
+## 31. Damage Feedback
 
 The player receives clear feedback for:
 
-- shield hit;
-- shield collapse;
+- shield hit/collapse;
 - armor impact;
 - biological damage;
-- critical state;
-- environmental damage.
+- Critical state;
+- environmental damage;
+- Incapacitation/recovery state.
 
-Presentation details belong to GDS-13.
+GDS-13 owns presentation.
 
-## 28. Damage Source Readability
+## 32. Failure/Recovery Feedback
 
-When incapacitated, the post-failure summary should identify the primary cause when known.
+After defeat, the player-facing recovery summary must distinguish:
 
-This supports learning rather than unexplained defeat.
+- mission result;
+- lost Field-Unsecured loot;
+- preserved Secured Loadout;
+- consumed supplies;
+- ship state/location;
+- robot/crew outcomes;
+- Recovery Transit destination/time;
+- known Horizon emergency/defense state;
+- medical/recovery cost where known.
 
-## 29. Save/Load During Incapacitation
+## 33. Save/Load During Incapacitation
 
-Save rules can restrict saving during transient defeat resolution.
+A stable Incapacitated state can be saved when GDS-12 Stable Save Boundary conditions are met.
 
-Loading cannot be used to duplicate lost field resources or undo an already committed mission-failure transaction outside normal save semantics.
+Once failure/recovery atomic transaction begins, a save request queues until the next Stable Save Boundary.
 
-## 30. Edge Cases
+Loading cannot duplicate field resources or split pre/post recovery state.
 
-If the player reaches zero Health at the exact moment extraction commits, Mission rules determine transaction ordering explicitly.
+## 34. Simultaneous Extraction and Incapacitation
 
-If the player is incapacitated in vacuum, rescue requires valid environmental protection for responders.
+If Health reaches zero in the same Simulation Time step as extraction completion, GDS-8's deterministic mission/extraction event ordering resolves whether extraction commits before the failure transaction.
 
-If the player has no medbay, emergency station recovery still prevents permanent hard-lock.
+The result cannot depend on render-frame order.
 
-If shield capacity hits zero from an attack with excess damage, GDS-9 defines whether overflow reaches armor/Health.
+## 35. Incapacitation in Hazard
 
-## 31. Explicit Non-Goals
+If the player is incapacitated in vacuum, fire, toxic atmosphere, or equivalent hazard:
+
+- local rescue requires valid responder protection/access;
+- the hazard continues on Simulation Time until recovery/failure transition;
+- no helper teleports through unsafe/blocked geometry.
+
+## 36. No Medbay
+
+Absence of a developed medbay cannot hard-lock the save.
+
+Protected emergency recovery can stabilize/recover the player to the minimum playable state, potentially with meaningful delay/cost/limitations rather than free full restoration.
+
+## 37. Explicit Non-Goals
 
 The baseline does not use:
 
 - routine player permadeath;
+- instant defeat teleport to Horizon;
 - instant free full healing;
-- passive full health regeneration;
-- generic respawn with no consequence;
-- player combat damage formulas duplicated here.
+- passive full Health regeneration;
+- generic no-consequence respawn;
+- automatic ship/robot recall with player recovery;
+- player combat damage formulas duplicated in Health.
 
-## 32. Tuneable Parameters
+## 38. Tuneable Parameters
 
-Tuneable values include Health maximum, state thresholds, healing values, recovery durations, equipment condition penalties, and personal shield statistics.
+Tuneable values include Health maximum, state thresholds, healing values, recovery durations, medical costs, equipment-condition consequences, and shield statistics.
 
-## 33. Dependencies
+## 39. Dependencies
 
-This specification depends on Player Character, Movement, Equipment, Field Survival, Interaction, GDS-9 Combat, Missions, station medical systems, Crew Medic rules, and persistence.
+Depends on Player Character, Movement, Equipment, Field Survival, Interaction, GDS-9 Combat, GDS-8 Missions, GDS-6 Spacecraft, Station medical/emergency systems, Crew Medic, GDS-12 Time/Persistence/Failure Recovery, `../systems/recovery_transit_and_destination.md`, and GDS-13 Presentation.
 
-## 34. Open Questions
+## 40. Open Questions
 
-None in the health/failure baseline.
-
-Combat damage formulas are now authoritative in GDS-9, and the exact mission defeat transaction order is authoritative in GDS-8. No unresolved player-health rule remains at this boundary.
+None after GDS-14 external-defeat/recovery reconciliation.

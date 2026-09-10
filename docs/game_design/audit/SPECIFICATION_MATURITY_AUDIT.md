@@ -43,16 +43,16 @@ A Draft permits:
 - incomplete cross-validation;
 - revision without implementation-lock procedure.
 
-An implementer therefore cannot be told to treat every current Draft as a final gameplay contract merely because GDS-14 scenario tests passed.
+For that reason, the promotion sweep changed the actual owning-file statuses only after their maturity checks passed; directory-level audit success alone was not treated as equivalent to Design Complete.
 
 ## 4. Status Promotion Must Be Explicit
 
-After the final audit, each authoritative spec intended for implementation must be reviewed/promoted to one of the project-defined statuses:
+Each authoritative spec intended for implementation must explicitly carry one of the project-defined mature statuses:
 
 - `Design Complete`; or later
 - `Implementation Locked`.
 
-The status must be changed in the owning document or through another explicitly accepted governance mechanism that does not contradict `00_design_authority.md`.
+GDS-14 completed the first of those steps for every current authoritative owning specification. It did not automatically apply `Implementation Locked`.
 
 ## 5. Tuneable Parameters Are Not Blockers
 
@@ -66,7 +66,7 @@ Examples:
 - Recovery Grace duration;
 - UI scale bound after technical validation.
 
-The *rule* governing the value must already be fixed.
+The *rule* governing the value is fixed even when the balance value remains adjustable.
 
 ## 6. Content Data vs Gameplay Rule
 
@@ -82,11 +82,11 @@ By contrast:
 
 `Critical Health may or may not reduce movement.`
 
-is not complete unless the baseline behavior is chosen.
+would not be complete because the baseline behavior would still be undefined.
 
-## 7. Uncertainty-Language Sweep Required
+## 7. Uncertainty-Language Sweep Applied
 
-Before promotion, every authoritative file requires a semantic sweep for words/phrases such as:
+The promotion sweep semantically reviewed modal/uncertainty wording including:
 
 - maybe;
 - perhaps;
@@ -96,83 +96,91 @@ Before promotion, every authoritative file requires a semantic sweep for words/p
 - can include;
 - future;
 - later;
-- optional
+- optional.
 
-when they represent an unresolved gameplay choice rather than an explicitly defined capability/content switch.
+The word itself is not automatically invalid. Under the Design Authority rule, a Design Complete use is valid only when the source of variation is explicit: player choice, authored content/data, equipment/capability state, physical/world condition, tuneable balance, or explicitly excluded future scope.
 
-The word itself is not automatically invalid; unresolved semantics are.
+Phrases that delegated gameplay behavior to implementer preference or explicitly deferred a decision were treated as blockers.
 
 ## 8. Example — Player Critical Health
 
-The first-pass Player Health document previously stated that Critical Health `can` create movement-related penalties without selecting whether the baseline actually does so.
+The first-pass Player Health document previously allowed Critical Health to create movement-related penalties without selecting exact baseline behavior.
 
-This is an example of an implementation-relevant choice that must be normalized during status promotion.
+The promoted Player Health contract now fixes that behavior:
 
-Canonical maturity rule for the promotion pass should choose one baseline behavior rather than asking implementation to decide.
+- Wounded has no inherent movement/aim/control penalty;
+- Critical disables sprint, normal jump, mantle, and `HeavyOperation` equipment;
+- Critical does not randomly alter aim, sensitivity, recoil, or movement direction;
+- separate explicit Status Effects/injuries may still apply their own documented restrictions.
 
-## 9. Example — Future Time Acceleration References
+This removes the implementation choice that existed in the first-pass wording.
 
-Older navigation wording says a future time-acceleration feature could be considered.
+## 9. Example — Transit Time Acceleration
 
-GDS-14 Time authority now explicitly states:
+Older navigation wording said a future time-acceleration feature could be considered.
 
-- no baseline player-controlled fast-forward/slow-motion;
-- adding it later requires formal design change.
+The promoted navigation/time contracts now explicitly state:
 
-Therefore older speculative wording is non-authoritative future-scope commentary and should be cleaned during promotion, not implemented.
+- baseline strategic transit uses **1.0x Simulation Time**;
+- no player-controlled fast-forward, slow-motion, selective subsystem acceleration, or transit-only time compression exists in the Design Complete baseline;
+- adding any such system later requires a formal design change.
+
+The older speculative text was therefore removed rather than treated as an implementation option.
 
 ## 10. Example — Cross-Domain `Active Game Time`
 
 GDS-14 resolved gameplay time authority to Simulation Time.
 
-Any older subsystem sentence using `Active Game Time` as a gameplay timer must be normalized to `Simulation Time` during the maturity sweep.
+The promotion sweep normalized legacy subsystem gameplay timers to `Simulation Time`.
 
-Active Game Time remains valid only for player-facing playtime/UX cadence such as periodic autosave frequency.
+`Active Game Time` remains valid only in its defined non-gameplay-authority role, such as player-facing playtime/UX cadence and periodic autosave cadence.
 
 ## 11. Example — Stale Future-Dependency Language
 
-Some older Draft specs end with statements such as:
+Older Draft specs contained statements such as:
 
 `remains Draft until future Combat/Robots/Presentation is cross-validated`.
 
-Where that dependency is now complete, the wording is stale rather than a new gameplay problem.
+Those dependencies now exist and were already covered by GDS-14 cross-system validation.
 
-It must be removed/updated before status promotion so the authoritative repository does not simultaneously claim a dependency is resolved and unresolved.
+The promotion sweep removed or normalized this stale language so the authoritative repository no longer simultaneously claims a dependency is both resolved and unresolved.
 
 ## 12. Domain README Status Is Not Enough
 
-Promoting only a directory README to Design Complete while its authoritative child specifications still say Draft would be internally misleading.
+Promoting only a directory README while its authoritative child specifications still said Draft would have been internally misleading.
 
-The promotion pass must address the actual owning files.
+The promotion sweep therefore promoted the actual owning files first and synchronized all **14 domain READMEs** only after the child-spec gate passed.
 
 ## 13. Cross-Validation Files
 
-Historical first-pass `CROSS_VALIDATION.md` files may remain historical audit records.
+Historical first-pass `CROSS_VALIDATION.md` files remain historical audit records.
 
 They do not need to pretend they tested later systems before those systems existed.
 
-The final GDS-14 audit supersedes them for whole-project closure.
+The final GDS-14 audit and promotion sweep supersede them for whole-project closure.
 
-Their status/history must remain clearly distinguishable from current authoritative rules.
+They do not override current authoritative owning specifications.
 
-## 14. New GDS-14 Gap-Closure Specs
+## 14. GDS-14 Gap-Closure Specs
 
-The following newly added GDS-14 authorities are currently `Under Review` and also require final promotion only after this audit closes:
+GDS-14 introduced or materially corrected the following authorities during gap closure:
 
 - `systems/horizon_recovery_state.md`;
 - `systems/communications_and_remote_control.md`;
 - `systems/recovery_transit_and_destination.md`;
-- corrected `systems/time_and_simulation.md`;
-- corrected `systems/dynamic_events.md`;
-- corrected `player/health_damage_death.md`;
-- corrected `02_global_game_rules.md`.
+- `systems/time_and_simulation.md`;
+- `systems/dynamic_events.md`;
+- `player/health_damage_death.md`;
+- `02_global_game_rules.md`.
+
+All are now `Design Complete` and participate in the same authority/change-control rules as the rest of the promoted GDS.
 
 ## 15. Design Complete Promotion Criteria
 
-A file can be promoted only when:
+A file is eligible for Design Complete only when:
 
 - its Open Questions contain no implementation-critical unresolved behavior;
-- dependencies now exist or are explicitly nonblocking;
+- dependencies exist or are explicitly nonblocking;
 - fixed rules are distinguishable from tuneable values;
 - edge cases relevant to the mechanic are defined;
 - persistence is defined where required;
@@ -181,17 +189,19 @@ A file can be promoted only when:
 - no unresolved uncertainty language leaves the implementer a gameplay choice;
 - GDS-14 scenario/transaction/authority/presentation audits do not contradict it.
 
+The final promotion sweep applied these criteria to all 156 authoritative owning specifications.
+
 ## 16. Implementation Lock Criteria
 
-Implementation Locked is a separate later governance action.
+`Implementation Locked` is a separate later governance action.
 
 It requires:
 
 - Design Complete status;
-- explicit implementation contract decision;
+- explicit implementation-contract handoff;
 - change-control expectation understood.
 
-GDS-14 does not automatically lock every file merely by auditing it.
+GDS-14 does not automatically lock every file merely by auditing/promoting it.
 
 ## 17. Current Gate Verdict
 

@@ -208,7 +208,7 @@ Define:
 
 ## GDS-11 — Raids and Station Defense
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
@@ -225,7 +225,7 @@ Define:
 
 ## GDS-12 — Economy, Progression, Difficulty, and Cross-Cutting Systems
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 

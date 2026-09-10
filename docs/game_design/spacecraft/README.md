@@ -21,71 +21,31 @@ Authoritative design domain for persistent player-owned spacecraft and ship oper
 
 ## Authority Boundary
 
-This domain owns:
+This domain owns ship identity/classes, fitting, ship systems, local-space flight, propulsion/Reach, navigation/travel, docking/hangars, cargo/utility, damage/recovery, and spacecraft combat integration.
 
-- ship identity and hull classes;
-- modular fitting/configuration;
-- onboard power/thermal/life support;
-- local-space flight;
-- propulsion and strategic reach;
-- navigation/travel state;
-- docking/hangar behavior;
-- ship cargo/utility;
-- ship damage/recovery;
-- spacecraft combat integration.
-
-GDS-4 owns canonical resources, recipes, Blueprints, and Research.
-
-GDS-5 owns player movement, EVA, inventory, equipment, and direct interaction.
-
-GDS-7 owns the actual galaxy route graph and locations.
-
-GDS-8 owns mission extraction/deployment.
-
-GDS-9 owns final weapon/damage/shield/armor combat formulas.
-
-GDS-10 owns robot units/TCC while this domain owns their physical spacecraft transport/service interfaces.
-
-GDS-11 owns raid/boarding/station-defense orchestration.
-
-GDS-12 owns ship-facing economy, progression pacing, difficulty constraints, final persistence, and finale readiness validation.
+GDS-4 owns Resources/Blueprints/Research. GDS-5 owns player/EVA/inventory interaction. GDS-7 owns galaxy routes/locations. GDS-8 owns mission extraction/deployment. GDS-9 owns combat resolution. GDS-10 owns robot units/TCC while this domain owns ship transport/service interfaces. GDS-11 owns raid/boarding orchestration. GDS-12 owns economy/progression/Difficulty/persistence/finale readiness. GDS-13 owns spacecraft HUD, flight/docking feedback, audio/VFX, onboarding and accessibility.
 
 ## Core Baseline
 
-GDS-6 establishes:
-
-- persistent player-owned ships;
-- Shuttle, Scout, Utility Cutter, Corvette, and Frigate hull classes;
-- authored hull variants and modular slots rather than freeform voxel ships;
-- mass/power/thermal/life-support fitting validation;
-- compact physical onboard systems;
-- 6DoF inertial local flight with Flight Assist;
-- separate local flight and strategic travel scales;
-- Chemical/Electrothermal, Ion/Plasma, Fusion Torch, and Exotic/Quantum drive families;
-- Strategic Reach Classes I–IV;
-- explicit Fuel vs Propellant distinction;
-- finite docking/service connections;
-- Mass + Volume ship cargo;
-- Vehicle/Extraction-Secured cargo ownership;
-- subsystem-specific persistent ship damage;
-- Disabled/Derelict recovery rather than routine permanent primary-ship deletion;
-- ship-combat integration without preempting GDS-9.
+GDS-6 establishes persistent player-owned authored hulls; modular fitting; mass/power/thermal/life-support validation; 6DoF inertial flight with Flight Assist; separate local and strategic travel; Chemical/Electrothermal, Ion/Plasma, Fusion Torch and Exotic/Quantum drives; Reach I–IV; Fuel vs Propellant; finite docking/service connections; Mass + Volume cargo; Vehicle/Extraction-Secured ownership; subsystem damage; Disabled/Derelict recovery; and combat integration without preempting GDS-9.
 
 ## Downstream Resolution
 
-World/Galaxy, Missions, Combat, Robots, and Raids are now first-pass cross-validated.
+World/Galaxy, Missions, Combat, Robots, Raids, and GDS-12 are first-pass cross-validated.
 
-GDS-12 has additionally resolved:
+GDS-13 now resolves:
 
-- prices/service economy boundary;
-- Reach progression pacing;
-- TCC ship-support progression;
-- final save transaction semantics;
-- persistent ship recovery interaction;
-- Reach-IV finale ship readiness without requiring a Frigate.
+- third-person/cockpit flight presentation parity;
+- orientation vs velocity-vector HUD;
+- target/power/thermal/fuel/propellant/system warnings;
+- physical docking alignment/capture/Hard Dock feedback;
+- spacecraft exterior pilot-telemetry audio model;
+- thruster/drive/damage VFX tied to actual ship state;
+- ship fitting/Reach blocker UX;
+- remappable ship controls, camera/motion settings and readable navigation assistance.
 
 ## Completion State
 
 GDS-6 is not yet Design Complete.
 
-Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

@@ -2,481 +2,209 @@
 
 > **Status:** Active Audit  
 > **Authority:** GDS-9 consistency review only  
-> **Purpose:** Validate combat loop, hit resolution, damage, weapons, ammunition, armor/shields, status effects, enemy behavior, spacecraft combat, and combat-objective semantics against established global and subsystem rules.
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-9 against:
+This audit validates direct combat, hit resolution, damage, weapons, ammunition/reload, armor/shields, status effects, enemy behavior, spacecraft combat, combat objectives, raids, economy, progression, Difficulty, loot, and persistence against GDS-1 through GDS-12.
 
-- Global Game Rules;
-- GDS-2 Home Station;
-- GDS-3 Crew;
-- GDS-4 Resources/Crafting;
-- GDS-5 Player Character;
-- GDS-6 Spacecraft;
-- GDS-7 Factions/World;
-- GDS-8 Missions/Exploration.
+## 2. First-Person / Physical Combat — Result: PASS
 
-## 2. First-Person Combat — Result: PASS
+On-foot combat remains first-person and resolves through physical trace/projectile/melee collision rather than RPG hit rolls.
 
-On-foot combat remains first-person.
+## 3. No Universal Level Scaling — Result: PASS
 
-No third-person combat dependency or cover-snap camera was introduced.
+Weapons, armor, Health, and AI do not derive from a hidden Player Level/Gear Score. GDS-12 preserves fixed/bounded world threat rather than matching every encounter to player power.
 
-## 3. No Universal Player Level Scaling — Result: PASS
+## 4. Hit and Critical Resolution — Result: PASS
 
-Weapon damage, armor, health, and AI do not scale from a hidden Player Level.
+Hits use real collision/Hit Locations. Critical performance comes from authored Weak Points/head/subsystems rather than random critical chance.
 
-Combat capability comes from actual equipment, technology, preparation, and enemy/location content.
+## 5. Damage Pipeline — Result: PASS
 
-This preserves DD-015 and DD-025.
+Canonical combat sequence remains:
 
-## 4. Hit Detection — Result: PASS
+Attack validation → ammo/energy commit → hit resolution → Damage Packet → Shield → Armor → hit-location/weak-point consequence → Health/System/Structure → Status → resulting state.
 
-GDS-9 uses physical trace/projectile/melee-volume intersection.
+GDS-12 does not redefine this pipeline.
 
-There is no hidden RPG hit roll after a physical shot intersects or misses.
+## 6. Damage Channels — Result: PASS
 
-Camera aim is reconciled with muzzle obstruction, preventing firing through nearby cover.
+Kinetic, Thermal, Explosive, Electrical/EMP, and Corrosive remain the combat channels. Environmental pressure/vacuum/radiation/temperature remain outside direct combat authority.
 
-## 5. Critical Hits — Result: PASS
+## 7. Player Health Boundary — Result: PASS
 
-Critical performance comes from authored hit locations/weak points.
+GDS-9 owns attack damage/protection resolution. GDS-5 owns player biological Health, Incapacitation, and medical recovery. GDS-12 Failure/Recovery adds no second health/death system.
 
-There is no random critical-hit chance.
+## 8. Armor and Shields — Result: PASS
 
-Humanoid baseline locations are:
-- Head;
-- Torso;
-- Arms;
-- Legs.
+Armor remains mitigation/protection rather than a generic second HP bar. Shield overflow remains deterministic. Difficulty does not secretly replace these formulas with a universal HP multiplier system.
 
-Weak points must be visible or sensor-discoverable.
+## 9. Ammunition Ownership — Result: PASS
 
-## 6. Damage Pipeline — Result: PASS
+Ammunition is finite and physically conserved. Reload has explicit transfer commits. GDS-12 Economy may sell ammunition but cannot create it outside finite market stock/physical ownership.
 
-Canonical order is:
+## 10. Reload Persistence — Result: PASS
 
-Attack validation  
-→ ammo/energy commit  
-→ hit resolution  
-→ Damage Packet  
-→ Shield  
-→ Armor  
-→ hit-location/weak-point multiplier  
-→ Health/System/Structure  
-→ Status  
-→ notifications/state.
+GDS-12 Stable Save Boundaries complete the reload/save contract. A save cannot capture both pre-transfer reserve ammunition and post-transfer magazine ammunition as simultaneous copies.
 
-No subsystem defines a contradictory second damage pipeline.
+## 11. Weapons and Loot — Result: PASS
 
-## 7. Player Health Authority — Result: PASS
+Weapons remain model/technology/configuration/condition based. GDS-12 does not introduce random Common/Rare/Epic/Legendary weapon-stat tiers or a universal random-affix treadmill.
 
-GDS-9 owns:
-- raw attack damage;
-- channels;
-- shield interaction;
-- armor mitigation;
-- penetration;
-- hit-location multipliers.
+## 12. Weapon Economy — Result: PASS
 
-GDS-5 remains authoritative for:
-- biological Health;
-- Wounded/Critical/Incapacitated;
-- medical recovery;
-- ordinary player defeat transition.
+The previously unresolved economic-cost dependency is now resolved by GDS-12.
 
-At Health zero Combat stops direct action and hands off to GDS-5/GDS-8.
+Weapons, ammunition, armor, shields, modifications, and services may have Credit values and market availability, but purchase cannot bypass:
 
-## 8. Shield Overflow — Result: PASS
+- finite stock;
+- faction/service access;
+- Research;
+- Blueprint requirements;
+- physical inventory/cargo;
+- fitting/installation capability.
 
-Shield damage is deterministic.
+## 13. Combat Loot — Result: PASS
 
-Partial capacity absorbs a proportional fraction and remaining damage passes to Armor.
+Enemy equipment/salvage follows physical ownership and GDS-12 Loot/Reward rules. A defeated target does not automatically generate a duplicate loot copy of equipment that still exists elsewhere.
 
-The model resolves the open GDS-5 question regarding same-hit shield overflow.
+## 14. Player Inventory / Mission Failure — Result: PASS
 
-## 9. Armor — Result: PASS
+Reserve ammunition and equipment remain real player inventory. Consumed ammunition remains consumed. Field-Unsecured combat loot can be lost on failure; already secured ownership follows GDS-8/GDS-12 transaction rules.
 
-Armor is mitigation/protection, not a generic second HP bar.
+## 15. Status Effects — Result: PASS
 
-Protection is tied to actual Hit Locations and channel ratings.
+Statuses remain deterministic/explicit and do not gain hidden difficulty-exclusive random proc mechanics.
 
-Environmental protection remains distinct from Combat Armor.
+## 16. Enemy AI — Result: PASS
 
-## 10. Damage Channels — Result: PASS
+Enemy AI continues to use Vision, Hearing, Sensors, Shared Alert, and Last Known Position. Difficulty cannot grant omniscient knowledge or guaranteed hits.
 
-Canonical combat channels are:
+## 17. Difficulty — Result: PASS
 
-- Kinetic;
-- Thermal;
-- Explosive;
-- Electrical/EMP;
-- Corrosive.
+The previously downstream GDS-12 Difficulty dependency is now resolved.
 
-Environmental vacuum/radiation/temperature remains GDS-5/GDS-8 authority.
+Difficulty profiles may alter only documented execution-pressure parameters, such as allowable incoming damage burden, AI reaction/aim tolerance, and related configured axes.
 
-No duplicate environmental-damage system was introduced.
+Difficulty does **not** alter:
 
-## 11. Damage Determinism — Result: PASS
+- world/mission Threat;
+- enemy level;
+- progression gates;
+- Research/Blueprint access;
+- TCC;
+- loot/reward eligibility;
+- AI information rules.
 
-No baseline:
-- random damage roll;
-- random critical chance;
-- random weapon jam;
-- random status proc
+## 18. Difficulty Does Not Create a Second Damage Authority — Result: PASS
 
-is required.
+Any permitted Difficulty damage-pressure modifier applies through the established GDS-9 damage pipeline; it does not create an independent damage formula or hidden protection layer.
 
-Tuneable dispersion can use deterministic shot seeds.
+## 19. Mission Objective Semantics — Result: PASS
 
-## 12. Ammunition Ownership — Result: PASS
+Kill, Incapacitate, Destroy, Disable, Drive Off, Capture, Protect, Survive, and Clear Area remain explicit combat outcomes consumed by GDS-8 Objectives.
 
-Finished ammunition has one owner.
+Difficulty does not change which semantic result an objective requires.
 
-Reload transfers physical ammunition into weapon state.
+## 20. Spacecraft Combat — Result: PASS
 
-No reload or weapon equip creates ammunition.
+GDS-9 remains authoritative for ship weapon/hit/damage/protection resolution. GDS-6 remains authoritative for power, thermal state, flight, modules, Disabled/Derelict state, and ship recovery.
 
-This matches GDS-4 physical ownership.
+GDS-12 Reach/progression/economy do not add a hidden ship Combat Rating.
 
-## 13. Ammo Manufacturing — Result: PASS
+## 21. Robots — Result: PASS
 
-Ammunition uses canonical GDS-4 industrial inputs.
+GDS-10 remains authoritative for robot classes, configuration, TCC, AI, subsystem consequences, repair, and permanent Destroyed state. Direct robot combat reuses GDS-9 formulas.
 
-GDS-9 defines finished ammunition items and combat behavior without inventing a new raw-material economy.
+## 22. Raids — Result: PASS
 
-## 14. Reload Atomicity — Result: PASS
+GDS-11 is first-pass resolved for raid/defense orchestration, while GDS-9 remains authority for direct combat inside every raid phase.
 
-Reload has explicit transfer commit points.
+GDS-12 adds economic, Difficulty, recovery, and persistence context without a separate raid-combat formula.
 
-Save/load cannot preserve both pre-reload reserve and post-reload magazine copies.
+## 23. Horizon Defense — Result: PASS
 
-## 15. Player Inventory — Result: PASS
+Station defenders and attackers obey actual weapons, ammunition, shields/armor, perception, and physical combat rules whether rendered directly or resolved at lower detail off-screen.
 
-Reserve ammunition contributes Mass/Volume.
+No opaque Defense Score replaces combat/system causality.
 
-Mission-acquired ammo begins Field-Unsecured.
+## 24. Persistence — Result: PASS
 
-Consumed ammunition remains consumed on mission failure.
+The previously downstream GDS-12 persistence dependency is resolved.
 
-This matches GDS-5/GDS-8.
+Combat-relevant save state can include:
 
-## 16. Weapon Progression — Result: PASS
-
-Weapons use:
-- models;
-- technologies;
-- modifications;
-- ammunition variants;
-- condition.
-
-No Common/Rare/Epic/Legendary random stat tiers were introduced.
-
-This matches DD-021/GDS-5 Equipment.
-
-## 17. Weapon Families — Result: PASS
-
-Baseline on-foot families are mechanically distinct:
-
-- Sidearm;
-- Rifle;
-- Shotgun;
-- Precision;
-- Rail;
-- Laser;
-- Plasma;
-- Explosive;
-- Melee.
-
-Their behavior maps to explicit hit/damage/ammo/heat rules.
-
-## 18. Suit Energy / Personal Shields — Result: PASS
-
-Personal shield recharge consumes actual Suit Energy.
-
-Shield Capacity is distinct from Suit Energy and Life-Support Reserve.
-
-A zero-energy suit does not automatically delete remaining shield Capacity, but cannot recharge it unless model rules say otherwise.
-
-## 19. Status Effects — Result: PASS
-
-Statuses use deterministic trigger/threshold rules and explicit stacking models.
-
-No undefined random proc or universal magical slow was introduced.
-
-## 20. Fire / Environment — Result: PASS
-
-Ordinary Burning does not ignore vacuum physics.
-
-Self-oxidizing payloads require explicit capability.
-
-This preserves World/Survival consistency.
-
-## 21. On-Foot Movement — Result: PASS
-
-Combat introduces no universal stamina bar, dodge i-frames, prone, or cover snapping.
-
-Sprint-to-fire, ADS, crouch, airborne dispersion, reload, and healing integrate with GDS-5 rather than replacing movement rules.
-
-## 22. Healing — Result: PASS
-
-Combat does not prohibit healing merely because enemies are aware.
-
-Healing remains a finite, interruptible GDS-5 medical interaction using actual consumables.
-
-## 23. Friendly Fire — Result: PASS
-
-Hit/damage math is faction-neutral.
-
-Friendly actors do not become intangible.
-
-Reputation/security consequences remain GDS-7/GDS-11 authority.
-
-## 24. Enemy AI Knowledge — Result: PASS
-
-Generic enemy AI uses:
-
-- Vision;
-- Hearing;
-- Sensors;
-- Shared Alert.
-
-It has no omniscient player tracking.
-
-Last Known Position confidence degrades after contact loss.
-
-## 25. Enemy AI Physics — Result: PASS
-
-Enemies:
-- physically move to cover;
-- physically flank through valid routes;
-- use actual reload/ammo/fire-rate rules;
-- do not spawn visibly from nothing;
-- do not receive guaranteed hits.
-
-## 26. Mission Threat — Result: PASS
-
-GDS-9 supplies actual hostile capability to GDS-8 Hostile Threat.
-
-GDS-8 threat remains a description of world danger rather than a combat-stat replacement.
-
-## 27. Mission Objective Semantics — Result: PASS
-
-Combat Objective Resolution removes ambiguous verbs.
-
-GDS-8 objectives can explicitly require:
-
-- Kill;
-- Incapacitate;
-- Destroy;
-- Disable;
-- Drive Off;
-- Capture;
-- Protect;
-- Survive;
-- Clear Area.
-
-"Neutralize" or "Defeat" cannot remain implementation-undefined.
-
-## 28. Mission Extraction — Result: PASS
-
-Combat does not impose a universal kill-all requirement.
-
-Extraction can occur under fire when the specific extraction rule permits it.
-
-## 29. Player Defeat — Result: PASS
-
-Combat ends player direct action at Incapacitation.
-
-GDS-8 performs the mission-failure/inventory transaction.
-
-Combat does not teleport player home or refund ammunition.
-
-## 30. Spacecraft Combat — Result: PASS
-
-GDS-9 now defines:
-
-- ship weapon families;
-- hit/target resolution;
-- missile/point-defense behavior;
-- shield/armor resolution;
-- subsystem targeting;
-- disable/destroy/drive-off/capture semantics.
-
-GDS-6 remains authoritative for:
-- power;
-- thermal;
-- flight;
-- module condition;
-- Disabled/Derelict state;
-- persistent player-ship recovery.
-
-## 31. Player Ship Persistence — Result: PASS
-
-Ordinary combat cannot permanently delete the established player ship because GDS-6 loss protection remains authoritative.
-
-Enemy/nonpersistent ships can reach Destroyed state.
-
-## 32. Station Damage — Result: PASS
-
-Combat can damage station modules/turrets.
-
-GDS-2 remains authoritative for resulting:
-- power loss;
-- atmosphere;
-- thermal failure;
-- repair;
-- structural/system consequence.
-
-No combat-only station simulation was created.
-
-## 33. Station Defense — Result: PASS
-
-Station/turret weapons can reuse GDS-9:
-- Damage Packets;
-- targeting;
-- weapon channels;
-- shields/armor;
-- status effects.
-
-GDS-2/GDS-11 remain authoritative for station layout, defense infrastructure, and raid resolution.
-
-## 34. Crew — Result: PASS
-
-Recruited human crew remain non-disposable persistent assets.
-
-Combat can incapacitate/injure them where they participate, but ordinary combat does not override GDS-3 routine no-permadeath rule.
-
-## 35. Robots — Result: PASS
-
-GDS-10 now defines:
-- robot classes/chassis roles;
-- component/hit-zone layout;
-- Internal Energy Reserve;
-- robot-specific subsystem disablement;
-- repair/recovery/destruction;
-- tactical squad behavior;
-- finite robot ammunition/energy;
-- player Robot ID persistence.
-
-GDS-9 remains authoritative for generic hit, Damage Packets, EMP, armor/shields, weapons, and combat-objective Disable/Destroy semantics.
-
-No authority is duplicated.
-
-## 36. Raids — Result: PASS
-
-GDS-11 now defines:
-
-- raid intelligence and preparation;
-- external assault and defense suppression;
-- physical boarding/breaching;
-- interior raid control;
-- causal sabotage;
-- finite reinforcement escalation;
-- raid withdrawal/extraction;
-- surrender/capture boundaries;
-- deterministic Horizon Station defensive raids.
-
-GDS-9 remains authoritative for the direct combat layer used by those phases: weapons, hit resolution, Damage Packets, shields/armor, status effects, and generic combat AI.
-
-No raid-specific second combat formula is introduced.
-
-## 37. Difficulty — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-GDS-12 may tune:
-- AI reaction time;
-- aim error;
-- aggression;
-- damage received/dealt where formally chosen.
-
-It may not introduce:
-- AI omniscience;
-- physical-rule violations;
-- hidden universal level scaling.
-
-## 38. Persistence — Result: PASS WITH DOWNSTREAM DEPENDENCY
-
-Combat state is persistable:
-
-- health;
-- shield;
-- ammo;
+- actor Health/state;
+- shields;
+- ammunition;
 - weapon heat;
-- condition;
+- equipment condition;
 - statuses;
-- enemy state.
+- enemy perception/alert state where relevant;
+- projectile/encounter state where required for deterministic continuity.
 
-GDS-12 still owns final save transaction implementation/restrictions.
+Snapshots commit only at Stable Save Boundaries.
 
-## 39. Internal GDS-9 Consistency — Result: PASS
+## 25. Save During Combat — Result: PASS
 
-### Hit Resolution vs Damage
+Saving during combat is permitted when a stable snapshot exists. The design does not depend on a generic "cannot save while enemies are nearby" restriction.
 
-Hit determines whether/where; Damage determines consequence.
+## 26. Anti-Reroll — Result: PASS
 
-### Damage vs Armor/Shields
+Persistent mission/event seeds and committed outcomes prevent reload from becoming a mechanism to reroll major loot, encounter identity, or transaction results.
 
-Damage Model owns formulas; Armor/Shields owns protective capabilities/state.
+Tuneable weapon dispersion can remain deterministic where seeded.
 
-### Weapons vs Ammo
+## 27. Failure/Recovery — Result: PASS
 
-Weapons own firing behavior; Ammo owns finite reload/transfer.
+Routine combat defeat can cause actual:
 
-### Weapons vs Status
+- ammunition/consumable expenditure;
+- equipment damage;
+- unsecured-loot loss;
+- robot loss/destruction;
+- ship/station repair consequences.
 
-Weapons supply status payload; Status Effects owns application/stacking/duration.
+There is no universal percentage Credit or inventory death tax.
 
-### On-Foot vs Player
+## 28. Progression — Result: PASS
 
-Combat actions reference Player movement/health/equipment rather than redefining them.
+Combat progression comes from actual weapons, protection, technology, modifications, robot/ship support, and player preparation. P0–P5 phase labels grant no combat stat multiplier.
 
-### AI vs Weapons
+## 29. Finale Integration — Result: PASS
 
-Enemy AI uses the same weapon physical rules.
+GDS-12 MS-F01 requires at least one functioning player combat-capable weapon plus a valid robot combat/security contribution within the finale squad. These are capability checks, not a Gear Score.
 
-### Ship Combat vs GDS-6
+MS-F02 direct fighting continues to use GDS-9 combat authority.
 
-Combat resolves attacks; GDS-6 resolves operational consequences/recovery.
+## 30. Postgame — Result: PASS
 
-## 40. Dependencies Preventing Design Complete
+P5 may expose difficult remaining encounters, but there is no endless vertical combat-stat escalation or difficulty-exclusive loot ladder.
 
-GDS-9 remains first-pass pending:
+## 31. Remaining Downstream Dependency — GDS-13
 
-### GDS-10 Robots — First-Pass Resolved
+GDS-13 remains responsible for:
 
-**Result: PASS**
-
-Robot combat roles, hit-zone/subsystem consequences, squad AI, and repair/loss are now first-pass defined under GDS-10.
-
-### GDS-11 Raids — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-11 now defines raid/defense orchestration, boarding escalation, sabotage integration, physical looting/extraction, and raid capture/surrender boundaries while reusing GDS-9 direct-combat rules.
-
-### GDS-12 Economy / Progression / Difficulty / Persistence
-- ammunition/equipment economic costs;
-- final difficulty settings;
-- progression pacing;
-- loot tables;
-- persistence details.
-
-### GDS-13 Presentation
-- crosshair;
-- hit markers;
+- crosshair/aim presentation;
+- hit/damage feedback;
 - recoil presentation;
 - shield/armor feedback;
 - damage direction;
-- accessibility/aim assist;
-- combat audio/VFX.
+- combat audio/VFX;
+- aim assist/accessibility;
+- Difficulty-setting UX.
 
-## 41. First-Pass Conclusion
+These are presentation/accessibility dependencies, not unresolved GDS-9 gameplay rules.
 
-No blocking contradiction was found.
+## 32. Conclusion
+
+The previously pending **GDS-12 Economy / Progression / Difficulty / Loot / Persistence** dependency is now first-pass resolved.
+
+No blocking contradiction exists between GDS-9 and GDS-1 through GDS-12.
 
 GDS-9 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-Its remaining downstream dependencies are GDS-12 and GDS-13.
+Its remaining scheduled downstream design dependency is GDS-13, followed by the GDS-14 whole-project audit.

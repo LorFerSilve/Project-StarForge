@@ -1,473 +1,173 @@
 # Missions and Exploration Cross-Validation
 
 > **Status:** Active Audit  
-> **Authority:** GDS-8 consistency review only  
-> **Purpose:** Validate mission lifecycle, procedural generation, zones, objectives, exploration, threat, hazards, extraction, rewards, failure, and story-mission execution against established global, resource, player, crew, spacecraft, world, and narrative rules.
+> **Authority:** GDS-8 consistency review  
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-8 against:
+This audit validates GDS-8 against Global Rules and GDS-2 through GDS-12 while preserving Missions as authority for Mission IDs, lifecycle, objectives, zones, exploration, extraction, rewards, failure, abandonment, and story-mission execution.
 
-- Global Game Rules;
-- GDS-3 Survivors and Crew;
-- GDS-4 Resources, Mining, Salvage, Research, and Blueprints;
-- GDS-5 Player Character, Inventory, Health, Interaction, Tools, and Field Survival;
-- GDS-6 Spacecraft, Navigation, Cargo, Docking, and Damage;
-- GDS-7 World, Galaxy, Factions, Reputation, and Narrative.
+## 2. Mission Identity and Persistence — Result: PASS
 
-## 2. Mission Instancing — Result: PASS
+Missions use persistent Mission IDs and stable procedural seeds. Reloading cannot reroll major objectives, survivor identities, major loot, hazard schedules, or generated layout for the same Mission ID.
 
-GDS-8 preserves the global rule that external missions occur in bounded mission instances/zones.
+GDS-12 Save/Persistence preserves these commits through Stable Save Boundaries.
 
-Each Mission ID and active Mission Instance has authoritative state.
+## 3. Single Deployed Mission — Result: PASS
 
-The design does not require seamless planet or galaxy simulation.
+Only one external Mission Instance can be deployed at a time. Horizon Defense Events are persistent Home Station Events and therefore do not create a second player-deployed mission.
 
-## 3. One Deployed Mission — Result: PASS
+## 4. Bounded Mission Zones — Result: PASS
 
-The player may hold multiple Accepted missions but only one external Deployed Mission Instance at a time.
+Surface, Interior, Local Spaceflight, EVA, and Mixed zones remain bounded gameplay environments. GDS-8 does not require seamless planets or astronomical travel simulation.
 
-This prevents conflicting ownership of:
+## 5. Resource Ownership — Result: PASS
 
-- player location;
-- deployed ship;
-- mission inventory security;
-- extraction;
-- active zone state.
+Field acquisition, player inventory, ship cargo, and station storage preserve GDS-4 single ownership. Mission state never duplicates physical loot.
 
-No established system requires simultaneous deployed missions.
+## 6. Extraction — Result: PASS
 
-## 4. Active-Time Simulation — Result: PASS
+Extraction remains an explicit security transaction from Field-Unsecured into an authorized extraction owner. GDS-12 does not add a parallel loot-security model.
 
-Mission timers, hazards, transit-linked mission progress, and objective timing advance only during active game simulation.
+## 7. Rewards — Result: PASS
 
-True Pause stops mission simulation.
+Field loot and Resolution Rewards remain separate. GDS-12 Economy/Loot defines Credits, values, and reward-economic context without duplicating GDS-8 entitlement/claim semantics.
 
-Closing the game does not advance missions.
+## 8. Reward Delivery — Result: PASS
 
-This matches Global Rules.
+A physical reward that cannot enter a valid physical owner remains a Reward Delivery Claim rather than being spawned into an impossible inventory.
 
-## 5. Mission Failure Philosophy — Result: PASS
+## 9. Failure and Abandonment — Result: PASS
 
-Routine failure:
+GDS-12 Failure/Recovery and Save/Persistence now complete the cross-domain transaction semantics for mission failure:
 
-- does not delete unrelated long-term progression;
-- does not permanently kill the player;
-- does not routinely permanently kill recruited crew;
-- preserves previously secured station state;
-- keeps consumed supplies consumed;
-- can lose Field-Unsecured mission loot.
+- consumed supplies remain consumed;
+- Field-Unsecured loot can be lost;
+- already secured cargo remains governed by its real owner;
+- routine defeat does not erase committed Knowledge Assets;
+- save/load cannot duplicate rewards or undo atomic extraction commits.
 
-This matches Global Game Rules and GDS-5.
+## 10. Mission Threat vs Difficulty — Result: PASS
 
-## 6. Player Inventory Security — Result: PASS
+GDS-8 Threat remains four independent 0–5 axes:
 
-GDS-8 uses the established states:
+- Hostile Threat;
+- Environmental Threat;
+- Operational Complexity;
+- Extraction Risk.
 
-- Secured Loadout;
-- Field-Unsecured;
-- Vehicle/Extraction-Secured;
-- Station-Secured.
+GDS-12 Difficulty is a separate player-selected pressure profile. It does not rewrite Threat, unlocks, Reach, loot eligibility, or progression requirements.
 
-No alternate mission-only inventory ownership system was introduced.
+## 11. No Universal Player Scaling — Result: PASS
 
-## 7. Extraction Transaction — Result: PASS
+Mission/world threat does not automatically match the player's current equipment. GDS-12 preserves DD-015 and forbids a universal level/gear-score scaling layer.
 
-Extraction now provides the missing authoritative commit rule.
+## 12. Difficulty AI Boundary — Result: PASS
 
-At successful authorized extraction:
+Higher difficulty may modify allowed AI reaction/accuracy parameters but cannot grant omniscient knowledge. GDS-9 perception remains authoritative.
 
-- eligible Field-Unsecured backpack contents become Vehicle/Extraction-Secured;
-- they remain Player Inventory rather than being duplicated into ship cargo;
-- pre-secured ship cargo remains with the ship;
-- Station-Secured still requires actual station ownership/transfer.
+## 13. Procedural Mission Generation — Result: PASS
 
-This resolves the earlier GDS-5/GDS-6 mission dependency.
+GDS-12 Dynamic Events can create/offer mission opportunities, while GDS-8 remains authority for mission-generation validation and deployed Mission Instances.
 
-## 8. Resource Ownership — Result: PASS
+Dynamic Event creation does not bypass biome, faction, route, objective connectivity, access, extraction, or unique-content validation.
 
-Mining, salvage, pickups, cargo, and reward delivery preserve GDS-4 single authoritative physical ownership.
+## 14. Dynamic Event Timing — Result: PASS
 
-A mission never creates a second copy because an objective counter changed.
+Mission/event offers and expirations advance only through active Simulation Time. Real-world time while the application is closed does not silently expire or resolve them.
 
-## 9. Mining and Salvage — Result: PASS
+## 15. Combat Boundary — Result: PASS
 
-Mission Types/Objectives can require mining/salvage.
+GDS-9 owns hit/damage/weapons/protection/AI combat resolution. GDS-8 owns why combat occurs and what objective result it produces.
 
-GDS-4 remains authoritative for:
+## 16. Robots Boundary — Result: PASS
 
-- deposit reserve;
-- Yield Grade;
-- extraction output;
-- salvage yield.
+GDS-10 owns Robot IDs, TCC, squads, commands, physical deployment, damage, repair, loss, and extraction interfaces. GDS-8 owns the Mission Instance and mission-result transaction.
 
-GDS-8 owns only mission purpose/location/security requirements.
+GDS-12 now supplies bounded TCC progression and finale minimums without changing robot mechanics.
 
-## 10. Research / Blueprint Rewards — Result: PASS
+## 17. Raid Boundary — Result: PASS
 
-Mission rewards can grant:
+GDS-11 owns full fortified-target raid phases while raids remain specialized GDS-8 Missions.
 
-- Research Evidence;
-- Blueprint Unlock;
-- route/location knowledge.
+GDS-12 now resolves raid target recovery pacing, economy, Dynamic Event generation, Difficulty, persistence, and finale readiness.
 
-They do not collapse Research and Blueprint into one unlock.
+## 18. Main-Story Mission Execution — Result: PASS
 
-No generic Science Points or Mission XP were introduced.
+The fixed story-mission contracts remain compatible with GDS-12 progression phases P0–P5.
 
-## 11. Reward Delivery — Result: PASS
+GDS-12 does not relocate canonical geography or change the narrative meaning of story objectives.
 
-Field loot is distinct from mission Resolution Reward.
+## 19. MS-F01 Coalition Readiness — Result: PASS
 
-Physical sponsor rewards use valid physical delivery or a nonphysical Reward Delivery Claim until capacity exists.
+The previously unresolved GDS-12 finale dependency is now specified.
 
-Rewards do not spawn weightlessly into full inventory.
+MS-F01 validates actual:
 
-## 12. Survivor Rescue — Result: PASS
+- story state;
+- Reach IV spacecraft capability;
+- departure reserve manifest;
+- player environmental/tool/combat capability;
+- Horizon support capability;
+- at least 6 base Field TCC;
+- Tactical Squad Command Load >= 4;
+- four finale Support Channels.
 
-Mission objectives distinguish survivor states:
+No Player Level/Gear Score is used.
 
-- Located;
-- Stabilized;
-- Escorted;
-- Vehicle-Secured passenger;
-- Delivered.
+## 20. Faction Softlock Prevention — Result: PASS
 
-GDS-3 remains authoritative for survivor identity, recruitment, profession, and persistence.
+Support Channels can be fulfilled by valid faction/Continuance commitments or defined self-sufficient capability. No single human faction relationship can permanently block the finale through ordinary play.
 
-Proximity to a ship is not rescue completion.
+## 21. Save During Missions — Result: PASS
 
-## 13. Temporary Passengers / Ship Capacity — Result: PASS
+Manual/Quick/Autosave can operate during missions at Stable Save Boundaries. A request during an atomic ownership/reward/extraction transaction queues until the transaction is committed.
 
-Extraction validates actual passenger and life-support capacity.
+## 22. Anti-Reroll — Result: PASS
 
-GDS-6 remains authoritative for spacecraft occupancy.
+Save/load cannot reroll:
 
-No mission teleports rescued survivors into unavailable seats.
-
-## 14. Spacecraft Mission Integration — Result: PASS
-
-GDS-8 uses GDS-6 for:
-
-- travel;
-- Reach;
-- landing;
-- docking;
-- local flight;
-- ship cargo;
-- ship damage;
-- recovery.
-
-Missions define when these capabilities are required without redefining them.
-
-## 15. World Geography — Result: PASS
-
-GDS-8 Story Mission Execution uses the fixed GDS-7 canonical systems/locations.
-
-Procedural missions can add side content but cannot randomize mandatory campaign geography.
-
-## 16. Story Mission Chain — Result: PASS
-
-All 18 canonical GDS-7 main-story mission/stage IDs are mapped to:
-
-- mission archetype;
-- location;
-- zone composition;
-- mandatory objective chain;
-- extraction mode;
-- failure/retry contract;
-- fixed story output.
-
-GDS-8 therefore does not leave main-story mission structure to implementation.
-
-## 17. Main-Story Retry — Result: PASS
-
-Routine tactical failure cannot permanently brick campaign progress.
-
-Unique story evidence/characters remain governed by authored retry/persistence rules.
-
-No mandatory campaign evidence relies on procedural reroll.
-
-## 18. Procedural Determinism — Result: PASS
-
-Procedural Mission IDs receive persistent seeds.
-
-Reloading cannot reroll:
-
-- survivor identity;
+- mission seed;
 - major loot;
-- deposit placement;
-- objective layout;
-- hazard schedule;
-- major encounter composition seed.
+- survivor identity;
+- objective structure;
+- existing Dynamic Event identity;
+- committed mission outcomes.
 
-This matches GDS-3 anti-reroll survivor philosophy.
+## 23. No Offline Progression — Result: PASS
 
-## 19. Procedural World Validity — Result: PASS
+Mission timers, recovery, events, reinforcement ETAs, and other mission-related simulation do not advance merely because the game is closed.
 
-Generation validates:
+## 24. Economy Boundary — Result: PASS
 
-- biome;
-- faction;
-- resource plausibility;
-- route/Reach;
-- objective connectivity;
-- required access;
-- extraction path;
-- unique-content duplication.
+GDS-12 now defines Credits, finite market stock/liquidity, prices, and trade. GDS-8 reward logic may grant Credits or economic claims but does not implement the market economy itself.
 
-Broken missions are discarded before presentation.
+## 25. Progression Boundary — Result: PASS
 
-## 20. Mission Zones — Result: PASS
+GDS-12 phase structure guides availability/pacing but does not auto-complete Missions or grant free equipment/Research/Reach.
 
-Zones are bounded and support:
+## 26. Remaining Downstream Dependency — GDS-13
 
-- Surface;
-- Interior;
-- Local Spaceflight;
-- EVA;
-- Mixed.
+GDS-13 remains required for presentation and accessibility of:
 
-Active mission resources/containers/targets do not respawn from room changes or save/load.
-
-## 21. Exploration — Result: PASS
-
-Exploration uses:
-
-Unknown → Detected → Identified → Surveyed → Resolved.
-
-Scanner/ship sensors reveal only supported information.
-
-No omniscient map or universal scanner wallhack was introduced.
-
-## 22. Mission Threat — Result: PASS
-
-Threat uses four independent 0–5 axes:
-
-- Hostile;
-- Environmental;
-- Operational;
-- Extraction.
-
-Overall Threat is the maximum known axis.
-
-Threat does not automatically scale to the player.
-
-This preserves DD-015 / Global Rule 20.
-
-## 23. Difficulty Boundary — Result: PASS
-
-Mission Threat describes world danger.
-
-Global player-selected Difficulty remains GDS-12 authority.
-
-No conflict exists between fixed location threat and future accessibility/difficulty modifiers.
-
-## 24. Environmental Hazards — Result: PASS
-
-Hazards consume World environment and feed Player/Ship systems.
-
-GDS-8 defines:
-
-- local pattern;
-- telegraphing;
-- activation;
-- persistence;
-- mitigation paths.
-
-It does not redefine biological damage or ship system formulas.
-
-## 25. No Arbitrary Instant Death — Result: PASS
-
-Unknown hazards may surprise the player but must follow plausible detection/environment rules.
-
-Known unavoidable lethal entry conditions become deployment Hard Requirements.
-
-## 26. Objectives — Result: PASS
-
-Objectives use a directed acyclic dependency graph with:
-
-- Primary;
-- Secondary;
-- Optional;
-- Extraction;
-- Hidden/Discoverable.
-
-Mandatory hidden objectives require a valid discovery route.
-
-Objective completion/failure commits once.
-
-## 27. Failure Transaction — Result: PASS
-
-Failure has a fixed transaction order covering:
-
-- objective freeze;
-- ownership snapshot;
-- player defeat;
-- secured cargo preservation;
-- Field-Unsecured loss;
-- survivor/ship state;
-- faction/narrative consequences;
-- rewards;
-- instance closure;
-- retry state.
-
-This removes frame-order/save-load ambiguity.
-
-## 28. Abandonment — Result: PASS
-
-Active mission abandonment:
-
-- forfeits success;
-- does not teleport the player;
-- does not refund supplies;
-- retains physical withdrawal/extraction requirements.
-
-## 29. Combat Authority Boundary — Result: PASS
-
-GDS-8 defines where/why combat can occur and what combat outcome an objective requires.
-
-GDS-9 is now first-pass authoritative for:
-
-- damage;
-- weapons;
-- armor;
-- shields;
-- enemy combat behavior;
-- Kill/Incapacitate/Destroy/Disable/Drive Off/Capture/Clear Area semantics.
-
-**Result: PASS**
-
-GDS-8 retains mission lifecycle/objective authority while GDS-9 supplies exact combat resolution.
-
-## 30. Robot Authority Boundary — Result: PASS
-
-GDS-8 can reserve robot deployment/transport objectives or finale capability requirements.
-
-GDS-10 remains authoritative for robot classes, AI, squad commands, manufacturing, and damage.
-
-## 31. Raid Authority Boundary — Result: PASS
-
-GDS-11 is now first-pass authoritative for full fortified-target raids.
-
-It defines:
-
-- target intelligence;
-- preparation;
-- external assault;
-- boarding/breaching;
-- interior control;
-- sabotage;
-- physical looting;
-- escalation/reinforcements;
-- raid extraction;
-- offensive/defensive resolution.
-
-Ordinary small-scale Boarding Operation remains a GDS-8 mission type.
-
-GDS-11 explicitly binds the full wrapper to the MS-A301 hostile Rook's Wake branch, to MS-A302 only when its access route becomes a true fortified assault, and to the fortified access/control-path portions of MS-F02.
-
-**Result: PASS**
-
-GDS-8 retains Mission ID/objective/story structure while GDS-11 owns the raid-phase mechanics.
-
-## 32. Economy Boundary — Result: PASS
-
-GDS-8 defines reward entitlement/claim semantics.
-
-GDS-12 remains authoritative for:
-
-- currency;
-- prices;
-- final economic reward values;
-- contract rotation economy.
-
-No placeholder currency was made a physical Resource.
-
-## 33. Internal GDS-8 Consistency — Result: PASS
-
-### System vs Objectives
-
-Mission state owns lifecycle; Objectives own individual completion graph.
-
-### Generation vs Zones
-
-Generator creates validated zone content; Zone owns active local state.
-
-### Exploration vs Objectives
-
-Discovery can reveal objectives without automatically completing them.
-
-### Threat vs Hazards
-
-Hazards contribute to Environmental Threat; Threat does not replace actual hazard state.
-
-### Extraction vs Failure
-
-Successful extraction secures ownership; failure uses current actual security snapshot.
-
-### Rewards vs Extraction
-
-Field acquisitions require extraction; sponsor Resolution Rewards use separate commit/delivery semantics.
-
-### Story Execution vs Narrative
-
-GDS-8 implements fixed GDS-7 story beats without changing canon.
-
-## 34. Dependencies Preventing Design Complete
-
-GDS-8 remains first-pass pending:
-
-### GDS-9 Combat — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-9 now defines combat encounter resolution primitives, exact combat-objective outcome semantics, generic enemy AI, physical friendly-fire/protected-target behavior, and combat conditions used by contested extraction.
-
-GDS-8 remains authoritative for mission/extraction state transitions.
-
-### GDS-10 Robots — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-10 now defines physical robot mission deployment, Tactical Control Capacity, squad composition, support/repair/hacking/breaching/demolition roles, robot extraction/loss, and finale-ready squad capability.
-
-GDS-8 remains authoritative for Mission Instance and extraction/failure state.
-
-### GDS-11 Raids — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-11 now defines full fortified-target raid execution, persistent target damage/loot, physical boarding/sabotage/theft, finite reinforcement escalation, and Horizon Station defensive raids.
-
-### GDS-12 Economy, Progression, Difficulty, Persistence
-
-Required for:
-- exact reward values;
-- procedural contract refresh;
-- difficulty modifiers;
-- final autosave/manual-save transaction semantics;
-- coalition capability thresholds;
-- dynamic world-event mission creation;
-- long-term raid-target recovery/replenishment.
-
-### GDS-13 Presentation
-
-Required for:
-- mission briefing UX;
-- threat visualization;
+- mission briefing;
+- threat display;
 - objective markers;
+- local map/exploration feedback;
 - extraction feedback;
-- local map;
-- failure/reward screens;
-- raid intelligence/escalation feedback.
+- reward/failure summaries;
+- raid intelligence/escalation presentation;
+- finale-readiness blockers.
 
-## 35. First-Pass Conclusion
+These are presentation dependencies, not unresolved GDS-8 gameplay rules.
 
-No blocking contradiction was found.
+## 27. Conclusion
+
+No blocking contradiction exists between GDS-8 and GDS-1 through GDS-12.
 
 GDS-8 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-Its remaining dependencies are now GDS-12 and GDS-13.
+Its only scheduled downstream design dependency is now GDS-13 Presentation/Onboarding/Accessibility, followed by the GDS-14 whole-project audit.

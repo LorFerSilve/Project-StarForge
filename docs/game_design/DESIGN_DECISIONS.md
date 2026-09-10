@@ -141,7 +141,6 @@ Fixed gameplay rules must be specified before implementation, but values explici
 
 Some values cannot be validated without playable feedback. Separating rules from parameters preserves design authority without preventing iteration.
 
-
 ---
 
 ## DD-010 — Single-Player Is the Complete Core Game
@@ -232,7 +231,6 @@ Locations and enemies have intended threat ranges rather than automatically matc
 
 Fixed and bounded threat structure preserves meaningful danger, progression, preparation, and the feeling that previously difficult content has become easier through advancement.
 
-
 ---
 
 ## DD-016 — Crew Quality Is Not Represented by Loot Rarity
@@ -294,7 +292,6 @@ There is no generic crew level that replaces professional skill.
 ### Rationale
 
 Skill-specific progression preserves meaningful specialization and makes a crew member's history of work mechanically legible.
-
 
 ---
 
@@ -371,7 +368,6 @@ Recycling and transformation chains may recover resources but cannot create net 
 ### Rationale
 
 Station automation should create efficiency and self-sufficiency, not exploitable resource duplication.
-
 
 ---
 
@@ -451,7 +447,6 @@ Loss of Suit Energy disables active systems according to priority but does not a
 
 Separating electrical energy from atmosphere endurance creates clearer engineering decisions and avoids arbitrary instant death at battery depletion.
 
-
 ---
 
 ## DD-030 — Spacecraft Use Authored Hull Frames With Modular Fitting
@@ -527,7 +522,6 @@ Ships may be damaged, disabled, stranded, or recovered. Permanent ship loss requ
 ### Rationale
 
 Ships are long-term configurable progression assets analogous to the home station and recruited crew, not disposable lives.
-
 
 ---
 
@@ -620,7 +614,6 @@ There is no hidden fourth ending that removes all tradeoffs.
 ### Rationale
 
 The ending should reflect the game's themes of connectivity, safety, autonomy, and knowledge rather than collapse into a single objectively perfect answer.
-
 
 ---
 
@@ -715,7 +708,6 @@ Narrative importance does not create an unrelated special mission engine.
 ### Rationale
 
 A single mission framework reduces bespoke exceptions and keeps story gameplay consistent with the systemic game.
-
 
 ---
 
@@ -813,7 +805,6 @@ Enemies do not continuously know the player's hidden current position.
 
 Combat difficulty should come from credible tactics and capability rather than AI cheating.
 
-
 ---
 
 ## DD-053 — Player Robots Are Physical Persistent Manufactured Units
@@ -909,3 +900,113 @@ The baseline does not use generic Robot Levels or Common/Rare/Epic/Legendary rob
 ### Rationale
 
 This preserves StarForge's engineering-oriented capability progression and keeps robot strengths explainable through physical design.
+
+---
+
+## DD-059 — Raids Are Specialized Missions, Not a Second Mission System
+
+**Status:** Accepted
+
+### Decision
+
+Offensive raids use GDS-8 Mission identity, objectives, persistence, extraction, failure, and reward transactions.
+
+GDS-11 adds fortified-target phases without creating a parallel raid-only mission engine.
+
+### Rationale
+
+One mission framework keeps story, persistence, extraction, and objective semantics coherent.
+
+---
+
+## DD-060 — Raid Targets Preserve Committed Physical State
+
+**Status:** Accepted
+
+### Decision
+
+Committed raid damage, breaches, depleted storage, stolen unique objects, and persistent sabotage remain part of the target's world state until an explicit recovery/replenishment process changes them.
+
+A resolved target does not immediately reset to a pristine farmable copy.
+
+### Rationale
+
+Persistent consequences make sabotage and looting meaningful and prevent reload/re-entry farming exploits.
+
+---
+
+## DD-061 — Raid Loot and Theft Are Physical Ownership Transfers
+
+**Status:** Accepted
+
+### Decision
+
+The player and hostile raiders must physically access, carry, transfer, and extract loot.
+
+Horizon Station resources are permanently stolen only when the hostile extraction owner successfully departs with them.
+
+### Rationale
+
+This preserves the single-authoritative-owner resource model and turns logistics/extraction into real raid gameplay.
+
+---
+
+## DD-062 — Raid Reinforcements Are Finite and Require a Valid Source
+
+**Status:** Accepted
+
+### Decision
+
+Reinforcements require an actual local/world source, successful call/activation, valid route, and finite force budget.
+
+The raid system does not create endless punishment waves simply because an operation takes a long time.
+
+### Rationale
+
+Escalation should reward intelligence and sabotage while remaining physically credible and deterministic.
+
+---
+
+## DD-063 — Off-Screen Horizon Defense Uses Real Systems, Not a Defense Score
+
+**Status:** Accepted
+
+### Decision
+
+When Horizon Station is attacked while the player is away during active gameplay, lower-detail resolution must still derive from actual defenses, shields, power, cooling, ammunition, security, crew, robots, geometry, and attacker capabilities.
+
+No single opaque Defense Score determines the outcome.
+
+### Rationale
+
+Station construction and redundancy must remain mechanically meaningful whether the player is physically present or not.
+
+---
+
+## DD-064 — Routine Station Raids Cannot Delete the Core Campaign
+
+**Status:** Accepted
+
+### Decision
+
+A normal dynamic raid can seriously damage Horizon Station, steal physical resources, destroy robots, compromise security, and incapacitate crew, but it cannot permanently delete Horizon Station/Command Core, erase committed Knowledge Assets, or routinely kill recruited crew.
+
+### Rationale
+
+Station defense should create consequential setbacks without allowing an ordinary dynamic event to hard-brick long-term campaign progression.
+
+---
+
+## DD-065 — Baseline Raid Gameplay Is Single-Player PvE
+
+**Status:** Accepted
+
+### Decision
+
+The base game contains no synchronous or asynchronous player-versus-player station-raiding system.
+
+Core raid and station-defense gameplay is fully implemented against systemic NPC/faction targets and attackers.
+
+### Rationale
+
+This preserves the achievable custom C++/OpenGL scope and avoids networking, anti-cheat, snapshot, matchmaking, and griefing requirements becoming dependencies of the core game.

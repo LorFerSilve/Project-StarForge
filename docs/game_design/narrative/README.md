@@ -23,20 +23,34 @@ This domain owns how those facts are revealed, dramatized, and connected to prog
 
 ## Core Baseline
 
-The main campaign now has a fixed structure:
+The main campaign has the fixed structure:
 
-Prologue → Act I → Act II → Act III → Act IV → Finale → Postgame
+Prologue → Act I → Act II → Act III → Act IV → Finale → Postgame.
 
 The Fracture mystery resolves through evidence rather than a chosen-one or single-villain reveal.
 
-The finale supports three strategic outcomes:
+The finale supports exactly three strategic outcomes:
 
 - Stabilize;
 - Sever;
 - Contain.
 
+## Downstream Resolution
+
+GDS-8 provides fixed story Mission execution contracts. GDS-9 provides combat. GDS-10 provides robot participation. GDS-11 provides raid-specific story execution. GDS-12 provides campaign phases, finale readiness, persistent postgame, economy/reputation and failure/persistence coordination.
+
+GDS-13 now resolves:
+
+- dialogue/subtitle/radio intelligibility;
+- environmental-storytelling visual language;
+- faction and character identification;
+- mission/story objective presentation without hidden-information leakage;
+- tutorial integration into canonical P0/P1 campaign beats;
+- accessibility for dialogue, captions, text and presentation;
+- finale-readiness presentation without changing the three canonical ending choices.
+
 ## Completion State
 
 Narrative is not yet Design Complete.
 
-Missions, Combat, Robots, Raids, Progression/Persistence and Presentation must still implement and cross-validate the fixed story structure.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

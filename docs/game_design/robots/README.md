@@ -15,7 +15,7 @@ Authoritative design domain for manufactured robotic units.
 - [`tactical_commands.md`](tactical_commands.md) — **Draft**
 - [`damage_repair_and_loss.md`](damage_repair_and_loss.md) — **Draft**
 - [`station_robots.md`](station_robots.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
 
@@ -48,6 +48,8 @@ GDS-9 owns generic hit/damage/weapon/shield/armor/status combat mathematics.
 
 GDS-11 owns raid and station-defense orchestration.
 
+GDS-12 owns robot-facing economy, bounded TCC progression, difficulty constraints, persistence, replacement pacing, and finale readiness thresholds.
+
 ## Core Baseline
 
 GDS-10 establishes:
@@ -68,8 +70,21 @@ GDS-10 establishes:
 - station Maintenance, Logistics, Agriculture, Security, and Utility robot roles;
 - physical station automation without teleporting work/resources.
 
+## Downstream Resolution
+
+GDS-11 has resolved raid/defense integration.
+
+GDS-12 has resolved:
+
+- TCC progression;
+- component/replacement economy context;
+- robot attrition/recovery pacing;
+- final save semantics;
+- robot-related difficulty constraints;
+- finale minimum TCC/squad requirements.
+
 ## Completion State
 
 GDS-10 is not yet Design Complete.
 
-Raids/Station Defense, Economy/Progression/Difficulty/Persistence, and Presentation must still cross-validate robot-facing behavior.
+Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

@@ -1,231 +1,325 @@
 # Player Character
 
-> **Status:** Draft  
-> **Authority:** Player-character identity, persistence, capability philosophy, physical presence, failure ownership, and boundaries with combat/progression systems
+> **Status:** Design Complete  
+> **Authority:** Player-character identity, persistence, physical presence, direct capability philosophy, failure ownership, customization baseline, and boundaries with combat/progression systems
 
 ## 1. Purpose
 
-The player character is the persistent first-person operator and commander through whom the player directly explores, fights, repairs, mines, boards, and interacts with Project StarForge's world.
+The player character is the persistent first-person operator and commander through whom the player directly explores, fights, repairs, mines, boards, travels, and interacts with Project StarForge's world.
 
-## 2. Perspective
+## 2. Perspective and Physical Body
 
 Normal on-foot gameplay is first-person.
 
-The player character has a physical body in the world even when the full body is not always rendered from the first-person camera.
-
-The character has:
+The player always has an authoritative physical world body with:
 
 - position;
 - orientation;
 - collision;
-- health state;
+- locomotion state;
+- biological Health state;
 - equipped gear;
 - carried inventory;
 - environmental exposure;
-- current interaction state.
+- current interaction/action state.
+
+The gameplay body exists even when first-person rendering shows only hands, held equipment, and selected suit elements.
 
 ## 3. Persistent Identity
 
-There is one persistent primary player character per save.
+There is exactly one primary persistent player character per save timeline.
 
 Persistent state includes:
 
-- identity;
-- cosmetic appearance data where supported;
-- equipment;
-- inventory;
-- equipment condition;
-- health/recovery state;
-- unlocked interaction capabilities granted by equipment/technology;
-- narrative flags owned by narrative systems.
+- player-character identity;
+- chosen Callsign/display name;
+- equipment and slot assignment;
+- inventory and ownership;
+- equipment condition/charges;
+- Health/recovery state;
+- environmental exposure states that persist;
+- unlocked capability supplied by equipment/Research/knowledge;
+- narrative state owned by Narrative.
 
-## 4. No Generic Player Level
+## 4. Character-Creation Baseline
 
-The baseline has no universal Player Level that directly increases health, damage, carrying capacity, mining speed, movement speed, or research power.
+The baseline character setup allows the player to choose a **Callsign/display name**.
 
-Player progression primarily comes from:
+The baseline does **not** require a face sculptor, body-shape editor, selectable gameplay sex/body type, or recorded protagonist voice set.
+
+The physical on-foot avatar uses a standardized gameplay body whose visible appearance is dominated by equipped suit, helmet, gloves, and gear.
+
+Future cosmetic expansion requires an explicit presentation/content update but may not alter gameplay collision, reach, Health, movement, or statistics.
+
+## 5. Protagonist Voice Baseline
+
+The protagonist is **not voiced for conversational dialogue** in the baseline.
+
+Dialogue choices are presented as player-selected text/intents. NPC dialogue may be voiced.
+
+The player avatar may use non-linguistic embodiment sounds such as breathing, exertion, pain, suit reaction, and impact vocalization. These sounds do not establish a fixed spoken narrative voice/personality and remain subject to accessibility/audio settings.
+
+## 6. No Generic Player Level
+
+There is no universal Player Level that automatically increases:
+
+- Health;
+- damage;
+- carrying capacity;
+- mining speed;
+- movement speed;
+- Research power.
+
+Direct personal progression comes from real capability such as:
 
 - equipment;
 - suit technology;
 - weapons;
-- tools;
-- gadgets;
+- tools/gadgets;
 - backpack capacity;
-- ship access;
-- research;
-- station capability;
+- Research/Blueprints;
+- spacecraft access;
+- station infrastructure;
 - robots;
 - crew;
-- knowledge and preparation.
+- knowledge/preparation.
 
-## 5. No Player Skill Tree Baseline
+## 7. No Generic Player Skill Tree
 
-The baseline does not require a generic RPG skill tree built around passive percentage upgrades.
+The baseline contains no RPG skill tree or attribute-point system based on passive percentage inflation.
 
-Mechanically meaningful personal specialization should come from selected equipment/loadout and future explicitly designed systems rather than invisible permanent stat inflation.
+Adding a permanent personal-skill system later requires an explicit accepted design change. Implementation must not invent one from progression data.
 
-## 6. Physical Presence
+## 8. Physical Presence
 
-The player occupies world geometry and obeys collision, gravity, pressure/environment, doors, traversal paths, hazards, and combat damage.
+The player obeys:
 
-Management interfaces do not make the physical player cease to exist unless they are true paused strategic interfaces.
+- collision;
+- gravity;
+- pressure/atmosphere;
+- thermal/radiation/environment state;
+- doors and traversal paths;
+- hazards;
+- combat damage;
+- local interaction range.
 
-## 7. Player at the Home Station
+Opening a live management interface does not remove or protect the body from the world. Global True Pause freezes the simulation when explicitly invoked.
 
-At the home station the player can physically:
+## 9. At Horizon Station
 
-- traverse compartments;
-- interact with crew;
-- operate consoles;
-- inspect systems;
-- repair equipment;
-- construct through Construction Mode;
+At Horizon the player can physically:
+
+- traverse accessible compartments;
+- interact with crew/robots;
+- operate reachable consoles;
+- inspect/repair systems with valid capability;
+- enter Construction Mode through valid construction control;
 - configure automation;
-- manage manufacturing/research;
-- equip mission loadouts;
-- board spacecraft.
+- manage manufacturing/Research through authorized interfaces;
+- configure/equip mission loadouts;
+- board/operate spacecraft.
 
-## 8. Player on Missions
+Every action still obeys its owning system's access, resource, safety, time, and transaction rules.
 
-On external missions the player directly performs:
+## 10. External Missions and Raids
+
+On deployed content the player directly participates in:
 
 - exploration;
-- resource gathering;
-- mining;
-- salvage;
+- resource acquisition;
+- mining/salvage;
 - combat;
 - rescue;
 - environmental interaction;
 - objective manipulation;
-- extraction.
+- robot command;
+- boarding/sabotage where applicable;
+- extraction/withdrawal.
 
-Strategic systems support but do not replace this direct participation.
+Automation and strategic systems support rather than replace direct action.
 
-## 9. Player Failure
+## 11. Player Failure
 
-Routine on-foot defeat does not permanently delete the character.
+Routine defeat does not permanently delete the player character or save.
 
-The player can enter an Incapacitated/Defeated state.
+Health zero produces `PlayerHealthState::Incapacitated`.
 
-Mission or location rules then determine recovery.
+The current location/mission then resolves:
 
-Ordinary external mission defeat follows Global Game Rules: the mission normally fails, Field-Unsecured resources can be lost, persistent equipped gear is not permanently deleted, gear can suffer condition consequences, and secured long-term progression remains.
+- local rescue when a valid rescue state exists; or
+- mission/location failure followed by the GDS-14 Recovery Transit process.
 
-## 10. Station Defeat
+External defeat is not an instant teleport to Horizon.
 
-If the player is incapacitated at the home station:
+## 12. Horizon Incapacitation
 
-- the station continues according to current systems;
-- available crew/medical/robot response can recover the player;
+If incapacitated at Horizon:
+
+- station simulation continues while unpaused;
+- reachable crew/medical/robot systems may create/execute rescue tasks;
 - the station is not reset;
-- the player returns to active control after recovery conditions are satisfied.
+- local recovery requires valid physical access and medical/emergency capability;
+- protected emergency recovery prevents a permanent hard-lock without granting free full restoration.
 
-## 11. Player and Crew Distinction
+## 13. Player vs Crew
 
-The player is not represented as a normal crew roster entry.
+The player is not a normal Crew roster unit.
 
-Crew assignments, profession workload, and crew skill progression do not apply to the player.
+Crew profession workload, crew XP/skill bands, assignment slots, shift/rest needs, and crew-autonomy rules do not apply to the player.
 
-The player can manually perform many tasks that crew would automate, provided the player has the required tool/access.
+The player may manually perform a task only when that task explicitly supports player execution and all required tools/access/resources are present.
 
-## 12. Manual Competence Philosophy
+## 14. Manual Competence
 
-The player can perform baseline manual actions without a profession stat.
+The player's baseline practical competence permits ordinary use of:
 
-Examples include basic repairs, mining, salvage, machinery interaction, first aid, and construction assistance.
+- common ship controls;
+- Engineering Multitool functions unlocked by the tool;
+- basic repair workflows;
+- mining/salvage tools;
+- first aid;
+- construction assistance;
+- ordinary terminals and equipment.
 
-Advanced procedures can require specialized tools, researched technology, equipment, facilities, or crew specialist support.
+Advanced operations still require the actual Research, Blueprint, equipment, facility, information, or specialist dependency defined by the owning subsystem.
 
-## 13. Interaction Reach
+Narrative competence never bypasses gameplay capability.
 
-The player interacts with world objects through finite first-person interaction range.
+## 15. Interaction Reach
 
-Interaction cannot occur through solid geometry unless the target specifically supports remote interaction.
+Direct interaction uses the finite first-person interaction rules in `interaction.md`.
 
-## 14. Player Size
+Solid geometry and security/access remain authoritative.
 
-The player uses one standard humanoid physical scale for gameplay.
+Remote interaction requires an explicit remote-control capability; the player has no innate range-free control power.
 
-Cosmetic appearance changes do not alter collision size, reach, movement speed, or combat hitbox.
+## 16. Gameplay Scale
 
-## 15. Character Customization
+The player uses one standardized humanoid gameplay collision/reach scale.
 
-Appearance customization is allowed as a presentation feature.
+Callsign or any later cosmetic presentation cannot alter:
 
-It can include face/head, skin tone, hair, standardized body presentation, and voice where available.
+- collision;
+- reach;
+- movement;
+- combat hit volume;
+- inventory capacity;
+- statistics.
 
-Cosmetics never alter gameplay statistics.
+## 17. First-Person Representation
 
-## 16. Hands and First-Person Body
+Baseline rendering requires:
 
-The first-person view can render hands, held tools, weapons, and suit elements.
+- hands/arms as needed for held equipment actions;
+- held weapons/tools/gadgets;
+- relevant suit/helmet presentation cues.
 
-A full-body first-person representation is optional technical/presentation work rather than a gameplay requirement.
+A full rendered first-person body below the camera is **not required by the baseline gameplay specification**. If later added as presentation polish, it must match the same authoritative body/collision and cannot reveal through geometry.
 
-## 17. Context Switching
+## 18. Contexts
 
-The player can transition between:
+The player transitions among:
 
 - On Foot;
-- Construction/Strategic Interface;
+- Construction / Strategic interface state;
 - Spacecraft Control;
-- Station Console Interaction;
-- Incapacitated/Recovery.
+- Console / UI Interaction;
+- Incapacitated / Recovery Transit.
 
-Each mode has explicit control ownership.
+Input ownership is explicit under Controls/Time and no context duplicates the character or ship.
 
-## 18. Equipment Dependency
+## 19. Equipment-Driven Capability
 
-Player capability can depend on equipped systems.
+Examples of capability dependencies:
 
-Examples:
+- vacuum traversal requires valid sealed environmental protection;
+- advanced mining requires compatible Mining Cutter capability;
+- hazardous material handling requires valid containment/protection;
+- advanced scans require scanner mode/tier/sensor access;
+- specialized repairs require corresponding tools/components/facilities;
+- combat depends on actually equipped operational weapons/ammunition.
 
-- vacuum traversal requires environmental protection;
-- advanced mining requires a compatible mining tool;
-- hazardous-material handling can require protective gear/container;
-- advanced scans require suitable scanner;
-- some repairs require engineering tools.
-
-## 19. Persistent Gear Principle
+## 20. Persistent Gear Principle
 
 Ordinary defeat does not permanently delete equipped persistent gear.
 
-Equipment may still lose condition, become disabled, require repair, consume ammunition/charges, or be deliberately discarded.
+Gear may still:
 
-## 20. No Player Hunger/Thirst Loop
+- consume ammunition/charges;
+- lose condition;
+- become Disabled;
+- require repair;
+- be deliberately dropped/abandoned;
+- be lost only through an explicit rule that transfers or destroys its physical ownership.
 
-The player does not maintain constant personal hunger/thirst bars during normal gameplay.
+## 21. No Player Hunger / Thirst / Sleep Loop
 
-Food and water matter primarily to station/crew sustainability and explicit mission preparation.
+The player has no routine personal hunger, thirst, sleep, or fatigue meters.
 
-## 21. No Passive Health Regeneration Assumption
+Food/water remain station/crew resources and may appear as explicit authored mission cargo/provision requirements rather than continuous personal metabolism bars.
 
-Health does not automatically regenerate to full merely because combat stops.
+## 22. Biological Health Regeneration
 
-Recovery requires medical treatment, consumables, station recovery, or another explicitly defined system.
+Biological Health does not automatically regenerate to full when combat ends.
 
-Temporary personal-shield regeneration is separate equipment/combat behavior.
+Recovery requires the treatment/recovery processes defined by Player Health.
 
-## 22. UI Identity
+Personal Shield regeneration is a separate powered equipment/combat mechanic.
 
-The player HUD can expose health, shield, suit/environment state, ammunition, tool state, carried capacity, interaction prompts, and mission state.
+## 23. Presentation
 
-Presentation details belong to GDS-13.
+The GDS-13 HUD/presentation layer communicates the player's legitimately known:
 
-## 23. Persistence
+- Health band;
+- Shield state when equipped;
+- Suit Energy and Life-Support Reserve where relevant;
+- ammunition/weapon/tool state;
+- Mass/Volume limits;
+- interaction prompt/blocker;
+- mission/objective state;
+- environmental danger;
+- recovery state.
 
-Gameplay-relevant ownership, gear, inventory, health, and condition persist.
+The presentation layer cannot redefine these states.
 
-Transient animation/interpolation may be reconstructed technically.
+## 24. Persistence
 
-## 24. Explicit Non-Goals
+Save state preserves all gameplay-relevant player identity, ownership, condition, location/recovery, and progression-linked capability references required to resume deterministically.
 
-The player baseline does not require generic character levels, RPG attribute points, stat-affecting cosmetics, routine permanent player death, personal hunger/thirst micromanagement, or superhuman carrying capacity.
+Transient animation/camera interpolation may be reconstructed and is not a separate gameplay authority.
 
-## 25. Dependencies
+## 25. Edge Cases
 
-This specification is refined by controls, movement, interaction, health, inventory, equipment, tools, field survival, combat, missions, spacecraft, narrative, and persistence.
+- Loading while Incapacitated restores that stable state or committed recovery state, never an invented healthy state.
+- Losing a tool/weapon capability immediately removes actions that require it but does not delete unrelated progression.
+- Entering a live UI while hazardous exposure exists does not halt exposure unless global True Pause is invoked.
+- A later cosmetic system may change visual assets only; saves created before it remain compatible with the standardized gameplay body contract.
+- Changing Callsign alters presentation text only and cannot rewrite completed narrative identity/history.
 
-## 26. Open Questions
+## 26. Tuneable Parameters
 
-None at player-character overview level.
+Player-character overview contains no balance-critical fixed numbers beyond subsystem data.
+
+Movement, Health, inventory, equipment, and interaction values are tuneable only in their owning specifications.
+
+## 27. Explicit Non-Goals
+
+The baseline does not include:
+
+- Player Level;
+- generic RPG attributes/skill tree;
+- stat-affecting cosmetics;
+- mandatory face/body character editor;
+- voiced conversational protagonist;
+- routine player permadeath;
+- personal hunger/thirst/sleep micromanagement;
+- innate remote interaction;
+- superhuman inventory capacity.
+
+## 28. Dependencies
+
+Refined by Controls, Movement, Interaction, Health, Inventory, Equipment, Tools/Gadgets, Field Survival, Combat, Missions, Spacecraft, Narrative Player Role, Recovery Transit, Persistence, and GDS-13 Presentation.
+
+## 29. Open Questions
+
+None.

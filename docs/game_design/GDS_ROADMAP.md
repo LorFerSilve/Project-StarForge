@@ -225,23 +225,42 @@ Define:
 
 ## GDS-12 — Economy, Progression, Difficulty, and Cross-Cutting Systems
 
-**Status:** Next
+**Status:** First-Pass Complete — Cross-Validation Pending
 
 Define:
 
 - trading;
 - economy;
-- loot;
-- cross-domain progression;
-- difficulty;
-- scaling;
-- dynamic events;
-- persistence;
-- failure/recovery rules.
+- loot and reward coordination;
+- faction-reputation cross-system consequences;
+- cross-domain capability progression;
+- early-, mid-, late-, and endgame pacing;
+- Tactical Control Capacity progression;
+- finale readiness;
+- difficulty profiles and scaling constraints;
+- dynamic events and Horizon Recovery Grace;
+- time and simulation authority;
+- persistence and Stable Save Boundaries;
+- failure/recovery rules;
+- multiplayer position.
+
+First-pass closure establishes:
+
+- all planned cross-cutting system specifications;
+- all planned progression specifications;
+- explicit P0–P5 capability phases;
+- exact first-pass MS-F01 finale-readiness rules;
+- a combined GDS-12 cross-validation against GDS-1 through GDS-11;
+- no remaining implementation-critical open gameplay question inside GDS-12 scope.
+
+Remaining dependency:
+
+- GDS-13 must define/cross-validate presentation, onboarding, feedback, and accessibility behavior;
+- GDS-14 then performs the final whole-project cross-system audit.
 
 ## GDS-13 — Presentation, Onboarding, and Accessibility
 
-**Status:** Planned
+**Status:** Next
 
 Define:
 
@@ -257,6 +276,12 @@ Define:
 - onboarding;
 - tutorials;
 - accessibility.
+
+Exit criteria:
+
+- every gameplay-critical state and blocker defined by GDS-1 through GDS-12 has an explicit presentation/feedback path;
+- onboarding teaches the required systemic concepts without contradicting progression rules;
+- accessibility options are defined without silently changing authoritative world/progression semantics.
 
 ## GDS-14 — Cross-System Consistency Audit
 

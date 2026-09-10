@@ -60,4 +60,4 @@ Implementation of a subsystem may begin only when:
 
 The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
 
-The project has completed first-pass design through **GDS-10 Robots**. The next dependency-driven design phase is **GDS-11 Raids and Station Defense**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.
+The project has completed first-pass design through **GDS-11 Raids and Station Defense**. The next dependency-driven design phase is **GDS-12 Economy, Progression, Difficulty, and Cross-Cutting Systems**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.

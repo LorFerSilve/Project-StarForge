@@ -22,37 +22,9 @@ Authoritative design domain for structured expeditions, exploration, objectives,
 
 ## Authority Boundary
 
-This domain owns:
+This domain owns mission identity/lifecycle, mission instances, archetypes, generation, zones, objective graphs, exploration/discovery, Threat, mission hazards, extraction, rewards/claims, failure/abandonment, and gameplay execution for GDS-7 main-story Mission IDs.
 
-- mission identity/lifecycle;
-- mission instance state;
-- mission archetypes;
-- procedural mission generation;
-- bounded mission zones;
-- objective graphs;
-- local exploration/discovery;
-- mission threat representation;
-- mission-level environmental hazard behavior;
-- extraction transactions;
-- mission-result rewards/claims;
-- failure and abandonment;
-- gameplay execution contract for GDS-7 main-story missions.
-
-GDS-4 owns physical resource acquisition yields and Research/Blueprint knowledge.
-
-GDS-5 owns player movement, survival, health, tools, and inventory.
-
-GDS-6 owns spacecraft operation, travel, cargo, docking, and ship damage.
-
-GDS-7 owns world geography, faction canon, and narrative story beats.
-
-GDS-9 owns final combat mechanics.
-
-GDS-10 owns robot mechanics.
-
-GDS-11 owns full fortified-station raid mechanics.
-
-GDS-12 owns economy, global difficulty, Dynamic Events, progression pacing, and final persistence/failure coordination.
+GDS-4 owns Resources/Research/Blueprint knowledge. GDS-5 owns player movement/survival/inventory. GDS-6 owns spacecraft/travel/cargo. GDS-7 owns geography/narrative/factions. GDS-9 owns combat. GDS-10 owns robots. GDS-11 owns fortified raids. GDS-12 owns economy, global Difficulty, Dynamic Events, progression pacing and final persistence/failure coordination. GDS-13 owns mission-facing presentation/onboarding/accessibility.
 
 ## Core Baseline
 
@@ -74,20 +46,22 @@ GDS-8 establishes:
 
 ## Downstream Resolution
 
-Combat, Robots, and Raids are first-pass cross-validated against GDS-8.
+Combat, Robots, Raids, and GDS-12 cross-cutting systems are first-pass cross-validated against GDS-8.
 
-GDS-12 has additionally resolved:
+GDS-13 now resolves:
 
-- Credit/reward economy boundary;
-- global Difficulty interaction with mission Threat;
-- Dynamic Event mission creation/pacing;
-- Stable Save Boundary and anti-reroll persistence;
-- failure/recovery coordination;
-- long-term raid-target recovery context;
-- exact MS-F01 finale capability/readiness thresholds.
+- Mission Log/lifecycle presentation;
+- exact/search-area/directional/unknown objective guidance;
+- four-axis Threat display;
+- hazard signaling;
+- extraction and ownership-state feedback;
+- causal failure/reward summaries;
+- Dynamic Event notification/mission transition presentation;
+- campaign-integrated mission/extraction tutorials;
+- accessibility guidance that cannot reveal hidden mission information.
 
 ## Completion State
 
 GDS-8 is not yet Design Complete.
 
-Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

@@ -348,11 +348,28 @@ GDS-10 remains authoritative for robot classes, AI, squad commands, manufacturin
 
 ## 31. Raid Authority Boundary — Result: PASS
 
-Ordinary small-scale Boarding Operation is a GDS-8 mission type.
+GDS-11 is now first-pass authoritative for full fortified-target raids.
 
-Large fortified station assault with intelligence, external defense, breaching, sabotage, looting, escalation, and extraction remains GDS-11.
+It defines:
 
-MS-A301 explicitly hands a full hostile assault route to GDS-11 if that branch becomes a true Raid.
+- target intelligence;
+- preparation;
+- external assault;
+- boarding/breaching;
+- interior control;
+- sabotage;
+- physical looting;
+- escalation/reinforcements;
+- raid extraction;
+- offensive/defensive resolution.
+
+Ordinary small-scale Boarding Operation remains a GDS-8 mission type.
+
+GDS-11 explicitly binds the full wrapper to the MS-A301 hostile Rook's Wake branch, to MS-A302 only when its access route becomes a true fortified assault, and to the fortified access/control-path portions of MS-F02.
+
+**Result: PASS**
+
+GDS-8 retains Mission ID/objective/story structure while GDS-11 owns the raid-phase mechanics.
 
 ## 32. Economy Boundary — Result: PASS
 
@@ -417,12 +434,11 @@ GDS-10 now defines physical robot mission deployment, Tactical Control Capacity,
 
 GDS-8 remains authoritative for Mission Instance and extraction/failure state.
 
-### GDS-11 Raids
+### GDS-11 Raids — First-Pass Resolved
 
-Required for:
-- full station-assault branches;
-- hostile archive raids;
-- finale raid/boarding phases.
+**Result: PASS**
+
+GDS-11 now defines full fortified-target raid execution, persistent target damage/loot, physical boarding/sabotage/theft, finite reinforcement escalation, and Horizon Station defensive raids.
 
 ### GDS-12 Economy, Progression, Difficulty, Persistence
 
@@ -432,7 +448,8 @@ Required for:
 - difficulty modifiers;
 - final autosave/manual-save transaction semantics;
 - coalition capability thresholds;
-- dynamic world-event mission creation.
+- dynamic world-event mission creation;
+- long-term raid-target recovery/replenishment.
 
 ### GDS-13 Presentation
 
@@ -442,14 +459,15 @@ Required for:
 - objective markers;
 - extraction feedback;
 - local map;
-- failure/reward screens.
+- failure/reward screens;
+- raid intelligence/escalation feedback.
 
 ## 35. First-Pass Conclusion
 
 No blocking contradiction was found.
 
-GDS-8 can be marked:
+GDS-8 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The next dependency-driven phase is GDS-9 Combat.
+Its remaining dependencies are now GDS-12 and GDS-13.

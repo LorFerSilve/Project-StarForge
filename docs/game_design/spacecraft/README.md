@@ -17,7 +17,7 @@ Authoritative design domain for persistent player-owned spacecraft and ship oper
 - [`cargo_and_utility.md`](cargo_and_utility.md) — **Draft**
 - [`damage_and_repairs.md`](damage_and_repairs.md) — **Draft**
 - [`ship_combat.md`](ship_combat.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
 
@@ -44,6 +44,12 @@ GDS-8 owns mission extraction/deployment.
 
 GDS-9 owns final weapon/damage/shield/armor combat formulas.
 
+GDS-10 owns robot units/TCC while this domain owns their physical spacecraft transport/service interfaces.
+
+GDS-11 owns raid/boarding/station-defense orchestration.
+
+GDS-12 owns ship-facing economy, progression pacing, difficulty constraints, final persistence, and finale readiness validation.
+
 ## Core Baseline
 
 GDS-6 establishes:
@@ -65,8 +71,21 @@ GDS-6 establishes:
 - Disabled/Derelict recovery rather than routine permanent primary-ship deletion;
 - ship-combat integration without preempting GDS-9.
 
+## Downstream Resolution
+
+World/Galaxy, Missions, Combat, Robots, and Raids are now first-pass cross-validated.
+
+GDS-12 has additionally resolved:
+
+- prices/service economy boundary;
+- Reach progression pacing;
+- TCC ship-support progression;
+- final save transaction semantics;
+- persistent ship recovery interaction;
+- Reach-IV finale ship readiness without requiring a Frigate.
+
 ## Completion State
 
 GDS-6 is not yet Design Complete.
 
-World/Galaxy, Missions, Combat, and Robots are now first-pass cross-validated. Raids, Economy/Progression/Persistence, and Presentation remain downstream spacecraft dependencies.
+Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

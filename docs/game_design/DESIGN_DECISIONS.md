@@ -1010,3 +1010,131 @@ Core raid and station-defense gameplay is fully implemented against systemic NPC
 ### Rationale
 
 This preserves the achievable custom C++/OpenGL scope and avoids networking, anti-cheat, snapshot, matchmaking, and griefing requirements becoming dependencies of the core game.
+
+---
+
+## DD-066 — Credits Are Non-Physical Ledger Currency
+
+**Status:** Accepted
+
+### Decision
+
+The baseline economy uses Credits (`Cr`) as a non-physical ledger currency.
+
+Credits are not a GDS-4 physical Resource, do not occupy cargo Mass/Volume, and cannot substitute for physical crafting matter, Fuel, Research Evidence, or Tactical Control Capacity.
+
+### Rationale
+
+A ledger currency makes trade readable without violating the physical ownership model used for materials, equipment, cargo, and mission loot.
+
+---
+
+## DD-067 — Physical Markets Use Finite Stock and Liquidity
+
+**Status:** Accepted
+
+### Decision
+
+Markets/vendors have finite physical stock and finite purchasing liquidity.
+
+Buying and selling are atomic ownership/ledger transactions, and normal same-market buy/sell pricing cannot generate free Credits.
+
+### Rationale
+
+Trade should create strategic procurement and regional arbitrage decisions without becoming an infinite-resource or infinite-money faucet.
+
+---
+
+## DD-068 — Difficulty Does Not Rewrite World Progression
+
+**Status:** Accepted
+
+### Decision
+
+Difficulty profiles may alter documented pressure axes but do not change story access, Strategic Reach, Research/Blueprint prerequisites, TCC, loot eligibility, economic reward entitlement, or the galaxy's intended threat structure.
+
+Higher Difficulty also cannot grant AI omniscient knowledge.
+
+### Rationale
+
+Difficulty should change execution pressure while every player experiences the same coherent world and progression rules.
+
+---
+
+## DD-069 — Gameplay Progresses on Simulation Time
+
+**Status:** Accepted
+
+### Decision
+
+Production, Research, farming, healing, markets, Dynamic Events, raids, recovery, travel/reinforcement timers, and other gameplay progression use active Simulation Time rather than wall-clock time or render frames.
+
+True Pause stops Simulation Time, and closing the application does not advance it.
+
+### Rationale
+
+One gameplay-time authority prevents offline progression, frame-rate-dependent results, and subsystem timer contradictions.
+
+---
+
+## DD-070 — Saves Commit Only at Stable Save Boundaries
+
+**Status:** Accepted
+
+### Decision
+
+Manual Save, Quick Save, and Autosave may occur during active gameplay, including combat/missions/raids, but a snapshot is committed only when no authoritative atomic transaction is half-applied.
+
+A save requested during such a transaction queues until the next Stable Save Boundary.
+
+### Rationale
+
+This permits flexible saving without allowing duplicated resources, rewards, extraction, robot state, trade, or partially committed irreversible choices.
+
+---
+
+## DD-071 — Campaign Phases Describe Capability; They Do Not Grant It
+
+**Status:** Accepted
+
+### Decision
+
+The campaign uses P0–P5 capability phases for pacing and design coordination.
+
+A phase label never grants equipment, Research, ships, robots, station systems, resources, or stat bonuses by itself. Actual subsystem requirements remain authoritative.
+
+### Rationale
+
+This gives the campaign a readable macro-structure without recreating the generic Player/Base Level system the design deliberately avoids.
+
+---
+
+## DD-072 — Finale Readiness Is a Cross-Domain Capability Gate
+
+**Status:** Accepted
+
+### Decision
+
+MS-F01 makes MS-F02 deployable only after validating actual story state, an operational Reach IV spacecraft, a physical departure reserve manifest, player environmental/tool/combat capability, Horizon strategic support, at least 6 base Field TCC, a Tactical Squad with Command Load of at least 4, and valid providers for all four finale Support Channels.
+
+No single human faction or Frigate hull is mandatory.
+
+### Rationale
+
+The finale should function as a capstone of the game's interconnected systems rather than a generic level check, while convergent alternate support paths prevent faction softlocks.
+
+---
+
+## DD-073 — The Campaign Continues Persistently After the Finale
+
+**Status:** Accepted
+
+### Decision
+
+After Stabilize, Sever, or Contain commits, the game enters P5 in the same persistent world with compatible earned station, crew, ship, robot, Research, economy, faction, mission, and raid state intact subject to explicit ending consequences.
+
+The baseline does not force New Game+, prestige, seasonal reset, or a campaign wipe.
+
+### Rationale
+
+The player's station and interstellar operation are long-term constructed assets; preserving them makes the ending a world-state resolution rather than deletion of the progression fantasy.

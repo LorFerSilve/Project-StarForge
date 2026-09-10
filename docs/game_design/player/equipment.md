@@ -1,15 +1,13 @@
 # Player Equipment
 
-> **Status:** Draft  
-> **Authority:** Player equipment slots, equip/unequip rules, item condition, power integration, loadout behavior, modifications boundary, and protective equipment capability
+> **Status:** Design Complete  
+> **Authority:** Player equipment slots, equip/unequip rules, Condition, suit power/life-support integration, loadout behavior, modifications, repair profiles, and protective capability
 
 ## 1. Purpose
 
-Equipment is the primary source of direct player capability progression.
+Equipment is the primary source of direct player capability progression. It determines what the player can survive, carry, scan, mine, repair, and use in combat without relying on generic character levels.
 
-It defines what the player can survive, carry, scan, mine, repair, and use in combat.
-
-## 2. Equipment Slots
+## 2. Canonical Equipment Slots
 
 The baseline slots are:
 
@@ -23,293 +21,357 @@ The baseline slots are:
 - Gadget A;
 - Gadget B.
 
-Quick consumables are Inventory Quick Slots rather than equipment slots.
+Quick consumables use four Inventory Quick Slots and are not Equipment slots.
 
 ## 3. Slot Compatibility
 
-Every equippable item declares compatible slot(s).
+Every equippable item declares one or more compatible slots.
 
 An item cannot occupy an incompatible slot.
 
-Two-handed/large tools may temporarily occupy the held Tool state while still stored in backpack when not equipped, according to item definition.
+A carried tool not currently assigned to the Tool slot remains Backpack Storage until a valid swap commits.
 
-## 4. Suit
+## 4. Suit Definition
 
-The Suit provides the primary environmental/armor chassis.
-
-A Suit may define:
+Every Suit definition explicitly declares the properties it supports. Relevant properties include:
 
 - pressure sealing;
 - thermal protection;
 - radiation protection;
 - armor;
-- internal battery;
-- life-support connection;
-- magnetic boots;
-- mobility modifiers;
-- module sockets.
+- Suit Energy capacity;
+- Life-Support Reserve interface/capacity;
+- Magnetic Boots;
+- Zero-G maneuvering support;
+- movement modifiers;
+- modification sockets;
+- Condition thresholds and failure behavior.
 
-## 5. Helmet
+An omitted capability is absent; technology tier never implies an undocumented feature.
 
-The Helmet completes compatible sealed-suit environmental protection.
+## 5. Helmet Definition
 
-A suit requiring a sealed helmet is not vacuum-safe if the helmet is absent/open/damaged beyond seal capability.
+Every Helmet definition declares:
 
-Helmet features can include:
+- compatible Suit families;
+- seal capability;
+- protective ratings;
+- visor/HUD capability;
+- filter capability if present;
+- scanner/sensor integration if present;
+- Condition behavior.
 
-- visor HUD;
-- filters;
-- scanner integration;
-- radiation shielding.
+Where a sealed Suit requires a helmet, environmental sealing is invalid while the helmet is absent, open, incompatible, or below its required seal Condition.
 
-## 6. Backpack
+## 6. Backpack Definition
 
-Backpack defines portable Mass and Volume Capacity and optional specialized containment.
+Backpack Equipment declares:
 
-Backpack changes do not alter resource ownership.
+- Mass Capacity;
+- Volume Capacity;
+- containment capabilities;
+- optional specialized compartments;
+- Condition behavior;
+- appearance/attachment data.
+
+Backpack equipment does not create ownership duplicates when replaced.
 
 ## 7. Weapons
 
-Weapon slots define carry/readiness, not weapon mechanics.
+Weapon slots determine carry/readiness only. GDS-9 owns weapon firing, ammunition, reload, damage, spread/recoil, and combat behavior.
 
-Weapons are fully specified under GDS-9.
-
-Equipping a weapon does not create ammunition.
+Equipping a weapon never creates ammunition.
 
 ## 8. Tool Slot
 
-One primary Tool can be immediately ready for direct utility work.
+Exactly one primary utility tool can occupy the active Tool slot.
 
-Other portable tools may remain in backpack and require switching.
+Other portable tools remain in Backpack Storage and require a timed swap to become active.
 
 ## 9. Gadget Slots
 
-Gadgets are reusable or charge-based utility equipment providing specific capabilities such as:
+Gadget A and Gadget B accept compatible reusable or charge/single-use gadgets.
 
-- portable shield projector;
-- deployable sensor;
-- rescue beacon;
-- portable power interface;
-- mission utility device.
+Canonical gadget classes are defined in `tools_and_gadgets.md`.
 
-Exact gadgets are content definitions.
+## 10. Field Equip/Swap Eligibility
 
-## 10. Equipping
+Weapons, Tools, and Gadgets may be swapped in the field only when:
 
-Normal equip/unequip occurs:
+- the player is not Incapacitated;
+- source and destination items are player-owned and portable;
+- no target interaction explicitly locks the current held item;
+- the item class permits field swapping;
+- all resulting slot/Inventory rules remain valid.
 
-- at station loadout interfaces; or
-- in the field if the item is portable and current state allows safe swapping.
+A swap consumes its authored `SwapTime` on Simulation Time and can be interrupted by the item's action rules.
 
-Certain suits/backpacks cannot be removed in hostile environments if doing so would immediately violate safety.
+## 11. Suit / Helmet / Backpack Replacement
 
-## 11. Safety Lock
+Suit, Helmet, and Backpack replacement requires a safe equipment/loadout context with sufficient time and physical access.
 
-The game blocks an unequip action that would cause immediate unavoidable lethal exposure unless the player uses an explicit dangerous override where the equipment supports removal.
+Baseline replacement is not an instant combat action.
 
-Example: removing sealed helmet in vacuum.
+A replacement is blocked when it would immediately create an invalid unavoidable condition, including:
 
-## 12. Loadout
+- removing the only valid pressure seal in unsafe pressure/vacuum;
+- replacing a Backpack when current contents cannot legally fit the new configuration;
+- removing equipment currently required by an active life-critical support connection.
 
-A mission loadout is the selected set of:
+Where the target equipment explicitly supports a dangerous manual override, the player receives a high-consequence confirmation and the real environmental result follows immediately after commit.
+
+## 12. Mission Loadout
+
+A deployment loadout is composed only from actual owned objects/quantities:
 
 - equipped items;
 - carried ammunition;
 - consumables;
-- tools;
-- gadgets;
-- spare mission supplies.
+- tools/gadgets;
+- mission equipment;
+- spare supplies.
 
-Loadout does not create copies; items transfer from actual owned inventory.
+Deployment reserves/transfers those same objects under Mission/Inventory ownership rules; no copies are generated.
 
-## 13. Item Condition
+## 13. Equipment Condition
 
-Persistent equipment has Condition.
+Durable Equipment uses `EquipmentConditionState`:
 
-Baseline condition states:
-
-- Pristine/Operational;
+- Operational;
 - Worn;
 - Damaged;
 - Critical;
 - Disabled.
 
-Exact thresholds are tuneable.
+Exact thresholds are tuneable per item/model.
+
+`Pristine` may be displayed as full Condition but is not a separate functional state beyond Operational unless the item data explicitly requires it.
 
 ## 14. Condition Effects
 
-Condition affects only documented equipment capabilities.
+Each durable item declares a **Condition Profile** mapping its condition ranges to exact capability effects.
 
-Examples:
+Allowed effects include documented changes to:
 
-- damaged suit loses protection efficiency;
-- damaged tool slows/blocks advanced operation;
-- damaged shield reduces capacity;
-- disabled equipment cannot provide its active capability.
+- protection;
+- capacity;
+- energy efficiency/capacity;
+- accuracy/tool efficiency where the owning system permits;
+- available modes;
+- reliability state;
+- Disabled behavior.
 
-There is no hidden random stat degradation.
+No item receives hidden random degradation. If no Condition Profile modifier is declared for a capability, that capability is unchanged until another declared threshold.
 
-## 15. No Routine Permanent Gear Destruction
+## 15. Disabled Equipment
 
-Ordinary defeat does not permanently delete persistent equipped items.
+`EquipmentConditionState::Disabled` means the item's active gameplay capability is unavailable until repaired/replaced.
 
-Equipment can become Disabled and require repair.
+Passive properties survive only when the item definition explicitly marks them as mechanically intact at Disabled state.
 
-Specific consumable/single-use devices may be destroyed by use because their item definition says so.
+## 16. Routine Defeat Protection
 
-## 16. Equipment Repair
+Ordinary player defeat does not permanently delete established equipped persistent gear.
 
-Repair requires:
+Equipment can still:
 
-- compatible materials/components;
-- valid tool/facility;
-- access;
-- active game time.
+- lose Condition;
+- become Disabled;
+- consume ammunition/charges;
+- remain physically elsewhere if deliberately dropped before recovery;
+- be destroyed/consumed only by an explicit item/mission/world rule that authorizes that physical outcome.
 
-Station repair/manufacturing rules integrate with equipment repair.
+## 17. Repair Profiles
 
-## 17. Field Repair
+Every repairable Equipment model declares a **Repair Profile** with:
 
-Field repair can restore limited condition for eligible gear using portable repair consumables/tools.
+- eligible repair level(s);
+- required materials/components;
+- required tool/facility;
+- repair amount/state transition;
+- Simulation-Time work duration;
+- whether field repair is permitted;
+- whether full restoration requires station/ship service.
 
-Full restoration of advanced gear can require station facilities.
+Implementation never decides these rules ad hoc from item tier.
 
-## 18. Suit Energy
+## 18. Field Repair
 
-Active suit systems can draw from a common **Suit Energy Reserve**.
+Field repair is available only for an item whose Repair Profile permits it.
 
-Possible consumers:
+It consumes the listed physical inputs and uses a valid player/robot/crew repair action.
 
-- personal shield;
-- zero-g thrusters;
-- active scanner;
-- environmental processing;
-- powered tools when connected.
+Field repair cannot exceed the maximum Condition/state allowed by that Repair Profile.
 
-The exact energy model is equipment data.
+## 19. Full Service Repair
 
-## 19. Suit Energy Recharge
+When a Repair Profile requires Full Service, restoration above the field-repair limit needs an eligible station/ship facility and any required specialist, component, power, and work inputs.
 
-Suit energy can recharge from:
+Docking or opening a repair menu alone never heals an item.
 
-- station power interface;
-- ship interface;
-- compatible field power source;
-- replaceable/portable power cell where defined.
+## 20. Suit Energy Reserve
 
-Energy does not regenerate from nothing.
+Active Suit/Helmet systems draw from the shared **Suit Energy Reserve** unless an item explicitly has its own independent energy store.
 
-## 20. Priority During Low Energy
+Eligible suit consumers are:
 
-The default suit priority is:
+- environmental thermal regulation;
+- active life-support machinery when the suit model requires power;
+- Zero-G thrusters;
+- Magnetic Boots when their model uses powered adhesion;
+- Personal Shield;
+- active scanner/sensor functions;
+- powered Tool connection;
+- powered Gadgets connected to the Suit bus.
 
-1. life-support safety;
-2. environmental protection/control;
+Only installed/active consumers draw energy.
+
+## 21. Low-Energy Priority
+
+Default Suit Energy priority is:
+
+1. active life-support safety;
+2. environmental regulation/seal-support systems;
 3. emergency mobility;
-4. personal shield;
+4. Personal Shield;
 5. scanning/tools;
-6. discretionary gadgets.
+6. discretionary Gadgets.
 
-The player can configure eligible priorities.
+The player may configure only priorities marked configurable by the Suit. A protected safety consumer cannot be silently demoted below its authored minimum unless an explicit dangerous override exists.
 
-Passive physical armor does not require energy.
+Passive armor/seal properties require no energy unless their item definition says otherwise.
 
-## 21. Suit Life-Support Reserve
+## 22. Suit Energy Recharge
 
-A sealed suit has finite breathable-gas/life-support endurance where independent atmosphere is required.
+Recharge requires a valid source:
 
-Field Survival owns consumption/exposure.
+- station interface;
+- spacecraft interface;
+- compatible field power source;
+- physical replaceable/portable power cell where the Suit supports one.
 
-## 22. Ammunition
+Recharge transfers/stores finite energy and follows source/output limits. Energy never regenerates from nothing.
 
-Weapons use physical ammunition/energy according to combat definitions.
+## 23. Life-Support Reserve
 
-Equipment slots do not grant infinite ammunition.
+A sealed Suit uses the finite Life-Support Reserve model defined in Field Survival.
 
-## 23. Modifications
+The equipment definition supplies capacity/interface/protection properties; Field Survival owns consumption and exposure.
 
-Equipment can support authored modification sockets.
+## 24. Modifications
 
-A modification must define:
+Equipment may expose authored modification sockets.
 
-- compatible equipment;
-- effect;
-- cost;
-- install/remove rules.
+Every Modification definition declares:
 
-There is no universal random affix system in the baseline.
+- compatible host/category/socket;
+- exact effect;
+- installation/removal requirements;
+- physical ownership/cost;
+- whether removal is reversible;
+- Condition/energy interactions where applicable.
 
-## 24. No Loot-Rarity Stat Tiers
+No random affix generator exists in the baseline.
 
-Equipment is differentiated by design/model, technology, modifications, and condition.
+## 25. No Loot-Rarity Stat Tiers
 
-The baseline does not require Common/Rare/Epic/Legendary versions of the same item with random stat multipliers.
+Equipment strength comes from model design, Research/Blueprint access, installed components/modifications, configuration, and Condition.
 
-## 25. Equipment Comparison
+The baseline has no Common/Rare/Epic/Legendary copies of the same item with randomized percentage multipliers.
 
-UI shows actual mechanical differences:
+## 26. Equipment Comparison
+
+UI compares the actual known mechanical properties relevant to the slot, including:
 
 - protection;
 - capacity;
 - energy;
-- mass;
-- movement modifier;
-- environment compatibility;
-- condition;
-- modification slots.
+- Mass;
+- movement modifiers;
+- environmental compatibility;
+- Condition;
+- sockets/modifications;
+- known repair requirements.
 
-## 26. Equipped Mass
+Unknown properties are not revealed solely by comparison UI.
 
-Equipped gear contributes to player carried Mass.
+## 27. Carried Mass
 
-Heavy load rules apply to total carried mass.
+All equipped gear contributes to Player carried Mass.
 
-## 27. Field Swapping
+Movement uses total carried Mass and Inventory Heavy Load state.
 
-Weapon/tool/gadget swapping takes a short action time defined by item class.
+## 28. Persistence
 
-Inventory cannot instantaneously replace every equipped item without gameplay time where combat relevance exists.
+Save state preserves:
 
-## 28. Suit/Helmet Swapping
+- equipped slot assignment;
+- unique item identity where applicable;
+- Condition/Profile state;
+- Suit Energy;
+- Life-Support Reserve where applicable;
+- modifications;
+- weapon ammunition/charge state owned by Combat;
+- active field swap/repair state only when at a Stable Save Boundary that supports it.
 
-Suit and helmet replacement normally requires a safe non-combat environment or dedicated equipment interface.
+Load never repairs, recharges, or duplicates equipment automatically.
 
-It is not an instant combat action.
+## 29. Presentation
 
-## 29. Persistence
+Equipment UI/HUD communicates known:
 
-Equipped-slot assignment, condition, energy, Life-Support Reserve where gameplay relevant, modifications, and ammunition state persist.
+- slot compatibility;
+- Condition/state;
+- energy/reserve;
+- environmental protection;
+- modifications;
+- Mass/capacity;
+- field-swap eligibility;
+- repair requirements;
+- blocker causes.
+
+Success feedback occurs after equip/repair/transfer commit.
 
 ## 30. Edge Cases
 
-If the Suit becomes Disabled in vacuum, Field Survival uses remaining passive seal/emergency reserve only if the suit definition provides it.
+- A Suit becoming Disabled in vacuum does not automatically destroy its passive seal; the Suit's Condition Profile states whether seal remains and Field Survival applies it.
+- A Backpack replacement is blocked if contents cannot fit; no hidden overflow is created.
+- A Gadget consumed at use clears its Equipment slot after the consumption transaction commits.
+- At zero Suit Energy, passive properties remain only as defined; powered consumers shut down by priority.
+- If a field swap is interrupted before commit, ownership/slot assignment remains at its last committed state.
+- Repairing weapon hardware does not create ammunition or refill magazines.
 
-If the Backpack is destroyed/disabled, capacity does not vanish instantly; the item enters damaged storage state and field-resolution rules prevent resource duplication/loss without explicit consequence.
+## 31. Tuneable Parameters
 
-If a Gadget is consumed, its equipment slot clears.
+Tuneable values include:
 
-If Suit Energy reaches zero, passive protection remains while active systems shut down according to priority.
+- item Condition thresholds;
+- SwapTime;
+- protection/armor values;
+- Mass;
+- Suit Energy capacity/recharge;
+- Life-Support capacity;
+- modification values;
+- repair quantities/durations/costs.
 
-## 31. Explicit Non-Goals
+Slot set, physical ownership, Repair/Condition Profile requirements, and energy conservation are fixed.
 
-Equipment does not provide:
+## 32. Explicit Non-Goals
 
-- random rarity colors as core progression;
-- gear deletion on routine defeat;
+The baseline does not include:
+
+- random loot rarity tiers/affixes;
+- gear deletion merely because the player was defeated;
 - infinite suit power;
-- instant suit changes during combat/vacuum;
-- hidden condition effects.
-
-## 32. Tuneable Parameters
-
-Tuneable values include slot swap times, condition thresholds, armor/protection values, suit energy, recharge rate, Life-Support Reserve capacity, mass, and modification values.
+- instant suit/helmet/backpack changes in combat/vacuum;
+- hidden Condition penalties;
+- automatic repair from docking/menu access;
+- equipment-generated ammunition/resources.
 
 ## 33. Dependencies
 
-This specification depends on Inventory, Health, Field Survival, Movement, Tools, GDS-4 crafting/resources, GDS-9 Combat, Missions, and Station repair/manufacturing.
+Depends on Inventory, Player Health, Field Survival, Movement, Tools/Gadgets, GDS-4 Resources/Crafting/Blueprints, GDS-9 Combat, Missions, Station/Spacecraft repair and power/service systems, Time/Simulation, Save/Persistence, and Presentation.
 
 ## 34. Open Questions
 
-None in the equipment-framework baseline.
-
-Specific weapon/tool/suit models are future content definitions.
+None. Specific item-model numerical data is authored content governed by these fixed contracts and is not an unresolved gameplay rule.

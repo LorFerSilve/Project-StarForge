@@ -1,6 +1,6 @@
 # Dynamic Events
 
-> **Status:** Under Review — GDS-14 Corrected  
+> **Status:** Design Complete  
 > **Authority:** Dynamic Event identity, generation, eligibility, concurrency, lifecycle, Simulation-Time scheduling, event families, Horizon attack creation, market/world effects, cooldown/grace, persistence, and anti-frustration rules
 
 ## 1. Purpose

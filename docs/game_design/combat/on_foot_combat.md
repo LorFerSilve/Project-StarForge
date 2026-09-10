@@ -1,6 +1,6 @@
 # On-Foot Combat
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** First-person combat actions, movement-combat interaction, aiming, weapon handling, cover use, grenades, melee, healing/repair under threat, and combat-state action constraints
 
 ## 1. Purpose

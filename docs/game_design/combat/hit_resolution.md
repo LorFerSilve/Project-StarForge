@@ -1,6 +1,6 @@
 # Hit Resolution and Targeting
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Ranged/melee hit detection, hitscan/projectile classification, spread, recoil relationship, target collision zones, aim assistance boundary, cover/occlusion, and weak-point targeting
 
 ## 1. Purpose

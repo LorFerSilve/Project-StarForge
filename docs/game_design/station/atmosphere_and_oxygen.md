@@ -1,6 +1,6 @@
 # Station Atmosphere and Oxygen
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Compartment pressure, breathable atmosphere, gas exchange, ventilation, decompression, and oxygen-support behavior on the home station
 
 ## 1. Purpose
@@ -521,4 +521,4 @@ None in the current atmosphere baseline.
 
 Player survival has now been first-pass cross-validated through GDS-5: this specification owns environmental atmosphere state, while Player Field Survival owns suit protection and player exposure.
 
-The document remains Draft pending final cross-domain validation and later balance/presentation integration.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

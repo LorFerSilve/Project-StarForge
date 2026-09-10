@@ -1,6 +1,6 @@
 # Station Water System
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Water storage, distribution, consumption, recycling, leakage, and station-level water security
 
 ## 1. Purpose
@@ -378,4 +378,4 @@ This specification depends on:
 
 None in the current water baseline.
 
-The document remains Draft until farming, logistics, damage, resources, automation, and crew requirements are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

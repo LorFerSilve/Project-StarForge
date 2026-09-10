@@ -1,6 +1,6 @@
 # Home Station Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Persistent home-station identity, lifecycle, topology, and project-wide station invariants
 
 This document defines what the player's home station fundamentally is.
@@ -324,7 +324,7 @@ This includes, subject to subsystem rules:
 - crew work;
 - defensive readiness.
 
-This follows the active-time simulation rules in `../02_global_game_rules.md`.
+This follows the Simulation-Time simulation rules in `../02_global_game_rules.md`.
 
 ## 19. Station State Persistence
 

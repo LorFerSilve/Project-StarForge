@@ -1,6 +1,6 @@
 # Star Systems
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Strategic star-system composition, system metadata, location selection, environmental context, and authored/procedural system generation rules
 
 ## 1. Purpose

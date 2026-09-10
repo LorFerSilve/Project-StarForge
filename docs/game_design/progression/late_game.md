@@ -1,6 +1,6 @@
 # Late Game — P3/P4
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** P3 Strategic Power and P4 Verge Expedition progression, advanced-system maturity, Reach III/IV transition, raid/endurance escalation, and finale-preparation prerequisites
 
 ## 1. Scope

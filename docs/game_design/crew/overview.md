@@ -1,6 +1,6 @@
 # Crew Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Persistent recruited crew identity, role in station operation, global crew invariants, and crew-system boundaries
 
 ## 1. Purpose

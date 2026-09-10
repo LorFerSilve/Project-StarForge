@@ -1,6 +1,6 @@
 # Horizon Recovery State
 
-> **Status:** Under Review — Added by GDS-14  
+> **Status:** Design Complete  
 > **Authority:** Cross-system Horizon Recovery classification, Critical Recovery entry/exit, Recovery Grace trigger, and interaction between station aftermath and Dynamic Event attack eligibility
 
 ## 1. Purpose

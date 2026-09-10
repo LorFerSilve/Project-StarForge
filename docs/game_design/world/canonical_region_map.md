@@ -1,6 +1,6 @@
 # Canonical Region Map
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Fixed baseline named sectors, systems, major story locations, faction hubs, and strategic routes required by the base campaign
 
 ## 1. Purpose

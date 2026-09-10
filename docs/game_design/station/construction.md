@@ -1,6 +1,6 @@
 # Station Construction
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Player-facing creation, modification, construction lifecycle, and deconstruction of home-station modules
 
 ## 1. Purpose
@@ -573,4 +573,4 @@ Authoritative dependencies include:
 
 None in the current construction-rule baseline.
 
-The specification remains Draft until its dependent resource, logistics, structural, and presentation rules are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

@@ -1,6 +1,6 @@
 # Mining
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mineral deposit representation, extraction work, yield, depletion, mining tools, temporary extraction machinery, and mining-specific hazards
 
 ## 1. Purpose
@@ -71,7 +71,7 @@ Portable mining tools allow direct player extraction from compatible deposits.
 
 Manual mining:
 
-- consumes active game time;
+- consumes Simulation Time;
 - requires physical access;
 - creates raw resource output;
 - is limited by tool capability;
@@ -344,4 +344,4 @@ This specification depends on Resource Model, Resource Catalog, gathering, playe
 
 None in the current mining baseline.
 
-The document remains Draft until player tools, missions, world generation, and cargo systems are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

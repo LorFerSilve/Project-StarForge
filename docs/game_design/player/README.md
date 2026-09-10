@@ -1,6 +1,6 @@
 # Player Design
 
-> **Domain Status:** Design Complete
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for the persistent player character and direct on-foot interaction.
 
@@ -65,3 +65,8 @@ No implementation-time gameplay decision remains inside the Player domain.
 **Design Complete**
 
 This status authorizes the Player rules to be used as stable design input for later technical architecture. It does not itself start implementation or mark the domain Implementation Locked.
+
+
+## GDS-14 Promotion State
+
+All **9** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

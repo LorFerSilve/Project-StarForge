@@ -1,6 +1,6 @@
 # Faction Reputation Integration
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-domain routing of reputation consequences into trade, missions, raids, services, dynamic events, attribution, and one-time reward transactions
 
 ## 1. Purpose

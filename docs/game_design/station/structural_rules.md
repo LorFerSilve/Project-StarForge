@@ -1,6 +1,6 @@
 # Station Structural Rules
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Physical topology, attachment legality, compartment connectivity, and structural validity of the home station
 
 ## 1. Purpose
@@ -471,4 +471,4 @@ This document depends on:
 
 None in the current structural-rule baseline.
 
-The document remains Draft until dependent damage, atmosphere, docking, and traversal specifications are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

@@ -1,6 +1,6 @@
 # Main-Story Raid Integration
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** GDS-11 raid-phase execution for canonical GDS-7/GDS-8 story missions that can become fortified assaults
 
 ## 1. Purpose
@@ -314,7 +314,7 @@ Story raid integration does not:
 
 ## 30. Dependencies
 
-This specification depends on GDS-7 Canonical Region Map/Main Story, GDS-8 Story Mission Execution, all GDS-11 raid-phase specifications, GDS-9 Combat, GDS-10 Robots, and future GDS-12 Progression/Persistence.
+This specification depends on GDS-7 Canonical Region Map/Main Story, GDS-8 Story Mission Execution, all GDS-11 raid-phase specifications, GDS-9 Combat, GDS-10 Robots, and GDS-12 Progression/Persistence.
 
 ## 31. Open Questions
 

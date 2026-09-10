@@ -1,6 +1,6 @@
 # Robot Tactical Commands
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Player-issued robot commands, targeting requirements, command states, group execution, role-specific orders, Rules of Engagement interaction, cancellation, blocked-state reporting, and communications behavior
 
 ## 1. Purpose
@@ -472,7 +472,7 @@ Destination radius, hold radius, defend radius, formation tolerances, reaction d
 
 ## 45. Dependencies
 
-This specification depends on Robot AI, Classes, Squad Composition, GDS-9 Combat, GDS-8 Objectives, Station Security, Communications, and future Raids/Presentation.
+This specification depends on Robot AI, Classes, Squad Composition, GDS-9 Combat, GDS-8 Objectives, Station Security, Communications, and Raids/Presentation.
 
 ## 46. Open Questions
 

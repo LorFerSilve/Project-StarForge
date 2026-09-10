@@ -1,6 +1,6 @@
 # Raid Preparation
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Pre-raid loadout planning, objective selection, access plan, ship/squad preparation, hard requirements, warnings, cargo/extraction planning, and deployment commit
 
 ## 1. Purpose
@@ -380,7 +380,7 @@ Tuneable values include warning thresholds, recommended reserves, cargo forecast
 
 ## 36. Dependencies
 
-This specification depends on Target Intelligence, GDS-5 Loadout, GDS-6 Travel/Cargo, GDS-8 Mission deployment, GDS-9 Combat, GDS-10 Squad/Transport, and future Economy/Presentation.
+This specification depends on Target Intelligence, GDS-5 Loadout, GDS-6 Travel/Cargo, GDS-8 Mission deployment, GDS-9 Combat, GDS-10 Squad/Transport, and Economy/Presentation.
 
 ## 37. Open Questions
 

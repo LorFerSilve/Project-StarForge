@@ -1,6 +1,6 @@
 # Crew Recruitment
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Conditions, flow, acceptance, station capacity checks, and conversion of eligible survivors into persistent crew
 
 ## 1. Purpose

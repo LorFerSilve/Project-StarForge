@@ -1,6 +1,6 @@
 # Loot and Reward Rules
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-domain loot generation, physical drop provenance, unique loot, enemy recoverables, reward duplication prevention, deterministic procedural loot, replenishment, and reward-value boundaries
 
 ## 1. Purpose

@@ -1,22 +1,22 @@
 # Crew Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for survivors and persistent station crew.
 
 ## Specifications
 
-- [`overview.md`](overview.md) — **Draft**
-- [`survivor_encounters.md`](survivor_encounters.md) — **Draft**
-- [`recruitment.md`](recruitment.md) — **Draft**
-- [`professions.md`](professions.md) — **Draft**
-- [`skills_and_traits.md`](skills_and_traits.md) — **Draft**
-- [`assignments.md`](assignments.md) — **Draft**
-- [`automation_responsibilities.md`](automation_responsibilities.md) — **Draft**
-- [`crew_needs.md`](crew_needs.md) — **Draft**
-- [`experience_and_progression.md`](experience_and_progression.md) — **Draft**
-- [`injuries_incapacitation_and_death.md`](injuries_incapacitation_and_death.md) — **Draft**
-- [`crew_presence_and_behavior.md`](crew_presence_and_behavior.md) — **Draft**
+- [`overview.md`](overview.md) — **Design Complete**
+- [`survivor_encounters.md`](survivor_encounters.md) — **Design Complete**
+- [`recruitment.md`](recruitment.md) — **Design Complete**
+- [`professions.md`](professions.md) — **Design Complete**
+- [`skills_and_traits.md`](skills_and_traits.md) — **Design Complete**
+- [`assignments.md`](assignments.md) — **Design Complete**
+- [`automation_responsibilities.md`](automation_responsibilities.md) — **Design Complete**
+- [`crew_needs.md`](crew_needs.md) — **Design Complete**
+- [`experience_and_progression.md`](experience_and_progression.md) — **Design Complete**
+- [`injuries_incapacitation_and_death.md`](injuries_incapacitation_and_death.md) — **Design Complete**
+- [`crew_presence_and_behavior.md`](crew_presence_and_behavior.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Domain Baseline
@@ -66,4 +66,9 @@ GDS-13 now additionally resolves:
 
 The Crew domain is **not yet Design Complete**.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **11** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

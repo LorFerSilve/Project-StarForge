@@ -1,6 +1,6 @@
 # Onboarding and Tutorials
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** How the player learns controls, systemic rules, station operation, missions, extraction, resources, crew, robots, spacecraft, combat, raids, economy, progression, failure, and advanced systems
 
 ## 1. Purpose

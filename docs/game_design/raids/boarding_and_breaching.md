@@ -1,6 +1,6 @@
 # Boarding and Breaching
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid entry methods, docking capture, airlock intrusion, hull breaching, pressure/safety consequences, robot traversal constraints, defender response, and entry-state persistence
 
 ## 1. Purpose

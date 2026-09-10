@@ -1,6 +1,6 @@
 # Spacecraft Damage and Repairs
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Ship structural/functional damage states, subsystem faults, breaches, disabled/derelict state, emergency repair, service repair, recovery, and routine ship-loss constraints
 
 ## 1. Purpose
@@ -255,7 +255,7 @@ A disabled ship can emit distress if:
 
 - emergency power/communication exists.
 
-Future missions/world determine response.
+Missions/world determine response.
 
 ## 27. Destruction Boundary
 

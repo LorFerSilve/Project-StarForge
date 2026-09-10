@@ -1,6 +1,6 @@
 # Mission Types
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical mission archetypes, their required gameplay verbs, valid objective families, and scope boundaries
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Station Thermal Systems
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Heat generation, temperature state, coolant transport, radiator rejection, thermal protection, and thermal failure on the home station
 
 ## 1. Purpose
@@ -523,4 +523,4 @@ This specification depends on:
 
 None in the current thermal baseline.
 
-The document remains Draft until water, damage, automation, resource, player, and crew interactions are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

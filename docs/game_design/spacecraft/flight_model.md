@@ -1,6 +1,6 @@
 # Spacecraft Flight Model
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Real-time local-space piloting, translational/rotational control, inertia, flight assist, camera-equivalent mechanics, speed envelope, collision boundary, and disabled-flight behavior
 
 ## 1. Purpose
@@ -258,7 +258,7 @@ Emergency battery may restore limited control.
 
 If the player becomes unable to pilot while in local flight, automation can enter Safe Drift/Stabilize mode if avionics/power remain.
 
-Future combat/mission rules own failure outcome.
+Combat/mission rules own failure outcome.
 
 ## 29. Docking Integration
 

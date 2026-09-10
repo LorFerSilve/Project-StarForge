@@ -1,6 +1,6 @@
 # Cross-Cutting Game Systems
 
-> **Domain Status:** First-Pass Complete — GDS-14 Audited
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for systems that span several gameplay domains.
 
@@ -122,3 +122,8 @@ This domain is **GDS-14 audited**.
 Individual specification status promotion remains governed by the final GDS-14 report and [`../00_design_authority.md`](../00_design_authority.md).
 
 No implementation permission is implied by this index.
+
+
+## GDS-14 Promotion State
+
+All **12** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

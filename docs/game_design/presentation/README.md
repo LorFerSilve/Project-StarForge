@@ -1,23 +1,23 @@
 # Presentation Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for how authoritative game state is communicated, taught, perceived, and made accessible.
 
 ## Specifications
 
-- [`visual_direction.md`](visual_direction.md) — **Draft**
-- [`environment_art_direction.md`](environment_art_direction.md) — **Draft**
-- [`station_visual_language.md`](station_visual_language.md) — **Draft**
-- [`faction_visual_language.md`](faction_visual_language.md) — **Draft**
-- [`ui_ux.md`](ui_ux.md) — **Draft**
-- [`hud.md`](hud.md) — **Draft**
-- [`interaction_feedback.md`](interaction_feedback.md) — **Draft**
-- [`vfx.md`](vfx.md) — **Draft**
-- [`audio_direction.md`](audio_direction.md) — **Draft**
-- [`alarms_and_signaling.md`](alarms_and_signaling.md) — **Draft**
-- [`onboarding_and_tutorials.md`](onboarding_and_tutorials.md) — **Draft**
-- [`accessibility.md`](accessibility.md) — **Draft**
+- [`visual_direction.md`](visual_direction.md) — **Design Complete**
+- [`environment_art_direction.md`](environment_art_direction.md) — **Design Complete**
+- [`station_visual_language.md`](station_visual_language.md) — **Design Complete**
+- [`faction_visual_language.md`](faction_visual_language.md) — **Design Complete**
+- [`ui_ux.md`](ui_ux.md) — **Design Complete**
+- [`hud.md`](hud.md) — **Design Complete**
+- [`interaction_feedback.md`](interaction_feedback.md) — **Design Complete**
+- [`vfx.md`](vfx.md) — **Design Complete**
+- [`audio_direction.md`](audio_direction.md) — **Design Complete**
+- [`alarms_and_signaling.md`](alarms_and_signaling.md) — **Design Complete**
+- [`onboarding_and_tutorials.md`](onboarding_and_tutorials.md) — **Design Complete**
+- [`accessibility.md`](accessibility.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
 
 ## Authority Boundary
@@ -169,3 +169,8 @@ GDS-13 is:
 It is not yet Design Complete.
 
 The remaining dependency is **GDS-14 — Cross-System Consistency Audit**, which must test the complete specification under combined multi-system scenarios and close any remaining contradictions/orphan mechanics before technical architecture or implementation begins.
+
+
+## GDS-14 Promotion State
+
+All **12** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

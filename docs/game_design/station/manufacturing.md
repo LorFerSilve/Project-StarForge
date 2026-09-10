@@ -1,6 +1,6 @@
 # Station Manufacturing
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Station production machines, processing queues, recipe execution, input/output behavior, manufacturing failure states, and industrial automation
 
 ## 1. Purpose
@@ -478,4 +478,4 @@ This specification depends on:
 
 None in the current manufacturing baseline.
 
-The document remains Draft until recipes, resources, crew, damage, automation, and progression are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

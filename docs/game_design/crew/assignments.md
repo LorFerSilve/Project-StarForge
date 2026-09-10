@@ -1,6 +1,6 @@
 # Crew Assignments
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Crew job assignment, duty ownership, workload, reassignment, substitution, and assignment validity
 
 ## 1. Purpose
@@ -352,4 +352,4 @@ This specification depends on:
 
 None in the current assignment baseline.
 
-The document remains Draft until automation, AI/pathfinding, and profession-specific workload values are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

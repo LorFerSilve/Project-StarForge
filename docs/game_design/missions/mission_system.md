@@ -1,6 +1,6 @@
 # Mission System
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mission identity, lifecycle, acceptance, preparation, deployment, active-instance ownership, resolution, persistence, and mission-state invariants
 
 ## 1. Purpose
@@ -183,7 +183,7 @@ Warnings can be accepted.
 
 The mission owns a deployment intent while GDS-6 Navigation/Travel executes movement to the target.
 
-The station continues Active-Time Simulation.
+The station continues Simulation-Time Simulation.
 
 ## 15. Deployed
 
@@ -242,7 +242,7 @@ Save/load cannot reroll:
 
 unless a specific dynamic rule explicitly changes state through gameplay.
 
-## 19. Active-Time Simulation
+## 19. Simulation-Time Simulation
 
 Mission time advances only while the game simulation runs.
 
@@ -337,7 +337,7 @@ An Available but unaccepted mission can become unavailable only because:
 
 - a clearly represented world-state change invalidates it;
 - an authored event resolves it;
-- a future GDS-12 contract-rotation rule explicitly defines visible active-time expiration.
+- a GDS-12 contract-rotation rule explicitly defines visible Simulation-Time expiration.
 
 No real-world offline expiry is allowed.
 
@@ -408,7 +408,7 @@ Tuneable values include accepted-mission UI limits, preparation warning threshol
 
 ## 35. Dependencies
 
-This specification depends on Global Rules, World, Narrative, Player, Spacecraft, Resources, Crew, Extraction, Rewards, Failure, and future Combat/Robots/Raids/Persistence.
+This specification depends on Global Rules, World, Narrative, Player, Spacecraft, Resources, Crew, Extraction, Rewards, Failure, and Combat/Robots/Raids/Persistence.
 
 ## 36. Open Questions
 

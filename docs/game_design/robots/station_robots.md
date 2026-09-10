@@ -1,6 +1,6 @@
 # Station Robots
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical station robot roles, automation integration, physical task execution, charging/storage, service territories, security behavior, crew supervision, and station-side deployment
 
 ## 1. Purpose
@@ -413,7 +413,7 @@ Task speed, cargo capacity, charging rate, dock capacity, patrol spacing, energy
 
 ## 41. Dependencies
 
-This specification depends on GDS-2 Station Automation/Logistics/Security/Power, GDS-3 Crew, Robot AI/Components/Damage, GDS-4 Resources, GDS-9 Combat, and future Raids/Progression.
+This specification depends on GDS-2 Station Automation/Logistics/Security/Power, GDS-3 Crew, Robot AI/Components/Damage, GDS-4 Resources, GDS-9 Combat, and Raids/Progression.
 
 ## 42. Open Questions
 

@@ -1,6 +1,6 @@
 # Raid Looting
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid loot sources, physical transfer, target inventory depletion, data/knowledge handling, theft from Horizon Station, cargo security, partial loot, and anti-duplication rules
 
 ## 1. Purpose

@@ -1,20 +1,20 @@
 # Resources, Crafting & Research
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for physical resources, acquisition, processing, crafting, blueprints, research, and production dependencies.
 
 ## Specifications
 
-- [`resource_model.md`](resource_model.md) — **Draft**
-- [`resource_catalog.md`](resource_catalog.md) — **Draft**
-- [`gathering_and_salvage.md`](gathering_and_salvage.md) — **Draft**
-- [`mining.md`](mining.md) — **Draft**
-- [`processing.md`](processing.md) — **Draft**
-- [`crafting.md`](crafting.md) — **Draft**
-- [`blueprints.md`](blueprints.md) — **Draft**
-- [`research.md`](research.md) — **Draft**
-- [`production_chains.md`](production_chains.md) — **Draft**
+- [`resource_model.md`](resource_model.md) — **Design Complete**
+- [`resource_catalog.md`](resource_catalog.md) — **Design Complete**
+- [`gathering_and_salvage.md`](gathering_and_salvage.md) — **Design Complete**
+- [`mining.md`](mining.md) — **Design Complete**
+- [`processing.md`](processing.md) — **Design Complete**
+- [`crafting.md`](crafting.md) — **Design Complete**
+- [`blueprints.md`](blueprints.md) — **Design Complete**
+- [`research.md`](research.md) — **Design Complete**
+- [`production_chains.md`](production_chains.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -46,6 +46,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-4 is not yet Design Complete.
+GDS-4 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **9** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

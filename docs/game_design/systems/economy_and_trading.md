@@ -1,6 +1,6 @@
 # Economy and Trading
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Human economic currency, market inventory, buying/selling, price construction, faction/location trade access, barter, market replenishment, services, arbitrage, and anti-exploit rules
 
 ## 1. Purpose
@@ -366,7 +366,7 @@ Replenishment never advances because the application is closed.
 
 ## 36. Replenishment and Persistence
 
-Current market stock, liquidity, active modifiers, and next active-time economic update persist through save/load.
+Current market stock, liquidity, active modifiers, and next Simulation-Time economic update persist through save/load.
 
 Reloading cannot refill a market.
 
@@ -387,7 +387,7 @@ These events modify existing market state through explicit causes.
 
 A raided target/market does not instantly regenerate stolen stock.
 
-Recovery requires world/economic replenishment over active game time and can be interrupted by later events.
+Recovery requires world/economic replenishment over Simulation Time and can be interrupted by later events.
 
 ## 39. Player Production and Selling
 

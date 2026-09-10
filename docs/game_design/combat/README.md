@@ -1,22 +1,22 @@
 # Combat Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for direct combat rules.
 
 ## Specifications
 
-- [`combat_system.md`](combat_system.md) — **Draft**
-- [`damage_model.md`](damage_model.md) — **Draft**
-- [`hit_resolution.md`](hit_resolution.md) — **Draft**
-- [`weapons.md`](weapons.md) — **Draft**
-- [`ammunition_and_reload.md`](ammunition_and_reload.md) — **Draft**
-- [`armor_and_shields.md`](armor_and_shields.md) — **Draft**
-- [`status_effects.md`](status_effects.md) — **Draft**
-- [`on_foot_combat.md`](on_foot_combat.md) — **Draft**
-- [`enemy_combat_behavior.md`](enemy_combat_behavior.md) — **Draft**
-- [`spacecraft_combat_resolution.md`](spacecraft_combat_resolution.md) — **Draft**
-- [`combat_objective_resolution.md`](combat_objective_resolution.md) — **Draft**
+- [`combat_system.md`](combat_system.md) — **Design Complete**
+- [`damage_model.md`](damage_model.md) — **Design Complete**
+- [`hit_resolution.md`](hit_resolution.md) — **Design Complete**
+- [`weapons.md`](weapons.md) — **Design Complete**
+- [`ammunition_and_reload.md`](ammunition_and_reload.md) — **Design Complete**
+- [`armor_and_shields.md`](armor_and_shields.md) — **Design Complete**
+- [`status_effects.md`](status_effects.md) — **Design Complete**
+- [`on_foot_combat.md`](on_foot_combat.md) — **Design Complete**
+- [`enemy_combat_behavior.md`](enemy_combat_behavior.md) — **Design Complete**
+- [`spacecraft_combat_resolution.md`](spacecraft_combat_resolution.md) — **Design Complete**
+- [`combat_objective_resolution.md`](combat_objective_resolution.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -47,6 +47,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-9 is not yet Design Complete.
+GDS-9 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **11** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

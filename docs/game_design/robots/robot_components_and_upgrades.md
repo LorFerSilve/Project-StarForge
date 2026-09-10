@@ -1,6 +1,6 @@
 # Robot Components and Upgrades
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Robot component architecture, slot categories, compatibility, power/energy draw, software packages, installation/removal, condition, and upgrade philosophy
 
 ## 1. Purpose

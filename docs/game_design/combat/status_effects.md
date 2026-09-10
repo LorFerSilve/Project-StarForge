@@ -1,6 +1,6 @@
 # Status Effects
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Combat status-effect identity, application, stacking, duration, resistance, periodic processing, cleanse/removal, persistence, and baseline status catalog
 
 ## 1. Purpose
@@ -271,7 +271,7 @@ Thresholds, durations, tick intervals, intensities, resistance, and removal time
 
 ## 31. Dependencies
 
-This specification depends on Damage Model, Armor/Shields, Player Health/Equipment, Ship/Station Systems, future Robots, Missions, and Presentation.
+This specification depends on Damage Model, Armor/Shields, Player Health/Equipment, Ship/Station Systems, Robots, Missions, and Presentation.
 
 ## 32. Open Questions
 

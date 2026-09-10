@@ -1,6 +1,6 @@
 # Raid Victory, Failure and Retreat
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid result semantics, objective-completion mapping, retreat, partial outcome, persistent target aftermath, casualty/loss handling, capture boundary, and no-game-over station-defense rules
 
 ## 1. Purpose
@@ -419,7 +419,7 @@ Partial reward values, target recovery pace, attribution thresholds, surrender d
 
 ## 40. Dependencies
 
-This specification depends on GDS-7 Factions/Narrative, GDS-8 Mission Failure/Rewards, GDS-9 Combat Objectives, GDS-10 Robot Loss, Extraction, Looting, Sabotage, Station Defense Resolution, and future Economy/Persistence.
+This specification depends on GDS-7 Factions/Narrative, GDS-8 Mission Failure/Rewards, GDS-9 Combat Objectives, GDS-10 Robot Loss, Extraction, Looting, Sabotage, Station Defense Resolution, and Economy/Persistence.
 
 ## 41. Open Questions
 

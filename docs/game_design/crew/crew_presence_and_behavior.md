@@ -1,6 +1,6 @@
 # Crew Presence and Behavior
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Physical crew representation on the home station, movement, activity states, workplace presence, emergency behavior, off-screen abstraction, and AI scope
 
 ## 1. Purpose
@@ -196,7 +196,7 @@ During confirmed boarding:
 - non-security crew prioritizes safety and critical assigned emergency duties;
 - Security Officers/security robots coordinate response;
 - crew avoids known hostile paths where possible;
-- combat-capable crew can defend themselves according to future combat rules.
+- combat-capable crew can defend themselves according to combat rules.
 
 Generic scientists/farmers do not behave as disposable assault troops.
 
@@ -362,4 +362,4 @@ This specification depends on:
 
 None in the current presence baseline.
 
-The document remains Draft until AI/pathfinding, rendering/performance, combat, narrative, and station-security behavior are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

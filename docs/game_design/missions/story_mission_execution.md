@@ -1,6 +1,6 @@
 # Main Story Mission Execution
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** GDS-8 gameplay-level execution contract for the canonical GDS-7 main-story mission IDs
 
 ## 1. Purpose
@@ -740,7 +740,7 @@ Those are later authorities.
 
 ## 25. Dependencies
 
-This specification depends on GDS-7 Story Missions/World Map, Mission System, Objectives, Zones, Extraction, Failure, GDS-4 Research, GDS-5 Player, GDS-6 Spacecraft, and future Combat/Robots/Raids/Progression.
+This specification depends on GDS-7 Story Missions/World Map, Mission System, Objectives, Zones, Extraction, Failure, GDS-4 Research, GDS-5 Player, GDS-6 Spacecraft, and Combat/Robots/Raids/Progression.
 
 ## 26. Open Questions
 

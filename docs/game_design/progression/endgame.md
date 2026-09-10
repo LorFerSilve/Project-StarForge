@@ -1,6 +1,6 @@
 # Endgame — MS-F01, MS-F02, and P5
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Finale readiness validation, coalition/support commitments, MS-F01 capability gate, MS-F02 deployment prerequisites, ending transition, and P5 postgame progression
 
 ## 1. Purpose

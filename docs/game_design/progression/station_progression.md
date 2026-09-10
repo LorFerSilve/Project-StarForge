@@ -1,6 +1,6 @@
 # Station Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Horizon Station capability stages and the functional progression from damaged foothold to strategic nexus
 
 ## 1. Purpose

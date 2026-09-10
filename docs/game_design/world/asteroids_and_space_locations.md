@@ -1,6 +1,6 @@
 # Asteroids and Space Locations
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Non-planetary strategic location classes, asteroid fields, derelict zones, stations, wreck fields, deep-space points, anomalies, and resource/site plausibility
 
 ## 1. Purpose

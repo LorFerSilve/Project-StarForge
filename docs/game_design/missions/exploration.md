@@ -1,6 +1,6 @@
 # Exploration
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Local discovery states, Points of Interest, scanner/map revelation, exploration rewards, persistent discovery, route/location intelligence, and exploration anti-omniscience rules
 
 ## 1. Purpose

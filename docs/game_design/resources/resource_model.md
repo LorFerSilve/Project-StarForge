@@ -1,6 +1,6 @@
 # Resource Model
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Resource identity, physical representation class, ownership, quantity, reservation semantics, loss/conservation rules, and distinction between resources, items, knowledge, and currencies
 
 ## 1. Purpose
@@ -373,4 +373,4 @@ This specification is authoritative for all GDS-4 documents and is consumed by s
 
 None in the current resource-model baseline.
 
-The document remains Draft until player inventory, mission extraction, economy, and spacecraft cargo are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

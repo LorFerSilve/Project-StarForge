@@ -1,6 +1,6 @@
 # Combat System
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Global direct-combat loop, combat states, valid combat participants, engagement rules, attack-resolution pipeline, combat resource principles, and cross-domain authority boundaries
 
 ## 1. Purpose
@@ -349,7 +349,7 @@ The logical resolution rules are fixed.
 
 ## 35. Dependencies
 
-This specification depends on Player, Equipment, Health, Missions, Resources, Spacecraft, Station Damage, Crew, future Robots/Raids, and Presentation.
+This specification depends on Player, Equipment, Health, Missions, Resources, Spacecraft, Station Damage, Crew, Robots/Raids, and Presentation.
 
 ## 36. Open Questions
 

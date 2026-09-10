@@ -1,20 +1,20 @@
 # World Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for the setting, navigable galaxy, locations, factions, reputation, and historical lore.
 
 ## Specifications
 
-- [`setting.md`](setting.md) — **Draft**
-- [`galaxy_structure.md`](galaxy_structure.md) — **Draft**
-- [`canonical_region_map.md`](canonical_region_map.md) — **Draft**
-- [`star_systems.md`](star_systems.md) — **Draft**
-- [`planets_and_moons.md`](planets_and_moons.md) — **Draft**
-- [`asteroids_and_space_locations.md`](asteroids_and_space_locations.md) — **Draft**
-- [`factions.md`](factions.md) — **Draft**
-- [`reputation_and_relations.md`](reputation_and_relations.md) — **Draft**
-- [`lore.md`](lore.md) — **Draft**
+- [`setting.md`](setting.md) — **Design Complete**
+- [`galaxy_structure.md`](galaxy_structure.md) — **Design Complete**
+- [`canonical_region_map.md`](canonical_region_map.md) — **Design Complete**
+- [`star_systems.md`](star_systems.md) — **Design Complete**
+- [`planets_and_moons.md`](planets_and_moons.md) — **Design Complete**
+- [`asteroids_and_space_locations.md`](asteroids_and_space_locations.md) — **Design Complete**
+- [`factions.md`](factions.md) — **Design Complete**
+- [`reputation_and_relations.md`](reputation_and_relations.md) — **Design Complete**
+- [`lore.md`](lore.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Core Baseline
@@ -52,4 +52,9 @@ GDS-13 has now resolved the remaining first-pass presentation dependency through
 
 World/Factions are not yet Design Complete.
 
-All scheduled subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **9** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

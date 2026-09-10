@@ -1,6 +1,6 @@
 # Reinforcements and Escalation
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid escalation states, alarm triggers, reinforcement-call transaction, reinforcement arrival, defender mobilization, repair response, evacuation, escalation persistence, and anti-spawn-cheating rules
 
 ## 1. Purpose
@@ -252,7 +252,7 @@ If no valid detection exists, the player can be surprised by a physically legiti
 
 ## 26. ETA
 
-Reinforcement ETA advances only during active game time.
+Reinforcement ETA advances only during Simulation Time.
 
 True Pause stops it.
 

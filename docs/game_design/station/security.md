@@ -1,6 +1,6 @@
 # Station Security
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Internal access control, intrusion detection, lockdown, boarding response, security zones, and internal defensive coordination
 
 ## 1. Purpose
@@ -291,4 +291,4 @@ This specification depends on structural rules, atmosphere, power, automation, d
 
 None in the current baseline.
 
-The document remains Draft until dependent domains are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

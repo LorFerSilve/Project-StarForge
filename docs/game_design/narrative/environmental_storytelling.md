@@ -1,6 +1,6 @@
 # Environmental Storytelling
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Rules for conveying historical/narrative information through physical spaces, persistent damage, props, logs, system state, and location composition
 
 ## 1. Purpose

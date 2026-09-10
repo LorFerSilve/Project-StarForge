@@ -1,6 +1,6 @@
 # Armor and Shields
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Personal/actor armor coverage, protection ratings, penetration interaction, shield capacity/regeneration, shield power/heat behavior, shield disablement, and repair/condition boundary
 
 ## 1. Purpose
@@ -106,7 +106,7 @@ unless a different shield device explicitly does so.
 
 After shield damage, regeneration does not begin until Recharge Delay has elapsed without further qualifying shield damage.
 
-Delay uses active game time.
+Delay uses Simulation Time.
 
 ## 12. Shield Recharge
 

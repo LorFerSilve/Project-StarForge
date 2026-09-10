@@ -1,6 +1,6 @@
 # Galaxy Access Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Campaign access bands across Reach I–IV, route verification, shortcut rules, hard access gates, and alternate progression paths
 
 ## 1. Existing Authority

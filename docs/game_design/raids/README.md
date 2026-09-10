@@ -1,24 +1,24 @@
 # Raid Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for offensive raids against fortified targets and defensive raids against Horizon Station.
 
 ## Specifications
 
-- [`overview.md`](overview.md) — **Draft**
-- [`target_intelligence.md`](target_intelligence.md) — **Draft**
-- [`raid_preparation.md`](raid_preparation.md) — **Draft**
-- [`external_space_attack.md`](external_space_attack.md) — **Draft**
-- [`boarding_and_breaching.md`](boarding_and_breaching.md) — **Draft**
-- [`interior_attack.md`](interior_attack.md) — **Draft**
-- [`system_sabotage.md`](system_sabotage.md) — **Draft**
-- [`looting.md`](looting.md) — **Draft**
-- [`reinforcements_and_escalation.md`](reinforcements_and_escalation.md) — **Draft**
-- [`extraction.md`](extraction.md) — **Draft**
-- [`victory_failure_and_retreat.md`](victory_failure_and_retreat.md) — **Draft**
-- [`station_defense_resolution.md`](station_defense_resolution.md) — **Draft**
-- [`story_raid_integration.md`](story_raid_integration.md) — **Draft**
+- [`overview.md`](overview.md) — **Design Complete**
+- [`target_intelligence.md`](target_intelligence.md) — **Design Complete**
+- [`raid_preparation.md`](raid_preparation.md) — **Design Complete**
+- [`external_space_attack.md`](external_space_attack.md) — **Design Complete**
+- [`boarding_and_breaching.md`](boarding_and_breaching.md) — **Design Complete**
+- [`interior_attack.md`](interior_attack.md) — **Design Complete**
+- [`system_sabotage.md`](system_sabotage.md) — **Design Complete**
+- [`looting.md`](looting.md) — **Design Complete**
+- [`reinforcements_and_escalation.md`](reinforcements_and_escalation.md) — **Design Complete**
+- [`extraction.md`](extraction.md) — **Design Complete**
+- [`victory_failure_and_retreat.md`](victory_failure_and_retreat.md) — **Design Complete**
+- [`station_defense_resolution.md`](station_defense_resolution.md) — **Design Complete**
+- [`story_raid_integration.md`](story_raid_integration.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -49,6 +49,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-11 is not yet Design Complete.
+GDS-11 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **13** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

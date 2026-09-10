@@ -1,6 +1,6 @@
 # Environmental Hazards
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mission-level environmental hazard classes, hazard states, telegraphing, activation patterns, interaction with World/Player/Ship systems, and hazard persistence
 
 ## 1. Purpose
@@ -67,7 +67,7 @@ Example:
 
 ## 7. Cyclic Hazard
 
-Alternates according to a known/detectable active-time cycle.
+Alternates according to a known/detectable Simulation-Time cycle.
 
 Example:
 - electrical storm windows.
@@ -83,7 +83,7 @@ Example:
 
 ## 9. Progressive Hazard
 
-Worsens over active game time or system deterioration.
+Worsens over Simulation Time or system deterioration.
 
 Example:
 - spreading contamination;

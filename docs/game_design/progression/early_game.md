@@ -1,6 +1,6 @@
 # Early Game — P0/P1
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Early-game pacing goals, capability order, anti-softlock resources, onboarding-to-autonomy transition, and P1 exit conditions
 
 ## 1. Scope

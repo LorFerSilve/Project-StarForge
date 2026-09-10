@@ -1,6 +1,6 @@
 # Mission Zones
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Bounded playable mission environments, zone categories, instance boundaries, entry/exit points, local persistence, traversal topology, and zone cleanup/resolution
 
 ## 1. Purpose

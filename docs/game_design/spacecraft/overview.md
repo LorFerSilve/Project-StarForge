@@ -1,6 +1,6 @@
 # Spacecraft Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Persistent player-owned spacecraft identity, role, global ship invariants, operational lifecycle, and boundaries with station/player/combat systems
 
 ## 1. Purpose
@@ -323,7 +323,7 @@ GDS-6 does not require:
 
 ## 26. Dependencies
 
-This overview depends on GDS-4 Resources, GDS-5 Player, station docking/manufacturing, and future World, Missions, Combat, Robots, Economy, and Persistence.
+This overview depends on GDS-4 Resources, GDS-5 Player, station docking/manufacturing, and World, Missions, Combat, Robots, Economy, and Persistence.
 
 ## 27. Open Questions
 

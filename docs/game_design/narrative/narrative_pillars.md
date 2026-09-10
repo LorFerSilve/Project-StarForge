@@ -1,6 +1,6 @@
 # Narrative Pillars
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Core storytelling principles, narrative tone, player agency rules, mystery structure, and narrative/gameplay integration
 
 ## 1. Purpose

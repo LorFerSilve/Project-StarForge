@@ -1,6 +1,6 @@
 # Raid Extraction and Withdrawal
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid withdrawal initiation, extraction routes, player/robot/loot security, contested exits, ship departure, alternate extraction, abandoned assets, and extraction commit
 
 ## 1. Purpose
@@ -374,7 +374,7 @@ Departure warm-up, extraction interaction duration, warning thresholds, pursuit 
 
 ## 43. Dependencies
 
-This specification depends on GDS-6 Docking/Navigation, GDS-8 Extraction/Failure, GDS-10 Robot Recovery, Interior Attack, External Attack, Looting, Escalation, Victory/Failure, and future Persistence/Presentation.
+This specification depends on GDS-6 Docking/Navigation, GDS-8 Extraction/Failure, GDS-10 Robot Recovery, Interior Attack, External Attack, Looting, Escalation, Victory/Failure, and Persistence/Presentation.
 
 ## 44. Open Questions
 

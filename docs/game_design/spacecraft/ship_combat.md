@@ -1,6 +1,6 @@
 # Spacecraft Combat
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Ship-combat participation model, weapon mounting/operation boundary, shields, targeting interfaces, tactical power/thermal interaction, disable-vs-destroy philosophy, and handoff to GDS-9 Combat
 
 ## 1. Purpose
@@ -42,7 +42,7 @@ Utility mounts are not automatically weapon hardpoints.
 
 ## 5. Weapon Families Boundary
 
-Future GDS-9 can define ship-compatible families such as:
+GDS-9 can define ship-compatible families such as:
 
 - laser;
 - kinetic/rail;

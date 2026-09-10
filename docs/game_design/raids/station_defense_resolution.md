@@ -1,6 +1,6 @@
 # Horizon Station Defense Resolution
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Hostile raids against Horizon Station, attack creation, detection, defensive phases, on-screen/off-screen simulation, attacker objectives, theft, boarding, player return, station failure/recovery, and ordinary-loss protection
 
 ## 1. Purpose
@@ -606,7 +606,7 @@ Attack force sizes, arrival timing, objective priorities, withdrawal thresholds,
 
 ## 60. Dependencies
 
-This specification depends on GDS-2 Defenses/Security/Automation/Damage, GDS-3 Crew, GDS-4 Ownership/Salvage, GDS-6 Spacecraft, GDS-7 Factions, GDS-9 Combat, GDS-10 Robots, GDS-11 Looting/Sabotage/Escalation, and future GDS-12 Dynamic Events/Persistence.
+This specification depends on GDS-2 Defenses/Security/Automation/Damage, GDS-3 Crew, GDS-4 Ownership/Salvage, GDS-6 Spacecraft, GDS-7 Factions, GDS-9 Combat, GDS-10 Robots, GDS-11 Looting/Sabotage/Escalation, and GDS-12 Dynamic Events/Persistence.
 
 ## 61. Open Questions
 

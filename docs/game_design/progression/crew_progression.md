@@ -1,6 +1,6 @@
 # Crew Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-phase crew roster/profession/skill growth, specialist availability expectations, training progression, redundancy goals, and campaign integration
 
 ## 1. Existing Authority

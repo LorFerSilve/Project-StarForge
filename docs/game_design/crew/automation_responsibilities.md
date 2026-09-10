@@ -1,6 +1,6 @@
 # Crew Automation Responsibilities
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** What crew professions may automate, supervision boundaries, authority limits, and profession-specific failure escalation
 
 ## 1. Purpose
@@ -363,4 +363,4 @@ This specification depends on:
 
 None in the current baseline.
 
-The document remains Draft until every consuming domain is cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

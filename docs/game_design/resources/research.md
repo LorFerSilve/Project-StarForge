@@ -1,6 +1,6 @@
 # Research
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Technology knowledge, research projects, evidence, laboratory work, Scientist contribution, prerequisites, project states, unlock outputs, and research persistence
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Station Damage and Repairs
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Persistent station damage, faults, breaches, destruction states, stabilization, repair, reconstruction, and repair automation
 
 ## 1. Purpose
@@ -381,4 +381,4 @@ This document depends on the authoritative structural, power, atmosphere, therma
 
 None in the current baseline.
 
-The document remains Draft until dependent domains are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

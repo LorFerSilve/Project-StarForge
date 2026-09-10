@@ -1,6 +1,6 @@
 # Spacecraft Navigation
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Strategic route discovery, route planning, travel requirements, Navigator contribution, travel states, interruption/failure boundary, and local/strategic transition
 
 ## 1. Purpose
@@ -159,9 +159,9 @@ This transaction occurs once.
 
 ## 15. In Transit
 
-In Transit is active game simulation.
+In Transit is active gameplay simulation.
 
-Travel duration advances with game time.
+Travel duration advances exclusively with Simulation Time.
 
 The home station continues to simulate.
 
@@ -178,7 +178,7 @@ Some routes can trigger:
 
 The player can remain in ship context during transit.
 
-Exact dynamic events belong to future World/Missions.
+Dynamic transit-event content is owned by World/Missions and obeys the GDS-12 Dynamic Event and Simulation Time contracts.
 
 ## 17. No Real-World Offline Travel
 
@@ -201,13 +201,13 @@ Duration is an in-game pacing parameter influenced by:
 
 Travel should not impose long mandatory real-world waiting.
 
-## 20. Fast-Forward Boundary
+## 20. Simulation-Rate Boundary
 
-Because core game is single-player, a future time-acceleration feature can be considered during safe transit.
+Strategic transit uses the canonical **1.0x Simulation Time** rate.
 
-It must also advance station simulation equivalently.
+Player-controlled fast-forward, slow-motion, selective time acceleration, and transit-only time compression are not part of the Design Complete baseline.
 
-No such feature is required by GDS-6.
+Adding a player-controlled simulation-rate feature later requires a formal design change under `../systems/time_and_simulation.md`, because Horizon simulation, travel, hazards, events, recovery, and combat share the same gameplay clock.
 
 ## 21. Diversion
 
@@ -309,7 +309,8 @@ Navigation does not provide:
 - free cancellation after committed fuel use;
 - route selection to undiscovered destinations;
 - Navigator magic bypassing propulsion;
-- offline real-world transit.
+- offline real-world transit;
+- baseline player-controlled fast-forward, slow-motion, or time acceleration.
 
 ## 31. Tuneable Parameters
 

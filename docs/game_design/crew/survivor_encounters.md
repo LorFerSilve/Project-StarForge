@@ -1,6 +1,6 @@
 # Survivor Encounters
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** How recruitable and non-recruitable survivors appear, are discovered, rescued, evaluated, and persist before recruitment
 
 ## 1. Purpose

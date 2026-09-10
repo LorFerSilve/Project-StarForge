@@ -1,6 +1,6 @@
 # Crew Professions
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Standard crew professions, their domain responsibilities, and the boundaries of professional capability
 
 ## 1. Purpose

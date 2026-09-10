@@ -1,6 +1,6 @@
 # Robot AI
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Player-owned robot perception, command execution, autonomous behavior, task priorities, combat logic, communications loss, pathfinding, self-preservation, and deterministic fallback behavior
 
 ## 1. Purpose

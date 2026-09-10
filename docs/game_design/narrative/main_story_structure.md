@@ -1,6 +1,6 @@
 # Main Story Structure
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical campaign acts, story-gate logic, main mystery progression, mandatory discoveries, and high-level story outcomes
 
 ## 1. Purpose

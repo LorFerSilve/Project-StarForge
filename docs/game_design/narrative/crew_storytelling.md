@@ -1,6 +1,6 @@
 # Crew Storytelling
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Narrative use of recruited crew, background hooks, authored crew conversations, personal objectives, station reactions, and procedural-story limits
 
 ## 1. Purpose

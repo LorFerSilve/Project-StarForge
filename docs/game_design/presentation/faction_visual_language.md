@@ -1,6 +1,6 @@
 # Faction Visual Language
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Visual identity, architecture, equipment language, signage, silhouettes, material emphasis, and presentation boundaries for major factions and the Continuance
 
 ## 1. Purpose

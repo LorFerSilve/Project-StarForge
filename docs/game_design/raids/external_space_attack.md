@@ -1,6 +1,6 @@
 # External Space Attack
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid approach contact, external defense engagement, shield-zone attack, turret/sensor/comms targeting, approach corridors, suppression windows, ship/robot exterior support, and transition to boarding access
 
 ## 1. Purpose

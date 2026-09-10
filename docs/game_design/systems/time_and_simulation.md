@@ -1,6 +1,6 @@
 # Time and Simulation
 
-> **Status:** Under Review — GDS-14 Corrected  
+> **Status:** Design Complete  
 > **Authority:** Real Time, Active Game Time, Simulation Time, True Pause, interface-time rules, Strategic Timers, off-screen simulation, offline behavior, and deterministic elapsed-time handling
 
 ## 1. Purpose

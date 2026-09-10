@@ -1,6 +1,6 @@
 # Crew Injuries, Incapacitation and Death
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Crew physical-health states, injury consequences, stabilization, medical treatment, recovery, availability, and permanent-death constraints
 
 ## 1. Purpose
@@ -222,7 +222,7 @@ Medical scarcity does not silently kill generic persistent crew.
 
 ## 20. Recovery Time
 
-Recovery requires active game time.
+Recovery requires Simulation Time.
 
 Exact duration depends on:
 
@@ -373,10 +373,10 @@ This specification depends on:
 - [Professions](professions.md);
 - [Skills and Traits](skills_and_traits.md);
 - station atmosphere, thermal, security, damage, automation;
-- future combat and medical-resource specifications.
+- combat and medical-resource specifications.
 
 ## 35. Open Questions
 
 None in the current health baseline.
 
-The document remains Draft until combat, equipment, medical resources, AI rescue, and narrative systems are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

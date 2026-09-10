@@ -1,6 +1,6 @@
 # Interaction Feedback
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** How player actions, targets, validity, progress, completion, interruption, failure, ownership transfer, and physical system response are communicated
 
 ## 1. Purpose

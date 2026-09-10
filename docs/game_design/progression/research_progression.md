@@ -1,6 +1,6 @@
 # Research Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Campaign-band ordering and cross-domain purpose of Research without redefining GDS-4 Research mechanics
 
 ## 1. Existing Authority
@@ -138,7 +138,7 @@ Faction access expands options rather than replacing the canonical Research grap
 
 Research Work amounts are tuneable.
 
-Mandatory progression should require meaningful projects but not long AFK waiting; all progress is Active Game Time only.
+Mandatory progression should require meaningful projects but not long AFK waiting; all progress is Simulation Time only.
 
 ## 14. Research Parallelism
 

@@ -1,6 +1,6 @@
 # Combat Damage Model
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Damage Packet structure, damage channels, hit-location multipliers, shield overflow, armor penetration/mitigation mathematics, biological/system damage output, and damage-event ordering
 
 ## 1. Purpose
@@ -410,7 +410,7 @@ Tuneable values include ArmorScale, channel multipliers, hit multipliers, fallof
 
 ## 42. Dependencies
 
-This specification depends on Armor/Shields, Weapons, Status Effects, GDS-5 Health, GDS-6 Ship Damage, GDS-2 Station Damage, and future Robots.
+This specification depends on Armor/Shields, Weapons, Status Effects, GDS-5 Health, GDS-6 Ship Damage, GDS-2 Station Damage, and Robots.
 
 ## 43. Open Questions
 

@@ -1,6 +1,6 @@
 # Reputation and Relations
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Player-faction reputation state, relationship tiers, reputation changes, hostility, access, faction conflict side effects, and relation visibility
 
 ## 1. Purpose
@@ -90,7 +90,7 @@ Reputation can change through:
 
 ## 13. No Passive Decay
 
-Reputation does not drift toward zero merely because active game time passes.
+Reputation does not drift toward zero merely because Simulation Time passes.
 
 A faction remembers meaningful history.
 

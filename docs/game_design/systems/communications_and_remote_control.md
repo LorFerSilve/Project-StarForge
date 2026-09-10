@@ -1,6 +1,6 @@
 # Communications and Remote Control
 
-> **Status:** Under Review — Added by GDS-14  
+> **Status:** Design Complete  
 > **Authority:** Cross-system local/strategic communication availability, live-vs-recorded contact, remote Horizon information, remote-order capability, communication loss/recovery, and strategic communication timing semantics
 
 ## 1. Purpose

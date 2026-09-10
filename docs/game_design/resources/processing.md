@@ -1,6 +1,6 @@
 # Resource Processing
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical raw-to-refined transformations, process classes, efficiencies, byproducts, industrial requirements, and processing conservation rules
 
 ## 1. Purpose
@@ -437,10 +437,10 @@ Tuneable values include input/output ratios, efficiency caps, process durations,
 
 ## 20. Dependencies
 
-This specification depends on Resource Catalog, station Manufacturing, Power, Thermal, Water, Research, Blueprints, and future economy/balance.
+This specification depends on Resource Catalog, station Manufacturing, Power, Thermal, Water, Research, Blueprints, and economy/balance.
 
 ## 21. Open Questions
 
 None in the current processing baseline.
 
-The document remains Draft until machine catalog, progression, economy, and balance values are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

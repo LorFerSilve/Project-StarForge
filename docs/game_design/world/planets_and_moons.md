@@ -1,6 +1,6 @@
 # Planets and Moons
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Planetary/lunar strategic representation, biome classes, landing/mission-zone relationship, environmental metadata, and resource plausibility
 
 ## 1. Purpose

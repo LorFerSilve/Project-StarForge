@@ -1,6 +1,6 @@
 # Mission Objectives
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Objective identity, hierarchy, dependency graph, state machine, progress, completion/failure semantics, optional objectives, and objective persistence
 
 ## 1. Purpose
@@ -214,7 +214,7 @@ Timed objectives are allowed only when time pressure creates meaningful gameplay
 
 A timer:
 
-- advances only in active game time;
+- advances only in Simulation Time;
 - pauses under true Pause;
 - clearly communicates remaining time;
 - defines what happens at zero.

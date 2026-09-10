@@ -1,6 +1,6 @@
 # Spacecraft Docking and Hangars
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Docking compatibility, approach/alignment, hard-dock state, station service connections, hangar use, launch/undock validation, and docking failure behavior
 
 ## 1. Purpose

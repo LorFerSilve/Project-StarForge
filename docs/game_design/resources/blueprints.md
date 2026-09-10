@@ -1,6 +1,6 @@
 # Blueprints
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Design-knowledge ownership, blueprint unlock states, acquisition, reconstruction, prerequisites, persistence, and relationship between blueprints and recipes/construction
 
 ## 1. Purpose

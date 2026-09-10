@@ -1,6 +1,6 @@
 # Enemy Combat Behavior
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Generic hostile combat AI perception, alert states, target selection, movement/cover, firing discipline, communication, search, retreat, surrender boundary, and fairness/readability constraints
 
 ## 1. Purpose
@@ -399,7 +399,7 @@ Vision range/FOV, hearing range, reaction time, aim error, burst length, cover p
 
 ## 46. Dependencies
 
-This specification depends on Weapons, Hit Resolution, Damage, Mission Zones, Factions, Status Effects, future Robots/Raids, and GDS-12 Difficulty.
+This specification depends on Weapons, Hit Resolution, Damage, Mission Zones, Factions, Status Effects, Robots/Raids, and GDS-12 Difficulty.
 
 ## 47. Open Questions
 

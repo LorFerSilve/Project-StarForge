@@ -1,6 +1,6 @@
 # Robot System Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Global robot identity, physical existence, ownership, role categories, deployment philosophy, persistence, destruction boundary, energy, and cross-domain authority
 
 ## 1. Purpose
@@ -397,7 +397,7 @@ Energy capacity, Command Load, transport footprint, maintenance cost, movement, 
 
 ## 33. Dependencies
 
-This specification depends on GDS-2 Station Automation, GDS-3 Crew, GDS-4 Resources/Crafting, GDS-6 Spacecraft, GDS-8 Missions, GDS-9 Combat, and future Raids/Progression/Presentation.
+This specification depends on GDS-2 Station Automation, GDS-3 Crew, GDS-4 Resources/Crafting, GDS-6 Spacecraft, GDS-8 Missions, GDS-9 Combat, and Raids/Progression/Presentation.
 
 ## 34. Open Questions
 

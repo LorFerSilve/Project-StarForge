@@ -1,6 +1,6 @@
 # Crafting
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Component/finished-item recipe rules, station vs field crafting boundary, canonical component recipes, cancellation semantics, and crafting unlock requirements
 
 ## 1. Purpose

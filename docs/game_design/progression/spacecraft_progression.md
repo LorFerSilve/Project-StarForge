@@ -1,6 +1,6 @@
 # Spacecraft Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-phase player spacecraft access, hull-class role progression, Reach capability bands, upgrade philosophy, service dependencies, and finale ship readiness
 
 ## 1. Purpose

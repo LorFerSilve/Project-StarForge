@@ -1,6 +1,6 @@
 # Historical Lore
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical historical timeline, pre-Fracture civilization, The Fracture chronology, post-Fracture political emergence, and historical truths discoverable by the player
 
 ## 1. Purpose

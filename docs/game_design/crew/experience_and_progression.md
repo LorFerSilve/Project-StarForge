@@ -1,6 +1,6 @@
 # Crew Experience and Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Crew skill experience, training, skill-level advancement, specialization development, and profession-transition rules
 
 ## 1. Purpose
@@ -105,7 +105,7 @@ Crew can train skills using appropriate:
 - educational material;
 - research knowledge.
 
-Training consumes active game time and potentially resources.
+Training consumes Simulation Time and potentially resources.
 
 It does not advance through real-world offline time.
 
@@ -332,4 +332,4 @@ This specification depends on:
 
 None in the current progression baseline.
 
-The document remains Draft until training facilities, research, narrative, and task-difficulty systems are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

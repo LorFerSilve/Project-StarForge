@@ -1,6 +1,6 @@
 # Robot Classes
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical baseline player robot classes, their primary roles, size/transport class, baseline Command Load, required capabilities, and role boundaries
 
 ## 1. Purpose

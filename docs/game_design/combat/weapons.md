@@ -1,6 +1,6 @@
 # Weapons
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical baseline weapon families, firing modes, weapon state, accuracy/recoil/heat behavior, modification boundary, melee/explosive categories, and weapon progression philosophy
 
 ## 1. Purpose

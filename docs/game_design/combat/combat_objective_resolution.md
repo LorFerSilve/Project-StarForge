@@ -1,6 +1,6 @@
 # Combat Objective Resolution
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Exact combat-state meanings used by GDS-8 objectives: Kill, Incapacitate, Destroy, Disable, Drive Off, Capture, Protect, Survive, and Suppress
 
 ## 1. Purpose
@@ -105,7 +105,7 @@ The Objective must define acceptable end state:
 
 Survive completes when:
 
-- required active-time condition/event ends;
+- required Simulation-Time condition/event ends;
 - player/protected target has not triggered failure condition.
 
 It is not equivalent to "kill all."
@@ -237,7 +237,7 @@ without mapping them to one canonical Resolution Type.
 
 ## 26. Dependencies
 
-This specification depends on GDS-8 Objectives, Damage/Health, Enemy Behavior, Spacecraft Damage, future Robots/Raids, and Narrative.
+This specification depends on GDS-8 Objectives, Damage/Health, Enemy Behavior, Spacecraft Damage, Robots/Raids, and Narrative.
 
 ## 27. Open Questions
 

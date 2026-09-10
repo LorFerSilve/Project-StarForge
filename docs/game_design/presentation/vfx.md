@@ -1,6 +1,6 @@
 # VFX
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Visual-effects language for weapons, impacts, shields, environmental hazards, station systems, spacecraft, anomalies, damage, and effect readability/accessibility
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Mission Extraction
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Extraction availability, extraction points, withdrawal modes, secure-loot transitions, passenger/objective extraction, extraction commit, interruption, and post-extraction ownership
 
 ## 1. Purpose
@@ -259,7 +259,7 @@ There is no universal extraction countdown.
 
 A mission may define one when justified.
 
-Any countdown advances only in active game time and is clearly visible.
+Any countdown advances only in Simulation Time and is clearly visible.
 
 ## 29. Abandonment and Extraction
 

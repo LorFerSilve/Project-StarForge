@@ -1,6 +1,6 @@
 # Major Characters
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical major recurring characters, faction roles, baseline motivations, recruitability, and story function
 
 ## 1. Purpose

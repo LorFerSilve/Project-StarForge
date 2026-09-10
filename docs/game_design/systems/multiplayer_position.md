@@ -1,6 +1,6 @@
 # Multiplayer Position
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Baseline multiplayer scope and the boundary a future multiplayer design must not cross without a new accepted specification
 
 ## 1. Core Decision

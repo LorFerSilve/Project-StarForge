@@ -1,6 +1,6 @@
 # Mid Game — P2
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** P2 Frontier Network progression, capability maturation, Reach II economy/faction integration, systemic raid introduction, and P3 entry conditions
 
 ## 1. Scope

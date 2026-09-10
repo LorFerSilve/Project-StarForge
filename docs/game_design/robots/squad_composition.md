@@ -1,6 +1,6 @@
 # Robot Squad Composition
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Tactical squad identity, membership, Command Load/TCC limits, transport/support constraints, deployment, reserve units, squad preparation, and mission extraction of robots
 
 ## 1. Purpose
@@ -351,7 +351,7 @@ TCC progression, Rack capacity, minimum startup energy, formation spacing, reser
 
 ## 35. Dependencies
 
-This specification depends on Overview, Classes, AI, Tactical Commands, GDS-6 Spacecraft, GDS-8 Mission deployment/extraction, Damage/Repair, and future Raids/Progression.
+This specification depends on Overview, Classes, AI, Tactical Commands, GDS-6 Spacecraft, GDS-8 Mission deployment/extraction, Damage/Repair, and Raids/Progression.
 
 ## 36. Open Questions
 

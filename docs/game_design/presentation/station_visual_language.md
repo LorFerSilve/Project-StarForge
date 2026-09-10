@@ -1,6 +1,6 @@
 # Station Visual Language
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Visual grammar for Horizon Station modules, infrastructure, operational states, construction readability, damage, repairs, automation, defenses, crew presence, and progression
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Station Power System
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Electrical generation, storage, distribution, allocation, protection, and failure behavior on the home station
 
 ## 1. Purpose
@@ -153,7 +153,7 @@ A consumer defines as applicable:
 - nominal demand;
 - peak/transient demand;
 - current requested demand;
-- priority;
+- `PowerLoadPriority`;
 - whether partial-power operation is supported.
 
 ## 11. Consumer Operating Modes
@@ -185,27 +185,27 @@ All-or-nothing devices require their defined operating draw.
 
 Enabled consumers belong to one load-shedding priority.
 
-Baseline priorities are:
+Baseline priorities use the dedicated `PowerLoadPriority` type. This namespace is not interchangeable with `AlarmPriority`, automation severity, mission threat, or any other P-scale.
 
-### P0 — Emergency
+### `PowerLoadPriority::P0` — Emergency
 
 Reserved for protected emergency functions.
 
 Not normally user-reassignable.
 
-### P1 — Critical
+### `PowerLoadPriority::P1` — Critical
 
 Systems whose continued operation protects station survival or immediate safety.
 
-### P2 — Essential
+### `PowerLoadPriority::P2` — Essential
 
 Important operational and defensive infrastructure.
 
-### P3 — Normal Operations
+### `PowerLoadPriority::P3` — Normal Operations
 
 Industry, research, routine logistics, and similar normal work.
 
-### P4 — Discretionary
+### `PowerLoadPriority::P4` — Discretionary
 
 Comfort, decorative, or explicitly low-priority loads.
 
@@ -706,4 +706,4 @@ This specification depends on:
 
 None in the current power-network baseline.
 
-The document remains Draft until thermal, resource, logistics, automation, and damage dependencies are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

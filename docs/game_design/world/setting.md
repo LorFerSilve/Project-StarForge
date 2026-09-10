@@ -1,6 +1,6 @@
 # World Setting
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical era, historical premise, civilization state, tone, inhabited-space baseline, and setting-wide facts
 
 ## 1. Core Premise

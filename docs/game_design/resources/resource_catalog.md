@@ -1,6 +1,6 @@
 # Core Resource Catalog
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical baseline physical resources and manufactured components available to Project StarForge's core progression
 
 ## 1. Purpose

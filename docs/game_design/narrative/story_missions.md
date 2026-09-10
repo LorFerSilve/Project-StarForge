@@ -1,6 +1,6 @@
 # Story Missions
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical main-story mission IDs, narrative objectives, required discoveries, ordering constraints, and story progression outputs
 
 ## 1. Purpose

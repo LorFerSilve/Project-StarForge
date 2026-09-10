@@ -1,6 +1,6 @@
 # Failure and Recovery Rules
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-domain failure hierarchy, permanent-vs-recoverable losses, recovery principles, softlock protection, cost conservation, catastrophic-state handling, and precedence between subsystem failure rules
 
 ## 1. Purpose

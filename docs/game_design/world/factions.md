@@ -1,6 +1,6 @@
 # Factions
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical major factions, their identities, doctrines, territories, strategic interests, technology profiles, and baseline relationship to the player
 
 ## 1. Purpose

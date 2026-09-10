@@ -1,6 +1,6 @@
 # Spacecraft Combat Resolution
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** GDS-9 damage/weapon/targeting behavior specific to spacecraft combat, ship weapon classes, shield/armor interaction, subsystem targeting, missile guidance, disable/destruction resolution, and combat escape boundary
 
 ## 1. Purpose
@@ -392,7 +392,7 @@ Ship weapon damage, penetration, tracking, missile speed, point-defense efficien
 
 ## 41. Dependencies
 
-This specification depends on GDS-6 Ship Combat/Damage/Systems/Flight, Damage Model, Hit Resolution, Armor/Shields, Status Effects, Missions, and future Raids.
+This specification depends on GDS-6 Ship Combat/Damage/Systems/Flight, Damage Model, Hit Resolution, Armor/Shields, Status Effects, Missions, and Raids.
 
 ## 42. Open Questions
 

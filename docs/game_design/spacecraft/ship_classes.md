@@ -1,6 +1,6 @@
 # Spacecraft Ship Classes
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical player-ship hull classes, intended roles, capacity envelopes, interior expectations, and progression boundaries
 
 ## 1. Purpose

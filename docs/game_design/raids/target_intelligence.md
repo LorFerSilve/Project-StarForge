@@ -1,6 +1,6 @@
 # Raid Target Intelligence
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid-intelligence categories, confidence, acquisition, staleness, target revelation, preparation impact, and anti-omniscience rules
 
 ## 1. Purpose
@@ -331,7 +331,7 @@ Tuneable values include sensor resolution, recon exposure/time, staleness thresh
 
 ## 34. Dependencies
 
-This specification depends on GDS-5 Scanner, GDS-6 Sensors, GDS-7 World/Factions, GDS-8 Exploration, GDS-10 Recon/Hacker units, Station Security/Defenses, and future Economy/Presentation.
+This specification depends on GDS-5 Scanner, GDS-6 Sensors, GDS-7 World/Factions, GDS-8 Exploration, GDS-10 Recon/Hacker units, Station Security/Defenses, and Economy/Presentation.
 
 ## 35. Open Questions
 

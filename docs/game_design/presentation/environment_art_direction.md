@@ -1,6 +1,6 @@
 # Environment Art Direction
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Visual construction of planetary, orbital, derelict, colony, anomaly, and space mission environments; biome readability; environmental storytelling; gameplay-space legibility; and art-state persistence
 
 ## 1. Purpose

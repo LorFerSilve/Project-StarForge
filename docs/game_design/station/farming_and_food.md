@@ -1,6 +1,6 @@
 # Station Farming and Food
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Home-station food production, crop growth, food storage behavior, agricultural automation requirements, and food-security failure states
 
 ## 1. Purpose
@@ -427,4 +427,4 @@ This specification depends on:
 
 None in the current farming baseline.
 
-The document remains Draft until crew, resource, logistics, manufacturing, and time specifications are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

@@ -1,6 +1,6 @@
 # Gathering and Salvage
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Non-mining resource acquisition, world pickups, dismantling, salvage yields, container recovery, artifact recovery, and resource securing prior to extraction
 
 ## 1. Purpose
@@ -186,7 +186,7 @@ Exact player tool mechanics belong to GDS-5.
 
 ## 18. Time and Exposure
 
-Salvage work takes active game time.
+Salvage work takes Simulation Time.
 
 The player can be interrupted by:
 
@@ -326,4 +326,4 @@ This specification depends on Resource Model, Resource Catalog, missions, player
 
 None in the current gathering/salvage baseline.
 
-The document remains Draft until mission extraction, player tools/inventory, and world persistence are defined.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

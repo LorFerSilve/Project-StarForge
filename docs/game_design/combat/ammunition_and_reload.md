@@ -1,6 +1,6 @@
 # Ammunition and Reload
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Ammunition item classes, carried reserve, weapon magazine/capacitor state, reload transactions, tactical/empty reload, energy-cell behavior, ammunition variants, and consumption persistence
 
 ## 1. Purpose

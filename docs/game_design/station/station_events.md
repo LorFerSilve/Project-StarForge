@@ -1,6 +1,6 @@
 # Station Events
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Dynamic home-station incidents, event escalation, resolution, fairness constraints, and interaction with station automation
 
 ## 1. Purpose
@@ -302,4 +302,4 @@ This specification depends on all station systems, automation, damage, defense, 
 
 None in the current baseline.
 
-The document remains Draft until dependent domains are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

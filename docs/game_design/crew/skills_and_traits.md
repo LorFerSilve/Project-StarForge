@@ -1,6 +1,6 @@
 # Crew Skills and Traits
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Crew skill scale, professional competence, cross-training, trait behavior, and limits on crew statistical bonuses
 
 ## 1. Purpose

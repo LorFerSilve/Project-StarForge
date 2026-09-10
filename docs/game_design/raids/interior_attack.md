@@ -1,6 +1,6 @@
 # Interior Attack
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Interior raid traversal, local control, defender behavior, bridgeheads, security interaction, robot use, local resupply, room/sector clearing, and objective movement
 
 ## 1. Purpose

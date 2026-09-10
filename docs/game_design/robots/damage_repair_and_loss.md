@@ -1,6 +1,6 @@
 # Robot Damage, Repair and Loss
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Robot structural/subsystem damage states, hit zones, disablement, destruction, field repair, station repair, wreck recovery, loss, salvage, and mission-failure persistence
 
 ## 1. Purpose

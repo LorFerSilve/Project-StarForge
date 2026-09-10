@@ -1,6 +1,6 @@
 # System Sabotage
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid sabotage target classes, sabotage methods, persistent/temporary disablement, causal dependency effects, overload/destruction boundaries, repair/recovery, and anti-global-switch rules
 
 ## 1. Purpose
@@ -77,7 +77,7 @@ Examples:
 
 ## 7. Disabled Temporary
 
-Function is unavailable for a bounded active-time/status condition.
+Function is unavailable for a bounded Simulation-Time/status condition.
 
 Examples:
 
@@ -477,7 +477,7 @@ Hack time, repair response, component durability, overload thresholds, shutdown 
 
 ## 43. Dependencies
 
-This specification depends on GDS-2 Station Systems/Security, GDS-4 ownership, GDS-8 Objectives, GDS-9 Damage/Status, GDS-10 Hacker/Breacher/Demolition/Repair, Interior Attack, Escalation, and future Persistence.
+This specification depends on GDS-2 Station Systems/Security, GDS-4 ownership, GDS-8 Objectives, GDS-9 Damage/Status, GDS-10 Hacker/Breacher/Demolition/Repair, Interior Attack, Escalation, and Persistence.
 
 ## 44. Open Questions
 

@@ -1,6 +1,6 @@
 # Mission Generation
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Procedural mission creation, deterministic seeds, content-selection constraints, validation, authored/procedural boundaries, offer stability, and anti-reroll behavior
 
 ## 1. Purpose
@@ -184,7 +184,7 @@ Declining it does not immediately regenerate an alternate version of the same op
 
 ## 18. Offer Replacement
 
-Replacement of unaccepted procedural offers is governed by explicit active-time/world-state refresh rules later finalized in GDS-12.
+Replacement of unaccepted procedural offers is governed by explicit Simulation-Time/world-state refresh rules later finalized in GDS-12.
 
 No real-world clock is used.
 

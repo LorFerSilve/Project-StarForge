@@ -1,6 +1,6 @@
 # Mission Difficulty and Threat
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mission threat representation, threat axes, overall threat calculation, intel uncertainty, capability warnings, and non-scaling mission danger
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Robot Manufacturing
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Robot production prerequisites, Blueprint/research requirements, assembly process, ownership creation, configuration commit, dismantling, repair-vs-rebuild boundary, and manufacturing queues
 
 ## 1. Purpose
@@ -60,7 +60,7 @@ Typical inputs include:
 
 There is no "Robot Point", "Training Elixir", or universal troop currency.
 
-Production consumes actual materials, components, station power, capacity, and active game time.
+Production consumes actual materials, components, station power, capacity, and Simulation Time.
 
 ## 7. Production Recipe
 
@@ -251,7 +251,7 @@ Strategic resources remain approval-gated.
 
 ## 27. No Offline Production
 
-Manufacturing advances only during active game time.
+Manufacturing advances only during Simulation Time.
 
 ## 28. Persistence
 

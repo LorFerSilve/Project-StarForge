@@ -1,6 +1,6 @@
 # Station Storage and Logistics
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Physical station inventory ownership, storage capacity, resource routing, transfer priorities, local buffers, and logistics failure behavior
 
 ## 1. Purpose
@@ -451,4 +451,4 @@ This specification depends on:
 
 None in the current logistics baseline.
 
-The document remains Draft until resource inventory, spacecraft cargo, damage, automation, and crew specifications are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

@@ -1,6 +1,6 @@
 # Save and Persistence
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Save types, Stable Save Boundaries, serialization scope, autosave/quicksave/manual save policy, atomic transactions, deterministic state, loading, migration, and anti-duplication requirements
 
 ## 1. Purpose

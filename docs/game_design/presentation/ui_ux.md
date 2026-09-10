@@ -1,6 +1,6 @@
 # UI and UX
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Project-wide information architecture, menu hierarchy, interaction model, planning interfaces, state communication, confirmation rules, error/blocker messaging, and UX consistency
 
 ## 1. Purpose
@@ -498,7 +498,7 @@ Events communicate:
 - expected consequence/reward where known;
 - whether accepting creates a Mission.
 
-Timers use Simulation/Active Game Time semantics rather than real-world countdown wording.
+Gameplay timers use Simulation Time semantics rather than real-world countdown wording.
 
 ## 36. Save UX
 

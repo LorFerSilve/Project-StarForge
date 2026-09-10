@@ -1,6 +1,6 @@
 # Spacecraft Construction and Configuration
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Hull acquisition/building, module fitting, slot compatibility, mass/power/thermal validation, configuration changes, blueprint/resource requirements, and ship loadout persistence
 
 ## 1. Purpose

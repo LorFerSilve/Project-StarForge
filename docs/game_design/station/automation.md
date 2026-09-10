@@ -1,6 +1,6 @@
 # Station Automation
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Delegation of routine station work, task execution, policy, permission, escalation, and coordination between crew, robots, machinery, and player control
 
 ## 1. Purpose
@@ -313,18 +313,18 @@ The automation interface shows:
 - escalations;
 - coverage gaps.
 
-## 26. Notification Levels
+## 26. Automation Report Severity
 
-Reports are categorized as:
+Automation reports use the dedicated `AutomationReportSeverity` type:
 
-- Information
-- Warning
-- Critical
-- Decision Required
+- `AutomationReportSeverity::Information` — routine state/result that does not require intervention;
+- `AutomationReportSeverity::Warning` — degraded or blocked work that merits attention;
+- `AutomationReportSeverity::Critical` — urgent operational condition detected within valid automation knowledge;
+- `AutomationReportSeverity::DecisionRequired` — further action requires explicit player authority or a strategic choice.
 
-Routine success does not spam the player.
+`AutomationReportSeverity` is not interchangeable with `AlarmPriority`. A Critical automation report creates or escalates an alarm only when the owning gameplay incident independently qualifies for an `AlarmPriority` under GDS-13.
 
-Critical events cannot be completely hidden.
+Routine success is aggregated and does not spam the player. A Critical or DecisionRequired report cannot be completely hidden while its underlying known condition remains unresolved.
 
 ## 27. Off-Screen Operation
 
@@ -384,4 +384,4 @@ This framework depends on every station operational system and especially crew, 
 
 None in the current baseline.
 
-The document remains Draft until dependent domains are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

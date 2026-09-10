@@ -1,6 +1,6 @@
 # HUD
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Default in-game HUD composition, adaptive visibility, combat/mission/ship/station/tactical information, markers, warning priority, and HUD accessibility
 
 ## 1. Purpose

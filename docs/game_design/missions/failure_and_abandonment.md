@@ -1,6 +1,6 @@
 # Mission Failure and Abandonment
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mission failure triggers, ordinary player defeat resolution, objective impossibility, active withdrawal, abandonment, secured/unsecured resource consequences, retry, and failure transaction ordering
 
 ## 1. Purpose
@@ -75,7 +75,7 @@ If success requires extraction and every valid extraction path becomes impossibl
 
 A timed mission fails at zero only if its objective explicitly defines timer expiration as failure.
 
-Timer is visible and uses active game time.
+Timer is visible and uses Simulation Time.
 
 ## 10. Strategic Failure
 

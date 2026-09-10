@@ -1,6 +1,6 @@
 # Spacecraft Cargo and Utility
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Ship cargo ownership, mass/volume capacity, secure extraction storage, hazardous cargo, passenger/robot transport, utility-bay behavior, and cargo transfer
 
 ## 1. Purpose

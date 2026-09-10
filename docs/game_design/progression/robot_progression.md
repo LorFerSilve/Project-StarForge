@@ -1,6 +1,6 @@
 # Robot Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-phase robot class access, Tactical Control Capacity progression, platform support, manufacturing maturity, and robot fleet growth
 
 ## 1. Existing Authority

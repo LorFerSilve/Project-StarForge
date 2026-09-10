@@ -1,23 +1,23 @@
 # Mission Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for structured expeditions, exploration, objectives, mission instances, extraction, rewards, and failure.
 
 ## Specifications
 
-- [`mission_system.md`](mission_system.md) — **Draft**
-- [`mission_types.md`](mission_types.md) — **Draft**
-- [`mission_generation.md`](mission_generation.md) — **Draft**
-- [`mission_zones.md`](mission_zones.md) — **Draft**
-- [`objectives.md`](objectives.md) — **Draft**
-- [`exploration.md`](exploration.md) — **Draft**
-- [`difficulty_and_threat.md`](difficulty_and_threat.md) — **Draft**
-- [`environmental_hazards.md`](environmental_hazards.md) — **Draft**
-- [`extraction.md`](extraction.md) — **Draft**
-- [`rewards.md`](rewards.md) — **Draft**
-- [`failure_and_abandonment.md`](failure_and_abandonment.md) — **Draft**
-- [`story_mission_execution.md`](story_mission_execution.md) — **Draft**
+- [`mission_system.md`](mission_system.md) — **Design Complete**
+- [`mission_types.md`](mission_types.md) — **Design Complete**
+- [`mission_generation.md`](mission_generation.md) — **Design Complete**
+- [`mission_zones.md`](mission_zones.md) — **Design Complete**
+- [`objectives.md`](objectives.md) — **Design Complete**
+- [`exploration.md`](exploration.md) — **Design Complete**
+- [`difficulty_and_threat.md`](difficulty_and_threat.md) — **Design Complete**
+- [`environmental_hazards.md`](environmental_hazards.md) — **Design Complete**
+- [`extraction.md`](extraction.md) — **Design Complete**
+- [`rewards.md`](rewards.md) — **Design Complete**
+- [`failure_and_abandonment.md`](failure_and_abandonment.md) — **Design Complete**
+- [`story_mission_execution.md`](story_mission_execution.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -62,6 +62,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-8 is not yet Design Complete.
+GDS-8 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **12** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

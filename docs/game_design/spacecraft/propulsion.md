@@ -1,6 +1,6 @@
 # Spacecraft Propulsion
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Main-drive families, propellant/fuel consumption, strategic range/reach, local thrust capability, drive requirements, and propulsion progression
 
 ## 1. Purpose
@@ -382,4 +382,4 @@ This specification depends on GDS-4 resources/research, Ship Systems, Flight, Na
 
 None in the propulsion-framework baseline.
 
-Future World/Progression content defines which Reach IV routes exist and when their blueprints become obtainable, but the drive's physical operating inputs and rules are fixed.
+World/Progression content defines which Reach IV routes exist and when their blueprints become obtainable, but the drive's physical operating inputs and rules are fixed.

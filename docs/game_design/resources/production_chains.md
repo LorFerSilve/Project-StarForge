@@ -1,6 +1,6 @@
 # Production Chains
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Canonical dependency graph connecting raw acquisition, processing, intermediate components, operational resources, and major technology tiers
 
 ## 1. Purpose
@@ -288,7 +288,7 @@ New ship-only resources require explicit Resource Catalog justification.
 
 ## 22. Robot Chains
 
-Future robot definitions must reuse:
+Robot definitions must reuse:
 
 - Structural material;
 - Carbon Composite;

@@ -1,23 +1,23 @@
 # Progression Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for long-term advancement, cross-domain capability gates, campaign phases, and pacing.
 
 ## Specifications
 
-- [`progression_model.md`](progression_model.md) — **Draft**
-- [`player_progression.md`](player_progression.md) — **Draft**
-- [`station_progression.md`](station_progression.md) — **Draft**
-- [`spacecraft_progression.md`](spacecraft_progression.md) — **Draft**
-- [`crew_progression.md`](crew_progression.md) — **Draft**
-- [`robot_progression.md`](robot_progression.md) — **Draft**
-- [`research_progression.md`](research_progression.md) — **Draft**
-- [`galaxy_access_progression.md`](galaxy_access_progression.md) — **Draft**
-- [`early_game.md`](early_game.md) — **Draft**
-- [`mid_game.md`](mid_game.md) — **Draft**
-- [`late_game.md`](late_game.md) — **Draft**
-- [`endgame.md`](endgame.md) — **Draft**
+- [`progression_model.md`](progression_model.md) — **Design Complete**
+- [`player_progression.md`](player_progression.md) — **Design Complete**
+- [`station_progression.md`](station_progression.md) — **Design Complete**
+- [`spacecraft_progression.md`](spacecraft_progression.md) — **Design Complete**
+- [`crew_progression.md`](crew_progression.md) — **Design Complete**
+- [`robot_progression.md`](robot_progression.md) — **Design Complete**
+- [`research_progression.md`](research_progression.md) — **Design Complete**
+- [`galaxy_access_progression.md`](galaxy_access_progression.md) — **Design Complete**
+- [`early_game.md`](early_game.md) — **Design Complete**
+- [`mid_game.md`](mid_game.md) — **Design Complete**
+- [`late_game.md`](late_game.md) — **Design Complete**
+- [`endgame.md`](endgame.md) — **Design Complete**
 - [`../systems/CROSS_VALIDATION.md`](../systems/CROSS_VALIDATION.md) — GDS-12 first-pass cross-domain audit
 
 ## Authority Boundary
@@ -92,3 +92,8 @@ Progression is:
 **First-Pass Complete — Cross-Validation Pending**
 
 Its GDS-13 presentation/onboarding/accessibility dependency is first-pass resolved. The remaining dependency is GDS-14 final cross-system consistency audit before Design Complete status.
+
+
+## GDS-14 Promotion State
+
+All **12** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

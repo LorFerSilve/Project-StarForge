@@ -1,6 +1,6 @@
 # Recovery Transit and Destination Resolution
 
-> **Status:** Under Review — Added by GDS-14  
+> **Status:** Design Complete  
 > **Authority:** Player external-defeat recovery destination, recovery transit timing, Horizon-under-attack interaction, ship-location preservation, and anti-teleport recovery rules
 
 ## 1. Purpose

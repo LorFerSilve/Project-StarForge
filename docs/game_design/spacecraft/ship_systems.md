@@ -1,6 +1,6 @@
 # Spacecraft Systems
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Onboard power, thermal, life-support, control, sensors, shield support, system states, dependencies, and ship-system prioritization
 
 ## 1. Purpose
@@ -245,7 +245,7 @@ Ship sensors provide information on:
 
 Sensor information is not omniscient.
 
-Range/quality depend on actual systems and future World/Combat rules.
+Range/quality depend on actual systems and World/Combat rules.
 
 ## 20. Life Support
 

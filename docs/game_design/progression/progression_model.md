@@ -1,6 +1,6 @@
 # Progression Model
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-domain progression structure, campaign capability phases, phase gates, anti-grind rules, horizontal/vertical advancement, and progression invariants
 
 ## 1. Purpose

@@ -1,6 +1,6 @@
 # Game Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** High-level game identity and core gameplay structure
 
 ## 1. Working Title
@@ -277,8 +277,10 @@ Unless explicitly changed by later accepted design decisions, the project is not
 - thousands of simultaneous tactical combat units;
 - a general-purpose reusable game engine as the project's primary product.
 
-## 16. Open Design Work
+## 16. Design Completion State
 
-This overview establishes game identity but intentionally does not define the detailed rules of every subsystem.
+This overview defines project identity and the core loop; detailed gameplay behavior is owned by the authoritative thematic specifications under `docs/game_design/`.
 
-Those rules will be specified in their authoritative thematic documents before implementation.
+GDS-14 has cross-validated those domains and completed the Design Complete Promotion Sweep. Implementation must consume the owning specifications rather than invent missing gameplay behavior.
+
+Numerical balance, authored content rosters, and values explicitly classified as tuneable remain adjustable without changing these fixed game rules.

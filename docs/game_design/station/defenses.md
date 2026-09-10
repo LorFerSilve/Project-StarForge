@@ -1,6 +1,6 @@
 # Station Defenses
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** External home-station defensive layers, targeting, shield coverage, weapon operation, interception, ammunition support, and defensive failure behavior
 
 ## 1. Purpose
@@ -322,4 +322,4 @@ This specification depends on power, thermal, logistics, damage, security, comba
 
 None in the current baseline.
 
-The document remains Draft until dependent combat and raid domains are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

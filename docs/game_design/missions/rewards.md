@@ -1,6 +1,6 @@
 # Mission Rewards
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Mission-result reward categories, reward commit, physical reward delivery, knowledge/faction rewards, optional-objective rewards, claim state, and anti-duplication rules
 
 ## 1. Purpose

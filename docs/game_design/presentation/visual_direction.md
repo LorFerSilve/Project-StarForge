@@ -1,6 +1,6 @@
 # Visual Direction
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Project-wide visual identity, realism/stylization target, shape language, material readability, lighting philosophy, color semantics, camera readability, and visual hierarchy
 
 ## 1. Purpose

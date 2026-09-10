@@ -1,6 +1,6 @@
 # Player Progression
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Cross-phase direct player capability progression without a Player Level
 
 ## 1. Core Rule

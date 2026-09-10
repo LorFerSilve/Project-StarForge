@@ -1,6 +1,6 @@
 # Global Game Rules
 
-> **Status:** Under Review — GDS-14 Corrected  
+> **Status:** Design Complete  
 > **Authority:** Project-wide gameplay invariants and scope rules
 
 This document defines rules that apply across multiple gameplay domains.

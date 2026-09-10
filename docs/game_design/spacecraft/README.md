@@ -1,22 +1,22 @@
 # Spacecraft Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for persistent player-owned spacecraft and ship operation.
 
 ## Specifications
 
-- [`overview.md`](overview.md) — **Draft**
-- [`ship_classes.md`](ship_classes.md) — **Draft**
-- [`ship_construction_and_configuration.md`](ship_construction_and_configuration.md) — **Draft**
-- [`ship_systems.md`](ship_systems.md) — **Draft**
-- [`flight_model.md`](flight_model.md) — **Draft**
-- [`propulsion.md`](propulsion.md) — **Draft**
-- [`navigation.md`](navigation.md) — **Draft**
-- [`docking_and_hangars.md`](docking_and_hangars.md) — **Draft**
-- [`cargo_and_utility.md`](cargo_and_utility.md) — **Draft**
-- [`damage_and_repairs.md`](damage_and_repairs.md) — **Draft**
-- [`ship_combat.md`](ship_combat.md) — **Draft**
+- [`overview.md`](overview.md) — **Design Complete**
+- [`ship_classes.md`](ship_classes.md) — **Design Complete**
+- [`ship_construction_and_configuration.md`](ship_construction_and_configuration.md) — **Design Complete**
+- [`ship_systems.md`](ship_systems.md) — **Design Complete**
+- [`flight_model.md`](flight_model.md) — **Design Complete**
+- [`propulsion.md`](propulsion.md) — **Design Complete**
+- [`navigation.md`](navigation.md) — **Design Complete**
+- [`docking_and_hangars.md`](docking_and_hangars.md) — **Design Complete**
+- [`cargo_and_utility.md`](cargo_and_utility.md) — **Design Complete**
+- [`damage_and_repairs.md`](damage_and_repairs.md) — **Design Complete**
+- [`ship_combat.md`](ship_combat.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -46,6 +46,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-6 is not yet Design Complete.
+GDS-6 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **11** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

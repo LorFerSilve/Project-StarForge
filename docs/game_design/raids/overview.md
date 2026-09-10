@@ -1,6 +1,6 @@
 # Raid System Overview
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Raid identity, lifecycle, specialization of GDS-8 missions, target persistence, offensive/defensive raid philosophy, raid-scale boundaries, and global raid rules
 
 ## 1. Purpose
@@ -224,7 +224,7 @@ This preserves DD-012.
 
 ## 16. Station Attack While Player Is Away
 
-A hostile attack on Horizon Station can occur while the player is deployed elsewhere during active game time.
+A hostile attack on Horizon Station can occur while the player is deployed elsewhere during Simulation Time.
 
 This does not violate the one-Deployed-Mission rule because the station attack is a persistent Home Station Event, not a second player-deployed external Mission Instance.
 
@@ -390,7 +390,7 @@ Tuneable values include raid scale distributions, defender counts, reinforcement
 
 ## 33. Dependencies
 
-This specification depends on GDS-2 Station, GDS-4 Resources, GDS-6 Spacecraft, GDS-7 World/Factions, GDS-8 Missions, GDS-9 Combat, GDS-10 Robots, and future Economy/Persistence/Presentation.
+This specification depends on GDS-2 Station, GDS-4 Resources, GDS-6 Spacecraft, GDS-7 World/Factions, GDS-8 Missions, GDS-9 Combat, GDS-10 Robots, and Economy/Persistence/Presentation.
 
 ## 34. Open Questions
 

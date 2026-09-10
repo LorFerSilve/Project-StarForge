@@ -1,6 +1,6 @@
 # Difficulty and Scaling
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Player-selectable difficulty profiles, allowed tuning axes, prohibited scaling, application timing, threat relationship, custom difficulty boundary, and fairness invariants
 
 ## 1. Purpose

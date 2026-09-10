@@ -1,20 +1,20 @@
 # Robot Design
 
-> **Domain Status:** First-Pass Complete — Cross-Validation Pending
+> **Domain Status:** Design Complete — GDS-14 Promotion Passed
 
 Authoritative design domain for manufactured robotic units.
 
 ## Specifications
 
-- [`overview.md`](overview.md) — **Draft**
-- [`manufacturing.md`](manufacturing.md) — **Draft**
-- [`robot_classes.md`](robot_classes.md) — **Draft**
-- [`robot_components_and_upgrades.md`](robot_components_and_upgrades.md) — **Draft**
-- [`robot_ai.md`](robot_ai.md) — **Draft**
-- [`squad_composition.md`](squad_composition.md) — **Draft**
-- [`tactical_commands.md`](tactical_commands.md) — **Draft**
-- [`damage_repair_and_loss.md`](damage_repair_and_loss.md) — **Draft**
-- [`station_robots.md`](station_robots.md) — **Draft**
+- [`overview.md`](overview.md) — **Design Complete**
+- [`manufacturing.md`](manufacturing.md) — **Design Complete**
+- [`robot_classes.md`](robot_classes.md) — **Design Complete**
+- [`robot_components_and_upgrades.md`](robot_components_and_upgrades.md) — **Design Complete**
+- [`robot_ai.md`](robot_ai.md) — **Design Complete**
+- [`squad_composition.md`](squad_composition.md) — **Design Complete**
+- [`tactical_commands.md`](tactical_commands.md) — **Design Complete**
+- [`damage_repair_and_loss.md`](damage_repair_and_loss.md) — **Design Complete**
+- [`station_robots.md`](station_robots.md) — **Design Complete**
 - [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Authority Boundary
@@ -44,6 +44,11 @@ GDS-13 now resolves:
 
 ## Completion State
 
-GDS-10 is not yet Design Complete.
+GDS-10 is Design Complete after the GDS-14 promotion sweep.
 
-All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The GDS-14 Design Complete promotion gate has passed.
+
+
+## GDS-14 Promotion State
+
+All **9** authoritative owning specifications in this domain passed the GDS-14 maturity gate and are **Design Complete**. Historical `CROSS_VALIDATION.md` material remains audit evidence and does not override current owning specifications.

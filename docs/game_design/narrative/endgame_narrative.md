@@ -1,6 +1,6 @@
 # Endgame Narrative
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Finale choice consequences, epilogue-state categories, postgame continuity, faction response, and narrative state after the main campaign
 
 ## 1. Purpose

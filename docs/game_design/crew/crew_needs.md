@@ -1,6 +1,6 @@
 # Crew Needs
 
-> **Status:** Draft  
+> **Status:** Design Complete  
 > **Authority:** Persistent crew support requirements, habitability, population sustainability, habitation allocation, and shortage consequences
 
 ## 1. Purpose
@@ -329,4 +329,4 @@ This specification depends on station atmosphere, thermal, water, farming/food, 
 
 None in the current baseline.
 
-The document remains Draft until medical, time, and resource systems are cross-validated.
+GDS-14 cross-domain validation is complete; remaining numeric balance and authored content values are governed as tuneable data under Design Authority.

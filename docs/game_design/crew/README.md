@@ -39,34 +39,31 @@ The crew domain establishes:
 ## Authority Boundary
 
 Station infrastructure is authoritative under `../station/`.
-
 Mission rescue context belongs under `../missions/`.
-
 Combat rules belong under `../combat/`.
-
 Robot behavior belongs under `../robots/`.
-
 Narrative character arcs belong under `../narrative/`.
-
 GDS-12 owns cross-cutting time, persistence, economy, Difficulty, and campaign-progression coordination.
+GDS-13 owns crew-facing UI, local visual presence, feedback, alarms, onboarding, subtitles/captions, and accessibility.
 
 This domain defines how persistent people interact with those systems and must not redefine their underlying rules.
 
 ## Downstream Resolution
 
-Missions, Resources/Research, Spacecraft, Narrative/Factions, Player, Combat, Robots, and Raids have now been first-pass cross-validated against Crew.
+Missions, Resources/Research, Spacecraft, Narrative/Factions, Player, Combat, Robots, Raids, and GDS-12 cross-cutting systems are first-pass cross-validated against Crew.
 
-GDS-12 additionally resolves:
+GDS-13 now additionally resolves:
 
-- Simulation Time for work/training/healing/off-screen activity;
-- final save/persistence semantics;
-- crew progression pacing;
-- economy interaction boundaries;
-- failure/recovery coordination;
-- finale support integration.
+- crew roster/identity/Profession/Skill/Assignment presentation;
+- health/incapacitation and availability feedback;
+- visible local habitation/work presence;
+- automation-response presentation;
+- survivor/recruitment onboarding;
+- color-independent and scalable crew UI;
+- subtitles/captions for crew dialogue where applicable.
 
 ## Completion State
 
 The Crew domain is **not yet Design Complete**.
 
-Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

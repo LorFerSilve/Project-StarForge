@@ -2,239 +2,177 @@
 
 > **Status:** Active Audit  
 > **Authority:** Crew-domain consistency review only  
-> **Purpose:** Verify that the first-pass crew design does not contradict established global and station rules, and record unresolved external dependencies.
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks the complete first-pass crew domain against:
+This audit validates the first-pass Crew domain against Global Rules and GDS-2 through GDS-12, including survivor/recruitment, professions, skills, assignments, automation, needs, experience, injury, physical presence, time, progression, economy, raids, and persistence.
 
-- Global Game Rules;
-- Home Station Overview;
-- Station Automation;
-- Farming and Food;
-- Station Security;
-- Station Damage and Repairs;
-- Station Events.
+## 2. Persistent Crew — Result: PASS
 
-It does not mark future domains complete.
+Recruited crew remains a persistent long-term asset. A rescued Survivor becomes Crew only after recruitment commits.
 
-## 2. Global Rules — Result: PASS
+Routine gameplay does not permanently kill recruited crew; injury and Incapacitation remain meaningful persistent consequences.
 
-### Persistent Crew
+## 3. Profession, Skill, and Assignment — Result: PASS
 
-Crew specifications preserve the global rule that recruited crew is a long-term persistent asset.
+Profession is primary role identity, skills are independent competence, and one Primary Assignment plus finite Workload Capacity prevents unlimited specialist coverage.
 
-### No Routine Permanent Death
+No GDS-12 progression phase creates a generic Crew Level or overrides these rules.
 
-`injuries_incapacitation_and_death.md` explicitly prevents routine permanent death and reserves it for authored narrative exceptions.
+## 4. Crew Quality — Result: PASS
 
-### Human Crew Are Not Disposable Troops
+Crew value continues to come from profession, skills, traits, background, Special Knowledge, training, health, and actual assignment.
 
-`overview.md` and `crew_presence_and_behavior.md` preserve the global rule that robots are the repeatable tactical assault force.
+GDS-12 does not introduce Common/Rare/Epic/Legendary crew tiers.
 
-### No Real-World Offline Progression
+## 5. Station Integration — Result: PASS
 
-Crew needs, training, healing, and automation advance only during active game simulation.
+Crew work remains constrained by actual:
 
-### Automation Boundary
-
-Crew automation never selects missions, raids, diplomacy, or strategic resource use without player policy.
-
-**Conclusion:** no conflict with `../02_global_game_rules.md`.
-
-## 3. Home Station Overview — Result: PASS
-
-Crew population is constrained by actual station support rather than an arbitrary account cap.
-
-Crew physically inhabits the persistent home station.
-
-Crew assignments do not bypass structural, utility, or access requirements.
-
-**Conclusion:** no conflict with `../station/overview.md`.
-
-## 4. Station Automation — Result: PASS
-
-The station automation framework owns generic task states, scheduling, permissions, and policies.
-
-The crew domain owns:
-
-- specialist capability;
-- workload capacity;
-- professional responsibility;
-- substitution;
-- skill requirements.
-
-This avoids duplicate authority.
-
-**Conclusion:** authority boundary is clean.
-
-## 5. Farming and Food — Result: PASS
-
-The station farming specification states that a Farmer is valuable but not mandatory for basic farm operation.
-
-Crew specifications preserve this by treating Farmer expertise as automation/supervision capability rather than as a magical requirement for crop existence.
-
-**Conclusion:** no hard-lock conflict.
-
-## 6. Station Security — Result: PASS
-
-Crew security behavior respects:
-
-- pressure safety;
-- actual door state;
-- access permissions;
-- hazard knowledge;
-- physical pathfinding.
-
-Security Officers coordinate response but cannot create sensor information or override physics.
-
-**Conclusion:** no authority conflict.
-
-## 7. Damage and Repairs — Result: PASS
-
-Engineer/Mechanic capability is separated from physical repair requirements.
-
-Crew cannot repair without:
-
-- access;
-- labor;
+- station infrastructure;
+- access/pathing;
 - resources;
 - tools;
-- compatible environment.
+- environment;
+- workload;
+- assignment/authorization.
 
-**Conclusion:** crew expertise does not bypass station repair rules.
+Expertise does not bypass physical station rules.
 
-## 8. Station Events — Result: PASS
+## 6. Automation Boundary — Result: PASS
 
-Crew can respond to events according to:
+GDS-2 owns generic task scheduling/policies; GDS-3 owns human capability and professional responsibility.
 
-- availability;
+Crew automation cannot independently select missions, raids, diplomacy, Research strategy, or unbounded strategic spending.
+
+## 7. Needs — Result: PASS
+
+Crew needs remain station-level support requirements such as habitation, food, water, atmosphere, temperature, and medical support rather than individual hunger/thirst/happiness/sleep micromanagement.
+
+## 8. Resources and Research — Result: PASS
+
+GDS-4 physical ownership, Research Evidence, laboratory work, Blueprints, and Research prerequisites remain compatible with Scientist and other specialist responsibilities.
+
+Crew cannot generate physical inputs or scientific knowledge from nothing.
+
+## 9. Spacecraft — Result: PASS
+
+Passenger/life-support capacity, Navigator contribution, Engineer/Mechanic ship-service roles, docking, and recovery remain compatible with Crew rules.
+
+Baseline ship operation does not require one mandatory recruited specialist.
+
+## 10. Player and Combat — Result: PASS
+
+Crew physical presence respects GDS-5 movement/interaction and GDS-9 combat.
+
+Combat can wound/incapacitate crew but does not turn them into expendable tactical units or override routine no-permadeath protection.
+
+## 11. Robots — Result: PASS
+
+Robotics Specialists supervise eligible robot production/diagnostics/maintenance without replacing GDS-10 robot authority.
+
+Robots remain the routinely expendable manufactured force; human crew does not inherit permanent robot attrition rules.
+
+## 12. Raids and Horizon Defense — Result: PASS
+
+GDS-11 now resolves crew behavior during station attacks and raids:
+
+- security/response assignments;
+- evacuation/safe-compartment behavior;
+- engineering/medical/logistics response;
+- injury/incapacitation;
+- no routine permanent crew death.
+
+## 13. Economy — Result: PASS
+
+GDS-12 Economy can provide contracts, services, training inputs, and eligible recruitment/faction opportunities without converting Crew into purchasable rarity cards or a generic labor currency.
+
+Credits do not replace habitation, skill, profession, or staffing requirements.
+
+## 14. Crew Progression — Result: PASS
+
+GDS-12 phase progression now supplies campaign pacing around the existing skill-specific XP/training model.
+
+Crew still advances through meaningful work, training, mentorship, and Special Knowledge rather than one cross-domain XP bar.
+
+## 15. Time and Simulation — Result: PASS
+
+The previously unresolved time dependency is now resolved by GDS-12.
+
+Crew:
+
+- work;
+- training;
+- healing/recovery;
+- needs consumption;
+- off-screen station activity
+
+advance on active Simulation Time only.
+
+Real-world time while the application is closed grants no work, XP, healing, training, or needs consumption.
+
+## 16. Off-Screen Crew Simulation — Result: PASS
+
+When the player is away during active gameplay, crew may use lower-detail simulation, but outcomes must still respect actual workload, access, resources, health, assignment, and elapsed Simulation Time.
+
+## 17. Persistence — Result: PASS
+
+The previously unresolved persistence dependency is now resolved by GDS-12 Stable Save Boundaries.
+
+Persisted Crew state includes applicable:
+
+- identity;
+- recruitment state;
 - profession;
+- skills/XP;
+- traits/Special Knowledge;
 - assignment;
-- automation policy;
-- physical access.
+- workload state;
+- health/injury/recovery;
+- training progress;
+- location/behavior state where gameplay relevant.
 
-The event system remains owner of incident lifecycle; crew owns character response.
+Save/load cannot duplicate recruitment, XP, training completion, or recovery transactions.
 
-**Conclusion:** no duplicate event rules.
+## 18. Failure/Recovery — Result: PASS
 
-## 9. Internal Crew Consistency — Result: PASS
+Routine failure may create injury, Incapacitation, workload loss, emergency staffing pressure, and recovery resource/time costs.
 
-The following relationships are internally consistent:
+It does not silently erase a recruited Crew identity or committed skills/knowledge.
 
-### Profession vs Skill
+## 19. Finale Integration — Result: PASS
 
-Profession is the primary role; skill is independent learned competence.
+GDS-12 MS-F01 readiness can use faction/Continuance support or self-sufficient Horizon capability without imposing one mandatory named crew member.
 
-### Assignment vs Automation
+Qualified Crew can strengthen Research, engineering, logistics, navigation, medical, and defense readiness through their actual systems.
 
-Assignment defines responsibility; automation responsibility defines what the crew member may do within that assignment.
+## 20. Difficulty — Result: PASS
 
-### Assignment vs Presence
+Difficulty does not alter crew identity, skill levels, profession, assignment capacity, permanent-death protection, or progression unlock ownership.
 
-A local task requires physical presence; remote supervision requires valid infrastructure.
+## 21. Remaining Downstream Dependency — GDS-13
 
-### Injury vs Assignment
+GDS-13 remains responsible for:
 
-Incapacitation removes available workload capacity and forces reassignment/escalation.
+- crew management UI;
+- assignment/workload feedback;
+- needs and injury warnings;
+- training/skill presentation;
+- survivor/recruitment feedback;
+- station-presence readability;
+- accessibility.
 
-### Needs vs Recruitment
+These are presentation dependencies, not unresolved Crew gameplay rules.
 
-Permanent recruitment requires habitation; food/water sustainability may warn rather than hard-lock if immediate support exists.
+## 22. Conclusion
 
-### Progression vs Rarity
+The previously pending cross-cutting **Time and Persistence** dependency, plus later Raid/Economy/Progression interactions, are now first-pass resolved by GDS-11/GDS-12.
 
-Progression occurs through skills/training and does not require crew rarity upgrades.
+No blocking contradiction exists between GDS-3 and GDS-1 through GDS-12.
 
-## 10. Dependencies Preventing Design Complete
+GDS-3 remains:
 
-The following future domains must be cross-validated before crew files can progress to Design Complete.
+**First-Pass Complete — Cross-Validation Pending**
 
-### Missions — First-Pass Resolved by GDS-8
-
-**Result: PASS**
-
-GDS-8 now defines survivor mission identity, rescue objective states, temporary-passenger extraction, mission persistence, failure/retry, and authored story-mission participation.
-
-GDS-3 remains authoritative for survivor identity, recruitment, crew persistence, and crew health.
-
-### Resources — First-Pass Resolved by GDS-4
-
-**Result: PASS**
-
-GDS-4 now defines canonical food, water, medical, repair, operational, and component resources together with physical ownership/reservation rules.
-
-Crew does not conflict with the resource model.
-
-Exact balance quantities remain tuneable and do not block crew rule definition.
-
-### Research — First-Pass Resolved by GDS-4
-
-**Result: PASS**
-
-GDS-4 now defines Research Evidence, laboratory Research Work, Scientist requirements, technology prerequisites, Blueprint separation, and persistent research state.
-
-Crew Scientist responsibilities and finite workload are compatible with the research framework.
-
-### Spacecraft — First-Pass Resolved by GDS-6
-
-**Result: PASS**
-
-GDS-6 now defines passenger/life-support capacity, temporary survivor transport, Navigator contribution to route planning, Mechanic/Engineer ship-service boundaries, docking, and spacecraft recovery.
-
-Crew remains optional for baseline piloting while specialists improve advanced operation without bypassing physical ship requirements.
-
-### Combat — First-Pass Resolved by GDS-9
-
-**Result: PASS**
-
-GDS-9 now defines physical hit resolution, damage channels, shields/armor, status effects, combat AI, and direct boarding-combat primitives.
-
-Crew remains governed by GDS-3 injury/incapacitation and no-routine-permadeath rules; combat does not turn human crew into disposable units.
-
-### Robots — First-Pass Resolved by GDS-10
-
-**Result: PASS**
-
-GDS-10 now defines Repair Drones, Security Sentinels, robot manufacturing/maintenance, bounded robot AI, and the Robotics Specialist supervision boundary.
-
-Robotics Specialists improve diagnostics, production supervision, maintenance, and advanced fleet support but do not bypass missing parts, tools, access, or physical capability.
-
-### Narrative / Factions — First-Pass Resolved by GDS-7
-
-**Result: PASS**
-
-GDS-7 now defines authored major characters, Nia Calder's recruitable-character mapping, faction/reputation context, survivor story sources, and the rule that no baseline main-story mission requires recruited-crew permadeath.
-
-Procedural crew remain governed by GDS-3 while authored crew can add fixed background/dialogue without bypassing core mechanics.
-
-### Player / Movement / Interaction — First-Pass Resolved by GDS-5
-
-**Result: PASS**
-
-GDS-5 now defines first-person movement, collision, physical interaction, manual repair/tool use, player incapacitation, and rescue constraints.
-
-Crew presence rules are compatible with the player collision/interaction baseline and do not require teleporting manual cooperation.
-
-### Time and Persistence
-
-Required for:
-
-- exact aggregate food/water consumption cadence;
-- training duration;
-- recovery duration;
-- off-screen activity timing.
-
-## 11. No New Blocking Contradiction Found
-
-The first-pass audit found no contradiction that requires changing the established global or station design baseline.
-
-The crew domain can therefore remain the authoritative first-pass dependency for the next design phase.
-
-## 12. Next Review Trigger
-
-This audit must be revisited after completion of:
-
-1. relevant cross-cutting time/persistence specifications.
-
-Until then, Crew remains **First-Pass Complete — Cross-Validation Pending**, not Design Complete.
+Its remaining scheduled downstream design dependency is GDS-13, followed by the GDS-14 whole-project audit.

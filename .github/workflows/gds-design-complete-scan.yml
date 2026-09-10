@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - '.github/workflows/gds-design-complete-scan.yml'
-      - 'docs/game_design/**'
 
 permissions:
   contents: write
@@ -104,12 +103,14 @@ jobs:
 
           report = root/'audit'/'MATURITY_SCAN_REPORT.md'
           report.write_text('\n'.join(lines)+'\n', encoding='utf-8')
-          print('\n'.join(lines[:40]))
-          print(f'\nFull report written to {report}')
+          print(f'Scanned {len(authoritative)} authoritative specifications.')
+          print(f'Hard blocker hits: {len(blockers)}')
+          print(f'Semantic review candidates: {len(review)}')
+          print(f'Full report written to {report}')
 
       - name: Commit scan report
         run: |
-          if git diff --quiet -- docs/game_design/audit/MATURITY_SCAN_REPORT.md; then
+          if [ -z "$(git status --porcelain -- docs/game_design/audit/MATURITY_SCAN_REPORT.md)" ]; then
             echo 'Report unchanged.'
             exit 0
           fi

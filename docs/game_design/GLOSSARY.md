@@ -384,3 +384,67 @@ A persistent unique identifier for one hostile raid against Horizon Station and 
 ## Hostile Extraction Commit
 
 The transaction point at which a hostile raid carrier or ship successfully departs with stolen physical assets, permanently removing those assets from the player's current ownership unless a later world event explicitly recovers them.
+
+## Credits — Cr
+
+The baseline non-physical ledger currency used for market purchases, sales, services, and authored economic rewards.
+
+Credits are not a physical Resource and do not occupy Mass/Volume.
+
+## Market Inventory
+
+The finite physical stock currently owned by a market/vendor and available for eligible purchase.
+
+Buying transfers ownership out of Market Inventory; selling transfers physical ownership into it.
+
+## Market Liquidity
+
+The finite Credit purchasing capacity available to a market/vendor for buying goods from the player during the relevant economic state.
+
+## Active Game Time
+
+Elapsed time during which the game is actively running rather than closed. It is distinct from wall-clock time and may include periods where Simulation Time is paused.
+
+## Simulation Time
+
+The authoritative gameplay-progression clock used by production, Research, farming, healing, markets, Dynamic Events, raids, recovery, and other simulation systems.
+
+True Pause stops Simulation Time. Closing the application does not advance it.
+
+## Stable Save Boundary
+
+A game state at which no authoritative atomic transaction is half-applied and a consistent save snapshot can therefore be committed.
+
+If a save is requested during an atomic transaction, it waits for the next Stable Save Boundary.
+
+## Dynamic Event ID
+
+A persistent unique identifier for one generated or authored cross-cutting world event and its seed, lifecycle, conditions, effects, and resolution state.
+
+## Recovery Grace
+
+A bounded active-Simulation-Time protection period after a qualifying severe Horizon Station setback during which ordinary severe follow-up station attacks are suppressed.
+
+Recovery Grace does not repair the station or freeze unrelated gameplay.
+
+## Difficulty Profile
+
+A player-selected set of allowed execution-pressure modifiers such as Assisted, Standard, Veteran, Extreme, or Custom.
+
+Difficulty Profile does not redefine world progression, Reach, Research/Blueprint prerequisites, loot eligibility, or story access.
+
+## Capability Phase
+
+One of the P0–P5 campaign pacing states that summarizes the player's actual cross-domain capability and story position.
+
+A Capability Phase is not a Player Level and grants no free capability by itself.
+
+## Finale Readiness Gate
+
+The complete cross-domain validation performed through MS-F01 before MS-F02 becomes deployable, including story state, spacecraft, player loadout, Horizon support, robot/TCC capability, Support Channels, and the departure reserve manifest.
+
+## Support Channel
+
+One of the four finale preparation capability categories: Navigation and Route Support, Engineering and Recovery Support, Combat and Security Support, or Analysis and Containment Support.
+
+A Support Channel can be fulfilled only by a valid external commitment or an explicitly defined self-sufficient capability path.

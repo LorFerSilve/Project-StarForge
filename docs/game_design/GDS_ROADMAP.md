@@ -3,15 +3,13 @@
 > **Status:** Active  
 > **Authority:** Game-design documentation sequencing
 
-This roadmap defines the order in which Project StarForge's authoritative Game Design Specification is developed.
-
-The sequence is dependency-driven: foundational rules are specified before systems that depend on them.
+This roadmap defines the dependency-driven order in which Project StarForge's authoritative Game Design Specification is developed and matured.
 
 ## GDS-0 — Governance, Structure, and Historical Baseline
 
 **Status:** Complete
 
-Deliverables:
+Established:
 
 - design authority;
 - specification template;
@@ -21,55 +19,45 @@ Deliverables:
 - preserved original concept baseline;
 - structure-completeness audit.
 
-Exit criteria:
-
-- the original concept is archived;
-- every major design concern has an authoritative planned home;
-- documentation ownership rules are established.
-
 ## GDS-1 — Global Game Rules
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
-Defines project-wide rules that constrain multiple systems, including:
+Defines project-wide invariants including:
 
-- gameplay perspectives;
+- perspectives;
 - primary game mode;
-- time and simulation;
-- pause behavior;
-- player failure philosophy;
-- crew permanence;
-- survival-system scope;
-- automation philosophy;
+- simulation/pause;
+- failure philosophy;
+- crew/ship/station persistence;
+- survival scope;
+- automation;
 - mission instancing;
-- progression philosophy;
-- save/persistence philosophy;
-- difficulty philosophy;
-- multiplayer scope.
+- progression;
+- save/persistence;
+- difficulty;
+- multiplayer scope;
+- communication/recovery constraints.
 
-First-pass closure:
-
-- global baseline has no open gameplay question;
-- GDS-2 through GDS-13 have been designed under these constraints;
-- GDS-14 must perform the final whole-project validation before Design Complete status.
+GDS-14 corrected the time and defeat-recovery wording without changing the project's single-player/no-development scope.
 
 ## GDS-2 — Home Space Station
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
-Authoritative specifications for:
+Authoritative domain for:
 
-- station identity and lifecycle;
+- station identity/lifecycle;
 - construction;
-- structural rules;
+- structure;
 - power;
-- atmosphere and oxygen;
+- atmosphere/oxygen;
 - thermal management;
 - water;
-- farming and food;
-- storage and logistics;
+- farming/food;
+- storage/logistics;
 - manufacturing;
-- damage and repairs;
+- damage/repair;
 - automation;
 - defenses;
 - security;
@@ -77,270 +65,262 @@ Authoritative specifications for:
 
 ## GDS-3 — Survivors and Crew
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
-Authoritative specifications for:
+Authoritative domain for:
 
-- survivor encounters;
-- recruitment;
+- survivor encounters/recruitment;
 - professions;
-- skills and traits;
-- assignments;
+- skills/traits;
+- assignments/workload;
 - automation responsibilities;
 - needs;
 - progression;
-- injury and incapacitation;
+- injury/incapacitation;
 - physical station presence.
 
 ## GDS-4 — Resources, Processing, Crafting, and Research
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- resource taxonomy;
-- acquisition;
-- mining;
-- salvage;
+- physical resource taxonomy/ownership;
+- acquisition/mining/salvage;
 - processing;
 - production chains;
-- blueprints;
+- Blueprints;
 - crafting;
-- research.
+- Research/Evidence.
 
 ## GDS-5 — Player Character
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
 - movement;
 - interaction;
 - controls;
-- health;
-- shields;
-- damage;
-- incapacitation;
+- health/incapacitation;
 - inventory;
 - equipment;
 - tools;
 - field survival.
 
+GDS-14 added a cross-cutting Recovery Transit/destination authority and reconciled Player Health to it.
+
 ## GDS-6 — Spacecraft
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- ship classes;
-- modular configuration;
+- ship classes/configuration;
 - ship systems;
 - flight;
-- propulsion;
+- propulsion/Reach;
 - navigation;
-- docking;
-- ship combat;
-- damage;
-- repairs;
-- cargo.
+- docking/hangars;
+- cargo/utility;
+- combat integration;
+- damage/repairs/recovery.
 
 ## GDS-7 — World, Galaxy, Narrative, and Factions
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- setting;
-- galaxy topology;
-- star systems;
-- planetary locations;
-- space locations;
-- factions;
-- reputation;
-- historical lore;
+- setting/geography;
+- star systems/locations;
+- factions/reputation;
+- Fracture lore;
 - narrative structure;
-- main progression narrative;
-- major characters.
+- main story;
+- characters;
+- Stabilize/Sever/Contain endings.
 
 ## GDS-8 — Missions and Exploration
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- mission lifecycle;
-- mission generation;
-- mission zones;
+- mission lifecycle/generation;
+- zones;
 - objectives;
-- environmental hazards;
+- exploration/hazards;
 - extraction;
 - rewards;
-- failure;
-- abandonment.
+- failure/abandonment;
+- story mission execution.
 
 ## GDS-9 — Combat
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- combat loop;
-- damage model;
-- weapons;
-- armor;
-- shields;
+- physical hit resolution;
+- Damage Packets/channels;
+- weapons/ammunition;
+- armor/shields;
 - status effects;
-- enemy combat behavior.
+- on-foot combat;
+- enemy combat behavior;
+- spacecraft combat resolution;
+- combat-objective semantics.
 
 ## GDS-10 — Robots
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
 - manufacturing;
-- robot classes;
-- components;
+- classes/components;
 - AI;
-- squads;
-- commands;
-- damage;
-- repair;
+- TCC/squads;
+- commands/ROE;
+- damage/repair/loss;
 - station robots.
 
 ## GDS-11 — Raids and Station Defense
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- intelligence;
-- raid preparation;
-- external attack;
-- boarding;
+- intelligence/preparation;
+- external assault;
+- boarding/breaching;
 - interior attack;
 - sabotage;
-- looting;
-- escalation;
-- extraction;
-- defensive resolution.
+- physical looting/theft;
+- reinforcements/escalation;
+- withdrawal/extraction;
+- Horizon Station defense resolution.
 
 ## GDS-12 — Economy, Progression, Difficulty, and Cross-Cutting Systems
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- trading;
-- economy;
-- loot and reward coordination;
+- Credits/trading/economy;
+- loot/reward coordination;
 - faction-reputation cross-system consequences;
-- cross-domain capability progression;
-- early-, mid-, late-, and endgame pacing;
-- Tactical Control Capacity progression;
+- P0-P5 capability progression;
+- early/mid/late/endgame pacing;
+- TCC progression;
 - finale readiness;
-- difficulty profiles and scaling constraints;
-- dynamic events and Horizon Recovery Grace;
-- time and simulation authority;
-- persistence and Stable Save Boundaries;
-- failure/recovery rules;
+- Difficulty;
+- Dynamic Events;
+- Simulation Time;
+- persistence/Stable Save Boundaries;
+- failure/recovery;
 - multiplayer position.
 
-First-pass closure establishes:
+### GDS-14 Gap-Closure Additions
 
-- all planned cross-cutting system specifications;
-- all planned progression specifications;
-- explicit P0–P5 capability phases;
-- exact first-pass MS-F01 finale-readiness rules;
-- a combined GDS-12 cross-validation against GDS-1 through GDS-11;
-- no remaining implementation-critical open gameplay question inside GDS-12 scope.
+GDS-14 identified and created authoritative homes for:
 
-Remaining dependency:
+- Horizon Recovery State / Critical Recovery / Recovery Grace;
+- strategic communication and remote control;
+- external-defeat Recovery Transit and destination resolution.
 
-- GDS-13 must define/cross-validate presentation, onboarding, feedback, and accessibility behavior;
-- GDS-14 then performs the final whole-project cross-system audit.
+It also reconciled Time/Dynamic Event semantics so Simulation Time is the sole gameplay-progression clock.
 
 ## GDS-13 — Presentation, Onboarding, and Accessibility
 
-**Status:** First-Pass Complete — Cross-Validation Pending
+**Status:** First-Pass Complete — GDS-14 Audited
 
 Defines:
 
-- project-wide visual direction;
-- environment art direction;
-- Horizon Station visual language;
-- faction visual language;
-- UI/UX information architecture;
+- visual/environment/station/faction language;
+- UI/UX;
 - adaptive HUD;
-- interaction and transaction feedback;
-- VFX language;
-- audio direction;
-- alarms and signaling;
-- onboarding/tutorial sequencing;
+- interaction feedback;
+- VFX;
+- audio;
+- alarms/signaling;
+- onboarding/tutorials;
 - accessibility.
 
-First-pass closure establishes:
-
-- stylized grounded science-fiction visual direction;
-- hybrid diegetic/non-diegetic presentation;
-- functional/silhouette readability before color-only identification;
-- presentation knowledge boundaries that prevent hidden-information leakage;
-- adaptive HUD without an omniscient minimap or generic XP/gear-score layer;
-- truthful Preview/Commit and transaction feedback;
-- visual/audio/VFX state tied to authoritative gameplay state;
-- P0–P3 alarm priority and category signaling;
-- campaign-integrated tutorials using the real game rules;
-- explicit onboarding for extraction ownership, robot attrition, raids, station defense, economy, saves, and capability progression;
-- accessibility independent from Difficulty/rewards;
-- remappable controls, motion reduction, photosensitivity protection, UI/text scaling, subtitle/caption/audio support, navigation support, and bounded aim assistance;
-- a combined GDS-13 cross-validation with 107 checks against GDS-1 through GDS-12;
-- no remaining implementation-critical open gameplay/presentation question inside GDS-13 scope.
-
-Remaining dependency:
-
-- GDS-14 must perform the final whole-project cross-system consistency audit and resolve any contradictions/orphan states before implementation planning.
+GDS-14 validates that critical cross-system states remain readable under color-independent, audio-reduced, reduced-motion/effects, subtitle/caption, UI-scale, remapped-input, navigation-assistance, and bounded aim-assist configurations.
 
 ## GDS-14 — Cross-System Consistency Audit
 
-**Status:** Next
+**Status:** Audit Complete — Design Complete Promotion Pending
 
-The complete specification is tested against complex scenarios involving several systems simultaneously.
+GDS-14 audited the complete first-pass specification across domains.
 
-The audit must include at minimum:
+### Audit Artifacts
 
-- simultaneous station power/thermal/atmosphere/security failures;
-- Horizon defense while the player is deployed elsewhere;
-- robot/crew response under damaged logistics and communication;
-- mission failure with mixed secured/unsecured ownership;
-- spacecraft damage during extraction/docking/travel boundaries;
-- raid sabotage, theft, reinforcements, robot loss and withdrawal;
-- economy/reputation/progression consequences after persistent world changes;
-- save/load at transactional boundaries;
-- Dynamic Event overlap/recovery grace;
-- finale readiness and all three finale resolutions;
-- presentation/readability of simultaneous failures;
-- accessibility configurations including reduced motion/effects, color-independent presentation, subtitles/captions, remapped inputs, UI scaling and aim assistance.
+See [`audit/`](audit/):
 
-Example audit scenario:
+- authority/namespace audit;
+- 25 compound scenario audit;
+- transaction/persistence audit;
+- presentation/accessibility audit;
+- specification-maturity audit;
+- final audit report.
 
-> The player is away on a mission when the home station suffers an attack, a primary power route is damaged, thermal capacity falls, a critical crew specialist is incapacitated, and automated repair resources are limited.
+### Blocking Findings Discovered
 
-The specification must determine every consequential game state without requiring an implementation-time gameplay decision.
+GDS-14 found five implementation-relevant cross-domain issues:
 
-Exit criteria:
+1. mixed Active Game Time / Simulation Time gameplay authority;
+2. undefined Horizon Critical Recovery / Recovery Grace trigger;
+3. missing unified strategic communication / remote-control authority;
+4. external-defeat recovery ambiguity and potential defeat-as-fast-travel exploit;
+5. unqualified repeated priority/state labels such as P0/P1, Critical, and Disabled.
 
-- no unresolved cross-system contradictions;
-- no duplicated authoritative rules;
-- no orphan mechanics;
-- no gameplay-critical state without a valid presentation path;
-- no accessibility configuration that silently changes knowledge/progression semantics;
-- no dependency cycle with undefined ownership;
-- all implementation-critical open questions resolved;
-- relevant domain statuses can be promoted according to `00_design_authority.md`.
+All five cross-system problems now have authoritative resolutions.
 
-## After GDS Completion
+### Cross-System Result
 
-Only after GDS-14 passes and the relevant design is sufficiently complete does the project proceed to:
+- authority ownership: PASS;
+- compound scenarios: PASS;
+- transaction/persistence: PASS;
+- failure/softlock: PASS;
+- economy/progression/difficulty: PASS;
+- presentation/accessibility: PASS;
+- cross-system orphan mechanics: PASS after corrections.
+
+### Formal Maturity Result
+
+**Pending.**
+
+Many authoritative child specifications remain explicitly `Draft` or newly `Under Review`.
+
+Under [`00_design_authority.md`](00_design_authority.md), those files cannot silently be treated as `Design Complete`.
+
+### Required GDS-14 Closure Action — Design Complete Promotion Sweep
+
+Before technical architecture or implementation planning:
+
+1. traverse every authoritative child specification;
+2. resolve remaining implementation-relevant ambiguity in Draft wording;
+3. remove stale future-dependency language;
+4. normalize gameplay timing terminology to Simulation Time;
+5. verify fixed rules vs tuneable values;
+6. promote each passing authoritative spec individually to `Design Complete`;
+7. run targeted regression checks after promotion edits;
+8. update final domain/root status only when the child specs agree.
+
+This is still **game-design documentation/governance**, not development.
+
+## Current Project Gate
+
+The project has completed the planned GDS-14 **cross-system audit**, but the complete GDS has **not yet passed formal Design Complete promotion**.
+
+Therefore the next project action is the GDS-14 Design Complete Promotion Sweep.
+
+## After Formal GDS Completion
+
+Only after the promotion sweep succeeds and the relevant design is formally Design Complete may the project proceed to:
 
 1. technical architecture;
 2. implementation roadmap;

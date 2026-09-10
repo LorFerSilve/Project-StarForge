@@ -17,28 +17,28 @@ Authoritative design domain for survivors and persistent station crew.
 - [`experience_and_progression.md`](experience_and_progression.md) — **Draft**
 - [`injuries_incapacitation_and_death.md`](injuries_incapacitation_and_death.md) — **Draft**
 - [`crew_presence_and_behavior.md`](crew_presence_and_behavior.md) — **Draft**
-- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — first-pass consistency audit
+- [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md) — refreshed through GDS-12
 
 ## Domain Baseline
 
-The crew domain currently establishes these high-level rules:
+The crew domain establishes:
 
-- survivors are encountered in the world and are not abstract recruit cards;
+- survivors are encountered physically and are not abstract recruit cards;
 - rescue and recruitment are separate states;
 - recruited crew is persistent;
-- crew quality comes from profession, skills, traits, background, and special knowledge rather than loot rarity tiers;
+- crew quality comes from profession, skills, traits, background, and Special Knowledge rather than loot rarity;
 - crew has one Primary Assignment at a time;
-- specialist supervision has finite workload capacity;
+- specialist supervision has finite Workload Capacity;
 - crew primarily enables automation, supervision, diagnosis, and exception handling;
-- ordinary crew needs are handled at station scale rather than individual survival micromanagement;
-- skills progress from real work and training;
+- ordinary crew needs are handled at station scale rather than individual life-sim micromanagement;
+- skills progress from meaningful work and training;
 - routine gameplay does not permanently kill recruited crew;
 - crew physically exists and navigates through the station when locally simulated;
-- off-screen crew simulation must preserve equivalent gameplay outcomes.
+- off-screen crew simulation preserves equivalent gameplay causality.
 
 ## Authority Boundary
 
-Station infrastructure rules are authoritative under `../station/`.
+Station infrastructure is authoritative under `../station/`.
 
 Mission rescue context belongs under `../missions/`.
 
@@ -48,12 +48,25 @@ Robot behavior belongs under `../robots/`.
 
 Narrative character arcs belong under `../narrative/`.
 
+GDS-12 owns cross-cutting time, persistence, economy, Difficulty, and campaign-progression coordination.
+
 This domain defines how persistent people interact with those systems and must not redefine their underlying rules.
+
+## Downstream Resolution
+
+Missions, Resources/Research, Spacecraft, Narrative/Factions, Player, Combat, Robots, and Raids have now been first-pass cross-validated against Crew.
+
+GDS-12 additionally resolves:
+
+- Simulation Time for work/training/healing/off-screen activity;
+- final save/persistence semantics;
+- crew progression pacing;
+- economy interaction boundaries;
+- failure/recovery coordination;
+- finale support integration.
 
 ## Completion State
 
-The crew domain is **not yet Design Complete**.
+The Crew domain is **not yet Design Complete**.
 
-Its mission, resource, spacecraft, narrative, player, combat, and robot dependencies are now first-pass cross-validated. Remaining blocking review work is primarily cross-cutting time/persistence and later raid/presentation interactions where relevant.
-
-Those dependencies are explicitly tracked in [`CROSS_VALIDATION.md`](CROSS_VALIDATION.md).
+Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.

@@ -60,4 +60,12 @@ Implementation of a subsystem may begin only when:
 
 The active sequencing authority is [GDS Roadmap](GDS_ROADMAP.md).
 
-The project has completed first-pass design through **GDS-11 Raids and Station Defense**. The next dependency-driven design phase is **GDS-12 Economy, Progression, Difficulty, and Cross-Cutting Systems**. Earlier domains remain cross-validation candidates until their downstream dependencies are specified.
+The project has completed first-pass design through **GDS-12 Economy, Progression, Difficulty, and Cross-Cutting Systems**.
+
+GDS-12 now includes complete first-pass specification sets under [`systems/`](systems/) and [`progression/`](progression/), together with a combined cross-validation in [`systems/CROSS_VALIDATION.md`](systems/CROSS_VALIDATION.md). Its audit found no blocking contradiction against GDS-1 through GDS-11.
+
+The next dependency-driven design phase is **GDS-13 Presentation, Onboarding, and Accessibility**.
+
+Earlier domains remain cross-validation candidates until GDS-13 resolves their presentation dependencies and GDS-14 performs the final whole-project consistency audit.
+
+Gameplay implementation has therefore **not** begun and should not begin solely because GDS-12 is first-pass complete.

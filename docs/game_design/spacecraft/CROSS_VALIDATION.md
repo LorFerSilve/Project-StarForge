@@ -1,432 +1,168 @@
 # Spacecraft Cross-Validation
 
 > **Status:** Active Audit  
-> **Authority:** GDS-6 consistency review only  
-> **Purpose:** Validate spacecraft identity, configuration, systems, flight, propulsion, navigation, docking, cargo, damage, and combat integration against established global, station, crew, resource, and player rules.
+> **Authority:** GDS-6 consistency review  
+> **Audit Revision:** Refreshed after GDS-12
 
 ## 1. Scope
 
-This audit checks GDS-6 against:
+This audit validates spacecraft identity, hull/configuration, systems, flight, propulsion, navigation, docking, cargo, damage, repair, combat integration, robot transport, raid use, economy, progression, and persistence against GDS-1 through GDS-12.
 
-- Global Game Rules;
-- GDS-4 Resource Model, Catalog, Crafting, Research, and Production Chains;
-- GDS-5 Player Character, Inventory, Equipment, Movement, Interaction, and Field Survival;
-- GDS-3 Crew professions and assignments;
-- Station Power, Thermal, Atmosphere, Logistics, Manufacturing, Damage, and Automation.
+## 2. Camera and Flight — Result: PASS
 
-## 2. Spacecraft Camera Rule — Result: PASS
+Third-person chase remains the primary ship-flight view with optional cockpit view where supported. Local flight remains bounded real-time 6DoF with inertia/Flight Assist rather than full orbital simulation.
 
-GDS-6 preserves the global rule:
+## 3. Strategic Travel — Result: PASS
 
-- third-person chase camera is the primary flight view;
-- cockpit view is optional where supported;
-- both control the same ship simulation.
+Local flight and strategic travel remain separate scales. GDS-7 owns the route graph; GDS-6 owns ship Reach/navigation execution; GDS-12 owns progression pacing without creating seamless galaxy traversal.
 
-No camera-exclusive mechanical advantage was introduced.
+## 4. Reach Progression — Result: PASS
 
-## 3. World Structure / Strategic Travel — Result: PASS
+Reach I–IV remains actual propulsion/navigation capability. GDS-12 phase progression never substitutes a story flag for functioning drive, navigation, power, thermal, fuel/propellant, or route compatibility.
 
-Local flight is real-time and bounded.
+## 5. Fuel and Propellant — Result: PASS
 
-Strategic travel connects discrete galaxy locations through routes.
+Fuel and Propellant remain distinct physical resources where required. GDS-12 Economy may sell eligible fuel/propellant but cannot bypass storage, cargo, compatibility, market stock, or resource ownership.
 
-GDS-6 does not require seamless manual galaxy traversal.
+## 6. Power/Thermal/Life Support — Result: PASS
 
-This matches Global Game Rule 6.
+Finite generation, batteries, priority shedding, coolant/thermal rejection, atmosphere, and life support remain actual ship systems. Progression or Difficulty cannot grant hidden infinite capacity.
 
-## 4. Propulsion Progression — Result: PASS
+## 7. Cargo Ownership — Result: PASS
 
-DD-006 requires propulsion to unlock strategic access.
+Ship cargo remains one physical owner constrained by Mass + Volume. Trade, mission extraction, raid loot, robot transport, and reward delivery preserve ownership conservation.
 
-GDS-6 implements this through Strategic Reach Classes:
+## 8. Mission Extraction — Result: PASS
 
-- Reach I;
-- Reach II;
-- Reach III;
-- Reach IV.
+Vehicle/Extraction-Secured cargo remains physically owned by the ship. GDS-12 Save/Persistence guarantees extraction ownership commits atomically.
 
-Routes declare minimum Reach Class.
+## 9. Construction/Refit — Result: PASS
 
-Progression therefore changes where the player can go, not only local top speed.
+Ships use authored hull variants and modular fitting. Research, Blueprints, materials/components, fitting envelope, station/shipyard service, and commissioning remain required.
 
-## 5. Resource Ownership — Result: PASS
+Credits alone cannot create a valid refit.
 
-Ship cargo, fuel tanks, propellant tanks, coolant, and installed modules remain physical owners/items under GDS-4.
+## 10. Economy — Result: PASS
 
-Transfers between:
+GDS-12 now resolves ship/module/service purchase and sale context through:
 
-- station;
-- player inventory;
-- ship cargo;
-- mission world
+- Credits;
+- finite market stock;
+- finite liquidity;
+- faction/service access;
+- physical transfer/installation.
 
-use one authoritative ownership transfer.
+Small ships retain legitimate lower-cost/agile niches; the economy does not force a linear hull ladder.
 
-No spacecraft system creates duplicate resources.
+## 11. Robots/Transport — Result: PASS
 
-## 6. Fuel / Propellant — Result: PASS
+GDS-10 defines robot bodies/TCC/squads. GDS-6 owns Robot Racks, Rack Units, Heavy Robot Bays, charging/service, and physical transport.
 
-GDS-6 explicitly distinguishes:
+GDS-12 now defines bounded TCC progression and ship Command Support (+2 strongest valid platform contribution) without merging transport and command constraints.
 
-- Fuel = energy source;
-- Propellant = reaction mass.
+## 12. Combat — Result: PASS
 
-Canonical operating inputs are:
+GDS-9 owns combat mathematics. GDS-6 owns hardpoints, ship system condition, power/thermal consequences, flight, Disabled/Derelict state, and repair/recovery.
 
-- Reaction Propellant;
-- Fusion Fuel Pellet;
-- electrical energy;
-- canonical advanced components.
+Difficulty does not create a hidden ship-combat-rating multiplier.
 
-Reach IV propulsion does not introduce an undefined exotic consumable.
+## 13. Raids — Result: PASS
 
-## 7. Reach IV Chain — Result: PASS
+The previously pending GDS-11 dependency is resolved.
 
-Reach IV propulsion uses:
+GDS-11 now defines:
 
-- Fusion Fuel Pellets;
-- Reaction Propellant;
-- very high electrical power;
-- Quantum Processor control;
-- Quantum Substrate-derived hardware.
-
-These all exist in GDS-4.
-
-No undefined material remains.
-
-## 8. Power Architecture — Result: PASS
-
-Spacecraft power uses the same design principles as station power:
-
-- finite generation;
-- finite battery energy;
-- priority shedding;
-- startup requirements;
-- blackout;
-- black-start recovery.
-
-GDS-6 uses a more compact integrated bus and does not redefine station power topology.
-
-## 9. Thermal Architecture — Result: PASS
-
-Ship thermal systems preserve:
-
-- finite coolant;
-- heat generation;
-- radiator/heat rejection;
-- thermal throttling;
-- emergency shutdown;
-- no arbitrary heat deletion.
-
-This is consistent with station thermal philosophy.
-
-## 10. Atmosphere and Life Support — Result: PASS
-
-Ship cabin atmosphere is owned by spacecraft systems.
-
-GDS-5 Field Survival owns player suit response.
-
-The ship can refill player Life-Support Reserve only through finite compatible service.
-
-No infinite oxygen/life-support source is introduced.
-
-## 11. Player Inventory vs Ship Cargo — Result: PASS
-
-GDS-5 Player Inventory and GDS-6 Cargo remain separate physical owners.
-
-Player-to-ship transfer requires an actual cargo interface.
-
-Mass/Volume limitations apply on both sides.
-
-## 12. Mission Extraction Security — Result: PASS
-
-GDS-5 defines:
-
-- Secured Loadout;
-- Field-Unsecured;
-- Vehicle/Extraction-Secured;
-- Station-Secured.
-
-GDS-6 provides the physical ship-cargo commit mechanism for Vehicle/Extraction-Secured state.
-
-GDS-8 Missions still owns the exact mission extraction success/failure transaction.
-
-## 13. EVA — Result: PASS
-
-GDS-5 owns:
-
-- suit seal;
-- Life-Support Reserve;
-- zero-g player movement capability.
-
-GDS-6 owns:
-
-- ship exterior;
-- docking context;
-- disabled/drifting ship state;
-- repair targets.
-
-EVA ship repair therefore has a clean authority boundary.
-
-## 14. Player Controls / Flight — Result: PASS
-
-GDS-5 uses action-based input contexts.
-
-GDS-6 introduces Spacecraft context actions without hard-coding engine-specific key behavior.
-
-This remains implementable in the custom C++/OpenGL input architecture.
-
-## 15. Flight Model — Result: PASS
-
-Local flight uses:
-
-- 6DoF;
-- inertia;
-- thrust/mass relationship;
-- flight assistance;
-- finite maneuver authority.
-
-The model intentionally avoids full orbital mechanics.
-
-This is consistent with selective-simulation and realism philosophy.
-
-## 16. Cargo Mass — Result: PASS
-
-Cargo, modules, fuel, propellant, ammunition, and occupants all contribute to ship mass.
-
-Mass affects flight/strategic cost.
-
-There is no hidden weightless cargo system.
-
-## 17. Ship Construction vs GDS-4 — Result: PASS
-
-Hull/module construction requires:
-
-- Blueprint;
-- Research prerequisites;
-- canonical materials/components;
-- station shipyard/manufacturing capability.
-
-No generic undefined "Ship Parts" resource was introduced.
-
-## 18. Blueprint / Salvaged Module — Result: PASS
-
-A salvaged physical module can be installed if technically compatible even when the player does not own its manufacturing Blueprint, subject to technology/operation restrictions.
-
-Installing the module does not automatically unlock its Blueprint.
-
-This preserves GDS-4's distinction between item ownership and design knowledge.
-
-## 19. Station Logistics / Docking — Result: PASS
-
-Hard Docking enables finite service links.
-
-Docking does not merge inventories.
-
-Cargo/refuel/service flows require:
-
-- valid connector;
-- throughput;
-- source;
-- destination capacity.
-
-This matches station logistics.
-
-## 20. Station Manufacturing / Refit — Result: PASS
-
-Major ship construction/refit uses station facilities.
-
-GDS-6 defines fitting/commissioning rules.
-
-Station Manufacturing remains owner of physical production queues and processing.
-
-No second independent manufacturing economy exists.
-
-## 21. Crew Professions — Result: PASS
-
-Crew roles integrate cleanly:
-
-- Navigator → route/navigation supervision;
-- Mechanic → mechanical ship service;
-- Engineer → power/thermal/system diagnosis;
-- Weapons Specialist → combat coordination;
-- Logistics Officer → cargo/service support.
-
-Baseline ship operation does not hard-lock the player behind mandatory multi-crew.
-
-## 22. Player-Owned Ship Persistence — Result: PASS
-
-Routine mission defeat does not permanently delete the player's established Primary Ship.
-
-The ship can become:
-
-- damaged;
-- disabled;
-- derelict;
-- recovered.
-
-This is consistent with global failure philosophy.
-
-## 23. Ship Damage — Result: PASS
-
-GDS-6 owns:
-
-- module condition;
-- subsystem consequences;
-- leaks;
-- breaches;
-- disabled/derelict state;
-- repair/recovery.
-
-GDS-9 now owns:
-
-- attack resolution;
-- combat damage channels;
-- penetration;
-- shield overflow;
-- weapon formulas;
-- subsystem targeting semantics;
-- missile/point-defense combat behavior.
-
-**Result: PASS**
-
-No combat formula is duplicated.
-
-## 24. Ship Combat Boundary — Result: PASS
-
-GDS-6 defines combat integration:
-
-- hardpoints;
-- targeting dependency;
-- shields;
-- power/thermal tradeoffs;
-- disable-vs-destroy;
-- boarding preconditions.
-
-GDS-9 remains authoritative for the actual combat model.
-
-## 25. No Infinite Resource Loops — Result: PASS
-
-Reviewed spacecraft loops:
-
-### Refueling
-
-Consumes actual station/field resources.
-
-### Suit Refill
-
-Transfers finite ship/station life-support capacity.
-
-### Cargo
-
-Ownership transfer only.
-
-### Repair
-
-Consumes canonical parts/materials.
-
-### Salvage
-
-Returns less than full recipe by default.
-
-### Batteries
-
-Recharge from actual electrical power.
-
-No free closed material/energy loop was introduced.
-
-## 26. Internal GDS-6 Consistency — Result: PASS
-
-### Class vs Configuration
-
-Hull class defines envelope; variant defines exact slots; modules define capability.
-
-### Configuration vs Flight
-
-Installed mass and propulsion directly affect flight.
-
-### Propulsion vs Navigation
-
-Drive Reach enables routes; Navigation validates and executes route transitions.
-
-### Docking vs Cargo
-
-Docking creates physical service access; cargo transfer remains separate.
-
-### Systems vs Damage
-
-Damaged systems reduce the actual functions they support.
-
-### Cargo vs Mission Security
-
-Cargo can provide secure extraction ownership without automatically completing a mission.
-
-## 27. Dependencies Preventing Design Complete
-
-GDS-6 remains first-pass pending:
-
-### GDS-7 World / Galaxy / Factions — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-7 now defines the canonical campaign route graph, Strategic Locations, sector Reach bands, faction ship identity, major shipyard/service hubs, and planetary/space location contexts.
-
-Exact economy acquisition prices remain GDS-12 authority.
-
-### GDS-8 Missions — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-8 now defines ship mission deployment, landing/docking use within Mission Zones, extraction commit/failure, ship-secured cargo behavior, rescue/tow mission contexts, and stranded-state mission recovery.
-
-GDS-6 remains authoritative for the ship's actual flight, cargo, docking, damage, and recovery systems.
-
-### GDS-9 Combat — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-9 now defines ship weapon families, shield/armor resolution, subsystem targeting, missile/point-defense behavior, collision-damage authority, and generic enemy ship-combat behavior.
-
-GDS-6 remains authoritative for flight, power, thermal state, module condition, Disabled/Derelict state, and recovery.
-
-### GDS-10 Robots — First-Pass Resolved
-
-**Result: PASS**
-
-GDS-10 now defines Light/Medium/Heavy robot footprints, Tactical Squads, reserve/deployment semantics, charging/support needs, and robot extraction/recovery.
-
-GDS-6 Cargo/Utility now explicitly owns Robot Rack Units, Robot Racks, and Heavy Robot Bays as physical spacecraft capabilities.
-
-### GDS-11 Raids
-
-Required for:
-- hostile boarding;
+- fortified external attack;
+- hostile docking/boarding;
 - breaching;
 - sabotage;
-- capture.
+- raid cargo/loot extraction;
+- Horizon defensive use.
 
-### GDS-12 Economy / Progression / Persistence
+GDS-6 remains authority for the ship mechanics used during those phases.
 
-Required for:
-- prices;
-- service costs;
-- final progression pacing;
-- permanent save transaction details.
+## 14. Ship Damage/Loss — Result: PASS
 
-### GDS-13 Presentation
+Ordinary mission/raid defeat does not permanently delete the established Primary Ship. Damage, Disabled/Derelict state, towing, recovery, fuel, repair parts, and service costs remain real consequences.
 
-Required for:
-- final cockpit/chase HUD;
-- flight feedback;
-- docking UI;
-- damage alarms.
+GDS-12 does not add a generic percentage loss or instant free restoration.
 
-## 28. First-Pass Conclusion
+## 15. Save/Persistence — Result: PASS
 
-No blocking contradiction was found.
+GDS-12 now resolves the final transaction model for ship state.
 
-GDS-6 can be marked:
+Persistent state includes applicable:
+
+- ship identity;
+- hull/configuration;
+- installed modules;
+- condition/damage;
+- fuel/propellant;
+- cargo ownership;
+- ammunition;
+- docking/travel state;
+- robot cargo/transport state.
+
+Stable Save Boundaries prevent half-applied cargo/refuel/refit/extraction transactions.
+
+## 16. Difficulty — Result: PASS
+
+Difficulty cannot alter:
+
+- Reach requirement;
+- fitting constraints;
+- Fuel/Propellant conservation;
+- hull ownership;
+- cargo ownership;
+- progression unlocks.
+
+## 17. Spacecraft Progression — Result: PASS
+
+GDS-12 defines intended progression bands:
+
+- P0/P1: Shuttle/Scout and Reach I;
+- P2: improved Scout/Utility Cutter/early Corvette and Reach II;
+- P3: advanced Corvette/Frigate access and Reach III;
+- P4: any legitimately qualifying Reach IV configuration.
+
+Hull classes remain role choices rather than mandatory replacements.
+
+## 18. Finale Ship Requirement — Result: PASS
+
+The previously unresolved finale dependency is now explicit.
+
+MS-F01 requires an **Operational Reach IV-capable spacecraft configuration**, including valid power, thermal, navigation/sensors, life support, cargo/support, fuel/propellant, and mission access capability.
+
+A Frigate is explicitly **not mandatory**.
+
+## 19. Finale Departure Manifest — Result: PASS
+
+Required fuel, propellant, life support, mission consumables, repair spares, and mission-specific cargo are validated from actual owned/loaded resources. Exact quantities are tuneable content data.
+
+## 20. Finale Robot Support — Result: PASS
+
+The selected ship must physically support the chosen Tactical Squad. Temporary coalition TCC support cannot teleport robots or remove rack/bay/service requirements.
+
+## 21. Final Deployment Atomicity — Result: PASS
+
+MS-F02 performs final readiness revalidation before deployment commit. Save/load cannot duplicate ship cargo, reserved supplies, robot deployment, or support activation.
+
+## 22. Postgame — Result: PASS
+
+P5 preserves owned ships/configurations subject to actual damage/world-state consequences. Postgame optimization does not introduce endless Ship Levels or require capital ships.
+
+## 23. Remaining Downstream Dependency — GDS-13
+
+GDS-13 remains responsible for chase/cockpit HUD, navigation feedback, docking UI, cargo/refit interfaces, damage alarms, Difficulty/accessibility presentation, and finale-readiness UI.
+
+## 24. Conclusion
+
+The previously pending **GDS-11 Raids** and **GDS-12 Economy/Progression/Persistence** dependencies are now first-pass resolved.
+
+No blocking contradiction exists between GDS-6 and GDS-1 through GDS-12.
+
+GDS-6 remains:
 
 **First-Pass Complete — Cross-Validation Pending**
 
-The next dependency-driven phase is GDS-7 World, Galaxy, Narrative, and Factions.
+Its remaining scheduled downstream design dependency is GDS-13, followed by GDS-14 final audit.

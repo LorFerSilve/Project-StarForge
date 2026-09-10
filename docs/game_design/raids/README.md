@@ -23,76 +23,32 @@ Authoritative design domain for offensive raids against fortified targets and de
 
 ## Authority Boundary
 
-This domain owns:
+This domain owns raid-specific phase structure, target intelligence/persistent raid state, preparation, external assault, boarding/breaching, interior control, sabotage, physical looting/theft, escalation/reinforcements, withdrawal/extraction, victory/failure/retreat, Horizon defense resolution, and raid-specific story execution.
 
-- raid-specific mission phase structure;
-- raid target intelligence and persistent raid-relevant target state;
-- raid preparation/validation;
-- external fortified-target assault;
-- boarding and breaching;
-- interior raid control;
-- system sabotage;
-- physical raid looting/theft;
-- escalation and finite reinforcement response;
-- raid withdrawal/extraction specialization;
-- raid victory/failure/retreat semantics;
-- hostile attacks against Horizon Station;
-- on-screen/off-screen station-defense execution;
-- raid-specific main-story execution.
-
-GDS-2 owns Home Station infrastructure, defenses, security, automation, damage, and repair systems.
-
-GDS-4 owns resource identity, physical ownership, salvage, Research, and Blueprints.
-
-GDS-6 owns spacecraft flight, docking, cargo, power/thermal systems, and persistent ship recovery.
-
-GDS-8 owns the base Mission lifecycle, objectives, extraction/failure transactions, and story Mission IDs.
-
-GDS-9 owns direct combat, weapons, hit/damage, shields/armor, and combat AI.
-
-GDS-10 owns robot bodies, TCC, squads, commands, repair, and robot loss.
-
-GDS-12 owns economy, progression, Dynamic Event generation/pacing, difficulty, long-term target recovery, and final persistence policy.
+GDS-2 owns Home Station systems. GDS-4 owns Resources/ownership/Research/Blueprints. GDS-6 owns spacecraft. GDS-8 owns base Mission lifecycle/objectives/extraction/failure. GDS-9 owns direct combat. GDS-10 owns robot bodies/TCC. GDS-12 owns economy/progression/Dynamic Events/Difficulty/long-term recovery/persistence. GDS-13 owns raid planning/HUD/feedback/VFX/audio/alarms/onboarding/accessibility.
 
 ## Core Baseline
 
-GDS-11 establishes:
-
-- raids as specialized GDS-8 Missions rather than a second mission engine;
-- persistent fortified targets rather than pristine reset instances;
-- Unknown/Suspected/Confirmed/Stale raid intelligence;
-- preparation based on real ship/loadout/robot/cargo/extraction capability;
-- valid low-signature and destructive access alternatives;
-- physical external defense suppression;
-- docking, maintenance access, and authored hull breaching;
-- local interior control rather than global station ownership;
-- causal sabotage of power, shields, sensors, comms, security, weapons, atmosphere, cooling, logistics, docking, and mission systems;
-- physical finite loot transfer rather than percentage theft;
-- finite, sourced, deterministic reinforcements;
-- physical withdrawal/extraction with no magical squad recall;
-- objective-based raid success rather than kill-all victory;
-- deterministic Horizon Station defense while player is present or away;
-- no real-world offline raids;
-- no routine permanent crew death or Horizon Station deletion;
-- permanent robot attrition;
-- explicit GDS-11 integration for Rook's Wake, forced Sealed Authority assault, and Crownless finale access;
-- no baseline synchronous or asynchronous PvP raid system.
+GDS-11 establishes specialized GDS-8 raids; persistent fortified targets; Unknown/Suspected/Confirmed/Stale intelligence; preparation based on real capability; low-signature and destructive access alternatives; external defense suppression; physical docking/maintenance/hull breach; local interior control; causal sabotage; physical finite loot; finite sourced reinforcements; physical withdrawal/extraction; objective-based success; deterministic Horizon defense on- or off-screen; no offline raids; no routine crew/Horizon deletion; permanent robot attrition; canonical story-raid integration; and no baseline PvP raid system.
 
 ## Downstream Resolution
 
-GDS-12 has now cross-validated and resolved:
+GDS-12 resolves economy, event pacing, Recovery Grace, target recovery, reputation, Difficulty, save semantics and finale integration.
 
-- target stock/value and raid-profitability context;
-- attack-generation pacing;
-- Recovery Grace after severe Horizon setbacks;
-- long-term target recovery/replenishment;
-- reputation/economic consequences;
-- Difficulty constraints;
-- final save/atomic transaction semantics;
-- MS-F01/MS-F02 finale readiness integration.
+GDS-13 now resolves:
+
+- raid intelligence/planning UX preserving uncertainty;
+- Approach/Access/Interior/Withdrawal presentation;
+- bridgehead and extraction HUD;
+- sabotage/loot ownership feedback;
+- known escalation/reinforcement signaling without information leakage;
+- Horizon defense alarms and remote reporting;
+- raid VFX/audio tied to physical state;
+- staged raid tutorial with a required systemic non-kill-all teaching example;
+- accessibility without wallhacks or hidden target revelation.
 
 ## Completion State
 
 GDS-11 is not yet Design Complete.
 
-Its remaining scheduled downstream dependency is **GDS-13 Presentation, Onboarding, and Accessibility**, followed by the GDS-14 whole-project audit.
+All scheduled downstream subsystem/presentation dependencies are now first-pass resolved. The remaining gate is **GDS-14 — Cross-System Consistency Audit**.

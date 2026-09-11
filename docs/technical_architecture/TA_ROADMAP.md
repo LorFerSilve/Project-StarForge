@@ -15,31 +15,31 @@ Defines architecture authority, precedence, status model, no-general-engine prin
 
 **Status:** Architecture Complete
 
-Defines the modular monolith, C++23/CMake/vcpkg/OpenGL baseline, dependency boundaries, 60 Hz authoritative simulation, command/transaction/event model, worker authority, Stable Simulation Boundary, and save snapshot capture boundary.
+Defines the modular monolith, C++23/CMake/vcpkg/OpenGL baseline, dependency boundaries, 60 Hz authoritative simulation, worker authority, Stable Simulation Boundary, and save snapshot capture boundary.
 
 ## TA-2 — Identity, Domain State, Transactions, and Serialization Contracts
 
 **Status:** Architecture Complete
 
-Defines typed persistent/runtime identities, ContentId, domain stores, Activation Leases, revisions/epochs, typed commands/results/events, deterministic transaction commit, immutable read models, physical ownership, Credit ledger transactions, versioned Save DTOs, the StarForge save container, migrations/integrity, and deterministic PCG32 RNG.
+Defines typed persistent/runtime identities, domain stores, Activation Leases, revisions/epochs, typed commands/results/events, transactions, read models, physical ownership, Save DTO/container, migration/integrity, and deterministic PCG32 RNG.
 
 ## TA-3 — World, Scene, Zone, and Streaming Architecture
 
 **Status:** Architecture Complete
 
-Defines one authoritative player-local SceneInstance, strategic-vs-local coordinates, scene lifecycle/generation, streaming residency versus activation, Hard Streaming Hold, double-precision Context Space, floating origin, local spatial indexing, Horizon active/off-screen handoff, atomic context transitions, persistent world projection, and scene-composition profiles.
+Defines one authoritative local SceneInstance, scene lifecycle/generation, streaming residency vs activation, Hard Streaming Hold, double-precision Context Space/floating origin, Horizon handoff, atomic transitions, persistent world projection, and scene profiles.
 
 ## TA-4 — Rendering Architecture
 
 **Status:** Architecture Complete
 
-Defines main-thread OpenGL ownership, RenderSnapshot interpolation, hybrid deferred/forward rendering, reversed-Z, HDR/SDR output, render passes, shadows, tiled lights, glTF-compatible PBR, shader families, cameras/views, culling/LOD/instancing/transparency, particles/VFX/debug rendering, GPU uploads/resource lifetime, resize/context-failure handling, and presentation-only graphics tiers.
+Defines main-thread OpenGL ownership, RenderSnapshot interpolation, hybrid deferred/forward rendering, reversed-Z, HDR/SDR, passes, shadows/lights, PBR, cameras, culling/LOD/instancing/transparency, VFX, GPU lifetime, and graphics tiers.
 
 ## TA-5 — Physics, Collision, Character, and Spaceflight Integration
 
 **Status:** Architecture Complete
 
-Defines Jolt adapter/world ownership, semantic collision/query contracts, kinematic CharacterMotor, swept/dynamic projectile physics, Dynamic 6DoF spacecraft, physical Hard Dock constraints, Zero-G/EVA/Magnetic Boots, normalized impact/contact facts, collision-damage routing, fixed 60 Hz physics phase ordering, deferred safe backend mutation, and floating-origin/load behavior without synthetic impacts.
+Defines Jolt adapter/world ownership, collision/query contracts, CharacterMotor, projectiles, Dynamic 6DoF spacecraft, docking, Zero-G/EVA, impact/contact facts, fixed physics ordering, deferred mutation, and floating-origin/load behavior.
 
 Artifacts: `27_physics_adapter_and_world_lifecycle.md` through `34_physics_tick_origin_shift_and_snapshot_sync.md`, plus `TA5_CROSS_VALIDATION.md`.
 
@@ -47,7 +47,7 @@ Artifacts: `27_physics_adapter_and_world_lifecycle.md` through `34_physics_tick_
 
 **Status:** Architecture Complete
 
-Defines canonical Horizon topology, Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData graph views, deterministic capacity-constrained Power, conserved atmosphere/thermal/water state, one-owner logistics, persistent Simulation-Time WorkOrders, construction/damage/repair topology mutation, automation/control, chronological off-screen simulation, and persistent-state-first station projection into TA-5 physics.
+Defines Horizon topology, typed utility graph views, deterministic Power, conserved atmosphere/thermal/water, one-owner logistics, WorkOrders, topology mutation, automation/control, chronological off-screen simulation, and persistent-state-first projection.
 
 Artifacts: `35_station_graph_foundation_and_topology.md` through `43_station_runtime_projection_and_physics_handoff.md`, plus `TA6_CROSS_VALIDATION.md`.
 
@@ -55,61 +55,49 @@ Artifacts: `35_station_graph_foundation_and_topology.md` through `43_station_run
 
 **Status:** Architecture Complete
 
-Defines:
+Defines one runtime registry per active scene, generation-checked handles, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/inventory/equipment runtime, combat/status/projectile/interactable projections, persistent/runtime synchronization, deferred destruction, deterministic runtime phases, and headless execution.
 
-- one `RuntimeEntityRegistry` per active SceneInstance;
-- generation-checked RuntimeEntityHandle plus SceneGeneration scoping;
-- explicit persistent-ID/runtime-handle separation;
-- typed component pools with no universal polymorphic GameObject hierarchy;
-- deterministic query ordering where gameplay results depend on order;
-- buffered runtime structural mutation;
-- typed persistent actor activation/deactivation through TA-2 Activation Leases;
-- actor lifecycle states `Preparing -> Active -> Closing -> PendingDestroy -> Reclaimed`;
-- one locally controlled player runtime entity;
-- player Health/control/action runtime state without hidden penalties;
-- Inventory/Equipment runtime references that preserve one physical owner;
-- world-item pickup/partial-stack/Auto Pickup transaction ordering;
-- combat actor, weapon, shield, hit-zone, damage and deterministic Status runtime state;
-- TA-5 physical facts routed through GDS-9 Combat to owning gameplay domains;
-- swept/dynamic projectile runtime contracts;
-- Interactable, Container, Hazard, MissionObject, Door and Station projection runtime entities;
-- persistent/runtime synchronization with ActivationEpoch/revision validation;
-- logical removal before deferred entity/component/physics/render/audio reclamation;
-- a single deterministic 60 Hz runtime phase order from intents through immutable snapshot publication;
-- headless runtime execution for testing.
-
-Artifacts:
-
-- `44_runtime_entity_registry_and_handles.md`;
-- `45_component_storage_and_query_model.md`;
-- `46_actor_lifecycle_activation_and_deactivation.md`;
-- `47_player_inventory_and_equipment_runtime.md`;
-- `48_combat_actor_weapon_damage_and_status_runtime.md`;
-- `49_projectiles_interactables_and_world_runtime_objects.md`;
-- `50_persistent_runtime_sync_and_deferred_destruction.md`;
-- `51_runtime_update_phases_and_system_boundaries.md`;
-- `TA7_CROSS_VALIDATION.md`.
+Artifacts: `44_runtime_entity_registry_and_handles.md` through `51_runtime_update_phases_and_system_boundaries.md`, plus `TA7_CROSS_VALIDATION.md`.
 
 ## TA-8 — AI and Navigation Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- navigation representation for interiors/surfaces;
-- dynamic path invalidation;
-- heavy/light robot traversal constraints;
-- crew task navigation;
-- enemy perception/memory;
-- robot command AI;
-- station automation scheduling;
-- asynchronous pathfinding job model;
-- off-screen behavior abstraction;
-- debugging/validation.
+- Recast/Detour-backed tiled grounded navmesh behind a StarForge navigation adapter;
+- Small/Standard/Heavy grounded navigation classes and actor-specific traversal profiles;
+- separate bounded 3D navigation graph/volume for flying/Zero-G autonomous actors;
+- typed traversal links for doors, airlocks, lifts, ladders, breaches, docking and free-flight portals;
+- dynamic navigation overlays plus persistent-state-first tile/link invalidation and atomic NavigationRevision updates;
+- asynchronous path jobs with SceneGeneration/NavigationRevision/actor/task/request freshness validation;
+- deterministic worker-result consumption independent of completion order;
+- project-owned path following, local avoidance and no-teleport stuck recovery;
+- explicit world-truth vs AI-knowledge separation;
+- vision, semantic hearing, equipment sensors, Last Known Position/confidence and provenance-preserving shared knowledge;
+- generic enemy awareness/tactical AI with reaction timing, cover, search, flank, suppression, retreat and no omniscience;
+- player robot command AI, ROE, communication degradation, fallback and squad coordination;
+- crew assignment/task travel, emergency response, evacuation and TA-6 automation execution handoff;
+- ActiveLocal/ReducedLocal/OffScreenLogical AI modes with chronological Simulation-Time travel/task boundaries;
+- deterministic AI scheduler and exact integration into TA-7 fixed runtime phases;
+- read-only AI diagnostics and headless validation.
+
+Artifacts:
+
+- `52_navigation_representation_and_traversal_profiles.md`;
+- `53_navigation_topology_invalidation_and_links.md`;
+- `54_async_pathfinding_and_path_following.md`;
+- `55_perception_memory_and_shared_knowledge.md`;
+- `56_decision_layers_enemy_combat_and_tactical_ai.md`;
+- `57_robot_command_ai_and_squad_coordination.md`;
+- `58_crew_task_navigation_and_station_behavior.md`;
+- `59_ai_scheduling_and_offscreen_behavior_abstraction.md`;
+- `60_ai_runtime_phase_integration_debugging_and_validation.md`;
+- `TA8_CROSS_VALIDATION.md`.
 
 ## TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines
 
-**Status:** Planned
+**Status:** Next
 
 Must define MissionInstance runtime/persistent representation, objective state-machine infrastructure, deterministic procedural generation, raid phases, reinforcements, Dynamic Events, world-location consequences, recovery/communication integration, and finale transaction state.
 
@@ -117,7 +105,7 @@ Must define MissionInstance runtime/persistent representation, objective state-m
 
 **Status:** Planned
 
-Must define canonical source/exchange formats, glTF import, textures/materials, collision-content cooking, shader build pipeline, content IDs/schemas, validation tooling, runtime/cooked assets where needed, asset registry/cache, dependency tracking, and hot-reload boundaries.
+Must define canonical source/exchange formats, glTF import, textures/materials, collision/navigation-content cooking, shader build pipeline, content IDs/schemas, validation tooling, runtime/cooked assets, registry/cache, dependency tracking, and hot-reload boundaries.
 
 ## TA-11 — Input, UI, Audio, and Presentation Integration
 
@@ -129,25 +117,25 @@ Must define raw input → actions, context routing, remapping, controller/aim-as
 
 **Status:** Planned
 
-Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C implementation, write-new-then-commit flow, manual/quick/autosave layout, migration implementation, crash recovery, diagnostics, and deterministic load validation.
+Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C, write-new-then-commit, manual/quick/autosave layout, migrations, crash recovery, diagnostics, and deterministic load validation.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
 **Status:** Planned
 
-Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache budgets, TA-4 rendering budgets, TA-5 physics/query/body/contact budgets, TA-6 station graph/solver/off-screen budgets, and TA-7 entity/component/query/projectile/status/runtime-structural-mutation budgets.
+Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-8 budgets including entity counts, physics, station solvers, nav tile rebuilds, path jobs, perception queries, AI decision cadence, AI backlog, and off-screen actor advancement.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity/AI/navigation smoke tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
 **Status:** Planned
 
-Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, world/scene transition consistency, performance assumptions, subsystem dependency cycles, failure recovery, and testability.
+Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, world/scene transitions, performance assumptions, dependency cycles, failure recovery, and testability.
 
 No implementation phase is authorized to invent unresolved architecture after this audit.
 
@@ -157,7 +145,7 @@ No implementation phase is authorized to invent unresolved architecture after th
 
 Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets, first test gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
 
-Only after TA-16 may the planned C++/OpenGL scaffolding phase begin.
+Only after TA-16 may planned C++/OpenGL scaffolding begin.
 
 ## Current Sequence
 
@@ -170,8 +158,9 @@ GDS Design Complete
 → TA-5 Architecture Complete  
 → TA-6 Architecture Complete  
 → TA-7 Architecture Complete  
-→ **TA-8 next**  
-→ TA-9 ... TA-15  
+→ TA-8 Architecture Complete  
+→ **TA-9 next**  
+→ TA-10 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

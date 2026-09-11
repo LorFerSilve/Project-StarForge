@@ -708,3 +708,115 @@ Central station control and automation depend on explicit ControlData connectivi
 ### Rationale
 
 This preserves systemic failures and prevents both omniscient automation and the opposite error where losing a network connection makes physical infrastructure cease to exist.
+
+---
+
+## AD-051 — Active Scenes Own a Generation-Checked Runtime Entity Registry
+
+**Status:** Accepted
+
+### Decision
+
+Each active SceneInstance owns exactly one RuntimeEntityRegistry. RuntimeEntityHandle uses index + generation and is additionally validated against SceneGeneration. Runtime handles are never serialized or treated as persistent identity.
+
+### Rationale
+
+High-frequency local objects need compact references and safe slot reuse, while TA-2 persistent identities must survive scene destruction/reconstruction independently.
+
+---
+
+## AD-052 — Runtime Composition Uses Typed Component Pools, Not a Universal GameObject Hierarchy
+
+**Status:** Accepted
+
+### Decision
+
+Runtime gameplay state is composed from typed component pools under the active scene. StarForge does not use a universal polymorphic GameObject inheritance tree or make a generic archetype ECS a baseline requirement.
+
+### Rationale
+
+Typed pools give efficient active iteration and explicit state ownership without turning the project into a general engine or forcing persistent strategic state into an ECS.
+
+---
+
+## AD-053 — Persistent Actors Activate Through Typed Activation Adapters and Leases
+
+**Status:** Accepted
+
+### Decision
+
+Persistent player, crew, robot, ship and other eligible actor records enter the active runtime through typed activation descriptors and TA-2 Activation Leases. Only designated high-frequency facets transfer to runtime authority; persistent identity and non-leased strategic fields remain store-owned.
+
+### Rationale
+
+This preserves exactly one mutable authority per field while allowing performant local simulation and coherent save/deactivation handoff.
+
+---
+
+## AD-054 — Runtime Inventory and Equipment State References Physical Persistent Ownership
+
+**Status:** Accepted
+
+### Decision
+
+Equipped items, quick slots, world-item proxies and runtime equipment state reference the actual Inventory/Resource-owned objects or stacks. Runtime components never create a second physical ownership copy. Pickup/removal presentation follows ownership commit.
+
+### Rationale
+
+This keeps mass/volume, security state, reservations, ammo and defeat behavior transactionally correct and prevents scene/runtime reconstruction from duplicating items.
+
+---
+
+## AD-055 — Combat Runtime Consumes Physics Facts; Owning Domains Commit Consequences
+
+**Status:** Accepted
+
+### Decision
+
+Weapons/projectiles/hit zones produce typed attack and physical facts. Combat resolves shield/armor/status semantics, then Biological Health, Robot, Spacecraft, Station or other owning domains/components commit the authoritative consequence. Health zero does not itself free the runtime entity.
+
+### Rationale
+
+This preserves TA-5's backend boundary and GDS distinctions between Incapacitation, Disablement, Destruction and persistent aftermath.
+
+---
+
+## AD-056 — Gameplay-Relevant Status Effects Use Deterministic Simulation-Time Runtime Instances
+
+**Status:** Accepted
+
+### Decision
+
+Active StatusInstance state carries explicit definition, source, stacking/intensity, duration/deadline and periodic tick state. Status progression uses Simulation Time and authored deterministic stacking/application rules; persistent statuses return/export with persistent actor state.
+
+### Rationale
+
+This makes status effects frame-rate independent, save/deactivation safe and consistent with the GDS prohibition on undefined/random baseline proc behavior.
+
+---
+
+## AD-057 — Runtime Entity Removal Is Logical First and Physically Reclaimed Later
+
+**Status:** Accepted
+
+### Decision
+
+Gameplay outcomes first move entities through Closing/PendingDestroy. Entity/component/physics/render/audio reclamation occurs only in deferred safe mutation phases after consequences and lease returns settle. Callbacks cannot immediately free authoritative runtime objects.
+
+### Rationale
+
+Deferred destruction prevents use-after-free, invalid iteration and backend callback races while preserving persistent/corpse/wreck outcome semantics.
+
+---
+
+## AD-058 — The Active Gameplay Runtime Uses One Explicit Deterministic Phase Order
+
+**Status:** Accepted
+
+### Decision
+
+Each 60 Hz runtime tick orders intents, action/status deadlines, movement/weapon preparation, physics, normalized facts, combat/interaction resolution, owning-domain commits, runtime reflection, lifecycle transitions, deferred structural/physics mutation and immutable snapshot publication.
+
+### Rationale
+
+A fixed phase contract prevents render order, callback timing or container iteration from deciding gameplay and ensures persistent commit precedes visual/runtime disappearance.

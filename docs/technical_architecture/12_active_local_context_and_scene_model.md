@@ -44,21 +44,26 @@ Interstellar travel changes strategic state through GDS/TA mission-navigation co
 
 The session stores one authoritative `ActiveLocalContextDescriptor` containing at minimum:
 
-- `ContextKind`;
+- `ActiveLocalContextKind`;
 - owning persistent identity/identities;
 - root Zone Instance identity where applicable;
 - current Scene generation;
 - current coordinate-origin generation;
 - transition state;
-- active environment/profile identifier.
+- active scene-profile/environment identifier.
 
-`ContextKind` baseline values are:
+`ActiveLocalContextKind` describes **ownership/lifecycle**, not physical scene shape.
+
+Baseline values are:
 
 - Horizon;
 - Mission;
 - PersistentLocation;
-- LocalSpaceflight;
 - Recovery.
+
+Physical scene shape is separately described by `SceneProfileKind` under `18_scene_composition_profiles.md`, including Interior, Surface, EVA, LocalSpaceflight, and Horizon/Station profiles.
+
+Thus a Mission can contain a LocalSpaceflight scene profile without becoming a different ActiveLocalContextKind.
 
 The descriptor is persistent session state where required by save/load.
 
@@ -174,7 +179,7 @@ At a Stable Simulation Boundary:
 5. register spatial state;
 6. establish player spawn/entry transform;
 7. publish the new active read/render snapshot;
-8. permit local simulation beginning on the next simulation phase.
+8. permit local simulation beginning on the next valid simulation phase.
 
 ## 14. Quiescing
 
@@ -380,7 +385,8 @@ Tests must cover:
 - same ShipId/RobotId/CrewId survives scene reload;
 - Mixed Zone sub-zones remain one Mission Instance;
 - unload/reload does not regenerate persistent local outcomes;
-- off-screen Horizon does not own duplicate leased state.
+- off-screen Horizon does not own duplicate leased state;
+- Mission context with LocalSpaceflight profile does not change context ownership kind.
 
 ## 33. Performance Constraints
 

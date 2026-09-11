@@ -8,9 +8,11 @@ The game centers on a physically traversable and expandable player-owned space s
 
 The authoritative Game Design Specification has completed **GDS-0 through GDS-14** and is formally **Design Complete**.
 
-The project has now entered the **Technical Architecture** phase.
+The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0** and **TA-1** are complete/Architecture Complete. The next dependency is **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**.
+Technical Architecture stages **TA-0**, **TA-1**, and **TA-2** are complete/Architecture Complete. The next dependency is **TA-3 — World, Scene, Zone, and Streaming Architecture**.
+
+TA-2 has fixed the project's persistent identity, domain-state ownership, activation leases, command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG foundation.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, architecture integration audit, and implementation roadmap/contract locking.
 

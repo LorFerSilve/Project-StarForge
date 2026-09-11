@@ -18,9 +18,10 @@ Technical Architecture has completed:
 - **TA-4 — Rendering Architecture**;
 - **TA-5 — Physics, Collision, Character, and Spaceflight Integration**;
 - **TA-6 — Station Simulation and Graph Architecture**;
-- **TA-7 — Gameplay Runtime Entity Architecture**.
+- **TA-7 — Gameplay Runtime Entity Architecture**;
+- **TA-8 — AI and Navigation Architecture**.
 
-The next dependency is **TA-8 — AI and Navigation Architecture**.
+The next dependency is **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -42,6 +43,8 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 - glad2;
 - GLM;
 - Jolt Physics behind a StarForge adapter;
+- Recast/Detour behind a StarForge navigation adapter for grounded navigation;
+- project-owned bounded 3D navigation graph/volume for flying/Zero-G AI;
 - miniaudio behind a StarForge audio layer;
 - fastgltf / glTF 2.0;
 - Dear ImGui for development tooling only;
@@ -74,30 +77,31 @@ One StarForge `PhysicsWorld` per active SceneInstance, Jolt encapsulation, seman
 
 ### TA-6 Station Simulation
 
-Canonical Horizon topology with separate Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData views; deterministic capacity-constrained Power; conserved atmosphere/thermal/water; one-owner logistics; persistent Simulation-Time WorkOrders; construction/damage/repair topology mutation; automation/control; chronological off-screen station simulation; and persistent-state-first projection into TA-5 physics.
+Canonical Horizon topology with separate Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData views; deterministic Power; conserved atmosphere/thermal/water; one-owner logistics; persistent Simulation-Time WorkOrders; topology mutation; automation/control; chronological off-screen station simulation; and persistent-state-first projection into physics.
 
 ### TA-7 Gameplay Runtime Entities
 
-TA-7 establishes:
+One generation-checked runtime registry per active scene, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/inventory/equipment runtime references, combat/status/projectile/interactable projections, persistent↔runtime synchronization, deferred destruction, deterministic 60 Hz runtime phase ordering, and headless execution.
 
-- exactly one `RuntimeEntityRegistry` per active SceneInstance;
-- generation-checked `RuntimeEntityHandle` plus SceneGeneration validation;
-- explicit separation between runtime handles and persistent IDs;
-- typed sparse/packed component pools rather than a universal polymorphic `GameObject` hierarchy;
-- buffered structural component/entity mutation;
-- typed persistent-actor activation adapters over TA-2 Activation Leases;
-- atomic actor activation/deactivation with Closing/PendingDestroy lifecycle states;
-- one locally controlled Player runtime entity;
-- Inventory/Equipment runtime references that never duplicate physical ownership;
-- sustained player actions and equipment use driven by Simulation Time;
-- combat actor, weapon, hit-zone, shield, Health and deterministic Status runtime contracts;
-- TA-5 physical facts → GDS-9 Combat → owning-domain consequence routing;
-- swept/dynamic projectile runtime aligned with TA-5;
-- typed Interactable, WorldItem, Container, Hazard, MissionObject and Station projection entities;
-- persistent/runtime synchronization via ActivationEpoch and revisions;
-- logical removal before deferred backend/component reclamation;
-- one deterministic 60 Hz runtime phase order from intents through physics, consequences, commits, cleanup and immutable snapshot publication;
-- headless gameplay-runtime execution independent of OpenGL/audio/UI.
+### TA-8 AI and Navigation
+
+TA-8 establishes:
+
+- Recast/Detour-backed tiled grounded navmeshes behind a StarForge adapter;
+- Small/Standard/Heavy grounded navigation classes plus actor-specific traversal profiles;
+- separate bounded 3D free-flight navigation for flying/Zero-G autonomous actors;
+- typed door/airlock/elevator/ladder/dock/breach/free-flight traversal links;
+- persistent-state-first navigation invalidation and atomic tile/link revision commits;
+- asynchronous path jobs that are advisory, revision-tagged, and consumed deterministically;
+- project-owned path following/local avoidance/stuck recovery with no teleport fallback;
+- explicit separation between world truth and AI knowledge;
+- vision, semantic hearing, equipment sensors, Last Known Position/confidence and provenance-preserving shared knowledge;
+- layered enemy tactical AI with awareness states, deterministic goal selection, reaction timing, cover/flank/search/retreat behavior and no omniscience;
+- robot tactical-command execution, ROE, fallback, communication degradation and squad coordination;
+- crew assignment/task navigation, emergency/evacuation behavior and TA-6 automation handoff;
+- active/reduced/off-screen logical AI modes with Simulation-Time travel and chronological event boundaries;
+- deterministic `AIScheduler` and exact insertion into TA-7 runtime phases;
+- headless AI/navigation tests and rich read-only diagnostics.
 
 ## Architecture Documents
 
@@ -181,15 +185,28 @@ TA-7 establishes:
 - [`51_runtime_update_phases_and_system_boundaries.md`](51_runtime_update_phases_and_system_boundaries.md)
 - [`TA7_CROSS_VALIDATION.md`](TA7_CROSS_VALIDATION.md)
 
+### TA-8
+
+- [`52_navigation_representation_and_traversal_profiles.md`](52_navigation_representation_and_traversal_profiles.md)
+- [`53_navigation_topology_invalidation_and_links.md`](53_navigation_topology_invalidation_and_links.md)
+- [`54_async_pathfinding_and_path_following.md`](54_async_pathfinding_and_path_following.md)
+- [`55_perception_memory_and_shared_knowledge.md`](55_perception_memory_and_shared_knowledge.md)
+- [`56_decision_layers_enemy_combat_and_tactical_ai.md`](56_decision_layers_enemy_combat_and_tactical_ai.md)
+- [`57_robot_command_ai_and_squad_coordination.md`](57_robot_command_ai_and_squad_coordination.md)
+- [`58_crew_task_navigation_and_station_behavior.md`](58_crew_task_navigation_and_station_behavior.md)
+- [`59_ai_scheduling_and_offscreen_behavior_abstraction.md`](59_ai_scheduling_and_offscreen_behavior_abstraction.md)
+- [`60_ai_runtime_phase_integration_debugging_and_validation.md`](60_ai_runtime_phase_integration_debugging_and_validation.md)
+- [`TA8_CROSS_VALIDATION.md`](TA8_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define AI/navigation, missions/raids, content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
+Later TA phases define missions/raids, content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
 
 ## Implementation Gate
 
 Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-7 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-8 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**

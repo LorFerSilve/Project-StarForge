@@ -582,3 +582,129 @@ Fast plasma, rockets, and similar gameplay projectiles use deterministic fixed-t
 ### Rationale
 
 Swept project-owned motion avoids tunneling and excessive rigid-body overhead while preserving true rigid interactions for projectile classes that visibly depend on them.
+
+---
+
+## AD-042 — Horizon Uses Shared Topology Facts but Separate Typed Subsystem Solvers
+
+**Status:** Accepted
+
+### Decision
+
+Horizon has one canonical persistent module/port/topology foundation, but Power, Atmosphere, Thermal, Water, and Logistics build separate typed graph/solver views. StarForge does not implement one universal utility-flow solver.
+
+### Rationale
+
+The station systems share physical connectivity while conserving materially different state and obeying different failure/transfer semantics. A universal graph solver would blur authority and make conservation/error behavior ambiguous.
+
+---
+
+## AD-043 — Stable Pressure Cells Own Atmosphere; Portals Transfer Conserved Gas
+
+**Status:** Accepted
+
+### Decision
+
+Station atmosphere is stored as conserved gas-species quantities in stable authored Pressure Cells. Doors, breaches, ducts, and airlocks are Pressure Portals that transfer gas; opening/closing topology does not recreate gas ownership through temporary compartment objects.
+
+### Rationale
+
+Stable cells make dynamic compartment split/merge deterministic and prevent pressure-boundary changes from duplicating or deleting atmosphere.
+
+---
+
+## AD-044 — Station Power Uses Deterministic Capacity-Constrained Allocation Per Connected Island
+
+**Status:** Accepted
+
+### Decision
+
+Power is allocated separately inside each connected electrical island using deterministic priority/order rules and finite producer, storage, edge, and consumer capacities. Total station generation does not bypass a local distribution bottleneck.
+
+### Rationale
+
+This directly implements the GDS network, redundancy, load-shedding, and throughput behavior without simulating unnecessary AC electrical detail.
+
+---
+
+## AD-045 — Logistics Preserves One Physical Owner Through Explicit In-Transfer Ownership
+
+**Status:** Accepted
+
+### Decision
+
+Station logistics never creates a network-global inventory copy. Cargo removed from a source but not yet delivered is owned by a typed TransferCargoOwner correlated to one TransferJob until destination delivery or explicit loss/recovery.
+
+### Rationale
+
+This makes interrupted routes and save/load unambiguous while preserving TA-2 exactly-one-owner resource semantics.
+
+---
+
+## AD-046 — Long-Running Station Work Uses Persistent WorkOrders and Exactly-Once Completion
+
+**Status:** Accepted
+
+### Decision
+
+Manufacturing, farming, construction, repair, and compatible station work progress through persistent WorkOrders driven only by Simulation Time. Resource consumption and output/harvest/completion occur at explicit transactional milestones rather than through an open long-lived transaction.
+
+### Rationale
+
+This supports pausing, saving, interruption, off-screen execution, and deterministic failure without duplicated outputs or refunded consumed inputs.
+
+---
+
+## AD-047 — Station Topology Commits Before Physics/Render Projection Changes
+
+**Status:** Accepted
+
+### Decision
+
+Construction, damage, repair, door, breach, and related persistent station mutations commit in their owning stores first. Resulting StationGeometryDelta records are applied only later at TA-5's safe deferred physics-mutation boundary; renderer/navigation consume derived state afterward.
+
+### Rationale
+
+Persistent station state must never chase a physics/render mutation that happened first, and Jolt callbacks must not become topology authority.
+
+---
+
+## AD-048 — Off-Screen Horizon Advances Chronologically by Simulation-Time Boundaries
+
+**Status:** Accepted
+
+### Decision
+
+Horizon off-screen simulation uses the same persistent systems and advances through deterministic event/deadline boundaries. It may take larger mathematical steps but must stop at earlier depletion, threshold, completion, damage, or policy events before advancing further.
+
+### Rationale
+
+This achieves performance without a hidden second full scene and prevents coarse stepping from granting production/cooling/growth after a failure that should already have occurred.
+
+---
+
+## AD-049 — Thermal and Water Networks Conserve Explicit Stored Quantities
+
+**Status:** Accepted
+
+### Decision
+
+Thermal simulation tracks finite heat/coolant state with explicit transfer/rejection, while Water tracks separate Fresh Water and Wastewater inventories with explicit transfer, recycling loss, reserve, and leakage. Neither system uses hidden global availability.
+
+### Rationale
+
+Explicit conserved state makes damage, isolation, leaks, storage limits, and off-screen stepping testable and prevents utility duplication/deletion.
+
+---
+
+## AD-050 — Control/Data Connectivity Governs Observability and Automation, Not Physical Existence
+
+**Status:** Accepted
+
+### Decision
+
+Central station control and automation depend on explicit ControlData connectivity and sensor knowledge. Losing control/sensors can degrade commands/diagnostics, while the underlying physical Power, Atmosphere, Thermal, Water, equipment, and local safety state continue according to their own rules.
+
+### Rationale
+
+This preserves systemic failures and prevents both omniscient automation and the opposite error where losing a network connection makes physical infrastructure cease to exist.

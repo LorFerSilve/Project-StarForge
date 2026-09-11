@@ -27,7 +27,7 @@ Defines typed persistent/runtime identities, ContentId, domain stores, Activatio
 
 **Status:** Architecture Complete
 
-Defines one authoritative player-local SceneInstance, strategic-vs-local coordinates, ActiveLocalContext and SceneProfile kinds, scene lifecycle/generation, streaming residency versus activation, Hard Streaming Hold, double-precision Context Space, floating origin, local spatial indexing, Horizon active/off-screen handoff, atomic context transitions, persistent world projection, and scene-composition profiles.
+Defines one authoritative player-local SceneInstance, strategic-vs-local coordinates, scene lifecycle/generation, streaming residency versus activation, Hard Streaming Hold, double-precision Context Space, floating origin, local spatial indexing, Horizon active/off-screen handoff, atomic context transitions, persistent world projection, and scene-composition profiles.
 
 ## TA-4 — Rendering Architecture
 
@@ -39,94 +39,60 @@ Defines main-thread OpenGL ownership, RenderSnapshot interpolation, hybrid defer
 
 **Status:** Architecture Complete
 
-Defines:
+Defines Jolt adapter/world ownership, semantic collision/query contracts, kinematic CharacterMotor, swept/dynamic projectile physics, Dynamic 6DoF spacecraft, physical Hard Dock constraints, Zero-G/EVA/Magnetic Boots, normalized impact/contact facts, collision-damage routing, fixed 60 Hz physics phase ordering, deferred safe backend mutation, and floating-origin/load behavior without synthetic impacts.
 
-- StarForge-owned Jolt adapter and one PhysicsWorld per active SceneInstance;
-- generation-checked physics handles and no serialized backend identity;
-- semantic collision layers, pair filtering, CollisionMaterialId, and typed query families;
-- locomotion bodies separated from Combat hit-zone/query shapes;
-- kinematic CharacterMotor for grounded movement, crouch, jump, slopes, steps, platforms, mantle, ladders, and safe-position recovery;
-- trigger/interaction physical facts that never directly commit gameplay;
-- swept project-owned fast projectiles plus Dynamic grenade/bounce bodies where appropriate;
-- melee sweep and explosion-candidate query architecture;
-- Dynamic spacecraft rigid bodies with mass/inertia and bounded 6DoF force/torque;
-- Flight Assist and local safe-speed envelope through actual avionics/thruster authority;
-- physical Hard Dock capture constraints and explicit undock/separation;
-- Zero-G/EVA momentum, stabilization thrusters, and Magnetic Boot support frames;
-- physics-to-gameplay Impact/Contact Facts and collision-damage routing;
-- fixed 60 Hz physics phase ordering;
-- deferred safe body/constraint mutation after gameplay commit;
-- floating-origin rebase synchronization with no synthetic impact/trigger events;
-- coherent save/activation/RenderSnapshot synchronization.
-
-Artifacts:
-
-- `27_physics_adapter_and_world_lifecycle.md`;
-- `28_collision_layers_filters_and_queries.md`;
-- `29_character_controller_and_ground_movement.md`;
-- `30_triggers_interactions_projectiles_and_sweeps.md`;
-- `31_spacecraft_rigidbody_and_flight_integration.md`;
-- `32_docking_constraints_and_zero_g.md`;
-- `33_collision_damage_and_structural_contacts.md`;
-- `34_physics_tick_origin_shift_and_snapshot_sync.md`;
-- `TA5_CROSS_VALIDATION.md`.
+Artifacts: `27_physics_adapter_and_world_lifecycle.md` through `34_physics_tick_origin_shift_and_snapshot_sync.md`, plus `TA5_CROSS_VALIDATION.md`.
 
 ## TA-6 — Station Simulation and Graph Architecture
 
 **Status:** Architecture Complete
 
-Defines:
+Defines canonical Horizon topology, Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData graph views, deterministic capacity-constrained Power, conserved atmosphere/thermal/water state, one-owner logistics, persistent Simulation-Time WorkOrders, construction/damage/repair topology mutation, automation/control, chronological off-screen simulation, and persistent-state-first station projection into TA-5 physics.
 
-- one canonical persistent Horizon topology foundation with stable station-local typed IDs;
-- separate Structural and Traversal graphs plus stable Pressure Cells/Portals;
-- typed utility-link channels and independent topology revisions;
-- deterministic dependency invalidation after construction, damage, repair, door/valve/breaker, breach, and docking changes;
-- deterministic capacity-constrained Power allocation per connected island with `PowerLoadPriority`, producer dispatch, finite storage, breakers, protection, blackout, and black-start behavior;
-- conserved Atmosphere species quantities in stable pressure cells with portal/ventilation exchange, breaches, life-support processing, airlock pressure facts, and bounded decompression-force handoff;
-- finite Thermal energy/coolant state, coolant-loop throughput, radiator rejection, ambient-temperature coupling, and equipment protection facts;
-- separate Fresh Water/Wastewater inventories with finite storage, distribution, reserve policy, recycling loss, and leaks;
-- one-owner Logistics requests/reservations, deterministic source/routing selection, finite throughput, explicit `TransferCargoOwner`, local buffers, and docking cargo links;
-- persistent Simulation-Time WorkOrders for Manufacturing, Farming, Construction, Repair, and compatible station work;
-- exactly-once material consumption/output/harvest/completion milestones;
-- construction/deconstruction transactions, structural-completion/commissioning boundaries, persistent damage/fault/breach state, stabilization, repair, and topology restoration;
-- explicit ControlData connectivity, sensor knowledge, local safety controllers, automation tasks/policies/permissions, finite automation capacity, and escalation;
-- chronological event/deadline-based active/off-screen station scheduling using the same persistent Horizon state;
-- persistent-state-first station runtime projection with `StationGeometryDelta` handoff to TA-5 deferred safe physics mutation;
-- active/off-screen/docking/defense continuity without duplicate station state.
-
-Artifacts:
-
-- `35_station_graph_foundation_and_topology.md`;
-- `36_power_network_solver_and_allocation.md`;
-- `37_atmosphere_compartments_and_pressure_simulation.md`;
-- `38_thermal_water_and_environmental_networks.md`;
-- `39_logistics_reservations_and_transfer_runtime.md`;
-- `40_manufacturing_farming_and_work_scheduling.md`;
-- `41_construction_repair_and_topology_mutation.md`;
-- `42_station_automation_control_and_offscreen_simulation.md`;
-- `43_station_runtime_projection_and_physics_handoff.md`;
-- `TA6_CROSS_VALIDATION.md`.
+Artifacts: `35_station_graph_foundation_and_topology.md` through `43_station_runtime_projection_and_physics_handoff.md`, plus `TA6_CROSS_VALIDATION.md`.
 
 ## TA-7 — Gameplay Runtime Entity Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- runtime entity registry;
-- component pools;
-- actor lifecycle;
-- player runtime state;
-- item/equipment runtime state;
-- combat-facing entities;
-- projectiles/status effects;
-- interactive objects;
-- persistent/runtime synchronization;
-- deferred destruction.
+- one `RuntimeEntityRegistry` per active SceneInstance;
+- generation-checked RuntimeEntityHandle plus SceneGeneration scoping;
+- explicit persistent-ID/runtime-handle separation;
+- typed component pools with no universal polymorphic GameObject hierarchy;
+- deterministic query ordering where gameplay results depend on order;
+- buffered runtime structural mutation;
+- typed persistent actor activation/deactivation through TA-2 Activation Leases;
+- actor lifecycle states `Preparing -> Active -> Closing -> PendingDestroy -> Reclaimed`;
+- one locally controlled player runtime entity;
+- player Health/control/action runtime state without hidden penalties;
+- Inventory/Equipment runtime references that preserve one physical owner;
+- world-item pickup/partial-stack/Auto Pickup transaction ordering;
+- combat actor, weapon, shield, hit-zone, damage and deterministic Status runtime state;
+- TA-5 physical facts routed through GDS-9 Combat to owning gameplay domains;
+- swept/dynamic projectile runtime contracts;
+- Interactable, Container, Hazard, MissionObject, Door and Station projection runtime entities;
+- persistent/runtime synchronization with ActivationEpoch/revision validation;
+- logical removal before deferred entity/component/physics/render/audio reclamation;
+- a single deterministic 60 Hz runtime phase order from intents through immutable snapshot publication;
+- headless runtime execution for testing.
+
+Artifacts:
+
+- `44_runtime_entity_registry_and_handles.md`;
+- `45_component_storage_and_query_model.md`;
+- `46_actor_lifecycle_activation_and_deactivation.md`;
+- `47_player_inventory_and_equipment_runtime.md`;
+- `48_combat_actor_weapon_damage_and_status_runtime.md`;
+- `49_projectiles_interactables_and_world_runtime_objects.md`;
+- `50_persistent_runtime_sync_and_deferred_destruction.md`;
+- `51_runtime_update_phases_and_system_boundaries.md`;
+- `TA7_CROSS_VALIDATION.md`.
 
 ## TA-8 — AI and Navigation Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define:
 
@@ -169,13 +135,13 @@ Must define exact TA-2 save-container byte layout, section directory/manifest, d
 
 **Status:** Planned
 
-Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache numeric budgets, TA-4 rendering budgets, TA-5 physics/query/body/contact budgets, and TA-6 station graph/solver/environment/off-screen-scheduler budgets.
+Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache budgets, TA-4 rendering budgets, TA-5 physics/query/body/contact budgets, TA-6 station graph/solver/off-screen budgets, and TA-7 entity/component/query/projectile/status/runtime-structural-mutation budgets.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station-simulation smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
+Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -203,8 +169,9 @@ GDS Design Complete
 → TA-4 Architecture Complete  
 → TA-5 Architecture Complete  
 → TA-6 Architecture Complete  
-→ **TA-7 next**  
-→ TA-8 ... TA-15  
+→ TA-7 Architecture Complete  
+→ **TA-8 next**  
+→ TA-9 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

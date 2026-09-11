@@ -82,37 +82,43 @@ Artifacts:
 - `11_rng_migration_and_integrity_contracts.md`;
 - `TA2_CROSS_VALIDATION.md`.
 
-Primary GDS dependencies resolved:
-
-- physical ownership;
-- unique persistent identities;
-- Stable Save Boundaries;
-- mission/event/robot/ship IDs;
-- transaction atomicity and anti-duplication;
-- deterministic procedural state;
-- save migration/integrity boundaries.
-
 ## TA-3 — World, Scene, Zone, and Streaming Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- Active Local Context;
-- Zone/Scene lifecycle;
-- mission sub-zone streaming;
-- persistent location activation;
-- Horizon active/off-screen transitions;
-- spatial partitioning;
-- local/global coordinate strategy;
-- origin/precision strategy;
-- world bounds;
-- terrain/interior/space scene composition;
-- transition/loading state machine.
+- one authoritative player-local SceneInstance at a time;
+- strategic galaxy graph separated from local 3D scene coordinates;
+- ActiveLocalContext ownership kinds separated from physical SceneProfile kinds;
+- Scene lifecycle and SceneGeneration stale-result protection;
+- Mission/World Zone Instance and stable local-key projection;
+- stream-cell residency separated from simulation activation;
+- deterministic activation sets and non-authoritative predictive prefetch;
+- Hard Streaming Hold with Simulation Time freeze;
+- persistent double-precision Context Space positions;
+- origin-relative runtime coordinates and `RuntimeOrigin64`/`OriginEpoch` rebasing;
+- loose hashed gameplay spatial index distinct from streaming/physics/render structures;
+- explicit Horizon active/off-screen handoff;
+- off-screen Horizon Defense → active-scene continuity;
+- staged destination scene preparation and atomic context-switch transitions;
+- Mission/World persistent-state projection over immutable content;
+- Interior, Surface, EVA, LocalSpaceflight, Horizon, and Mixed scene-composition profiles.
+
+Artifacts:
+
+- `12_active_local_context_and_scene_model.md`;
+- `13_zone_streaming_and_residency_model.md`;
+- `14_coordinate_precision_and_spatial_partitioning.md`;
+- `15_horizon_active_offscreen_handoff.md`;
+- `16_scene_transition_and_loading_state_machine.md`;
+- `17_zone_state_and_persistent_world_projection.md`;
+- `18_scene_composition_profiles.md`;
+- `TA3_CROSS_VALIDATION.md`.
 
 ## TA-4 — Rendering Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define:
 
@@ -255,21 +261,20 @@ Must define:
 
 **Status:** Planned
 
-TA-2 has already fixed the persistence semantics and v1 container family. TA-12 must define/lock the concrete storage implementation details required before code, including:
+Must define:
 
-- exact byte-level v1 header/section layout;
-- serializer/reader interfaces and domain registry;
-- file/slot naming and directory layout;
-- CRC32C implementation boundary;
-- write-new-validate-atomic-replace platform adapter;
-- autosave/manual/quicksave rotation/storage policy;
-- staging memory strategy;
-- exact migration registry/execution interfaces;
-- crash/interrupted-write recovery;
-- corruption diagnostics/user recovery flow;
-- golden save fixture organization.
+- exact byte layout of the TA-2 StarForge save container;
+- snapshot manifest/section directory representation;
+- domain serialization registry;
+- CRC32C implementation and integrity handling;
+- write-new-then-commit storage flow;
+- autosave/manual/quicksave file layout;
+- migration pipeline implementation;
+- crash recovery;
+- corruption diagnostics;
+- deterministic load validation.
 
-TA-12 may not replace TA-2's identity, DTO ownership, all-or-nothing load, migration determinism, or Stable Save Boundary contracts.
+TA-2 already fixes the persistence semantics and container family; TA-12 specifies the concrete storage implementation without redesigning those contracts.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
@@ -286,7 +291,8 @@ Must define:
 - simulation backlog behavior;
 - profiling counters;
 - performance test scenes;
-- scalability strategy for Horizon/off-screen state.
+- scalability strategy for Horizon/off-screen state;
+- TA-3 streaming radius/origin/grid/cache numeric budgets.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
@@ -316,6 +322,7 @@ Cross-validates TA-0 through TA-14 against:
 - ownership/lifetime boundaries;
 - threading;
 - persistence;
+- world/scene transition consistency;
 - performance assumptions;
 - subsystem dependency cycles;
 - failure recovery;
@@ -346,8 +353,9 @@ GDS Design Complete
 → TA-0 complete  
 → TA-1 Architecture Complete  
 → TA-2 Architecture Complete  
-→ **TA-3 next**  
-→ TA-4 ... TA-15  
+→ TA-3 Architecture Complete  
+→ **TA-4 next**  
+→ TA-5 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

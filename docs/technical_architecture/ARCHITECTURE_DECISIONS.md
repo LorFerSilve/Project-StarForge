@@ -386,3 +386,101 @@ Local scenes are reconstructed from immutable Content definitions plus persisten
 ### Rationale
 
 This guarantees that unload/reload cannot respawn harvested resources, duplicate ships/robots, repair destroyed objects, reset doors, or erase discoveries/objectives.
+
+---
+
+## AD-028 — StarForge Uses a Hybrid Deferred Renderer
+
+**Status:** Accepted
+
+### Decision
+
+Opaque and alpha-masked world geometry render through a deferred G-buffer/lighting path. Transparent glass, shields, special energy surfaces, and VFX render through forward HDR passes after deferred lighting.
+
+### Rationale
+
+StarForge contains dense station/interior lighting plus meaningful transparent and effect-heavy surfaces. A hybrid deferred path gives predictable many-light opaque shading without forcing transparency into an unsuitable G-buffer or adopting a larger engine renderer.
+
+---
+
+## AD-029 — Gameplay Views Use Reversed-Z Zero-to-One Depth
+
+**Status:** Accepted
+
+### Decision
+
+The OpenGL renderer uses `glClipControl` zero-to-one clip depth, reversed-Z floating-point depth, and effectively infinite far perspective projection where compatible with the view profile.
+
+### Rationale
+
+TA-3 permits large bounded local spaceflight contexts while also requiring precise player-scale scenes. Reversed-Z provides substantially better depth precision without creating a galaxy-scale coordinate system.
+
+---
+
+## AD-030 — World Materials Use glTF-Compatible Metallic-Roughness PBR
+
+**Status:** Accepted
+
+### Decision
+
+Baseline world shading uses metallic-roughness PBR with GGX/Smith/Schlick direct lighting, image-based environment/probe lighting, and explicit direct lights. Real-time global illumination is not a baseline requirement.
+
+### Rationale
+
+This maps directly to the selected glTF 2.0 asset exchange format, supports the stylized-grounded art direction, and keeps the custom renderer achievable without speculative GI/ray-tracing infrastructure.
+
+---
+
+## AD-031 — Rendering Uses Linear HDR Internally and SDR sRGB Output Baseline
+
+**Status:** Accepted
+
+### Decision
+
+Scene lighting is accumulated in linear HDR, tone mapped to SDR sRGB, and shipping UI is composited afterward at native output resolution. Native HDR-display output is outside the initial baseline.
+
+### Rationale
+
+This provides lighting/effect headroom while keeping the first shipping display path predictable and preserving UI color/readability independently of world exposure and 3D render scale.
+
+---
+
+## AD-032 — Initial Anti-Aliasing Is Off or FXAA and Motion Blur Is Omitted
+
+**Status:** Accepted
+
+### Decision
+
+The initial renderer supports no anti-aliasing or FXAA as the shipping AA options. TAA/MSAA are not baseline requirements, and motion blur is not implemented in the initial renderer.
+
+### Rationale
+
+FXAA is simple and stable with the deferred/floating-origin architecture, while avoiding temporal-history complexity before representative scenes exist. GDS-13 already defines motion blur as optional and Off by default.
+
+---
+
+## AD-033 — GPU Resources Are Render-Owned and Uploaded on the Main OpenGL Thread
+
+**Status:** Accepted
+
+### Decision
+
+Workers prepare immutable CPU-side asset payloads. Only the main/context-owning render thread creates, mutates, uploads, or destroys OpenGL resources. Runtime GPU references are generation-checked and never persistent gameplay identity.
+
+### Rationale
+
+This preserves TA-1 thread ownership, avoids multi-context synchronization complexity, and gives scene streaming a clear resource-lifetime boundary.
+
+---
+
+## AD-034 — Graphics Quality Can Change Presentation Cost but Never Gameplay Semantics
+
+**Status:** Accepted
+
+### Decision
+
+Low/Medium/High/Ultra/Custom presets can change render scale, shadows, SSAO, texture/LOD residency, bloom, and decorative effects only within the critical-readability floor. Automatic dynamic resolution is not baseline.
+
+### Rationale
+
+Hardware/performance variability must never change collision, simulation timing, world knowledge, enemy behavior, rewards, or required hazard/objective readability.

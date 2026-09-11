@@ -10,9 +10,11 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0**, **TA-1**, and **TA-2** are complete/Architecture Complete. The next dependency is **TA-3 — World, Scene, Zone, and Streaming Architecture**.
+Technical Architecture stages **TA-0**, **TA-1**, **TA-2**, and **TA-3** are complete/Architecture Complete. The next dependency is **TA-4 — Rendering Architecture**.
 
-TA-2 has fixed the project's persistent identity, domain-state ownership, activation leases, command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG foundation.
+TA-2 fixed persistent identity, domain-state ownership, activation leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
+
+TA-3 now fixes the one-player-local-scene model, bounded Zone/Scene lifecycle, stream-cell residency versus simulation activation, double-precision Context Space plus floating-origin runtime coordinates, spatial partitioning, Horizon active/off-screen handoff, persistent world projection, scene profiles, and staged atomic context transitions/loading.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, architecture integration audit, and implementation roadmap/contract locking.
 

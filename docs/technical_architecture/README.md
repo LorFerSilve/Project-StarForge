@@ -15,9 +15,10 @@ Technical Architecture has completed:
 - **TA-1 — System Context, Toolchain, and Runtime Foundation**;
 - **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**;
 - **TA-3 — World, Scene, Zone, and Streaming Architecture**;
-- **TA-4 — Rendering Architecture**.
+- **TA-4 — Rendering Architecture**;
+- **TA-5 — Physics, Collision, Character, and Spaceflight Integration**.
 
-The next dependency is **TA-5 — Physics, Collision, Character, and Spaceflight Integration**.
+The next dependency is **TA-6 — Station Simulation and Graph Architecture**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -131,6 +132,24 @@ TA-4 establishes:
 - Off/FXAA initial anti-aliasing and no baseline motion-blur implementation;
 - explicit resize/minimize/context-failure policies.
 
+## TA-5 Physics Baseline
+
+TA-5 establishes:
+
+- one StarForge-owned `PhysicsWorld` per active SceneInstance with Jolt isolated behind typed adapters;
+- generation-checked physics runtime handles and no serialized/backend gameplay identity;
+- one canonical semantic collision layer/filter/query architecture;
+- separate locomotion colliders and Combat hit-zone query shapes;
+- a kinematic `CharacterMotor` for humanoid grounded movement, crouch, slopes, steps, jumping, platforms, mantling, ladders, and technical safe-position recovery;
+- project-owned physical projectile/sweep architecture with bounded owner-ignore, deterministic melee sweeps, and explosion candidate/occlusion queries;
+- Dynamic spacecraft rigid bodies with project-computed mass/inertia and bounded 6DoF forces/torques;
+- Flight Assist and safe-speed envelope implemented through avionics/thruster authority rather than fake vacuum drag or velocity teleport/clamping;
+- real Hard Dock capture constraints plus explicit release/separation behavior;
+- Zero-G/EVA momentum, suit-thruster stabilization, and Magnetic Boot support frames;
+- normalized Impact/Contact Facts routed to gameplay Damage/Health/Structure owners rather than physics-owned damage;
+- one fixed 60 Hz physics phase schedule integrated with TA-2 transactions, TA-3 origin rebasing, TA-4 snapshots, streaming holds, and save boundaries;
+- no synthetic impacts/triggers caused by load reconstruction or floating-origin rebases.
+
 ## Architecture Documents
 
 ### TA-0 / TA-1
@@ -176,12 +195,24 @@ TA-4 establishes:
 - [`26_graphics_settings_resize_and_failure_recovery.md`](26_graphics_settings_resize_and_failure_recovery.md)
 - [`TA4_CROSS_VALIDATION.md`](TA4_CROSS_VALIDATION.md)
 
+### TA-5
+
+- [`27_physics_adapter_and_world_lifecycle.md`](27_physics_adapter_and_world_lifecycle.md)
+- [`28_collision_layers_filters_and_queries.md`](28_collision_layers_filters_and_queries.md)
+- [`29_character_controller_and_ground_movement.md`](29_character_controller_and_ground_movement.md)
+- [`30_triggers_interactions_projectiles_and_sweeps.md`](30_triggers_interactions_projectiles_and_sweeps.md)
+- [`31_spacecraft_rigidbody_and_flight_integration.md`](31_spacecraft_rigidbody_and_flight_integration.md)
+- [`32_docking_constraints_and_zero_g.md`](32_docking_constraints_and_zero_g.md)
+- [`33_collision_damage_and_structural_contacts.md`](33_collision_damage_and_structural_contacts.md)
+- [`34_physics_tick_origin_shift_and_snapshot_sync.md`](34_physics_tick_origin_shift_and_snapshot_sync.md)
+- [`TA5_CROSS_VALIDATION.md`](TA5_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define physics, station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
+Later TA phases define station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
 
 ## Implementation Gate
 
@@ -195,4 +226,4 @@ A technical subsystem is ready for code only when:
 6. tests/validation expectations are defined;
 7. the implementation roadmap places it in an approved phase.
 
-`Implementation Locked` remains a later per-contract handoff state. TA-4 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.
+`Implementation Locked` remains a later per-contract handoff state. TA-5 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.

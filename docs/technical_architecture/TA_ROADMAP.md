@@ -118,26 +118,45 @@ Artifacts:
 
 ## TA-4 — Rendering Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- OpenGL object/resource ownership;
-- render graph/pass structure;
-- material/shader model;
-- camera/view system;
-- lighting/shadows;
-- opaque/transparent ordering;
-- instancing/batching;
-- particles/VFX;
-- debug rendering;
-- GPU asset upload lifecycle;
-- resize/device/context failure behavior;
-- graphics settings/performance tiers.
+- main-thread OpenGL 4.6 Core context and thin StarForge `RenderDevice` ownership;
+- immutable RenderSnapshot frame input and fixed-simulation/variable-render interpolation;
+- linear HDR scene rendering with SDR sRGB output and native-resolution shipping UI composition;
+- reversed-Z zero-to-one floating-point depth;
+- hybrid deferred opaque/alpha-mask rendering plus forward transparency/special/VFX;
+- fixed-purpose render-pass/resource dependency schedule;
+- four-cascade primary directional shadows and bounded local-light shadow budgets;
+- compute-assisted tiled deferred local-light culling;
+- glTF-compatible metallic-roughness PBR, IBL/environment probes, and explicit direct lights;
+- bounded GLSL 4.60 shader families/variant keys and interface validation;
+- FirstPerson, SpacecraftChase, Cockpit, Management/Strategic, and Debug view contracts;
+- renderer-only frustum/LOD/optional conservative occlusion culling;
+- stable draw ordering, batching, hardware instancing, and transparent sorting;
+- renderer-side GPU particle/VFX execution with no gameplay authority;
+- Reduced Effects/Photosensitivity critical-representation guarantees;
+- main-thread GPU upload/deletion queues, generation-checked RenderResourceHandles, caching, and fence-safe retirement;
+- Low/Medium/High/Ultra/Custom graphics presets whose changes are presentation-only;
+- Off/FXAA initial anti-aliasing and no baseline motion-blur implementation;
+- resize/minimize/context-creation/context-loss failure policy.
+
+Artifacts:
+
+- `19_renderer_ownership_and_frame_pipeline.md`;
+- `20_render_graph_and_passes.md`;
+- `21_camera_and_view_system.md`;
+- `22_material_shader_and_lighting_model.md`;
+- `23_visibility_culling_batching_and_transparency.md`;
+- `24_vfx_particles_and_debug_rendering.md`;
+- `25_gpu_resource_upload_and_lifecycle.md`;
+- `26_graphics_settings_resize_and_failure_recovery.md`;
+- `TA4_CROSS_VALIDATION.md`.
 
 ## TA-5 — Physics, Collision, Character, and Spaceflight Integration
 
-**Status:** Planned
+**Status:** Next
 
 Must define:
 
@@ -292,7 +311,8 @@ Must define:
 - profiling counters;
 - performance test scenes;
 - scalability strategy for Horizon/off-screen state;
-- TA-3 streaming radius/origin/grid/cache numeric budgets.
+- TA-3 streaming radius/origin/grid/cache numeric budgets;
+- TA-4 render-quality/shadow/texture/effect numeric budgets.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
@@ -354,8 +374,9 @@ GDS Design Complete
 → TA-1 Architecture Complete  
 → TA-2 Architecture Complete  
 → TA-3 Architecture Complete  
-→ **TA-4 next**  
-→ TA-5 ... TA-15  
+→ TA-4 Architecture Complete  
+→ **TA-5 next**  
+→ TA-6 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

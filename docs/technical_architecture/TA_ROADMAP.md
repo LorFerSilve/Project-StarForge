@@ -63,47 +63,50 @@ Artifacts: `44_runtime_entity_registry_and_handles.md` through `51_runtime_updat
 
 **Status:** Architecture Complete
 
-Defines:
+Defines Recast/Detour-backed grounded navigation, separate bounded 3D free-flight navigation, typed traversal profiles/links, persistent-state-first navigation invalidation, revision-validated asynchronous pathfinding, project-owned path following/avoidance, knowledge-limited perception/memory, enemy tactical AI, robot command/squad AI, crew task/emergency navigation, deterministic AI scheduling, active/off-screen logical AI equivalence, and headless diagnostics/validation.
 
-- Recast/Detour-backed tiled grounded navmesh behind a StarForge navigation adapter;
-- Small/Standard/Heavy grounded navigation classes and actor-specific traversal profiles;
-- separate bounded 3D navigation graph/volume for flying/Zero-G autonomous actors;
-- typed traversal links for doors, airlocks, lifts, ladders, breaches, docking and free-flight portals;
-- dynamic navigation overlays plus persistent-state-first tile/link invalidation and atomic NavigationRevision updates;
-- asynchronous path jobs with SceneGeneration/NavigationRevision/actor/task/request freshness validation;
-- deterministic worker-result consumption independent of completion order;
-- project-owned path following, local avoidance and no-teleport stuck recovery;
-- explicit world-truth vs AI-knowledge separation;
-- vision, semantic hearing, equipment sensors, Last Known Position/confidence and provenance-preserving shared knowledge;
-- generic enemy awareness/tactical AI with reaction timing, cover, search, flank, suppression, retreat and no omniscience;
-- player robot command AI, ROE, communication degradation, fallback and squad coordination;
-- crew assignment/task travel, emergency response, evacuation and TA-6 automation execution handoff;
-- ActiveLocal/ReducedLocal/OffScreenLogical AI modes with chronological Simulation-Time travel/task boundaries;
-- deterministic AI scheduler and exact integration into TA-7 fixed runtime phases;
-- read-only AI diagnostics and headless validation.
-
-Artifacts:
-
-- `52_navigation_representation_and_traversal_profiles.md`;
-- `53_navigation_topology_invalidation_and_links.md`;
-- `54_async_pathfinding_and_path_following.md`;
-- `55_perception_memory_and_shared_knowledge.md`;
-- `56_decision_layers_enemy_combat_and_tactical_ai.md`;
-- `57_robot_command_ai_and_squad_coordination.md`;
-- `58_crew_task_navigation_and_station_behavior.md`;
-- `59_ai_scheduling_and_offscreen_behavior_abstraction.md`;
-- `60_ai_runtime_phase_integration_debugging_and_validation.md`;
-- `TA8_CROSS_VALIDATION.md`.
+Artifacts: `52_navigation_representation_and_traversal_profiles.md` through `60_ai_runtime_phase_integration_debugging_and_validation.md`, plus `TA8_CROSS_VALIDATION.md`.
 
 ## TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define MissionInstance runtime/persistent representation, objective state-machine infrastructure, deterministic procedural generation, raid phases, reinforcements, Dynamic Events, world-location consequences, recovery/communication integration, and finale transaction state.
+Defines:
+
+- persistent MissionId versus per-deployment MissionInstanceId and transactional single-external-deployment authority;
+- persistent multi-zone mission attempts, retry history, no-reroll/no-refund failure semantics, and exactly-once resolution;
+- typed acyclic objective graphs driven by committed owning-domain facts/state;
+- explicit objective branch, combat-end-state, resource-security, rescue, repair, scan, timer, hidden-objective and extraction semantics;
+- deterministic staged procedural mission generation using persistent cursors, scoped PCG32 streams, bounded validation and stable major content;
+- offensive Raids as specialized MissionInstances against persistent targets;
+- independent raid phase/escalation state with immediate persistent target damage, sabotage and physical loot consequences;
+- finite reinforcement response calls with a pre-commit interruption boundary, persistent post-commit force manifest, strategic ETA and physical arrival;
+- persistent Horizon DefenseEvent execution in active/off-screen modes without an authoritative single Defense Score;
+- physical hostile theft/extraction and causal station recovery;
+- DynamicEventStore/StrategicEventScheduler with source plausibility, concurrency limits, cooldowns, Recovery Grace and softlock validation;
+- atomic DynamicEvent handoff to MissionId/DefenseEventId without duplicated execution state machines;
+- strategic communication/knowledge delivery separate from event existence and remote-command physical feasibility;
+- external-defeat Recovery Transit with Simulation-Time anti-teleport destination logic and real asset-location preservation;
+- typed cross-domain strategic consequence batches;
+- exactly-once MS-F02 Stabilize/Sever/Contain FinalResolution transaction and persistent PostgameResolutionState;
+- deterministic local/strategic phase integration, chronological cross-scheduler boundaries, Stable Save Boundary invariants and headless diagnostics/testing contracts.
+
+Artifacts:
+
+- `61_mission_store_instance_and_deployment_state.md`;
+- `62_objective_graph_runtime_and_commit_semantics.md`;
+- `63_procedural_mission_generation_and_offer_runtime.md`;
+- `64_raid_state_machine_and_target_runtime.md`;
+- `65_reinforcements_escalation_and_defense_events.md`;
+- `66_dynamic_event_scheduler_and_world_consequence_runtime.md`;
+- `67_communications_recovery_and_strategic_consequence_routing.md`;
+- `68_finale_postgame_and_irreversible_choice_transactions.md`;
+- `69_ta9_runtime_phase_integration_debugging_and_validation.md`;
+- `TA9_CROSS_VALIDATION.md`.
 
 ## TA-10 — Content and Asset Pipeline
 
-**Status:** Planned
+**Status:** Next
 
 Must define canonical source/exchange formats, glTF import, textures/materials, collision/navigation-content cooking, shader build pipeline, content IDs/schemas, validation tooling, runtime/cooked assets, registry/cache, dependency tracking, and hot-reload boundaries.
 
@@ -123,13 +126,13 @@ Must define exact TA-2 save-container byte layout, section directory/manifest, d
 
 **Status:** Planned
 
-Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-8 budgets including entity counts, physics, station solvers, nav tile rebuilds, path jobs, perception queries, AI decision cadence, AI backlog, and off-screen actor advancement.
+Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-9 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective evaluation, procedural-generation jobs, strategic-event scheduling, off-screen DefenseEvent advancement, and strategic backlog limits.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity/AI/navigation smoke tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -159,8 +162,9 @@ GDS Design Complete
 → TA-6 Architecture Complete  
 → TA-7 Architecture Complete  
 → TA-8 Architecture Complete  
-→ **TA-9 next**  
-→ TA-10 ... TA-15  
+→ TA-9 Architecture Complete  
+→ **TA-10 next**  
+→ TA-11 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

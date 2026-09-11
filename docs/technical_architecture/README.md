@@ -14,9 +14,10 @@ Technical Architecture has completed:
 - **TA-0 — Architecture Governance and Constraints**;
 - **TA-1 — System Context, Toolchain, and Runtime Foundation**;
 - **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**;
-- **TA-3 — World, Scene, Zone, and Streaming Architecture**.
+- **TA-3 — World, Scene, Zone, and Streaming Architecture**;
+- **TA-4 — Rendering Architecture**.
 
-The next dependency is **TA-4 — Rendering Architecture**.
+The next dependency is **TA-5 — Physics, Collision, Character, and Spaceflight Integration**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -105,6 +106,31 @@ TA-3 establishes:
 - persistent World/Mission state projected over immutable Content definitions;
 - explicit Interior, Surface, EVA, LocalSpaceflight, Horizon, and Mixed scene-composition profiles.
 
+## TA-4 Rendering Baseline
+
+TA-4 establishes:
+
+- one main-thread OpenGL 4.6 Core rendering context;
+- a thin StarForge-owned `RenderDevice` and move-safe/deferred-lifetime GPU wrappers;
+- immutable `RenderSnapshot` input with fixed-simulation/variable-render interpolation;
+- origin/scene-generation discontinuity handling;
+- linear HDR rendering with SDR sRGB output and native-resolution shipping UI composition;
+- reversed-Z zero-to-one floating-point depth;
+- a hybrid deferred renderer: G-buffer/deferred opaque lighting plus forward transparent/special/VFX passes;
+- four-cascade primary directional shadows and bounded prioritized local-light shadows;
+- compute-assisted tiled deferred local-light culling;
+- glTF-compatible metallic-roughness PBR with GGX/Smith/Schlick direct lighting and IBL/probes;
+- bounded shader families and explicit shader variant keys;
+- explicit FirstPerson, SpacecraftChase, Cockpit, Management/Strategic, and Debug view contracts;
+- render-only frustum/LOD/optional conservative occlusion culling and hardware instancing;
+- stable transparent ordering without mandatory OIT;
+- GPU-compute presentation particles that never become gameplay authority;
+- VFX priority/accessibility filtering with critical-representation floor;
+- main-thread GPU upload/deletion queue, generation-checked RenderResourceHandles, caches, and fence-safe retirement;
+- Low/Medium/High/Ultra/Custom presentation presets that cannot alter gameplay semantics;
+- Off/FXAA initial anti-aliasing and no baseline motion-blur implementation;
+- explicit resize/minimize/context-failure policies.
+
 ## Architecture Documents
 
 ### TA-0 / TA-1
@@ -138,12 +164,24 @@ TA-3 establishes:
 - [`18_scene_composition_profiles.md`](18_scene_composition_profiles.md)
 - [`TA3_CROSS_VALIDATION.md`](TA3_CROSS_VALIDATION.md)
 
+### TA-4
+
+- [`19_renderer_ownership_and_frame_pipeline.md`](19_renderer_ownership_and_frame_pipeline.md)
+- [`20_render_graph_and_passes.md`](20_render_graph_and_passes.md)
+- [`21_camera_and_view_system.md`](21_camera_and_view_system.md)
+- [`22_material_shader_and_lighting_model.md`](22_material_shader_and_lighting_model.md)
+- [`23_visibility_culling_batching_and_transparency.md`](23_visibility_culling_batching_and_transparency.md)
+- [`24_vfx_particles_and_debug_rendering.md`](24_vfx_particles_and_debug_rendering.md)
+- [`25_gpu_resource_upload_and_lifecycle.md`](25_gpu_resource_upload_and_lifecycle.md)
+- [`26_graphics_settings_resize_and_failure_recovery.md`](26_graphics_settings_resize_and_failure_recovery.md)
+- [`TA4_CROSS_VALIDATION.md`](TA4_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define rendering, physics, station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
+Later TA phases define physics, station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
 
 ## Implementation Gate
 
@@ -157,4 +195,4 @@ A technical subsystem is ready for code only when:
 6. tests/validation expectations are defined;
 7. the implementation roadmap places it in an approved phase.
 
-`Implementation Locked` remains a later per-contract handoff state. TA-3 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.
+`Implementation Locked` remains a later per-contract handoff state. TA-4 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.

@@ -56,26 +56,11 @@ The renderer targets **OpenGL 4.6 Core Profile**.
 
 Compatibility-profile/deprecated fixed-function OpenGL is prohibited.
 
-The project directly owns:
-
-- render passes;
-- shaders;
-- resource lifetime;
-- material system;
-- framebuffers;
-- draw submission;
-- lighting/shadows;
-- GPU debugging/profiling.
+The project directly owns render passes, shaders, resource lifetime, materials, framebuffers, draw submission, lighting/shadows, and GPU diagnostics.
 
 ## 7. GLFW
 
-**GLFW** provides only the platform-facing window/context/input-device foundation:
-
-- desktop window;
-- OpenGL context creation;
-- keyboard/mouse events;
-- gamepad/controller discovery/input where supported;
-- framebuffer/window events.
+**GLFW** provides only the platform-facing window/context/input-device foundation: desktop window, OpenGL context creation, keyboard/mouse events, controller discovery/input, and framebuffer/window events.
 
 GLFW does not own gameplay bindings or UI action semantics.
 
@@ -83,195 +68,137 @@ GLFW does not own gameplay bindings or UI action semantics.
 
 **glad2** provides generated OpenGL function loading for the selected OpenGL 4.6 Core API.
 
-Generated loader code is treated as third-party/generated infrastructure.
-
-No gameplay module includes glad headers.
+Generated loader code is third-party/generated infrastructure. No gameplay module includes glad headers.
 
 ## 9. GLM
 
-**GLM** is adopted as the foundational runtime math library for graphics-compatible vectors, matrices, quaternions, transforms, and common math operations.
+**GLM** is the foundational runtime math library for graphics-compatible vectors, matrices, quaternions, transforms, and common math operations.
 
-Project-specific semantic types can wrap GLM values where units/meaning require stronger distinction.
-
-Examples:
-
-- SimulationDuration;
-- TickIndex;
-- MassKg;
-- PersistentId;
-- world/local coordinate abstractions where later required.
+Project-specific semantic types can wrap GLM values where units/meaning require stronger distinction, including SimulationDuration, TickIndex, MassKg, PersistentId, and world/local coordinate abstractions.
 
 ## 10. Jolt Physics
 
-**Jolt Physics** supplies commodity collision and rigid-body physics.
-
-It is wrapped by the StarForge `physics` module.
+**Jolt Physics** supplies commodity collision and rigid-body physics behind the StarForge `physics` adapter.
 
 Direct Jolt types do not become persistent/gameplay domain types.
 
-The project retains authority for:
+StarForge retains authority for character movement rules, damage, collision consequences, docking validity, mission boundaries, station structure, and ship disable/destroy semantics.
 
-- character movement rules;
-- damage;
-- collision gameplay consequences;
-- docking validity;
-- mission boundaries;
-- station structural graph;
-- ship disable/destroy semantics.
+## 11. Recast / Detour
 
-## 11. miniaudio
+**Recast/Detour** supplies commodity grounded navigation-mesh cooking and path-corridor queries behind the StarForge `navigation` adapter.
 
-**miniaudio** supplies the audio device/backend, decoding/mixing facilities used by the StarForge audio layer.
+The upstream `recastnavigation/recastnavigation` project is not archived at TA-8 selection time; the exact dependency version is pinned in the implementation manifest under the normal version/license gate.
+
+Direct Recast/Detour types such as navmesh/query objects and polygon refs do not become gameplay or persistent identity.
+
+StarForge retains authority for:
+
+- actor traversal profiles;
+- security/access rules;
+- door/airlock/elevator gameplay;
+- hazard knowledge/cost policy;
+- Heavy/light robot constraints;
+- 3D free-flight/Zero-G navigation;
+- AI decisions;
+- path-result freshness/deterministic consumption;
+- dynamic navigation invalidation semantics.
+
+Recast/Detour does not host the game loop or AI object model.
+
+## 12. miniaudio
+
+**miniaudio** supplies the audio device/backend and decoding/mixing facilities used by the StarForge audio layer.
 
 Gameplay code emits semantic audio intents/events rather than calling miniaudio directly.
 
-## 12. fastgltf
+## 13. fastgltf
 
 **fastgltf** is the canonical runtime/build-pipeline parser for **glTF 2.0** mesh/scene asset import.
 
-The project uses glTF as the primary authored 3D asset exchange format.
+The project uses glTF as the primary authored 3D asset exchange format. Runtime representation is StarForge-owned.
 
-Runtime representation is StarForge-owned and does not keep parser objects as gameplay state.
+## 14. Texture/Image Support
 
-## 13. Texture/Image Support
+Texture decoding/transcoding is behind the content/render-resource pipeline.
 
-Texture decoding/transcoding is kept behind the content/render-resource pipeline.
+The initial implementation can use a small decoder dependency suitable for common source formats, while shipping representation can later use GPU-friendly compression without changing gameplay/content IDs.
 
-The initial implementation can use a small decoder dependency suitable for common source formats, but shipping texture representation should support later GPU-friendly compression without changing gameplay/content IDs.
+Exact decoder/compression package is selected during TA-10.
 
-The exact decoder/compression package is selected during the asset-pipeline architecture phase rather than prematurely fixed here.
+## 15. Dear ImGui
 
-## 14. Dear ImGui
+**Dear ImGui** is permitted only for developer/debug tooling such as inspectors, profilers, render/physics/navigation diagnostics, graph visualization, and debug commands.
 
-**Dear ImGui** is permitted only for developer/debug tooling:
+It is not the baseline player-facing HUD/menu/accessibility UI.
 
-- inspectors;
-- profilers;
-- render/physics diagnostics;
-- graph visualization;
-- debug commands.
-
-It is **not** the baseline implementation of the player-facing HUD/menu/accessibility UI because the GDS requires shipping presentation behavior that should remain project-owned and accessibility-aware.
-
-## 15. Catch2
+## 16. Catch2
 
 **Catch2** is the unit/component test framework.
 
 Tests must be runnable without launching the full game window unless they specifically exercise platform/render integration.
 
-## 16. Logging
+## 17. Logging
 
 The architecture uses a StarForge-owned logging facade.
 
 The underlying logging implementation may use a lightweight dependency selected during scaffolding, but game/domain code depends only on the project facade.
 
-Required properties:
+Required properties include severity, category/channel, structured context such as IDs/tick, development assertions/fatal diagnostics, and file/console sinks in development.
 
-- severity;
-- category/channel;
-- structured context such as IDs/tick;
-- development assertions/fatal diagnostics;
-- file/console sinks in development.
-
-## 17. Serialization Dependencies
+## 18. Serialization Dependencies
 
 Persistent save serialization is project-owned and versioned.
 
-A third-party JSON/binary library may be used as an encoding utility, but:
+A third-party encoding utility may be used, but it does not define save schema ownership; raw C++ object graphs/pointers are never serialized and migrations remain explicit StarForge logic.
 
-- it does not define save schema ownership;
-- raw C++ object graphs/pointers are never serialized directly;
-- migrations remain explicit StarForge logic.
+## 19. No General-Purpose Engine Libraries
 
-Exact encoding library/format is decided in the persistence architecture phase.
+The dependency manifest must not pull in a general-purpose engine/framework that takes ownership of scene/game loop, rendering architecture, gameplay object model, editor/runtime lifecycle, or mission/world systems.
 
-## 18. No General-Purpose Engine Libraries
+Unity, Unreal, Godot, O3DE, or another engine are out of scope as host runtime.
 
-The dependency manifest must not pull in a general-purpose engine/framework that takes ownership of:
-
-- scene/game loop;
-- rendering architecture;
-- gameplay object model;
-- editor/runtime lifecycle;
-- mission/world systems.
-
-Examples of out-of-scope dependency categories include integrating Unity, Unreal, Godot, O3DE, or another engine as the host runtime.
-
-## 19. Dependency Version Policy
+## 20. Dependency Version Policy
 
 Every direct third-party dependency is pinned through the reproducible toolchain/manifest.
 
-Upgrades are deliberate commits with:
+Upgrades are deliberate commits with relevant release review, clean configure/build, automated tests, adapter smoke tests, and no floating `latest` dependency in CI.
 
-- changelog/release review when relevant;
-- clean configure/build;
-- automated tests;
-- smoke test for affected adapter;
-- no silent floating `latest` dependency in CI.
-
-## 20. Transitive Dependency Policy
+## 21. Transitive Dependency Policy
 
 Avoid adding a large dependency solely for a small convenience utility.
 
-When two libraries solve the same need, prefer the option with:
+Prefer compatible-license, actively maintained, small-footprint libraries with simple CMake/vcpkg integration, clear replacement boundaries, and no hidden engine ownership.
 
-- smaller conceptual/runtime footprint;
-- compatible license;
-- active maintenance;
-- simple CMake/vcpkg integration;
-- clear replacement boundary;
-- no hidden engine ownership.
-
-## 21. License Gate
+## 22. License Gate
 
 Before a dependency is first committed to the implementation manifest:
 
 - license is recorded;
 - redistribution obligations are understood;
 - required notices are tracked;
-- incompatible/copyleft constraints that conflict with planned distribution are rejected or explicitly reviewed.
+- incompatible/copyleft constraints are rejected or explicitly reviewed.
 
-## 22. Build Configurations
+## 23. Build Configurations
 
-Initial CMake architecture provides at least:
-
-- `Debug`;
-- `RelWithDebInfo`;
-- `Release`.
+Initial CMake architecture provides at least `Debug`, `RelWithDebInfo`, and `Release`.
 
 Development-only diagnostics/tools compile conditionally rather than changing gameplay semantics.
 
-## 23. Warnings
+## 24. Warnings
 
 Project-owned code is compiled with a strict warning baseline.
 
-Warnings from third-party headers are isolated/suppressed at dependency boundaries rather than weakening project warnings globally.
+Third-party warnings are isolated at dependency boundaries; warnings-as-errors is enabled in CI for project-owned targets after the initial toolchain stabilizes.
 
-Warnings-as-errors is enabled in CI for project-owned targets after the initial toolchain stabilizes.
+## 25. Static Analysis and Formatting
 
-## 24. Static Analysis and Formatting
+The implementation phase standardizes repository-owned `clang-format`, selected `clang-tidy` checks, supported sanitizers, and useful MSVC runtime/debug diagnostics.
 
-The implementation phase will standardize:
+## 26. No Precompiled Binary Dependency Assumption
 
-- `clang-format`;
-- `clang-tidy` on selected project targets/checks;
-- compiler sanitizers where supported;
-- MSVC runtime/debug diagnostics where useful.
+A clean supported development machine must restore/build dependencies from the documented manifest/toolchain process without undocumented local DLL/lib copies.
 
-Configuration files are repository-owned.
+## 27. Explicit Non-Goals
 
-## 25. No Precompiled Binary Dependency Assumption
-
-A clean supported development machine must be able to restore/build dependencies from the documented manifest and toolchain process without relying on undocumented local DLL/lib copies.
-
-## 26. Explicit Non-Goals
-
-This toolchain does not require:
-
-- a custom compiler;
-- custom build system;
-- vendoring every dependency source manually;
-- a game engine package manager;
-- a scripting-language dependency;
-- networking dependencies in baseline;
-- player-facing Dear ImGui UI.
+This toolchain does not require a custom compiler, custom build system, vendoring every dependency manually, a game-engine package manager, a scripting-language dependency, baseline networking dependencies, or player-facing Dear ImGui UI.

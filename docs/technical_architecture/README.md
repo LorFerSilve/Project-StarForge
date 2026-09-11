@@ -17,46 +17,36 @@ Technical Architecture has completed:
 - **TA-3 — World, Scene, Zone, and Streaming Architecture**;
 - **TA-4 — Rendering Architecture**;
 - **TA-5 — Physics, Collision, Character, and Spaceflight Integration**;
-- **TA-6 — Station Simulation and Graph Architecture**.
+- **TA-6 — Station Simulation and Graph Architecture**;
+- **TA-7 — Gameplay Runtime Entity Architecture**.
 
-The next dependency is **TA-7 — Gameplay Runtime Entity Architecture**.
+The next dependency is **TA-8 — AI and Navigation Architecture**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
 ## Authority Relationship
 
-The technical architecture:
-
-- **must implement** the behavior defined by the Design Complete GDS;
-- may choose software structure, data layout, libraries, update strategy, serialization representation, and module boundaries;
-- may not silently change gameplay behavior;
-- must escalate a technical infeasibility into an explicit design/architecture decision rather than altering the GDS implicitly.
-
-When a technical document conflicts with the GDS, the GDS wins until a formal design change is accepted.
+The technical architecture must implement the Design Complete GDS, may choose software/data/runtime realization, may not silently change gameplay behavior, and must escalate technical infeasibility through explicit design/architecture change control.
 
 ## Architectural Direction
 
-Project StarForge is a **purpose-built modular monolith** in modern C++ with an OpenGL renderer.
-
-The architecture deliberately avoids a general-purpose game engine, runtime plugin architecture, mandatory scripting VM, baseline networking/server architecture, one universal ECS for every persistent system, and hidden framework ownership of the game loop or renderer.
-
-Commodity libraries are allowed when they remove non-differentiating infrastructure while leaving StarForge gameplay/rendering architecture under project control.
+Project StarForge is a **purpose-built modular monolith** in C++23 with a custom OpenGL renderer. It deliberately avoids a general-purpose game engine, runtime plugin architecture, mandatory scripting VM, baseline networking architecture, one universal persistent ECS, and hidden framework ownership of the game loop.
 
 ## Initial Technical Baseline
 
-- Language: **C++23**;
-- build system: **CMake**;
-- dependency management: **vcpkg manifest mode** with pinned baseline/versions;
-- graphics API: **OpenGL 4.6 Core Profile**;
-- platform/window/input: **GLFW**;
-- OpenGL loader: **glad2**;
-- math: **GLM**;
-- physics/collision: **Jolt Physics** behind a StarForge-owned adapter;
-- audio backend: **miniaudio** behind a StarForge-owned audio layer;
-- glTF 2.0 import: **fastgltf**;
-- developer/debug UI: **Dear ImGui**, tooling only;
-- tests: **Catch2**;
-- build automation: GitHub + GitHub Actions.
+- C++23;
+- CMake;
+- vcpkg manifest mode;
+- OpenGL 4.6 Core Profile;
+- GLFW;
+- glad2;
+- GLM;
+- Jolt Physics behind a StarForge adapter;
+- miniaudio behind a StarForge audio layer;
+- fastgltf / glTF 2.0;
+- Dear ImGui for development tooling only;
+- Catch2;
+- GitHub + GitHub Actions.
 
 Exact dependency versions remain implementation-roadmap/toolchain data and must be pinned before scaffolding.
 
@@ -64,42 +54,50 @@ Exact dependency versions remain implementation-roadmap/toolchain data and must 
 
 ### TA-1 Runtime Foundation
 
-TA-1 establishes the modular-monolith process model, main-thread simulation/OpenGL authority, fixed **60 Hz** authoritative simulation, deterministic worker handoff, Stable Simulation Boundaries, and save-snapshot capture boundary.
+Modular-monolith process model, main-thread simulation/OpenGL authority, fixed **60 Hz** authoritative simulation, deterministic worker handoff, Stable Simulation Boundaries, and save-snapshot capture boundary.
 
 ### TA-2 Data / State
 
-TA-2 establishes typed persistent IDs, nonserialized generation-checked runtime handles, Content IDs, domain stores, Activation Leases, StateRevision/ActivationEpoch, typed Command/Result/Event contracts, prepared atomic transactions, immutable Read Models, one-owner physical transfers, integer Credits, versioned Save DTOs, StarForge's chunked binary save family, staged all-or-nothing load/migration, and project-owned deterministic PCG32 RNG.
+Typed persistent IDs, generation-checked runtime handles, Content IDs, domain stores, Activation Leases, revisions/epochs, typed commands/results/events, prepared atomic transactions, immutable Read Models, one-owner physical transfers, Credits ledger, Save DTO/container contracts, staged load/migration, and deterministic PCG32 RNG.
 
 ### TA-3 World / Scene
 
-TA-3 establishes one authoritative player-local `SceneInstance`, strategic-vs-local coordinates, explicit Scene lifecycle/generation, streaming residency separated from simulation activation, Hard Streaming Hold, double-precision Context Space + floating origin, Horizon active/off-screen handoff, staged atomic context transitions, persistent world projection, and scene-composition profiles.
+One authoritative player-local `SceneInstance`, strategic-vs-local coordinates, Scene lifecycle/generation, streaming residency separate from simulation activation, Hard Streaming Hold, double-precision Context Space + floating origin, Horizon active/off-screen handoff, staged atomic transitions, persistent world projection, and scene profiles.
 
 ### TA-4 Rendering
 
-TA-4 establishes one main-thread OpenGL 4.6 Core renderer, immutable `RenderSnapshot`, reversed-Z, HDR linear world rendering with SDR output, hybrid deferred/forward passes, glTF-compatible metallic-roughness PBR, bounded shadows/lights, view/camera contracts, culling/LOD/instancing/transparency, VFX/particles, GPU resource lifecycle, graphics/accessibility constraints, and resize/context-failure behavior.
+Main-thread OpenGL 4.6 renderer, immutable `RenderSnapshot`, reversed-Z, linear HDR → SDR, hybrid deferred/forward rendering, glTF-compatible PBR, shadows/lights, camera contracts, culling/LOD/instancing/transparency, VFX/particles, GPU resource lifetime, and presentation-only graphics tiers.
 
 ### TA-5 Physics
 
-TA-5 establishes one StarForge `PhysicsWorld` per active SceneInstance, Jolt encapsulation, semantic collision/filter/query contracts, kinematic `CharacterMotor`, swept project-owned projectiles, Dynamic 6DoF spacecraft, physical Hard Dock constraints, Zero-G/EVA/Magnetic Boots, collision-impact fact routing, fixed 60 Hz physics ordering, deferred safe physics mutation, and origin-rebase/load behavior without synthetic impacts.
+One StarForge `PhysicsWorld` per active SceneInstance, Jolt encapsulation, semantic collision/query contracts, kinematic `CharacterMotor`, swept projectiles, Dynamic 6DoF spacecraft, physical docking constraints, Zero-G/EVA/Magnetic Boots, collision fact routing, deferred safe physics mutation, and no synthetic load/rebase impacts.
 
 ### TA-6 Station Simulation
 
-TA-6 establishes:
+Canonical Horizon topology with separate Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData views; deterministic capacity-constrained Power; conserved atmosphere/thermal/water; one-owner logistics; persistent Simulation-Time WorkOrders; construction/damage/repair topology mutation; automation/control; chronological off-screen station simulation; and persistent-state-first projection into TA-5 physics.
 
-- canonical persistent Horizon module/port topology;
-- separate Structural, Traversal, Pressure, Power, Thermal, Water, Logistics, and ControlData views/revisions;
-- no universal station utility solver;
-- deterministic capacity-constrained Power allocation with physical islands, breakers, storage, priorities, and black-start behavior;
-- stable pressure cells with conserved Oxygen/CO2/Contaminant/Inert gas and portal-based pressure exchange;
-- finite Thermal energy/coolant networks, radiator rejection, ambient temperature, and protection thresholds;
-- separate Fresh Water/Wastewater inventories, distribution, reserve, recycling, and leaks;
-- one-owner Logistics reservations, transfer jobs, in-transfer ownership, local buffers, and docking cargo links;
-- persistent Simulation-Time `WorkOrder` execution for manufacturing, farming, construction, repair, and compatible station work;
-- exactly-once manufacturing/harvest/completion milestones;
-- construction/deconstruction/damage/repair topology mutation with dependent graph invalidation;
-- ControlData/sensor-aware automation with finite capacity and policy/permission enforcement;
-- chronological event/deadline-based off-screen Horizon simulation preserving active-scene outcomes;
-- station runtime projection where persistent commits precede `StationGeometryDelta` application at TA-5 safe mutation boundaries.
+### TA-7 Gameplay Runtime Entities
+
+TA-7 establishes:
+
+- exactly one `RuntimeEntityRegistry` per active SceneInstance;
+- generation-checked `RuntimeEntityHandle` plus SceneGeneration validation;
+- explicit separation between runtime handles and persistent IDs;
+- typed sparse/packed component pools rather than a universal polymorphic `GameObject` hierarchy;
+- buffered structural component/entity mutation;
+- typed persistent-actor activation adapters over TA-2 Activation Leases;
+- atomic actor activation/deactivation with Closing/PendingDestroy lifecycle states;
+- one locally controlled Player runtime entity;
+- Inventory/Equipment runtime references that never duplicate physical ownership;
+- sustained player actions and equipment use driven by Simulation Time;
+- combat actor, weapon, hit-zone, shield, Health and deterministic Status runtime contracts;
+- TA-5 physical facts → GDS-9 Combat → owning-domain consequence routing;
+- swept/dynamic projectile runtime aligned with TA-5;
+- typed Interactable, WorldItem, Container, Hazard, MissionObject and Station projection entities;
+- persistent/runtime synchronization via ActivationEpoch and revisions;
+- logical removal before deferred backend/component reclamation;
+- one deterministic 60 Hz runtime phase order from intents through physics, consequences, commits, cleanup and immutable snapshot publication;
+- headless gameplay-runtime execution independent of OpenGL/audio/UI.
 
 ## Architecture Documents
 
@@ -171,23 +169,27 @@ TA-6 establishes:
 - [`43_station_runtime_projection_and_physics_handoff.md`](43_station_runtime_projection_and_physics_handoff.md)
 - [`TA6_CROSS_VALIDATION.md`](TA6_CROSS_VALIDATION.md)
 
+### TA-7
+
+- [`44_runtime_entity_registry_and_handles.md`](44_runtime_entity_registry_and_handles.md)
+- [`45_component_storage_and_query_model.md`](45_component_storage_and_query_model.md)
+- [`46_actor_lifecycle_activation_and_deactivation.md`](46_actor_lifecycle_activation_and_deactivation.md)
+- [`47_player_inventory_and_equipment_runtime.md`](47_player_inventory_and_equipment_runtime.md)
+- [`48_combat_actor_weapon_damage_and_status_runtime.md`](48_combat_actor_weapon_damage_and_status_runtime.md)
+- [`49_projectiles_interactables_and_world_runtime_objects.md`](49_projectiles_interactables_and_world_runtime_objects.md)
+- [`50_persistent_runtime_sync_and_deferred_destruction.md`](50_persistent_runtime_sync_and_deferred_destruction.md)
+- [`51_runtime_update_phases_and_system_boundaries.md`](51_runtime_update_phases_and_system_boundaries.md)
+- [`TA7_CROSS_VALIDATION.md`](TA7_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define runtime entities, AI/navigation, missions/raids, content pipeline, input/UI/audio integration, persistence storage details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
+Later TA phases define AI/navigation, missions/raids, content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
 
 ## Implementation Gate
 
-A technical subsystem is ready for code only when:
+Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-1. its relevant GDS contracts are Design Complete;
-2. its technical architecture contract is sufficiently complete;
-3. ownership/lifetime/threading boundaries are explicit;
-4. data and persistence boundaries are explicit where applicable;
-5. dependencies are selected and pinned where required;
-6. tests/validation expectations are defined;
-7. the implementation roadmap places it in an approved phase.
-
-`Implementation Locked` remains a later per-contract handoff state. **TA-6 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-7 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**

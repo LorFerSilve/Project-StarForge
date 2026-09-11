@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0** through **TA-5** are complete/Architecture Complete. The next dependency is **TA-6 — Station Simulation and Graph Architecture**.
+Technical Architecture stages **TA-0** through **TA-6** are complete/Architecture Complete. The next dependency is **TA-7 — Gameplay Runtime Entity Architecture**.
 
 TA-2 fixed persistent identity, domain-state ownership, activation leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -18,7 +18,9 @@ TA-3 fixed the one-player-local-scene model, bounded Zone/Scene lifecycle, strea
 
 TA-4 fixed the OpenGL renderer architecture: immutable render snapshots, hybrid deferred/forward pass structure, reversed-Z depth, glTF-compatible PBR materials, lighting/shadows, camera/view contracts, visibility/LOD/instancing/transparency, VFX/particles, GPU upload/resource lifetime, resize/failure behavior, and presentation-only graphics quality tiers.
 
-TA-5 now fixes the Jolt physics integration boundary, collision layers/queries, kinematic CharacterMotor, project-owned physical projectile/sweep handling, Dynamic 6DoF spacecraft bodies, physical docking constraints, Zero-G/EVA and Magnetic Boots, collision-damage fact routing, floating-origin physics synchronization, and fixed 60 Hz physics/update ordering.
+TA-5 fixes the Jolt physics integration boundary, collision layers/queries, kinematic CharacterMotor, project-owned physical projectile/sweep handling, Dynamic 6DoF spacecraft bodies, physical docking constraints, Zero-G/EVA and Magnetic Boots, collision-damage fact routing, floating-origin physics synchronization, and fixed 60 Hz physics/update ordering.
+
+TA-6 now fixes Horizon's persistent structural/traversal/utility topology, deterministic Power allocation, conserved Atmosphere/Thermal/Water state, one-owner logistics transfers/reservations, Manufacturing/Farming/WorkOrder scheduling, construction/damage/repair topology mutation, ControlData/automation, chronological off-screen station simulation, and safe station-state projection into TA-5 physics.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, architecture integration audit, and implementation roadmap/contract locking.
 

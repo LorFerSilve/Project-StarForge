@@ -484,3 +484,101 @@ Low/Medium/High/Ultra/Custom presets can change render scale, shadows, SSAO, tex
 ### Rationale
 
 Hardware/performance variability must never change collision, simulation timing, world knowledge, enemy behavior, rewards, or required hazard/objective readability.
+
+---
+
+## AD-035 — Jolt Physics Is Accessed Only Through StarForge-Owned Runtime Contracts
+
+**Status:** Accepted
+
+### Decision
+
+The active player-local SceneInstance owns one StarForge `PhysicsWorld`; gameplay accesses it only through typed project handles, descriptors, queries, and normalized physical facts. Raw Jolt body/constraint identities are neither gameplay authority nor persistent data.
+
+### Rationale
+
+This keeps backend replacement/tuning isolated and preserves the GDS/TA ownership model for damage, missions, docking, structure, and persistence.
+
+---
+
+## AD-036 — Humanoid Locomotion Uses a Kinematic CharacterMotor, Spacecraft Use Dynamic Rigid Bodies
+
+**Status:** Accepted
+
+### Decision
+
+Player/humanoid locomotion uses a collision-aware kinematic CharacterMotor over Jolt character/query facilities, while local spacecraft use true Dynamic rigid bodies with project-computed mass/inertia and bounded forces/torques.
+
+### Rationale
+
+Responsive authored first-person locomotion and inertial 6DoF spacecraft have materially different control requirements. Forcing both into one physical-body model would either make characters unstable or ships nonphysical.
+
+---
+
+## AD-037 — Physics Contacts Produce Facts; Gameplay Domains Commit Consequences
+
+**Status:** Accepted
+
+### Decision
+
+Jolt contact/trigger callbacks are normalized into project-owned physical observations. Health damage, ship damage, structural breakage, docking state, mission progress, and hazard effects are committed only by their owning gameplay domains after validation.
+
+### Rationale
+
+Solver callbacks are not a safe or semantically correct location for cross-domain gameplay mutation, and backend contact details must not become hidden gameplay rules.
+
+---
+
+## AD-038 — Ship Speed Limits Are Avionics Constraints, Not Fake Vacuum Drag or Instant Clamps
+
+**Status:** Accepted
+
+### Decision
+
+The GDS local-space speed envelope is implemented through project-owned flight-control/avionics authority. Thrust beyond the safe envelope is limited and physically available counter-thrust can recover excessive velocity; the rigid body is not subjected to gameplay-significant universal vacuum drag or instantaneous velocity clamping.
+
+### Rationale
+
+This preserves inertial spaceflight while maintaining the bounded controllable local-flight envelope defined by the GDS.
+
+---
+
+## AD-039 — Hard Dock Is a Real Physical Attachment Reconstructed From Logical Dock State
+
+**Status:** Accepted
+
+### Decision
+
+A committed Hard Dock creates an explicit project-owned physics constraint/attachment after physical capture validation. Save/load stores logical docking identities/state and reconstructs the physical constraint rather than serializing backend constraint IDs.
+
+### Rationale
+
+Docking must remain a physical operational attachment without coupling persistence to Jolt runtime objects or allowing trigger overlap to equal docking success.
+
+---
+
+## AD-040 — Floating-Origin Rebases Occur Only at Stable Simulation Boundaries and Cannot Create Gameplay Events
+
+**Status:** Accepted
+
+### Decision
+
+Physics bodies, character state, projectiles, constraints, and related spatial structures rebase together only at a TA-1 Stable Simulation Boundary. Relative state is preserved and no impact, damage, trigger, or movement consequence is generated solely by the coordinate-frame change.
+
+### Rationale
+
+TA-3's origin-relative runtime model must remain an invisible precision mechanism rather than becoming a source of synthetic physics or gameplay.
+
+---
+
+## AD-041 — Physical Projectiles Prefer Swept Project-Owned Motion; Dynamic Rigid Bodies Are Used When Bounce/Rigid Interaction Matters
+
+**Status:** Accepted
+
+### Decision
+
+Fast plasma, rockets, and similar gameplay projectiles use deterministic fixed-tick swept motion unless their physical behavior specifically requires a Dynamic rigid body. Grenades and comparable bouncing/rolling objects can use Dynamic physics.
+
+### Rationale
+
+Swept project-owned motion avoids tunneling and excessive rigid-body overhead while preserving true rigid interactions for projectile classes that visibly depend on them.

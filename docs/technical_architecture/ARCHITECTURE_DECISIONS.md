@@ -820,3 +820,115 @@ Each 60 Hz runtime tick orders intents, action/status deadlines, movement/weapon
 ### Rationale
 
 A fixed phase contract prevents render order, callback timing or container iteration from deciding gameplay and ensures persistent commit precedes visual/runtime disappearance.
+
+---
+
+## AD-059 — Grounded Navigation Uses Recast/Detour Behind a StarForge Navigation Adapter
+
+**Status:** Accepted
+
+### Decision
+
+StarForge uses Recast/Detour for commodity grounded navmesh cooking/query operations. Project-owned traversal profiles, dynamic links, hazard/access filters, path-result validation and AI decisions remain outside the library, and raw backend refs are never persistent identity.
+
+### Rationale
+
+Navigation-mesh generation and path corridors are mature commodity problems, while StarForge-specific security, hazard, robot-size, task and persistence semantics must remain under project control.
+
+---
+
+## AD-060 — Grounded and True 3D Navigation Use Separate Representations
+
+**Status:** Accepted
+
+### Decision
+
+Grounded humanoids/robots use tiled 2.5D navigation meshes grouped into Small/Standard/Heavy classes. Flying/Zero-G autonomous actors use a bounded project-owned 3D free-space graph/volume representation rather than being projected onto a floor navmesh.
+
+### Rationale
+
+The two movement domains have materially different topology and clearance semantics. One representation would either overcomplicate grounded navigation or make free-flight behavior physically incorrect.
+
+---
+
+## AD-061 — Async Pathfinding Is Advisory and Revision-Validated
+
+**Status:** Accepted
+
+### Decision
+
+Pathfinding workers read immutable navigation snapshots and return candidate routes tagged with SceneGeneration, NavigationRevision, actor generation, task/command generation, and request sequence. The main simulation accepts results only after freshness validation and consumes them in deterministic actor/request order.
+
+### Rationale
+
+Worker completion timing must improve performance without becoming a gameplay race or allowing stale paths to cross changed topology.
+
+---
+
+## AD-062 — AI Knowledge Is Explicitly Separate From World Truth
+
+**Status:** Accepted
+
+### Decision
+
+Knowledge-limited decisions consume PerceptionMemory/SharedKnowledge built from legitimate vision, hearing, sensors, combat facts, commands, and mission intel. AI may not query hidden world state for targeting/search convenience, and shared information retains source, timestamp, confidence and precision.
+
+### Rationale
+
+The GDS requires non-omniscient enemy/robot behavior. Encoding that as an architecture boundary prevents accidental wallhacks through otherwise convenient gameplay queries.
+
+---
+
+## AD-063 — Active AI Uses Layered Project-Owned Decisions Rather Than a Mandatory Generic Behavior Framework
+
+**Status:** Accepted
+
+### Decision
+
+The baseline AI architecture uses explicit safety/capability constraints, owning commands/tasks, awareness/tactical goals, role/doctrine selection, and typed action execution. A generic Behavior Tree, GOAP, scripting VM, or ML runtime is not a baseline architectural requirement.
+
+### Rationale
+
+The game needs deterministic, testable behaviors tied closely to established GDS contracts, not a speculative general AI engine.
+
+---
+
+## AD-064 — Robot Orders Are Persistent Intent; Local AI Executes Them Through Physical Sub-Actions
+
+**Status:** Accepted
+
+### Decision
+
+Player robot commands keep their GDS state/generation and decompose into navigation, positioning, interaction and combat sub-actions. Communication/ROE/fallback constrain execution; command AI cannot create resources, bypass access, or initiate strategic mission outcomes.
+
+### Rationale
+
+This preserves concise player authority while preventing tactical orders from becoming hidden teleport/permission/resource shortcuts.
+
+---
+
+## AD-065 — Off-Screen Mobile AI Uses Logical Routes and Simulation-Time Boundaries
+
+**Status:** Accepted
+
+### Decision
+
+Crew/robots outside high-detail simulation retain authoritative logical locations, route segments, tasks, resources, hazards and deadlines. They advance chronologically through the same Simulation Time/access/capability constraints and reconstruct physical runtime state through Activation Lease handoff.
+
+### Rationale
+
+This avoids a second hidden full Horizon scene while preventing off-screen teleport, free work, skipped hazards, or different gameplay outcomes merely because the player is away.
+
+---
+
+## AD-066 — AI Scheduling and Worker Timing Are Never Semantic Authority
+
+**Status:** Accepted
+
+### Decision
+
+An `AIScheduler` deterministically selects due high-level/perception work, while urgent interrupts cannot be silently dropped. Worker jobs remain advisory; result completion order never determines target choice, task assignment, path priority, or combat outcome.
+
+### Rationale
+
+Performance scaling must not make gameplay depend on CPU timing, thread scheduling, hash iteration, or render rate.

@@ -9,172 +9,71 @@ This roadmap defines the technical architecture work that must be completed befo
 
 **Status:** Complete
 
-Defines:
-
-- architecture authority and precedence;
-- Architecture Complete / Implementation Locked status model;
-- no-general-engine principle;
-- GDS traceability;
-- third-party dependency policy;
-- implementation gate.
-
-Artifacts:
-
-- `00_architecture_authority.md`;
-- `01_architecture_principles.md`.
+Defines architecture authority, precedence, status model, no-general-engine principle, GDS traceability, third-party dependency policy, and implementation gate.
 
 ## TA-1 — System Context, Toolchain, and Runtime Foundation
 
 **Status:** Architecture Complete
 
-Defines:
-
-- modular-monolith process model;
-- top-level module partition;
-- dependency direction;
-- active/off-screen context split;
-- C++23/CMake/vcpkg/OpenGL baseline;
-- third-party library roles/boundaries;
-- 60 Hz fixed authoritative simulation;
-- command/transaction/event model;
-- worker-job authority;
-- Stable Simulation Boundary;
-- save snapshot capture boundary.
-
-Artifacts:
-
-- `02_system_context.md`;
-- `03_toolchain_and_dependencies.md`;
-- `04_runtime_and_simulation_model.md`.
+Defines the modular monolith, C++23/CMake/vcpkg/OpenGL baseline, dependency boundaries, 60 Hz authoritative simulation, command/transaction/event model, worker authority, Stable Simulation Boundary, and save snapshot capture boundary.
 
 ## TA-2 — Identity, Domain State, Transactions, and Serialization Contracts
 
 **Status:** Architecture Complete
 
-Defines:
-
-- strongly typed non-zero 64-bit `PersistentId<Tag>` representation;
-- index+generation `RuntimeEntityHandle` representation;
-- canonical UTF-8 `ContentId` references;
-- persistent domain-store ownership and deterministic enumeration;
-- `StateRevision` and `ActivationEpoch` stale-state protection;
-- Activation Lease authority transfer between persistent and active state;
-- typed Command / Result / Event conventions;
-- deterministic command/event sequencing;
-- cross-domain TransactionCoordinator;
-- physical ownership and Credit transaction contracts;
-- immutable revisioned consumer Read Models;
-- per-domain versioned Save DTO ownership;
-- StarForge-owned little-endian chunked binary save container;
-- CRC32C section integrity and initial `None` compression codec;
-- staged all-or-nothing loading/migration;
-- project-owned PCG32 deterministic RNG and scoped stream derivation;
-- generation-version and integrity validation contracts.
-
-Artifacts:
-
-- `05_identity_and_reference_model.md`;
-- `06_domain_state_and_activation_contracts.md`;
-- `07_command_result_and_event_contracts.md`;
-- `08_transaction_and_ownership_contracts.md`;
-- `09_read_models_and_state_revisions.md`;
-- `10_serialization_and_save_contracts.md`;
-- `11_rng_migration_and_integrity_contracts.md`;
-- `TA2_CROSS_VALIDATION.md`.
+Defines typed persistent/runtime identities, ContentId, domain stores, Activation Leases, revisions/epochs, typed commands/results/events, deterministic transaction commit, immutable read models, physical ownership, Credit ledger transactions, versioned Save DTOs, the StarForge save container, migrations/integrity, and deterministic PCG32 RNG.
 
 ## TA-3 — World, Scene, Zone, and Streaming Architecture
 
 **Status:** Architecture Complete
 
-Defines:
-
-- one authoritative player-local SceneInstance at a time;
-- strategic galaxy graph separated from local 3D scene coordinates;
-- ActiveLocalContext ownership kinds separated from physical SceneProfile kinds;
-- Scene lifecycle and SceneGeneration stale-result protection;
-- Mission/World Zone Instance and stable local-key projection;
-- stream-cell residency separated from simulation activation;
-- deterministic activation sets and non-authoritative predictive prefetch;
-- Hard Streaming Hold with Simulation Time freeze;
-- persistent double-precision Context Space positions;
-- origin-relative runtime coordinates and `RuntimeOrigin64`/`OriginEpoch` rebasing;
-- loose hashed gameplay spatial index distinct from streaming/physics/render structures;
-- explicit Horizon active/off-screen handoff;
-- off-screen Horizon Defense → active-scene continuity;
-- staged destination scene preparation and atomic context-switch transitions;
-- Mission/World persistent-state projection over immutable content;
-- Interior, Surface, EVA, LocalSpaceflight, Horizon, and Mixed scene-composition profiles.
-
-Artifacts:
-
-- `12_active_local_context_and_scene_model.md`;
-- `13_zone_streaming_and_residency_model.md`;
-- `14_coordinate_precision_and_spatial_partitioning.md`;
-- `15_horizon_active_offscreen_handoff.md`;
-- `16_scene_transition_and_loading_state_machine.md`;
-- `17_zone_state_and_persistent_world_projection.md`;
-- `18_scene_composition_profiles.md`;
-- `TA3_CROSS_VALIDATION.md`.
+Defines one authoritative player-local SceneInstance, strategic-vs-local coordinates, ActiveLocalContext and SceneProfile kinds, scene lifecycle/generation, streaming residency versus activation, Hard Streaming Hold, double-precision Context Space, floating origin, local spatial indexing, Horizon active/off-screen handoff, atomic context transitions, persistent world projection, and scene-composition profiles.
 
 ## TA-4 — Rendering Architecture
 
 **Status:** Architecture Complete
 
-Defines:
-
-- main-thread OpenGL 4.6 Core context and thin StarForge `RenderDevice` ownership;
-- immutable RenderSnapshot frame input and fixed-simulation/variable-render interpolation;
-- linear HDR scene rendering with SDR sRGB output and native-resolution shipping UI composition;
-- reversed-Z zero-to-one floating-point depth;
-- hybrid deferred opaque/alpha-mask rendering plus forward transparency/special/VFX;
-- fixed-purpose render-pass/resource dependency schedule;
-- four-cascade primary directional shadows and bounded local-light shadow budgets;
-- compute-assisted tiled deferred local-light culling;
-- glTF-compatible metallic-roughness PBR, IBL/environment probes, and explicit direct lights;
-- bounded GLSL 4.60 shader families/variant keys and interface validation;
-- FirstPerson, SpacecraftChase, Cockpit, Management/Strategic, and Debug view contracts;
-- renderer-only frustum/LOD/optional conservative occlusion culling;
-- stable draw ordering, batching, hardware instancing, and transparent sorting;
-- renderer-side GPU particle/VFX execution with no gameplay authority;
-- Reduced Effects/Photosensitivity critical-representation guarantees;
-- main-thread GPU upload/deletion queues, generation-checked RenderResourceHandles, caching, and fence-safe retirement;
-- Low/Medium/High/Ultra/Custom graphics presets whose changes are presentation-only;
-- Off/FXAA initial anti-aliasing and no baseline motion-blur implementation;
-- resize/minimize/context-creation/context-loss failure policy.
-
-Artifacts:
-
-- `19_renderer_ownership_and_frame_pipeline.md`;
-- `20_render_graph_and_passes.md`;
-- `21_camera_and_view_system.md`;
-- `22_material_shader_and_lighting_model.md`;
-- `23_visibility_culling_batching_and_transparency.md`;
-- `24_vfx_particles_and_debug_rendering.md`;
-- `25_gpu_resource_upload_and_lifecycle.md`;
-- `26_graphics_settings_resize_and_failure_recovery.md`;
-- `TA4_CROSS_VALIDATION.md`.
+Defines main-thread OpenGL ownership, RenderSnapshot interpolation, hybrid deferred/forward rendering, reversed-Z, HDR/SDR output, render passes, shadows, tiled lights, glTF-compatible PBR, shader families, cameras/views, culling/LOD/instancing/transparency, particles/VFX/debug rendering, GPU uploads/resource lifetime, resize/context-failure handling, and presentation-only graphics tiers.
 
 ## TA-5 — Physics, Collision, Character, and Spaceflight Integration
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- Jolt adapter API;
-- collision layers/filter matrix;
-- character controller architecture;
-- triggers/interactions;
-- projectile/query integration;
-- ship rigid-body/6DoF integration;
-- docking contacts;
-- zero-g player movement;
-- collision damage interface;
-- station static/kinematic geometry updates;
-- fixed-step synchronization.
+- StarForge-owned Jolt adapter and one PhysicsWorld per active SceneInstance;
+- generation-checked physics handles and no serialized backend identity;
+- semantic collision layers, pair filtering, CollisionMaterialId, and typed query families;
+- locomotion bodies separated from Combat hit-zone/query shapes;
+- kinematic CharacterMotor for grounded movement, crouch, jump, slopes, steps, platforms, mantle, ladders, and safe-position recovery;
+- trigger/interaction physical facts that never directly commit gameplay;
+- swept project-owned fast projectiles plus Dynamic grenade/bounce bodies where appropriate;
+- melee sweep and explosion-candidate query architecture;
+- Dynamic spacecraft rigid bodies with mass/inertia and bounded 6DoF force/torque;
+- Flight Assist and local safe-speed envelope through actual avionics/thruster authority;
+- physical Hard Dock capture constraints and explicit undock/separation;
+- Zero-G/EVA momentum, stabilization thrusters, and Magnetic Boot support frames;
+- physics-to-gameplay Impact/Contact Facts and collision-damage routing;
+- fixed 60 Hz physics phase ordering;
+- deferred safe body/constraint mutation after gameplay commit;
+- floating-origin rebase synchronization with no synthetic impact/trigger events;
+- coherent save/activation/RenderSnapshot synchronization.
+
+Artifacts:
+
+- `27_physics_adapter_and_world_lifecycle.md`;
+- `28_collision_layers_filters_and_queries.md`;
+- `29_character_controller_and_ground_movement.md`;
+- `30_triggers_interactions_projectiles_and_sweeps.md`;
+- `31_spacecraft_rigidbody_and_flight_integration.md`;
+- `32_docking_constraints_and_zero_g.md`;
+- `33_collision_damage_and_structural_contacts.md`;
+- `34_physics_tick_origin_shift_and_snapshot_sync.md`;
+- `TA5_CROSS_VALIDATION.md`.
 
 ## TA-6 — Station Simulation and Graph Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define technical representations for:
 
@@ -189,7 +88,8 @@ Must define technical representations for:
 - manufacturing;
 - construction transactions;
 - damage/repair topology invalidation;
-- off-screen coarse scheduling.
+- off-screen coarse scheduling;
+- physical/graph handoff to TA-5 static and kinematic station collision.
 
 ## TA-7 — Gameplay Runtime Entity Architecture
 
@@ -229,124 +129,43 @@ Must define:
 
 **Status:** Planned
 
-Must define:
-
-- MissionInstance runtime/persistent representation;
-- objective state machine infrastructure;
-- deterministic procedural generation pipeline;
-- raid phase orchestration;
-- reinforcement scheduling;
-- Dynamic Event scheduler;
-- world-location persistent consequences;
-- recovery/communication integration;
-- finale transaction state.
+Must define MissionInstance runtime/persistent representation, objective state-machine infrastructure, deterministic procedural generation, raid phases, reinforcements, Dynamic Events, world-location consequences, recovery/communication integration, and finale transaction state.
 
 ## TA-10 — Content and Asset Pipeline
 
 **Status:** Planned
 
-Must define:
-
-- canonical asset source/exchange formats;
-- glTF import;
-- textures/materials;
-- shader source/build pipeline;
-- content IDs/references;
-- content schemas;
-- validation tooling;
-- cooked/runtime asset formats if needed;
-- asset registry/cache;
-- dependency tracking;
-- development hot reload boundaries.
+Must define canonical source/exchange formats, glTF import, textures/materials, collision-content cooking, shader build pipeline, content IDs/schemas, validation tooling, runtime/cooked assets where needed, asset registry/cache, dependency tracking, and hot-reload boundaries.
 
 ## TA-11 — Input, UI, Audio, and Presentation Integration
 
 **Status:** Planned
 
-Must define:
-
-- raw input → action mapping;
-- context/action routing;
-- remapping persistence;
-- controller/aim-assist boundary;
-- shipping UI architecture;
-- HUD/read models;
-- captions/subtitles;
-- alarm presentation;
-- miniaudio adapter/buses/spatialization;
-- accessibility presentation contracts.
+Must define raw input → actions, context routing, remapping, controller/aim-assist boundary, shipping UI/HUD/read models, subtitles/captions, alarms, miniaudio adapter/buses/spatialization, and accessibility integration.
 
 ## TA-12 — Persistence Implementation Architecture
 
 **Status:** Planned
 
-Must define:
-
-- exact byte layout of the TA-2 StarForge save container;
-- snapshot manifest/section directory representation;
-- domain serialization registry;
-- CRC32C implementation and integrity handling;
-- write-new-then-commit storage flow;
-- autosave/manual/quicksave file layout;
-- migration pipeline implementation;
-- crash recovery;
-- corruption diagnostics;
-- deterministic load validation.
-
-TA-2 already fixes the persistence semantics and container family; TA-12 specifies the concrete storage implementation without redesigning those contracts.
+Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C implementation, write-new-then-commit flow, manual/quick/autosave layout, migration implementation, crash recovery, diagnostics, and deterministic load validation.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
 **Status:** Planned
 
-Must define:
-
-- worker pool implementation model;
-- job categories/priorities;
-- immutable snapshot/versioning rules;
-- asset streaming budgets;
-- CPU/GPU frame budgets;
-- memory budgets;
-- simulation backlog behavior;
-- profiling counters;
-- performance test scenes;
-- scalability strategy for Horizon/off-screen state;
-- TA-3 streaming radius/origin/grid/cache numeric budgets;
-- TA-4 render-quality/shadow/texture/effect numeric budgets.
+Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache numeric budgets, TA-4 rendering budgets, and TA-5 physics/query/body/contact budgets.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define:
-
-- CMake target graph tests;
-- Catch2 test layers;
-- headless simulation tests;
-- transaction/persistence tests;
-- deterministic-seed regression tests;
-- content validation;
-- renderer/physics smoke tests;
-- clang-format/tidy/warnings;
-- sanitizer jobs where supported;
-- CI gates;
-- debug tooling requirements.
+Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
 **Status:** Planned
 
-Cross-validates TA-0 through TA-14 against:
-
-- all Design Complete GDS contracts;
-- ownership/lifetime boundaries;
-- threading;
-- persistence;
-- world/scene transition consistency;
-- performance assumptions;
-- subsystem dependency cycles;
-- failure recovery;
-- testability.
+Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, world/scene transition consistency, performance assumptions, subsystem dependency cycles, failure recovery, and testability.
 
 No implementation phase is authorized to invent unresolved architecture after this audit.
 
@@ -354,18 +173,9 @@ No implementation phase is authorized to invent unresolved architecture after th
 
 **Status:** Planned
 
-Produces:
+Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets, first test gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
 
-- dependency-ordered implementation phases;
-- vertical-slice definition;
-- scaffolding plan;
-- exact initial CMake/vcpkg targets;
-- first test gates;
-- per-contract `Implementation Locked` handoff;
-- merge/branch strategy;
-- milestone completion criteria.
-
-Only after TA-16 may the project begin the planned C++/OpenGL scaffolding phase.
+Only after TA-16 may the planned C++/OpenGL scaffolding phase begin.
 
 ## Current Sequence
 
@@ -375,8 +185,9 @@ GDS Design Complete
 → TA-2 Architecture Complete  
 → TA-3 Architecture Complete  
 → TA-4 Architecture Complete  
-→ **TA-5 next**  
-→ TA-6 ... TA-15  
+→ TA-5 Architecture Complete  
+→ **TA-6 next**  
+→ TA-7 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

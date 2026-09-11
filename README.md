@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0 through TA-7** are complete/Architecture Complete. The next dependency is **TA-8 — AI and Navigation Architecture**.
+Technical Architecture stages **TA-0 through TA-8** are complete/Architecture Complete. The next dependency is **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
 
 TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -22,7 +22,9 @@ TA-5 fixed Jolt integration, collision/query layers, kinematic CharacterMotor, p
 
 TA-6 fixed Horizon's structural/traversal/utility topology, deterministic Power allocation, conserved Atmosphere/Thermal/Water state, one-owner logistics, manufacturing/farming/work scheduling, construction/damage/repair topology mutation, ControlData/automation, chronological off-screen simulation, and persistent-state-first physics projection.
 
-TA-7 now fixes the active gameplay runtime: one generation-checked RuntimeEntityRegistry per SceneInstance, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/equipment/inventory runtime references, combat/weapon/status runtime state, projectile/interactable/world-object projections, persistent↔runtime synchronization, deferred destruction, and a deterministic 60 Hz runtime phase order.
+TA-7 fixed the active gameplay runtime: one generation-checked RuntimeEntityRegistry per SceneInstance, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/equipment/inventory runtime references, combat/weapon/status runtime state, projectile/interactable/world-object projections, persistent↔runtime synchronization, deferred destruction, and deterministic 60 Hz runtime phase ordering.
+
+TA-8 now fixes AI/navigation: Recast/Detour-backed grounded navigation behind a project adapter, separate bounded 3D free-flight navigation, traversal profiles/links, dynamic nav invalidation, async revision-validated paths, project-owned path following/local avoidance, explicit knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task navigation, off-screen logical actor behavior, deterministic AI scheduling, and fixed integration into the TA-7 runtime phases.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, TA-15 integration audit, and TA-16 implementation roadmap/contract locking.
 
@@ -54,6 +56,8 @@ Final GDS-14 maturity/promotion evidence:
 - glad2
 - GLM
 - Jolt Physics behind a StarForge adapter
+- Recast/Detour behind a StarForge navigation adapter for grounded navigation
+- project-owned bounded 3D navigation for flying/Zero-G AI
 - miniaudio behind a StarForge audio layer
 - fastgltf / glTF 2.0 asset pipeline
 - Dear ImGui for development tooling only

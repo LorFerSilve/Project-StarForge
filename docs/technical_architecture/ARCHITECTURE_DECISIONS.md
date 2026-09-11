@@ -288,3 +288,101 @@ Save decode, migration, domain import, reference/ownership validation, ContentId
 ### Rationale
 
 A corrupt/incompatible save must never leave the current session partially replaced or heuristically repaired into an undefined state.
+
+---
+
+## AD-021 — The Strategic Galaxy Is Topological, Not One Continuous Physics Coordinate Space
+
+**Status:** Accepted
+
+### Decision
+
+Strategic galaxy navigation is represented through persistent location identities and route topology. Only the current bounded local context receives a physical 3D coordinate space.
+
+### Rationale
+
+The Design Complete GDS explicitly separates strategic travel from bounded local flight/mission zones. This avoids meaningless astronomical coordinate precision and prevents a speculative seamless-galaxy engine architecture.
+
+---
+
+## AD-022 — Exactly One Player-Local Scene Is Authoritative
+
+**Status:** Accepted
+
+### Decision
+
+StarForge runs at most one authoritative player-local `SceneInstance` at a time. Horizon can continue off-screen through persistent scheduled state and bounded tactical working data, but not through a second fully active physics/render/locomotion scene.
+
+### Rationale
+
+This preserves the GDS one-deployed-local-context model, simplifies authority and memory ownership, and prevents duplicate crew/robot/station state.
+
+---
+
+## AD-023 — Streaming Residency Is Separate From Gameplay Activation
+
+**Status:** Accepted
+
+### Decision
+
+Stream-cell content can be loaded/resident without its gameplay actors, hazards, objectives, discoveries, or simulation being active. Logical activation is decided deterministically by the simulation thread; prefetch and eviction are technical optimizations only.
+
+### Rationale
+
+Asset-I/O timing must not change gameplay, reveal hidden information, or cause resources/enemies to spawn differently across machines.
+
+---
+
+## AD-024 — Persistent Local Space Uses Double Precision With an Origin-Relative Runtime Frame
+
+**Status:** Accepted
+
+### Decision
+
+Persistent local positions are stored as double-precision meter coordinates scoped to their Zone/Location. Active physics/render/audio operate in an origin-relative runtime frame controlled by `RuntimeOrigin64` and `OriginEpoch`, with rebasing only at Stable Simulation Boundaries.
+
+### Rationale
+
+This supports player-scale precision inside large bounded spaceflight contexts without requiring double precision in every backend or one galaxy-scale coordinate system.
+
+---
+
+## AD-025 — Required Streaming Failure Freezes Simulation Rather Than Changing Outcomes
+
+**Status:** Accepted
+
+### Decision
+
+If required gameplay content is not ready before the player/actor would cross into it, the session enters a Hard Streaming Hold at a Stable Simulation Boundary and authoritative Simulation Time stops until the content is ready or a technical failure is declared.
+
+### Rationale
+
+A slow disk, CPU, or worker schedule must not let enemies move, hazards tick, production advance, or the player suffer outcomes while required world geometry is unavailable.
+
+---
+
+## AD-026 — Inter-Context Transitions Stage Destination Before Atomic Context Commit
+
+**Status:** Accepted
+
+### Decision
+
+Destination scene/content is staged and validated before the authoritative player/ship/mission/context-location switch. The context change then commits atomically, after which destination Activation Leases become authoritative.
+
+### Rationale
+
+This avoids unload-first failure modes and prevents half-transitions where gameplay ownership says the player is at one location while runtime representation exists at another.
+
+---
+
+## AD-027 — Runtime Scenes Are Projections, Not Persistent Gameplay History
+
+**Status:** Accepted
+
+### Decision
+
+Local scenes are reconstructed from immutable Content definitions plus persistent World/Location and Mission/Zone state. Scene presence, streamed residency, render visibility, or runtime object destruction is never the sole record of persistent gameplay consequence.
+
+### Rationale
+
+This guarantees that unload/reload cannot respawn harvested resources, duplicate ships/robots, repair destroyed objects, reset doors, or erase discoveries/objectives.

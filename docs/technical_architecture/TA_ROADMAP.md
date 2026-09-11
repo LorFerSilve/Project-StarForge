@@ -73,27 +73,43 @@ Artifacts:
 
 ## TA-6 — Station Simulation and Graph Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define technical representations for:
+Defines:
 
-- structural graph;
-- compartment graph;
-- utility networks;
-- power graph;
-- atmosphere/pressure volumes;
-- thermal system;
-- water;
-- logistics;
-- manufacturing;
-- construction transactions;
-- damage/repair topology invalidation;
-- off-screen coarse scheduling;
-- physical/graph handoff to TA-5 static and kinematic station collision.
+- one canonical persistent Horizon topology foundation with stable station-local typed IDs;
+- separate Structural and Traversal graphs plus stable Pressure Cells/Portals;
+- typed utility-link channels and independent topology revisions;
+- deterministic dependency invalidation after construction, damage, repair, door/valve/breaker, breach, and docking changes;
+- deterministic capacity-constrained Power allocation per connected island with `PowerLoadPriority`, producer dispatch, finite storage, breakers, protection, blackout, and black-start behavior;
+- conserved Atmosphere species quantities in stable pressure cells with portal/ventilation exchange, breaches, life-support processing, airlock pressure facts, and bounded decompression-force handoff;
+- finite Thermal energy/coolant state, coolant-loop throughput, radiator rejection, ambient-temperature coupling, and equipment protection facts;
+- separate Fresh Water/Wastewater inventories with finite storage, distribution, reserve policy, recycling loss, and leaks;
+- one-owner Logistics requests/reservations, deterministic source/routing selection, finite throughput, explicit `TransferCargoOwner`, local buffers, and docking cargo links;
+- persistent Simulation-Time WorkOrders for Manufacturing, Farming, Construction, Repair, and compatible station work;
+- exactly-once material consumption/output/harvest/completion milestones;
+- construction/deconstruction transactions, structural-completion/commissioning boundaries, persistent damage/fault/breach state, stabilization, repair, and topology restoration;
+- explicit ControlData connectivity, sensor knowledge, local safety controllers, automation tasks/policies/permissions, finite automation capacity, and escalation;
+- chronological event/deadline-based active/off-screen station scheduling using the same persistent Horizon state;
+- persistent-state-first station runtime projection with `StationGeometryDelta` handoff to TA-5 deferred safe physics mutation;
+- active/off-screen/docking/defense continuity without duplicate station state.
+
+Artifacts:
+
+- `35_station_graph_foundation_and_topology.md`;
+- `36_power_network_solver_and_allocation.md`;
+- `37_atmosphere_compartments_and_pressure_simulation.md`;
+- `38_thermal_water_and_environmental_networks.md`;
+- `39_logistics_reservations_and_transfer_runtime.md`;
+- `40_manufacturing_farming_and_work_scheduling.md`;
+- `41_construction_repair_and_topology_mutation.md`;
+- `42_station_automation_control_and_offscreen_simulation.md`;
+- `43_station_runtime_projection_and_physics_handoff.md`;
+- `TA6_CROSS_VALIDATION.md`.
 
 ## TA-7 — Gameplay Runtime Entity Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define:
 
@@ -153,13 +169,13 @@ Must define exact TA-2 save-container byte layout, section directory/manifest, d
 
 **Status:** Planned
 
-Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache numeric budgets, TA-4 rendering budgets, and TA-5 physics/query/body/contact budgets.
+Must define worker-pool model, job categories/priorities, immutable snapshot/versioning, asset streaming budgets, CPU/GPU frame budgets, memory budgets, simulation backlog policy, profiling counters, performance test scenes, Horizon/off-screen scalability, TA-3 streaming/origin/grid/cache numeric budgets, TA-4 rendering budgets, TA-5 physics/query/body/contact budgets, and TA-6 station graph/solver/environment/off-screen-scheduler budgets.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
+Must define CMake target tests, Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station-simulation smoke tests, formatting/tidy/warnings, sanitizers where supported, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -186,8 +202,9 @@ GDS Design Complete
 → TA-3 Architecture Complete  
 → TA-4 Architecture Complete  
 → TA-5 Architecture Complete  
-→ **TA-6 next**  
-→ TA-7 ... TA-15  
+→ TA-6 Architecture Complete  
+→ **TA-7 next**  
+→ TA-8 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

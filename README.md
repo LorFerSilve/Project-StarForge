@@ -10,11 +10,13 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0**, **TA-1**, **TA-2**, and **TA-3** are complete/Architecture Complete. The next dependency is **TA-4 — Rendering Architecture**.
+Technical Architecture stages **TA-0**, **TA-1**, **TA-2**, **TA-3**, and **TA-4** are complete/Architecture Complete. The next dependency is **TA-5 — Physics, Collision, Character, and Spaceflight Integration**.
 
 TA-2 fixed persistent identity, domain-state ownership, activation leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
-TA-3 now fixes the one-player-local-scene model, bounded Zone/Scene lifecycle, stream-cell residency versus simulation activation, double-precision Context Space plus floating-origin runtime coordinates, spatial partitioning, Horizon active/off-screen handoff, persistent world projection, scene profiles, and staged atomic context transitions/loading.
+TA-3 fixed the one-player-local-scene model, bounded Zone/Scene lifecycle, stream-cell residency versus simulation activation, double-precision Context Space plus floating-origin runtime coordinates, spatial partitioning, Horizon active/off-screen handoff, persistent world projection, scene profiles, and staged atomic context transitions/loading.
+
+TA-4 now fixes the OpenGL renderer architecture: immutable render snapshots, hybrid deferred/forward pass structure, reversed-Z depth, glTF-compatible PBR materials, lighting/shadows, camera/view contracts, visibility/LOD/instancing/transparency, VFX/particles, GPU upload/resource lifetime, resize/failure behavior, and presentation-only graphics quality tiers.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, architecture integration audit, and implementation roadmap/contract locking.
 

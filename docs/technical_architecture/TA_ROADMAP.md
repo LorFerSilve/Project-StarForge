@@ -49,33 +49,52 @@ Artifacts:
 
 ## TA-2 — Identity, Domain State, Transactions, and Serialization Contracts
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define:
+Defines:
 
-- strongly typed PersistentId representation;
-- RuntimeEntityHandle representation;
-- persistent domain stores;
-- activation/deactivation data contracts;
-- command/result/event type conventions;
-- cross-domain transaction coordinator;
-- immutable read models;
-- save DTO ownership;
-- schema/version conventions;
-- deterministic RNG stream storage;
-- migration/integrity boundaries.
+- strongly typed non-zero 64-bit `PersistentId<Tag>` representation;
+- index+generation `RuntimeEntityHandle` representation;
+- canonical UTF-8 `ContentId` references;
+- persistent domain-store ownership and deterministic enumeration;
+- `StateRevision` and `ActivationEpoch` stale-state protection;
+- Activation Lease authority transfer between persistent and active state;
+- typed Command / Result / Event conventions;
+- deterministic command/event sequencing;
+- cross-domain TransactionCoordinator;
+- physical ownership and Credit transaction contracts;
+- immutable revisioned consumer Read Models;
+- per-domain versioned Save DTO ownership;
+- StarForge-owned little-endian chunked binary save container;
+- CRC32C section integrity and initial `None` compression codec;
+- staged all-or-nothing loading/migration;
+- project-owned PCG32 deterministic RNG and scoped stream derivation;
+- generation-version and integrity validation contracts.
 
-Primary GDS dependencies:
+Artifacts:
+
+- `05_identity_and_reference_model.md`;
+- `06_domain_state_and_activation_contracts.md`;
+- `07_command_result_and_event_contracts.md`;
+- `08_transaction_and_ownership_contracts.md`;
+- `09_read_models_and_state_revisions.md`;
+- `10_serialization_and_save_contracts.md`;
+- `11_rng_migration_and_integrity_contracts.md`;
+- `TA2_CROSS_VALIDATION.md`.
+
+Primary GDS dependencies resolved:
 
 - physical ownership;
 - unique persistent identities;
 - Stable Save Boundaries;
 - mission/event/robot/ship IDs;
-- transactions and anti-duplication.
+- transaction atomicity and anti-duplication;
+- deterministic procedural state;
+- save migration/integrity boundaries.
 
 ## TA-3 — World, Scene, Zone, and Streaming Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define:
 
@@ -236,20 +255,21 @@ Must define:
 
 **Status:** Planned
 
-Must define:
+TA-2 has already fixed the persistence semantics and v1 container family. TA-12 must define/lock the concrete storage implementation details required before code, including:
 
-- concrete save container/encoding;
-- snapshot manifest;
-- domain serialization registry;
-- checksums/integrity;
-- write-new-then-commit;
-- autosave/manual/quicksave file layout;
-- migration pipeline;
-- crash recovery;
-- corruption diagnostics;
-- deterministic load validation.
+- exact byte-level v1 header/section layout;
+- serializer/reader interfaces and domain registry;
+- file/slot naming and directory layout;
+- CRC32C implementation boundary;
+- write-new-validate-atomic-replace platform adapter;
+- autosave/manual/quicksave rotation/storage policy;
+- staging memory strategy;
+- exact migration registry/execution interfaces;
+- crash/interrupted-write recovery;
+- corruption diagnostics/user recovery flow;
+- golden save fixture organization.
 
-TA-2 establishes persistence contracts; TA-12 selects/defines their concrete storage implementation.
+TA-12 may not replace TA-2's identity, DTO ownership, all-or-nothing load, migration determinism, or Stable Save Boundary contracts.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
@@ -325,8 +345,9 @@ Only after TA-16 may the project begin the planned C++/OpenGL scaffolding phase.
 GDS Design Complete  
 → TA-0 complete  
 → TA-1 Architecture Complete  
-→ **TA-2 next**  
-→ TA-3 ... TA-15  
+→ TA-2 Architecture Complete  
+→ **TA-3 next**  
+→ TA-4 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

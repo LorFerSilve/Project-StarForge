@@ -8,15 +8,44 @@ The game centers on a physically traversable and expandable player-owned space s
 
 The authoritative Game Design Specification has completed **GDS-0 through GDS-14** and is formally **Design Complete**.
 
-The project is now ready for the separate **technical architecture and implementation-roadmap phase**. Gameplay implementation and C++/OpenGL scaffolding have not begun yet.
+The project has now entered the **Technical Architecture** phase.
 
-The authoritative game-design documentation lives in:
+Technical Architecture stages **TA-0** and **TA-1** are complete/Architecture Complete. The next dependency is **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**.
+
+Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, architecture integration audit, and implementation roadmap/contract locking.
+
+## Documentation
+
+Authoritative game design:
 
 [`docs/game_design/`](docs/game_design/)
 
-The final GDS-14 maturity and promotion evidence is recorded under:
+Technical architecture:
+
+[`docs/technical_architecture/`](docs/technical_architecture/)
+
+Technical Architecture roadmap:
+
+[`docs/technical_architecture/TA_ROADMAP.md`](docs/technical_architecture/TA_ROADMAP.md)
+
+Final GDS-14 maturity/promotion evidence:
 
 [`docs/game_design/audit/`](docs/game_design/audit/)
+
+## Initial Technical Baseline
+
+- C++23
+- CMake
+- vcpkg manifest mode
+- OpenGL 4.6 Core Profile
+- GLFW
+- glad2
+- GLM
+- Jolt Physics behind a StarForge adapter
+- miniaudio behind a StarForge audio layer
+- fastgltf / glTF 2.0 asset pipeline
+- Dear ImGui for development tooling only
+- Catch2 for automated C++ tests
 
 ## Core Development Principle
 

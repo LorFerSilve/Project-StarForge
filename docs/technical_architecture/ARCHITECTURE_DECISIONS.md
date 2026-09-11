@@ -932,3 +932,129 @@ An `AIScheduler` deterministically selects due high-level/perception work, while
 ### Rationale
 
 Performance scaling must not make gameplay depend on CPU timing, thread scheduling, hash iteration, or render rate.
+
+---
+
+## AD-067 — Mission Identity Is Separate From Deployed Attempt Identity
+
+**Status:** Accepted
+
+### Decision
+
+A persistent `MissionId` identifies the canonical mission opportunity/contract, while each committed deployment attempt owns a persistent `MissionInstanceId`. The session transactionally enforces at most one external deployed MissionInstance at a time; Horizon DefenseEvents do not consume that slot.
+
+### Rationale
+
+Story missions need retry history without duplicate canonical Mission IDs, while deployment, extraction, zone state and attempt outcomes need their own save-persistent identity.
+
+---
+
+## AD-068 — Objectives Progress Only From Committed Domain Facts or Authoritative Read State
+
+**Status:** Accepted
+
+### Decision
+
+Objective graphs are typed acyclic data. Objective completion/failure/branch transitions are exactly-once Mission-domain commits driven by committed gameplay facts or owning-domain state. TA-9 does not maintain shadow counters when inventory, Health, target state, rescue state, or world state already owns the truth.
+
+### Rationale
+
+This prevents callback/UI-driven quest progress, duplicated resource counts, and replayed objective rewards while preserving explicit AND/OR branching and security-state semantics.
+
+---
+
+## AD-069 — Procedural Mission Generation Is Staged, Deterministic, and Anti-Reroll
+
+**Status:** Accepted
+
+### Decision
+
+Procedural mission candidates use persistent generation cursors plus scoped TA-2 PCG32 streams. Candidate generation/validation can run on immutable snapshots, but the selected valid candidate is determined by semantic candidate order and MissionId/child identities are allocated only in the final validated commit.
+
+### Rationale
+
+Reload timing, worker completion, and rejected candidates must not reroll offers, consume IDs, or alter major mission content.
+
+---
+
+## AD-070 — Offensive Raids Are Specialized Missions Against Persistent Targets
+
+**Status:** Accepted
+
+### Decision
+
+A player Raid adds RaidId, raid phases, escalation and target-specific orchestration around the normal Mission/MissionInstance framework. Persistent target damage, sabotage and physical loot transfers commit to their actual owning world/resource systems when they occur and are not rolled back by later raid failure.
+
+### Rationale
+
+This reuses one mission/extraction/failure architecture while preserving fortified multi-phase gameplay and persistent consequences without a second raid quest engine or global target HP abstraction.
+
+---
+
+## AD-071 — Reinforcement Calls Become Persistent Finite Responses at Commit
+
+**Status:** Accepted
+
+### Decision
+
+Reinforcement `Calling` can be interrupted. The transition to `Committed` atomically validates source, communication, route and finite availability and creates/reserves the response manifest. After commit, later caller communication loss cannot unsend the force; arrival still requires actual strategic transit and a valid local insertion route.
+
+### Rationale
+
+This gives jamming/counterplay a meaningful pre-commit window while preventing save/load, later radio destruction, or duplicated calls from creating or deleting forces arbitrarily.
+
+---
+
+## AD-072 — Horizon Defense Uses One Persistent DefenseEvent Across Active and Off-Screen Simulation
+
+**Status:** Accepted
+
+### Decision
+
+A `DefenseEventId` owns a Horizon attack independently of the one external MissionInstance slot. The same event and Horizon persistent stores drive active local combat or deterministic off-screen resolution; no single Defense Score is authoritative, and hostile theft becomes permanent only through physical extraction commit.
+
+### Rationale
+
+Horizon must remain causally simulated while the player is away without a hidden second full scene, abstract percentage damage, or reset when the player returns.
+
+---
+
+## AD-073 — Dynamic Events Own Strategic Existence and Hand Off Specialized Execution Atomically
+
+**Status:** Accepted
+
+### Decision
+
+`DynamicEventStore` owns event generation, lifecycle, deadlines, cooldowns and Recovery Grace. When an event creates a Mission or Horizon Defense, MissionId/DefenseEventId creation and the source link commit atomically; the specialized Mission/Defense system then owns execution instead of Dynamic Events mirroring it.
+
+### Rationale
+
+This prevents duplicate state machines and guarantees reload-safe one-time creation while retaining strategic event history and source causality.
+
+---
+
+## AD-074 — Strategic Event Existence, Delivered Knowledge, and Recovery Transit Are Separate State
+
+**Status:** Accepted
+
+### Decision
+
+Missions/Defense/Dynamic Events may exist and progress without player knowledge; information and remote orders require valid communication delivery. External player defeat creates a Simulation-Time Recovery Transit with a valid destination/method and anti-teleport timing; it does not imply successful extraction or automatically move ships, robots, passengers, or cargo.
+
+### Rationale
+
+This preserves communication gameplay, prevents omniscient UI and defeat fast-travel exploits, and keeps physical asset/location ownership causal while Horizon/world events continue.
+
+---
+
+## AD-075 — The Finale Choice Is One Prepared Exactly-Once Cross-Domain Transaction
+
+**Status:** Accepted
+
+### Decision
+
+MS-F02 allows routine retry until an explicit `FinalResolutionTransaction` commits exactly one canonical choice: Stabilize, Sever, or Contain. The transaction validates capability/prerequisites and atomically commits the persistent PostgameResolutionState plus required world/route/faction/narrative consequences under one TransactionId.
+
+### Rationale
+
+An irreversible ending must not be selected by UI timing or partially applied across domains. After commit, later tactical state or reload cannot select a second ending from the same post-choice save timeline.

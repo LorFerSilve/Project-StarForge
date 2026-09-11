@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0 through TA-8** are complete/Architecture Complete. The next dependency is **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
+Technical Architecture stages **TA-0 through TA-9** are complete/Architecture Complete. The next dependency is **TA-10 — Content and Asset Pipeline**.
 
 TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -24,7 +24,9 @@ TA-6 fixed Horizon's structural/traversal/utility topology, deterministic Power 
 
 TA-7 fixed the active gameplay runtime: one generation-checked RuntimeEntityRegistry per SceneInstance, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/equipment/inventory runtime references, combat/weapon/status runtime state, projectile/interactable/world-object projections, persistent↔runtime synchronization, deferred destruction, and deterministic 60 Hz runtime phase ordering.
 
-TA-8 now fixes AI/navigation: Recast/Detour-backed grounded navigation behind a project adapter, separate bounded 3D free-flight navigation, traversal profiles/links, dynamic nav invalidation, async revision-validated paths, project-owned path following/local avoidance, explicit knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task navigation, off-screen logical actor behavior, deterministic AI scheduling, and fixed integration into the TA-7 runtime phases.
+TA-8 fixed AI/navigation: Recast/Detour-backed grounded navigation behind a project adapter, separate bounded 3D free-flight navigation, traversal profiles/links, dynamic nav invalidation, async revision-validated paths, project-owned path following/local avoidance, explicit knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task navigation, off-screen logical actor behavior, deterministic AI scheduling, and fixed integration into the TA-7 runtime phases.
+
+TA-9 now fixes missions and strategic events: persistent MissionId versus per-attempt MissionInstanceId, objective DAG/exactly-once progression, deterministic anti-reroll procedural mission generation, offensive raids as specialized missions, finite reinforcement/escalation state, persistent Horizon DefenseEvents across active/off-screen simulation, DynamicEvent scheduling/concurrency/Recovery Grace, communication-separated event knowledge, causal Recovery Transit, cross-domain strategic consequence transactions, and the exactly-once Stabilize/Sever/Contain finale/Postgame commit.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, TA-15 integration audit, and TA-16 implementation roadmap/contract locking.
 

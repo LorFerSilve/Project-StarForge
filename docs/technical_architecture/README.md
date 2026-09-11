@@ -19,9 +19,10 @@ Technical Architecture has completed:
 - **TA-5 — Physics, Collision, Character, and Spaceflight Integration**;
 - **TA-6 — Station Simulation and Graph Architecture**;
 - **TA-7 — Gameplay Runtime Entity Architecture**;
-- **TA-8 — AI and Navigation Architecture**.
+- **TA-8 — AI and Navigation Architecture**;
+- **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
 
-The next dependency is **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
+The next dependency is **TA-10 — Content and Asset Pipeline**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -102,6 +103,29 @@ TA-8 establishes:
 - active/reduced/off-screen logical AI modes with Simulation-Time travel and chronological event boundaries;
 - deterministic `AIScheduler` and exact insertion into TA-7 runtime phases;
 - headless AI/navigation tests and rich read-only diagnostics.
+
+### TA-9 Missions, Raids, Dynamic Events, and Strategic State Machines
+
+TA-9 establishes:
+
+- persistent `MissionId` contracts separated from persistent per-deployment `MissionInstanceId` attempts;
+- transactionally enforced single external deployed MissionInstance with Horizon DefenseEvents allowed in parallel;
+- persistent multi-zone MissionInstance state and explicit retry/attempt history without loss rollback/refund;
+- typed acyclic Objective graphs driven only by committed owning-domain facts/state and exactly-once terminal transitions;
+- explicit resource-security, rescue, combat-end-state, repair, scan, timer, hidden-objective, branch, and extraction semantics;
+- deterministic staged procedural mission generation using persistent cursors, scoped PCG32 streams, bounded validation and anti-reroll stable major content;
+- offensive Raids as specialized Missions against persistent world targets rather than a separate quest engine;
+- raid phase, escalation and target-state separation with physical loot/sabotage consequences committed when they occur;
+- finite reinforcement-call state with a real pre-commit interruption boundary and persistent post-commit force/ETA;
+- one persistent Horizon `DefenseEventId` across active and off-screen execution with no authoritative single Defense Score;
+- physical hostile theft ownership and extraction semantics;
+- persistent `DynamicEventStore`/StrategicEventScheduler with event concurrency, cooldowns, Recovery Grace, source plausibility and campaign-softlock validation;
+- atomic DynamicEvent handoff to MissionId/DefenseEventId without duplicate execution state machines;
+- strategic communication delivery separated from event existence and queued/delayed knowledge preservation;
+- Simulation-Time Recovery Transit with causal destination selection and no defeat fast-travel/ship/robot/cargo teleportation;
+- typed strategic consequence batches over owning world/faction/economy/narrative/resource domains;
+- exactly-one `Stabilize | Sever | Contain` finale commit through a prepared atomic FinalResolution transaction and persistent PostgameResolutionState;
+- deterministic local/strategic phase integration, chronological deadline processing, Stable Save Boundary invariants and headless diagnostics/testing contracts.
 
 ## Architecture Documents
 
@@ -198,15 +222,28 @@ TA-8 establishes:
 - [`60_ai_runtime_phase_integration_debugging_and_validation.md`](60_ai_runtime_phase_integration_debugging_and_validation.md)
 - [`TA8_CROSS_VALIDATION.md`](TA8_CROSS_VALIDATION.md)
 
+### TA-9
+
+- [`61_mission_store_instance_and_deployment_state.md`](61_mission_store_instance_and_deployment_state.md)
+- [`62_objective_graph_runtime_and_commit_semantics.md`](62_objective_graph_runtime_and_commit_semantics.md)
+- [`63_procedural_mission_generation_and_offer_runtime.md`](63_procedural_mission_generation_and_offer_runtime.md)
+- [`64_raid_state_machine_and_target_runtime.md`](64_raid_state_machine_and_target_runtime.md)
+- [`65_reinforcements_escalation_and_defense_events.md`](65_reinforcements_escalation_and_defense_events.md)
+- [`66_dynamic_event_scheduler_and_world_consequence_runtime.md`](66_dynamic_event_scheduler_and_world_consequence_runtime.md)
+- [`67_communications_recovery_and_strategic_consequence_routing.md`](67_communications_recovery_and_strategic_consequence_routing.md)
+- [`68_finale_postgame_and_irreversible_choice_transactions.md`](68_finale_postgame_and_irreversible_choice_transactions.md)
+- [`69_ta9_runtime_phase_integration_debugging_and_validation.md`](69_ta9_runtime_phase_integration_debugging_and_validation.md)
+- [`TA9_CROSS_VALIDATION.md`](TA9_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define missions/raids, content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
+Later TA phases define the content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
 
 ## Implementation Gate
 
 Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-8 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-9 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**

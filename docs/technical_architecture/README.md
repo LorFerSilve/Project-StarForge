@@ -13,9 +13,10 @@ Technical Architecture has completed:
 
 - **TA-0 — Architecture Governance and Constraints**;
 - **TA-1 — System Context, Toolchain, and Runtime Foundation**;
-- **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**.
+- **TA-2 — Identity, Domain State, Transactions, and Serialization Contracts**;
+- **TA-3 — World, Scene, Zone, and Streaming Architecture**.
 
-The next dependency is **TA-3 — World, Scene, Zone, and Streaming Architecture**.
+The next dependency is **TA-4 — Rendering Architecture**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -84,6 +85,26 @@ TA-2 establishes:
 - staged all-or-nothing loading/migration;
 - project-owned PCG32 deterministic RNG with scoped SplitMix64-based derivation.
 
+## TA-3 World/Scene Baseline
+
+TA-3 establishes:
+
+- one authoritative player-local `SceneInstance` at a time;
+- strategic galaxy identity/topology separated from local 3D coordinates;
+- `ActiveLocalContextKind` separated from physical `SceneProfileKind`;
+- explicit Scene lifecycle and SceneGeneration stale-result protection;
+- stream-cell content residency separated from simulation activation;
+- deterministic required activation plus non-authoritative predictive prefetch;
+- Hard Streaming Hold that freezes Simulation Time when required content is unavailable;
+- persistent double-precision Context Space positions with origin-relative runtime coordinates;
+- floating-origin `RuntimeOrigin64` + `OriginEpoch` rebasing;
+- loose hashed gameplay spatial-index architecture distinct from streaming/physics/render partitions;
+- Horizon active/off-screen state handoff without a second full scene;
+- off-screen Horizon Defense handoff preserving the same persistent event/actors/resources;
+- staged destination loading and atomic context-switch transitions;
+- persistent World/Mission state projected over immutable Content definitions;
+- explicit Interior, Surface, EVA, LocalSpaceflight, Horizon, and Mixed scene-composition profiles.
+
 ## Architecture Documents
 
 ### TA-0 / TA-1
@@ -106,12 +127,23 @@ TA-2 establishes:
 - [`11_rng_migration_and_integrity_contracts.md`](11_rng_migration_and_integrity_contracts.md)
 - [`TA2_CROSS_VALIDATION.md`](TA2_CROSS_VALIDATION.md)
 
+### TA-3
+
+- [`12_active_local_context_and_scene_model.md`](12_active_local_context_and_scene_model.md)
+- [`13_zone_streaming_and_residency_model.md`](13_zone_streaming_and_residency_model.md)
+- [`14_coordinate_precision_and_spatial_partitioning.md`](14_coordinate_precision_and_spatial_partitioning.md)
+- [`15_horizon_active_offscreen_handoff.md`](15_horizon_active_offscreen_handoff.md)
+- [`16_scene_transition_and_loading_state_machine.md`](16_scene_transition_and_loading_state_machine.md)
+- [`17_zone_state_and_persistent_world_projection.md`](17_zone_state_and_persistent_world_projection.md)
+- [`18_scene_composition_profiles.md`](18_scene_composition_profiles.md)
+- [`TA3_CROSS_VALIDATION.md`](TA3_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define world/scene ownership, rendering, physics, station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
+Later TA phases define rendering, physics, station graphs, runtime entities, AI/navigation, missions/raids, asset/content pipeline, audio/input/UI boundaries, persistence storage details, concurrency, observability/testing, and implementation handoff.
 
 ## Implementation Gate
 
@@ -125,4 +157,4 @@ A technical subsystem is ready for code only when:
 6. tests/validation expectations are defined;
 7. the implementation roadmap places it in an approved phase.
 
-`Implementation Locked` remains a later per-contract handoff state. TA-2 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.
+`Implementation Locked` remains a later per-contract handoff state. TA-3 Architecture Complete does **not** authorize C++/OpenGL scaffolding yet.

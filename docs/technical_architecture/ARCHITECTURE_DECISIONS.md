@@ -190,3 +190,101 @@ Core simulation/gameplay/persistence tests must run without requiring an OpenGL 
 ### Rationale
 
 The largest correctness risks are transactions, persistence, system graphs, missions, economy, AI rules, and deterministic state—not rendering. Headless tests make those systems fast and CI-friendly.
+
+---
+
+## AD-014 — Persistent Gameplay IDs Are Strongly Typed 64-Bit Monotonic Values
+
+**Status:** Accepted
+
+### Decision
+
+Persistent gameplay identities use domain-tagged non-zero 64-bit monotonic IDs. Allocator state is persisted, committed identities are never reused within a save timeline, and creation commits ID allocation with record creation.
+
+### Rationale
+
+This is compact, deterministic, serialization-friendly, testable, and prevents accidental cross-domain ID substitution without introducing wall-clock/random UUID infrastructure.
+
+---
+
+## AD-015 — Active Runtime State Uses Explicit Activation Leases
+
+**Status:** Accepted
+
+### Decision
+
+When a persistent entity becomes high-frequency active, designated state facets are transferred to the active runtime representation through an Activation Lease. The dormant store and active runtime never simultaneously mutate the same leased field.
+
+### Rationale
+
+This removes dual-authority ambiguity while allowing performant local simulation and coherent off-screen persistence/save export.
+
+---
+
+## AD-016 — Cross-Domain Transactions Prepare Fully Before an Infallible Commit Window
+
+**Status:** Accepted
+
+### Decision
+
+Cross-domain mutations validate and prepare all participant deltas first. Final commit executes on the authoritative simulation thread in deterministic domain order and performs no fallible external I/O, asset loading, worker waits, or user interaction.
+
+### Rationale
+
+The GDS requires exactly-once ownership and reward/extraction/trade semantics. A fully prepared single-thread commit avoids partial gameplay transactions and complex rollback infrastructure.
+
+---
+
+## AD-017 — Consumer State Is Exposed Through Immutable Revisioned Read Models
+
+**Status:** Accepted
+
+### Decision
+
+UI, renderer, audio, worker jobs, and diagnostics consume immutable purpose-specific read models/snapshots tagged with source revisions/generations. Player-facing views apply the Presentation Knowledge Boundary.
+
+### Rationale
+
+This prevents presentation/worker code from becoming hidden gameplay authority and provides explicit stale-state detection.
+
+---
+
+## AD-018 — Save Format V1 Is a Project-Owned Chunked Little-Endian Binary Container
+
+**Status:** Accepted
+
+### Decision
+
+Shipping save format v1 uses explicit versioned per-domain Save DTO sections in a StarForge-owned little-endian binary container with a section directory and CRC32C integrity. Initial compression codec is `None`.
+
+### Rationale
+
+The format is deterministic, backend-independent, migration-friendly, and avoids coupling persistence to raw C++/STL/Jolt/OpenGL memory layout or adding a general serialization framework before it is needed.
+
+---
+
+## AD-019 — Persistent Procedural Randomness Uses Project-Owned PCG32 Scoped Streams
+
+**Status:** Accepted
+
+### Decision
+
+Authoritative persistent procedural randomness uses a locked project-owned PCG32 implementation. Scoped streams are derived deterministically from SaveSeed, stable StreamKind/scope identity, and generation version using project-owned SplitMix64-based derivation. Standard-library distributions and `std::hash` are not persistence authority.
+
+### Rationale
+
+This keeps persistent procedural outcomes stable across save/load, thread scheduling, compiler/STL implementations, and unrelated random consumers.
+
+---
+
+## AD-020 — Save Loading and Migration Are Staged and All-or-Nothing
+
+**Status:** Accepted
+
+### Decision
+
+Save decode, migration, domain import, reference/ownership validation, ContentId resolution, and active-context preparation occur in staging state. The live session root is replaced only after all required validation succeeds.
+
+### Rationale
+
+A corrupt/incompatible save must never leave the current session partially replaced or heuristically repaired into an undefined state.

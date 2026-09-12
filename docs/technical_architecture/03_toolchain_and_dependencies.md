@@ -114,21 +114,47 @@ Gameplay code emits semantic audio intents/events rather than calling miniaudio 
 
 ## 13. fastgltf
 
-**fastgltf** is the canonical runtime/build-pipeline parser for **glTF 2.0** mesh/scene asset import.
+**fastgltf** is the canonical build-pipeline parser for **glTF 2.0** mesh/scene asset import.
 
-The project uses glTF as the primary authored 3D asset exchange format. Runtime representation is StarForge-owned.
+The project uses glTF as the primary authored 3D asset exchange format. Runtime representation is StarForge-owned and shipping runtime does not depend on raw glTF DOM objects.
 
-## 14. Texture/Image Support
+## 14. KTX-Software / KTX2
 
-Texture decoding/transcoding is behind the content/render-resource pipeline.
+TA-10 selects **KTX2** as the canonical cooked texture container and **Khronos KTX-Software** as the pinned texture-tool/library boundary.
 
-The initial implementation can use a small decoder dependency suitable for common source formats, while shipping representation can later use GPU-friendly compression without changing gameplay/content IDs.
+Canonical source textures use approved authoring formats such as PNG/EXR; the content pipeline performs semantic-aware mip/compression processing and emits validated KTX2.
 
-Exact decoder/compression package is selected during TA-10.
+StarForge ContentId remains texture identity. KTX filenames/objects do not become gameplay identity.
+
+The initial Windows x64 OpenGL 4.6 profile can use GPU block-compressed formats such as BC7/BC5/BC4/BC6H where the TA-10 semantic profile selects them.
+
+Basis Universal remains optional profile technology rather than mandatory desktop runtime semantics.
+
+## 14.1 meshoptimizer
+
+TA-10 selects pinned **meshoptimizer** for offline mesh optimization and declared generated-LOD processing behind the StarForge content tool.
+
+Permitted use includes vertex-cache/fetch optimization, overdraw-oriented reordering and deterministic simplification.
+
+meshoptimizer does not own runtime mesh identity, scene semantics, collision, or LOD gameplay behavior.
+
+## 14.2 glslang
+
+TA-10 selects pinned Khronos **glslang** as the offline/reference validator for declared shipping GLSL 4.60 shader variants.
+
+The StarForge renderer still performs final OpenGL driver compile/link and interface validation at runtime. glslang does not provide persistent driver binaries or own renderer shader-program lifetime.
+
+## 14.3 Source Image Decode Boundary
+
+Shipping runtime does not require ordinary PNG/EXR decode for world textures because textures are cooked to KTX2.
+
+Build-time source decode/conversion occurs inside the content-tool boundary through KTX-Software and any small explicitly selected source-image support required by the implementation.
+
+Adding such a helper decoder remains subject to the normal vcpkg/version/license gate and cannot change texture ContentId or semantic color-space authority.
 
 ## 15. Dear ImGui
 
-**Dear ImGui** is permitted only for developer/debug tooling such as inspectors, profilers, render/physics/navigation diagnostics, graph visualization, and debug commands.
+**Dear ImGui** is permitted only for developer/debug tooling such as inspectors, profilers, render/physics/navigation diagnostics, content-pipeline diagnostics, graph visualization, and debug commands.
 
 It is not the baseline player-facing HUD/menu/accessibility UI.
 
@@ -137,6 +163,8 @@ It is not the baseline player-facing HUD/menu/accessibility UI.
 **Catch2** is the unit/component test framework.
 
 Tests must be runnable without launching the full game window unless they specifically exercise platform/render integration.
+
+TA-10 content-schema/cooker/dependency tests are headless by default.
 
 ## 17. Logging
 
@@ -152,6 +180,8 @@ Persistent save serialization is project-owned and versioned.
 
 A third-party encoding utility may be used, but it does not define save schema ownership; raw C++ object graphs/pointers are never serialized and migrations remain explicit StarForge logic.
 
+Cooked asset serialization is likewise project-owned/versioned except where TA-10 explicitly adopts a standard container such as KTX2.
+
 ## 19. No General-Purpose Engine Libraries
 
 The dependency manifest must not pull in a general-purpose engine/framework that takes ownership of scene/game loop, rendering architecture, gameplay object model, editor/runtime lifecycle, or mission/world systems.
@@ -160,9 +190,9 @@ Unity, Unreal, Godot, O3DE, or another engine are out of scope as host runtime.
 
 ## 20. Dependency Version Policy
 
-Every direct third-party dependency is pinned through the reproducible toolchain/manifest.
+Every direct third-party dependency is pinned through the reproducible toolchain/manifest or explicitly pinned build-tool bootstrap.
 
-Upgrades are deliberate commits with relevant release review, clean configure/build, automated tests, adapter smoke tests, and no floating `latest` dependency in CI.
+Upgrades are deliberate commits with relevant release review, clean configure/build, automated tests, adapter/content-tool smoke tests, affected asset recooking where required, and no floating `latest` dependency in CI.
 
 ## 21. Transitive Dependency Policy
 
@@ -179,11 +209,15 @@ Before a dependency is first committed to the implementation manifest:
 - required notices are tracked;
 - incompatible/copyleft constraints are rejected or explicitly reviewed.
 
+TA-10 applies a parallel provenance/license gate to externally sourced game assets.
+
 ## 23. Build Configurations
 
 Initial CMake architecture provides at least `Debug`, `RelWithDebInfo`, and `Release`.
 
 Development-only diagnostics/tools compile conditionally rather than changing gameplay semantics.
+
+Content semantics/fingerprints do not depend on C++ optimization mode except where a distinct explicit content target profile is intentionally selected.
 
 ## 24. Warnings
 
@@ -197,8 +231,10 @@ The implementation phase standardizes repository-owned `clang-format`, selected 
 
 ## 26. No Precompiled Binary Dependency Assumption
 
-A clean supported development machine must restore/build dependencies from the documented manifest/toolchain process without undocumented local DLL/lib copies.
+A clean supported development machine must restore/build dependencies and content tools from the documented manifest/toolchain process without undocumented local DLL/lib/tool copies.
+
+Content compilation cannot depend on a random utility discovered first on the user's shell PATH.
 
 ## 27. Explicit Non-Goals
 
-This toolchain does not require a custom compiler, custom build system, vendoring every dependency manually, a game-engine package manager, a scripting-language dependency, baseline networking dependencies, or player-facing Dear ImGui UI.
+This toolchain does not require a custom compiler, custom build system, vendoring every dependency manually, a game-engine package manager, a general gameplay scripting-language dependency, baseline networking dependencies, player-facing Dear ImGui UI, raw authoring asset parsing as the normal shipping content path, or unpinned external content tools.

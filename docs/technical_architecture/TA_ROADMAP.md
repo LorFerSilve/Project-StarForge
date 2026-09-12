@@ -144,21 +144,34 @@ Artifacts: `80_input_device_action_and_context_routing.md` through `89_ta11_runt
 
 ## TA-12 — Persistence Implementation Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C, write-new-then-commit, manual/quick/autosave layout, migrations, crash recovery, diagnostics, content-compatibility integration, and deterministic load validation.
+Defines:
+
+- PersistenceService save/load operation state machines, Stable Save Boundary capture, immutable SaveSnapshot handoff and explicit session tokens;
+- exact little-endian v1 container bytes: 128-byte header, 64-byte directory entries, header/directory/per-payload CRC32C, 8-byte payload alignment, ContentBuildId metadata and codec None baseline;
+- stable SectionKind registry for all required gameplay domains plus optional SaveMetadata, SimulationInfrastructure and LocalContextContinuation, with explicit versioned domain codecs;
+- immutable committed save generations, SnapshotSequence ordering, logical Manual/Quick/Autosave slot semantics, rebuildable catalog/index state and 10-generation rolling Autosave retention;
+- crash-safe pending-file → flush → reopen/validate → unique atomic rename commit, with catalog update and superseded cleanup strictly post-commit;
+- deterministic all-or-nothing load staging, domain/cross-domain/ownership/timer/RNG/content validation, RuntimeActivationPlan creation, one SessionRoot replacement and fresh backend reconstruction;
+- explicit container/application/domain migration chains, deterministic migration-created ID allocation, exactly-once marker preservation, source-save immutability and ContentId rename/removal compatibility rules;
+- separate versioned fail-soft profile/application settings persistence for controls/accessibility/HUD/audio/display preferences without campaign coupling;
+- shared save inspector/diagnostic/recovery tooling, golden/corruption fixtures, quarantine and a prohibition on heuristic general gameplay repair;
+- fixed runtime integration: no mid-tick capture, no load-time Simulation progression, no presentation one-shot replay, and resume from `saved_simulation_tick + 1`.
+
+Artifacts: `90_persistence_service_and_snapshot_orchestration.md` through `99_ta12_runtime_integration_debugging_and_validation.md`, plus `TA12_CROSS_VALIDATION.md`.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
-**Status:** Planned
+**Status:** Next
 
-Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-11 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, UI/layout/text/glyph-atlas work, input/controller processing, marker/presentation queues, audio voices/streams/decode/occlusion, animation/VFX work, and strategic backlog limits.
+Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-12 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, UI/layout/text/glyph-atlas work, input/controller processing, marker/presentation queues, audio voices/streams/decode/occlusion, animation/VFX work, persistence snapshot memory, encode/decode/CRC/migration/catalog/load I/O work, and strategic backlog limits.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/subtitle/caption/alarm/accessibility/presentation smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/subtitle/caption/alarm/accessibility/presentation/persistence smoke and deterministic tests, persistence golden bytes/migrations/corruption/fault injection, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -191,8 +204,9 @@ GDS Design Complete
 → TA-9 Architecture Complete  
 → TA-10 Architecture Complete  
 → TA-11 Architecture Complete  
-→ **TA-12 next**  
-→ TA-13 ... TA-15  
+→ TA-12 Architecture Complete  
+→ **TA-13 next**  
+→ TA-14 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

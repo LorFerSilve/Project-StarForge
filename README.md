@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0 through TA-11** are complete/Architecture Complete. The next dependency is **TA-12 — Persistence Implementation Architecture**.
+Technical Architecture stages **TA-0 through TA-12** are complete/Architecture Complete. The next dependency is **TA-13 — Concurrency, Performance, Memory, and Streaming Budgets**.
 
 TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -31,6 +31,8 @@ TA-9 fixed missions and strategic events: persistent MissionId versus per-attemp
 TA-10 now fixes the complete content/asset path: canonical source layout and closed JSON schemas, path-independent ContentIds, SHA-256 content fingerprints/ContentBuildId, glTF import through fastgltf, meshoptimizer offline mesh/LOD processing, KTX2/KTX-Software texture cooking, glslang shader validation, explicit collision/navigation/terrain cooking, gameplay/procedural module definitions without a scripting VM, versioned loose cooked assets plus immutable Content Registry/CPU cache, deterministic dependency-driven incremental builds, safety-classified hot reload, headless content validation, and registry-first runtime scene loading where I/O timing cannot change gameplay or reroll committed procedural content.
 
 TA-11 now fixes the complete player-facing input/presentation integration: fixed-tick semantic action sampling and remapping, explicit input/focus contexts, a StarForge-owned retained shipping UI with HarfBuzz/FreeType text, knowledge-filtered HUD/markers/management/tutorial flows, miniaudio-backed audio with AI-hearing separation and vacuum/Pilot Telemetry rules, subtitles/captions/typed alarms/accessibility, animation/camera/VFX presentation-only boundaries, and deterministic stable-state/event handoff where presentation timing cannot mutate gameplay.
+
+TA-12 now fixes the concrete persistence implementation architecture: exact v1 binary container bytes and SectionKind registry, Stable Save Boundary snapshot orchestration, immutable Manual/Quick/Autosave generations and crash-safe atomic commit, deterministic staged load/session replacement, explicit migrations and ContentId compatibility, separate profile-settings persistence, diagnostic/recovery tooling, and resume semantics that never advance gameplay during load.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, TA-15 integration audit, and TA-16 implementation roadmap/contract locking.
 

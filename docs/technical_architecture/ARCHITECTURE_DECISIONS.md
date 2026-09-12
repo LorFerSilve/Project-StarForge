@@ -1226,3 +1226,185 @@ Pinned glslang validates every declared shipping GLSL variant during content bui
 ### Rationale
 
 Offline validation catches authoring errors early without relying on nonportable driver binaries or moving OpenGL program ownership out of the renderer.
+
+---
+
+## AD-088 — Player Input Is Sampled as Semantic Actions at the Fixed Simulation Boundary
+
+**Status:** Accepted
+
+### Decision
+
+Raw platform input is converted to typed `ActionId` state and sampled at TA-1's fixed-tick Input Command Sampling phase. A low-level edge latch may preserve a short physical press until the next eligible tick, but it never retries a rejected gameplay action or becomes a general input-intent buffer.
+
+### Rationale
+
+This prevents render-frame timing from losing or multiplying button presses while preserving the GDS rule that invalid actions are not queued until they later become legal.
+
+---
+
+## AD-089 — Input Context Ownership Is Explicit and Priority-Consumed
+
+**Status:** Accepted
+
+### Decision
+
+StarForge maintains an explicit InputContextStack in which modal/system UI, active UI/terminal, specialized gameplay and ordinary gameplay have deterministic ownership priority. A higher-priority context consumes conflicting input before lower contexts can observe it.
+
+### Rationale
+
+UI focus must never accidentally fire a weapon, issue a robot command or move the player through the same physical input.
+
+---
+
+## AD-090 — Shipping UI Is a StarForge-Owned Retained Interface; Dear ImGui Remains Development-Only
+
+**Status:** Accepted
+
+### Decision
+
+Player-facing HUD, menus and management screens use a purpose-built retained StarForge UI tree rendered through TA-4. Dear ImGui remains exclusively a development/debug inspection surface.
+
+### Rationale
+
+The GDS requires controller navigation, accessibility, scalable layouts, knowledge filtering and stable screen semantics that should remain under project ownership rather than a debug UI framework.
+
+---
+
+## AD-091 — Shipping Text Uses HarfBuzz Shaping and FreeType Font Rasterization Behind Project Boundaries
+
+**Status:** Accepted
+
+### Decision
+
+UTF-8 shipping text is shaped/positioned through HarfBuzz and scalable font faces/glyphs are accessed/rasterized through FreeType. StarForge owns text roles, line layout, wrapping, glyph-atlas lifetime and all UI semantics.
+
+### Rationale
+
+Correct Unicode shaping and robust scalable glyph rendering are commodity problems; screen logic, gameplay identity and accessibility layout remain project authority.
+
+---
+
+## AD-092 — UI Uses Knowledge-Filtered Read Models and Typed Commands; Preview Is Never Authority
+
+**Status:** Accepted
+
+### Decision
+
+Shipping screens consume immutable revisioned Read Models and issue typed Commands/requests against stable IDs. Proposed construction, trade, route, loadout, squad and other plans remain transient preview state until the owning gameplay domain validates and commits them.
+
+### Rationale
+
+This prevents UI business-rule duplication, stale-row targeting, hidden-information leakage and half-applied gameplay changes.
+
+---
+
+## AD-093 — HUD Markers and Feedback Preserve Knowledge Precision and Commit Timing
+
+**Status:** Accepted
+
+### Decision
+
+Markers retain authored knowledge/precision states such as Exact, SearchArea, DirectionOnly, Suspected, Confirmed and Stale. Interaction/reward/objective/docking/save success presentation is emitted only from authoritative committed state/results.
+
+### Rationale
+
+Presentation must never turn uncertain intel into exact waypoints or show success before the state it represents actually exists.
+
+---
+
+## AD-094 — miniaudio Is a Presentation Backend and Its Real-Time Callback Has No Gameplay Authority
+
+**Status:** Accepted
+
+### Decision
+
+miniaudio is encapsulated behind the StarForge audio module. Its real-time callback consumes prepared backend-safe audio state and cannot mutate gameplay, query DomainStores/physics, issue gameplay Commands, or decide story/mission progression.
+
+### Rationale
+
+Audio device timing and callback constraints must remain isolated from authoritative deterministic simulation.
+
+---
+
+## AD-095 — Gameplay Hearing and Player Audio Are Separate Semantic Pipelines
+
+**Status:** Accepted
+
+### Decision
+
+AI consumes project-owned `GameplaySoundEvent` semantics while player playback consumes knowledge/medium-filtered `PresentationAudioEvent` state. User mix, mute, dynamic range, headphones and audio-device behavior never alter AI hearing.
+
+### Rationale
+
+Accessibility and user playback configuration must not change stealth/gameplay, while legitimate audible events can still become player knowledge through the owning perception path.
+
+---
+
+## AD-096 — Player Audio Obeys Medium and Knowledge; Third-Person Ship Audio Uses Pilot Telemetry
+
+**Status:** Accepted
+
+### Decision
+
+Open vacuum carries no ordinary distant atmospheric audio. Valid suit/internal, physical-conduction, radio and sensor/telemetry paths remain audible. Third-person spacecraft uses the GDS Pilot Telemetry Mix, which may synthesize only legitimately detected/known ship events.
+
+### Rationale
+
+This preserves physical/informational causality without making an external chase camera literally hear through vacuum.
+
+---
+
+## AD-097 — Alarm and Notification Priority Namespaces Remain Typed and Alarm Acknowledgement Is Presentation-Only
+
+**Status:** Accepted
+
+### Decision
+
+`AlarmPriority::P0–P3` remains distinct from `NotificationPriority`, `PowerLoadPriority`, `AutomationReportSeverity` and other severity namespaces. Acknowledging an alarm records presentation acknowledgement only and never repairs, clears or de-escalates the owning incident by itself.
+
+### Rationale
+
+Similar labels must not collapse unrelated semantics, and player acknowledgement must never become hidden gameplay mutation.
+
+---
+
+## AD-098 — Accessibility Transforms Control and Presentation Without Rewriting Gameplay Rules
+
+**Status:** Accepted
+
+### Decision
+
+Remapping, Hold/Toggle, Auto-Sprint, UI scale, High Contrast, subtitles/captions, Reduced Motion, Photosensitivity Safe, Reduced Effects, haptics and bounded Aim Assist operate within explicit input/presentation boundaries. Aim Assist has no bullet magnetism or hidden targeting, and `Pause While Viewing` invokes global True Pause only.
+
+### Rationale
+
+Accessibility must improve perceivability/control while preserving rewards, ownership, world knowledge, hit resolution and Simulation-Time semantics.
+
+---
+
+## AD-099 — Animation, Camera, VFX and Viewmodels Are Presentation Projections, Not Gameplay Authority
+
+**Status:** Accepted
+
+### Decision
+
+Baseline character locomotion animation is in-place; there is no generic root-motion authority. Animation notifies, particles, decals, camera effects and first-person viewmodels can synchronize presentation but cannot deal damage, transfer ammo/resources, complete objectives or own physical items.
+
+### Rationale
+
+Presentation assets can fail, reload or be reduced for accessibility without changing authoritative movement, combat, ownership or persistence.
+
+---
+
+## AD-100 — Presentation Consumes Stable State and Committed Events on Its Own Clock Without Advancing Gameplay
+
+**Status:** Accepted
+
+### Decision
+
+Persistent presentation reconstructs from immutable Read Models; one-shot feedback consumes ordered committed PresentationEvents exactly once. Presentation Time may drive fades, UI motion, audio envelopes and cosmetic blends, while all gameplay progress remains Simulation-Time/fixed-tick authority. Scene/Entity/Origin/Content/ReadModel generations reject stale results.
+
+### Rationale
+
+Variable render/audio rates and asynchronous presentation work must affect smoothness and latency only, never gameplay outcomes or causality.

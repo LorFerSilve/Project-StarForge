@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0 through TA-10** are complete/Architecture Complete. The next dependency is **TA-11 — Input, UI, Audio, and Presentation Integration**.
+Technical Architecture stages **TA-0 through TA-11** are complete/Architecture Complete. The next dependency is **TA-12 — Persistence Implementation Architecture**.
 
 TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -29,6 +29,8 @@ TA-8 fixed AI/navigation: Recast/Detour-backed grounded navigation behind a proj
 TA-9 fixed missions and strategic events: persistent MissionId versus per-attempt MissionInstanceId, objective DAG/exactly-once progression, deterministic anti-reroll procedural mission generation, offensive raids as specialized missions, finite reinforcement/escalation state, persistent Horizon DefenseEvents across active/off-screen simulation, DynamicEvent scheduling/concurrency/Recovery Grace, communication-separated event knowledge, causal Recovery Transit, cross-domain strategic consequence transactions, and the exactly-once Stabilize/Sever/Contain finale/Postgame commit.
 
 TA-10 now fixes the complete content/asset path: canonical source layout and closed JSON schemas, path-independent ContentIds, SHA-256 content fingerprints/ContentBuildId, glTF import through fastgltf, meshoptimizer offline mesh/LOD processing, KTX2/KTX-Software texture cooking, glslang shader validation, explicit collision/navigation/terrain cooking, gameplay/procedural module definitions without a scripting VM, versioned loose cooked assets plus immutable Content Registry/CPU cache, deterministic dependency-driven incremental builds, safety-classified hot reload, headless content validation, and registry-first runtime scene loading where I/O timing cannot change gameplay or reroll committed procedural content.
+
+TA-11 now fixes the complete player-facing input/presentation integration: fixed-tick semantic action sampling and remapping, explicit input/focus contexts, a StarForge-owned retained shipping UI with HarfBuzz/FreeType text, knowledge-filtered HUD/markers/management/tutorial flows, miniaudio-backed audio with AI-hearing separation and vacuum/Pilot Telemetry rules, subtitles/captions/typed alarms/accessibility, animation/camera/VFX presentation-only boundaries, and deterministic stable-state/event handoff where presentation timing cannot mutate gameplay.
 
 Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind the remaining Technical Architecture work, TA-15 integration audit, and TA-16 implementation roadmap/contract locking.
 
@@ -63,6 +65,7 @@ Final GDS-14 maturity/promotion evidence:
 - Recast/Detour behind a StarForge navigation adapter for grounded navigation
 - project-owned bounded 3D navigation for flying/Zero-G AI
 - miniaudio behind a StarForge audio layer
+- FreeType + HarfBuzz for shipping UI text
 - fastgltf / glTF 2.0 asset import
 - KTX2 + Khronos KTX-Software for cooked textures
 - meshoptimizer for offline mesh optimization and generated LODs

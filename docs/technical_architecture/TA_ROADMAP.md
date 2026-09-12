@@ -123,13 +123,28 @@ Artifacts:
 
 ## TA-11 — Input, UI, Audio, and Presentation Integration
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define raw input → semantic actions, input contexts/focus/routing, keyboard/mouse/controller remapping, controller deadzones/aim-assist boundary, shipping UI/HUD architecture and read models, menus/settings, loading/failure/mission/strategic presentation, subtitles/captions, alarms/notifications, miniaudio adapter/resource lifetime/buses/spatialization/streaming, animation/presentation integration, and accessibility behavior without crossing gameplay knowledge/authority boundaries.
+Defines:
+
+- fixed-tick semantic ActionId sampling from GLFW device state, one-use physical edge latching, deterministic context priority/consumption and safe device switching;
+- full remapping, conflict/essential-action validation, controller calibration/deadzones/inversion, Hold/Toggle, Auto-Sprint, sustained-interaction support and bounded knowledge-safe Aim Assist;
+- profile/application settings snapshots and optional semantic haptics behind a StarForge-owned backend;
+- purpose-built retained shipping UI, one focus owner, pointer/keyboard/controller navigation, preview/confirm/commit separation, safe area and responsive UI/text scaling;
+- HarfBuzz + FreeType shipping text shaping/rasterization behind project-owned text/layout and renderer-owned glyph atlases;
+- knowledge-filtered HUD, interaction prompts, markers, notifications and ship/station/mission/raid presentation with no false success before commit;
+- management/planning/tutorial/save/loading/failure/system UI using immutable composite Read Models and typed Commands without UI-side gameplay authority or partial pause;
+- miniaudio adapter ownership, callback isolation, generation-checked voices, semantic buses, resident/streamed clips, listener/emitter/device lifecycle and safe silent degradation;
+- GameplaySoundEvent vs PresentationAudioEvent separation, medium/vacuum/conduction/Pilot Telemetry rules, dialogue/radio and knowledge-safe adaptive music;
+- subtitles/Closed Captions, typed alarms, acknowledgement/escalation, redundant critical channels and accessibility presentation transforms;
+- animation/camera/VFX/viewmodels as presentation projections with no generic root-motion, hit, resource or objective authority;
+- explicit fixed-tick → stable Read Model/PresentationEvent → variable-rate presentation integration, Simulation Time vs Presentation Time separation, stale-generation rejection and headless semantic testability.
+
+Artifacts: `80_input_device_action_and_context_routing.md` through `89_ta11_runtime_phase_integration_debugging_and_validation.md`, plus `TA11_CROSS_VALIDATION.md`.
 
 ## TA-12 — Persistence Implementation Architecture
 
-**Status:** Planned
+**Status:** Next
 
 Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C, write-new-then-commit, manual/quick/autosave layout, migrations, crash recovery, diagnostics, content-compatibility integration, and deterministic load validation.
 
@@ -137,13 +152,13 @@ Must define exact TA-2 save-container byte layout, section directory/manifest, d
 
 **Status:** Planned
 
-Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-10 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, and strategic backlog limits.
+Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-11 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, UI/layout/text/glyph-atlas work, input/controller processing, marker/presentation queues, audio voices/streams/decode/occlusion, animation/VFX work, and strategic backlog limits.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/subtitle/caption/alarm/accessibility/presentation smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -175,8 +190,9 @@ GDS Design Complete
 → TA-8 Architecture Complete  
 → TA-9 Architecture Complete  
 → TA-10 Architecture Complete  
-→ **TA-11 next**  
-→ TA-12 ... TA-15  
+→ TA-11 Architecture Complete  
+→ **TA-12 next**  
+→ TA-13 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

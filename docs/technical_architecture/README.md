@@ -21,9 +21,10 @@ Technical Architecture has completed:
 - **TA-7 — Gameplay Runtime Entity Architecture**;
 - **TA-8 — AI and Navigation Architecture**;
 - **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**;
-- **TA-10 — Content and Asset Pipeline**.
+- **TA-10 — Content and Asset Pipeline**;
+- **TA-11 — Input, UI, Audio, and Presentation Integration**.
 
-The next dependency is **TA-11 — Input, UI, Audio, and Presentation Integration**.
+The next dependency is **TA-12 — Persistence Implementation Architecture**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -48,6 +49,7 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 - Recast/Detour behind a StarForge navigation adapter for grounded navigation;
 - project-owned bounded 3D navigation graph/volume for flying/Zero-G AI;
 - miniaudio behind a StarForge audio layer;
+- FreeType + HarfBuzz for shipping text shaping/rasterization;
 - fastgltf / glTF 2.0 for canonical 3D exchange import;
 - KTX2 + Khronos KTX-Software for cooked textures;
 - meshoptimizer for offline mesh optimization/generated LODs;
@@ -113,6 +115,25 @@ TA-10 establishes:
 - hot-reload safety classes `PresentationSafe`, `SceneReactivationRequired`, and `SessionRestartRequired` with stale-generation rejection;
 - headless content validation/cook/build tooling integrated through CMake and designed for later TA-14 CI enforcement;
 - registry-first runtime loading, required asset readiness, Hard Streaming Hold integration, no raw-source fallback in shipping, and no gameplay/procedural changes from I/O/cache/worker timing.
+
+
+### TA-11 Input, UI, Audio, and Presentation
+
+TA-11 establishes:
+
+- GLFW raw-device ingestion mapped to typed semantic `ActionId` samples at the fixed simulation boundary, with a one-tick edge latch that is explicitly not a gameplay input buffer;
+- deterministic InputContextStack priority/consumption, device switching, controller calibration, Hold/Toggle, sustained-interaction support, Auto-Sprint and bounded knowledge-safe Aim Assist;
+- fully remappable keyboard/mouse/controller profiles, conflict validation, effective prompt glyph resolution, settings snapshots and optional haptics behind a StarForge `IHapticsBackend`;
+- a purpose-built retained shipping UI tree with one focus owner, keyboard/controller/pointer navigation, safe Back/Cancel, preview-versus-commit flows, responsive UI scaling/safe area and TA-4 native-resolution rendering;
+- UTF-8 text shaping with HarfBuzz plus FreeType glyph/font rasterization behind StarForge-owned text layout and renderer-owned glyph atlases;
+- knowledge-filtered HUD, interaction prompts, marker precision, notifications, station/ship/mission/raid presentation, and commit-synchronized success feedback;
+- management/planning/tutorial/system screens built from immutable composite Read Models and typed Commands, with no UI-side business-rule or partial-pause authority;
+- miniaudio behind a project audio adapter with isolated real-time callback, generation-checked voices, semantic buses, resident/streamed clip classes, device-failure degradation and explicit audio lifetime;
+- separate GameplaySoundEvent and PresentationAudioEvent pipelines so user mix never alters AI hearing;
+- atmosphere/vacuum/conduction/radio/Pilot Telemetry audio semantics, knowledge-safe occlusion, dialogue/radio, and non-omniscient adaptive music;
+- subtitles/Closed Captions, typed `AlarmPriority::P0–P3`, acknowledgement/escalation/deduplication, High Contrast, Reduced Motion/Effects, Photosensitivity Safe and critical multi-channel redundancy;
+- animation/camera/VFX/viewmodel projection where notifies, particles and camera effects never become movement/combat/resource/gameplay authority;
+- one explicit runtime handoff from fixed-tick commits to immutable Read Models + ordered exactly-once PresentationEvents, with Simulation Time separated from Presentation Time and stale generation/revision rejection.
 
 ## Architecture Documents
 
@@ -236,15 +257,29 @@ TA-10 establishes:
 - [`79_content_runtime_loading_failure_and_scene_integration.md`](79_content_runtime_loading_failure_and_scene_integration.md)
 - [`TA10_CROSS_VALIDATION.md`](TA10_CROSS_VALIDATION.md)
 
+### TA-11
+
+- [`80_input_device_action_and_context_routing.md`](80_input_device_action_and_context_routing.md)
+- [`81_input_bindings_remapping_settings_and_haptics.md`](81_input_bindings_remapping_settings_and_haptics.md)
+- [`82_shipping_ui_framework_text_layout_and_focus.md`](82_shipping_ui_framework_text_layout_and_focus.md)
+- [`83_hud_markers_notifications_and_interaction_presentation.md`](83_hud_markers_notifications_and_interaction_presentation.md)
+- [`84_management_planning_tutorial_and_system_ui.md`](84_management_planning_tutorial_and_system_ui.md)
+- [`85_audio_backend_voice_bus_and_resource_lifecycle.md`](85_audio_backend_voice_bus_and_resource_lifecycle.md)
+- [`86_audio_semantics_spatial_medium_music_and_dialogue.md`](86_audio_semantics_spatial_medium_music_and_dialogue.md)
+- [`87_subtitles_captions_alarms_and_accessibility_presentation.md`](87_subtitles_captions_alarms_and_accessibility_presentation.md)
+- [`88_animation_camera_vfx_and_presentation_state_integration.md`](88_animation_camera_vfx_and_presentation_state_integration.md)
+- [`89_ta11_runtime_phase_integration_debugging_and_validation.md`](89_ta11_runtime_phase_integration_debugging_and_validation.md)
+- [`TA11_CROSS_VALIDATION.md`](TA11_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define input/UI/audio/presentation integration, persistence implementation details, performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
+Later TA phases define persistence implementation details, performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
 
 ## Implementation Gate
 
 Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-10 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-11 Architecture Complete does not authorize C++/OpenGL/audio/UI scaffolding yet.**

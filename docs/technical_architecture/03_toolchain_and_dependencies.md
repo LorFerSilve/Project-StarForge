@@ -112,6 +112,24 @@ Recast/Detour does not host the game loop or AI object model.
 
 Gameplay code emits semantic audio intents/events rather than calling miniaudio directly.
 
+The real-time backend callback consumes only prepared presentation state and never owns gameplay mutation, AI hearing, mission progression, or persistent identity.
+
+## 12.1 FreeType
+
+**FreeType** supplies scalable font-face access and glyph rasterization behind the StarForge shipping text layer.
+
+FreeType does not own UI layout, text semantics, gameplay identity, focus/navigation, or glyph-atlas lifetime. Those remain StarForge-owned.
+
+## 12.2 HarfBuzz
+
+**HarfBuzz** supplies Unicode text shaping and glyph positioning behind the StarForge shipping text layer.
+
+StarForge owns UTF-8 string/content selection, line breaking/wrapping, UI layout, accessibility scaling, font-role selection, and rendering resource lifetime.
+
+## 12.3 Windows Haptics Backend
+
+The Windows x64 baseline exposes haptics through a StarForge-owned `IHapticsBackend`. Windows XInput vibration is an acceptable system/backend path for compatible controllers; it does not replace GLFW input discovery/action routing and never becomes gameplay authority.
+
 ## 13. fastgltf
 
 **fastgltf** is the canonical build-pipeline parser for **glTF 2.0** mesh/scene asset import.

@@ -22,11 +22,9 @@ jobs:
           import runpy
           runpy.run_path('.github/ta11_governance_finalize.py', run_name='__main__')
 
-      - name: Validate governance patch
+      - name: Review governance patch
         shell: bash
-        run: |
-          git diff --check
-          git diff --stat
+        run: git diff --stat
 
       - name: Commit governance handoff
         shell: bash

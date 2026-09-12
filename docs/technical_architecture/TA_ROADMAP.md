@@ -76,69 +76,80 @@ Defines:
 - persistent MissionId versus per-deployment MissionInstanceId and transactional single-external-deployment authority;
 - persistent multi-zone mission attempts, retry history, no-reroll/no-refund failure semantics, and exactly-once resolution;
 - typed acyclic objective graphs driven by committed owning-domain facts/state;
-- explicit objective branch, combat-end-state, resource-security, rescue, repair, scan, timer, hidden-objective and extraction semantics;
 - deterministic staged procedural mission generation using persistent cursors, scoped PCG32 streams, bounded validation and stable major content;
 - offensive Raids as specialized MissionInstances against persistent targets;
-- independent raid phase/escalation state with immediate persistent target damage, sabotage and physical loot consequences;
-- finite reinforcement response calls with a pre-commit interruption boundary, persistent post-commit force manifest, strategic ETA and physical arrival;
-- persistent Horizon DefenseEvent execution in active/off-screen modes without an authoritative single Defense Score;
-- physical hostile theft/extraction and causal station recovery;
-- DynamicEventStore/StrategicEventScheduler with source plausibility, concurrency limits, cooldowns, Recovery Grace and softlock validation;
-- atomic DynamicEvent handoff to MissionId/DefenseEventId without duplicated execution state machines;
-- strategic communication/knowledge delivery separate from event existence and remote-command physical feasibility;
-- external-defeat Recovery Transit with Simulation-Time anti-teleport destination logic and real asset-location preservation;
-- typed cross-domain strategic consequence batches;
-- exactly-once MS-F02 Stabilize/Sever/Contain FinalResolution transaction and persistent PostgameResolutionState;
-- deterministic local/strategic phase integration, chronological cross-scheduler boundaries, Stable Save Boundary invariants and headless diagnostics/testing contracts.
+- finite reinforcement responses and persistent Horizon DefenseEvents;
+- DynamicEvent scheduling/concurrency/Recovery Grace with plausible world sources;
+- communication-separated event knowledge and causal Recovery Transit;
+- exactly-once MS-F02 Stabilize/Sever/Contain FinalResolution transaction;
+- deterministic local/strategic phase integration and headless validation.
 
-Artifacts:
-
-- `61_mission_store_instance_and_deployment_state.md`;
-- `62_objective_graph_runtime_and_commit_semantics.md`;
-- `63_procedural_mission_generation_and_offer_runtime.md`;
-- `64_raid_state_machine_and_target_runtime.md`;
-- `65_reinforcements_escalation_and_defense_events.md`;
-- `66_dynamic_event_scheduler_and_world_consequence_runtime.md`;
-- `67_communications_recovery_and_strategic_consequence_routing.md`;
-- `68_finale_postgame_and_irreversible_choice_transactions.md`;
-- `69_ta9_runtime_phase_integration_debugging_and_validation.md`;
-- `TA9_CROSS_VALIDATION.md`.
+Artifacts: `61_mission_store_instance_and_deployment_state.md` through `69_ta9_runtime_phase_integration_debugging_and_validation.md`, plus `TA9_CROSS_VALIDATION.md`.
 
 ## TA-10 — Content and Asset Pipeline
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define canonical source/exchange formats, glTF import, textures/materials, collision/navigation-content cooking, shader build pipeline, content IDs/schemas, validation tooling, runtime/cooked assets, registry/cache, dependency tracking, and hot-reload boundaries.
+Defines:
+
+- explicit separation of DCC working sources, canonical repository source content, and generated cooked runtime content;
+- canonical source layout under `content/`, UTF-8 `*.sfdef.json` structured definitions, glTF 2.0 3D exchange, PNG/EXR texture sources, GLSL 4.60 shader sources, WAV/FLAC audio sources, and bounded terrain manifests;
+- path-independent lowercase dotted `ContentId` identity, explicit `ContentKind`, closed versioned schemas, typed content references, and deterministic generated Content Registry;
+- SHA-256 per-entry `ContentFingerprint` plus complete-build `ContentBuildId`, with explicit rename/removal compatibility rather than silent aliases;
+- fastgltf-based glTF import into StarForge-owned mesh/skeleton/animation products, deterministic vertex/index packing, sockets, skinning, and offline meshoptimizer LOD/mesh optimization;
+- KTX2 as the canonical cooked texture container through pinned KTX-Software, semantic color-space/compression/mip rules, material/environment/IBL cooking, and bounded shader families;
+- pinned glslang offline GLSL validation while final OpenGL compile/link remains TA-4 renderer authority;
+- separately cooked collision, CollisionMaterial, Recast/Detour grounded navigation, project-owned 3D free-flight navigation, terrain, traversal-link, and feasibility metadata products;
+- closed gameplay-definition schemas and authored procedural modules without a general-purpose scripting VM or content-side persistent-ID/resource/reward authority;
+- versioned loose cooked asset files plus one immutable runtime Content Registry, nonpersistent generation-checked ContentHandles, immutable CPU ContentCache, and consumer-owned GPU/Jolt/navigation resources;
+- explicit dependency graph, fingerprint-driven incremental rebuilding, atomic cooked/registry publication, deterministic build scheduling, and tool/schema/profile invalidation;
+- development hot reload classified as `PresentationSafe`, `SceneReactivationRequired`, or `SessionRestartRequired`, with stale-generation rejection and previous-valid-state preservation on failure;
+- headless `starforge-content` validation/cook/build architecture, stable diagnostics, CMake integration, provenance/license checks, deterministic fixtures and future CI contracts;
+- registry-first runtime loading, required-content readiness, TA-3 Hard Streaming Hold integration, no raw-source fallback in shipping, and the invariant that I/O/cache/worker timing cannot alter gameplay or reroll committed procedural content.
+
+Artifacts:
+
+- `70_content_repository_layout_and_source_formats.md`;
+- `71_content_ids_schemas_registry_and_compatibility.md`;
+- `72_gltf_mesh_scene_skeleton_and_animation_import.md`;
+- `73_texture_material_environment_and_shader_pipeline.md`;
+- `74_collision_navigation_and_terrain_cooking.md`;
+- `75_gameplay_content_definitions_and_procedural_modules.md`;
+- `76_cooked_asset_formats_registry_runtime_cache.md`;
+- `77_content_dependency_graph_incremental_build_and_hot_reload.md`;
+- `78_content_validation_diagnostics_and_build_integration.md`;
+- `79_content_runtime_loading_failure_and_scene_integration.md`;
+- `TA10_CROSS_VALIDATION.md`.
 
 ## TA-11 — Input, UI, Audio, and Presentation Integration
 
-**Status:** Planned
+**Status:** Next
 
-Must define raw input → actions, context routing, remapping, controller/aim-assist boundary, shipping UI/HUD/read models, subtitles/captions, alarms, miniaudio adapter/buses/spatialization, and accessibility integration.
+Must define raw input → semantic actions, input contexts/focus/routing, keyboard/mouse/controller remapping, controller deadzones/aim-assist boundary, shipping UI/HUD architecture and read models, menus/settings, loading/failure/mission/strategic presentation, subtitles/captions, alarms/notifications, miniaudio adapter/resource lifetime/buses/spatialization/streaming, animation/presentation integration, and accessibility behavior without crossing gameplay knowledge/authority boundaries.
 
 ## TA-12 — Persistence Implementation Architecture
 
 **Status:** Planned
 
-Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C, write-new-then-commit, manual/quick/autosave layout, migrations, crash recovery, diagnostics, and deterministic load validation.
+Must define exact TA-2 save-container byte layout, section directory/manifest, domain serialization registry, CRC32C, write-new-then-commit, manual/quick/autosave layout, migrations, crash recovery, diagnostics, content-compatibility integration, and deterministic load validation.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
 **Status:** Planned
 
-Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-9 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective evaluation, procedural-generation jobs, strategic-event scheduling, off-screen DefenseEvent advancement, and strategic backlog limits.
+Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-10 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, and strategic backlog limits.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
 **Status:** Planned
 
-Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content smoke and deterministic tests, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
 **Status:** Planned
 
-Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, world/scene transitions, performance assumptions, dependency cycles, failure recovery, and testability.
+Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, content compatibility, world/scene transitions, performance assumptions, dependency cycles, failure recovery, and testability.
 
 No implementation phase is authorized to invent unresolved architecture after this audit.
 
@@ -146,7 +157,7 @@ No implementation phase is authorized to invent unresolved architecture after th
 
 **Status:** Planned
 
-Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets, first test gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
+Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, first test/content gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
 
 Only after TA-16 may planned C++/OpenGL scaffolding begin.
 
@@ -163,8 +174,9 @@ GDS Design Complete
 → TA-7 Architecture Complete  
 → TA-8 Architecture Complete  
 → TA-9 Architecture Complete  
-→ **TA-10 next**  
-→ TA-11 ... TA-15  
+→ TA-10 Architecture Complete  
+→ **TA-11 next**  
+→ TA-12 ... TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

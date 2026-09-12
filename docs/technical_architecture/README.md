@@ -20,9 +20,10 @@ Technical Architecture has completed:
 - **TA-6 — Station Simulation and Graph Architecture**;
 - **TA-7 — Gameplay Runtime Entity Architecture**;
 - **TA-8 — AI and Navigation Architecture**;
-- **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**.
+- **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**;
+- **TA-10 — Content and Asset Pipeline**.
 
-The next dependency is **TA-10 — Content and Asset Pipeline**.
+The next dependency is **TA-11 — Input, UI, Audio, and Presentation Integration**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -47,7 +48,10 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 - Recast/Detour behind a StarForge navigation adapter for grounded navigation;
 - project-owned bounded 3D navigation graph/volume for flying/Zero-G AI;
 - miniaudio behind a StarForge audio layer;
-- fastgltf / glTF 2.0;
+- fastgltf / glTF 2.0 for canonical 3D exchange import;
+- KTX2 + Khronos KTX-Software for cooked textures;
+- meshoptimizer for offline mesh optimization/generated LODs;
+- glslang for offline GLSL validation;
 - Dear ImGui for development tooling only;
 - Catch2;
 - GitHub + GitHub Actions.
@@ -86,46 +90,29 @@ One generation-checked runtime registry per active scene, typed component pools,
 
 ### TA-8 AI and Navigation
 
-TA-8 establishes:
-
-- Recast/Detour-backed tiled grounded navmeshes behind a StarForge adapter;
-- Small/Standard/Heavy grounded navigation classes plus actor-specific traversal profiles;
-- separate bounded 3D free-flight navigation for flying/Zero-G autonomous actors;
-- typed door/airlock/elevator/ladder/dock/breach/free-flight traversal links;
-- persistent-state-first navigation invalidation and atomic tile/link revision commits;
-- asynchronous path jobs that are advisory, revision-tagged, and consumed deterministically;
-- project-owned path following/local avoidance/stuck recovery with no teleport fallback;
-- explicit separation between world truth and AI knowledge;
-- vision, semantic hearing, equipment sensors, Last Known Position/confidence and provenance-preserving shared knowledge;
-- layered enemy tactical AI with awareness states, deterministic goal selection, reaction timing, cover/flank/search/retreat behavior and no omniscience;
-- robot tactical-command execution, ROE, fallback, communication degradation and squad coordination;
-- crew assignment/task navigation, emergency/evacuation behavior and TA-6 automation handoff;
-- active/reduced/off-screen logical AI modes with Simulation-Time travel and chronological event boundaries;
-- deterministic `AIScheduler` and exact insertion into TA-7 runtime phases;
-- headless AI/navigation tests and rich read-only diagnostics.
+Recast/Detour-backed tiled grounded navmeshes, separate bounded 3D free-flight navigation, typed traversal profiles/links, persistent-state-first navigation invalidation, revision-validated asynchronous paths, project-owned following/avoidance, explicit world-truth vs AI-knowledge separation, enemy tactical AI, robot command/squad AI, crew task/emergency navigation, off-screen logical AI, deterministic AI scheduling, and headless diagnostics/tests.
 
 ### TA-9 Missions, Raids, Dynamic Events, and Strategic State Machines
 
-TA-9 establishes:
+Persistent `MissionId` separated from per-attempt `MissionInstanceId`, typed exactly-once objective DAGs, deterministic anti-reroll procedural generation, offensive raids as specialized missions, finite reinforcement state, one persistent Horizon `DefenseEventId` across active/off-screen modes, DynamicEvent scheduling/Recovery Grace, communication-separated event knowledge, causal Recovery Transit, typed strategic consequences, and exactly-once `Stabilize | Sever | Contain` finale commit.
 
-- persistent `MissionId` contracts separated from persistent per-deployment `MissionInstanceId` attempts;
-- transactionally enforced single external deployed MissionInstance with Horizon DefenseEvents allowed in parallel;
-- persistent multi-zone MissionInstance state and explicit retry/attempt history without loss rollback/refund;
-- typed acyclic Objective graphs driven only by committed owning-domain facts/state and exactly-once terminal transitions;
-- explicit resource-security, rescue, combat-end-state, repair, scan, timer, hidden-objective, branch, and extraction semantics;
-- deterministic staged procedural mission generation using persistent cursors, scoped PCG32 streams, bounded validation and anti-reroll stable major content;
-- offensive Raids as specialized Missions against persistent world targets rather than a separate quest engine;
-- raid phase, escalation and target-state separation with physical loot/sabotage consequences committed when they occur;
-- finite reinforcement-call state with a real pre-commit interruption boundary and persistent post-commit force/ETA;
-- one persistent Horizon `DefenseEventId` across active and off-screen execution with no authoritative single Defense Score;
-- physical hostile theft ownership and extraction semantics;
-- persistent `DynamicEventStore`/StrategicEventScheduler with event concurrency, cooldowns, Recovery Grace, source plausibility and campaign-softlock validation;
-- atomic DynamicEvent handoff to MissionId/DefenseEventId without duplicate execution state machines;
-- strategic communication delivery separated from event existence and queued/delayed knowledge preservation;
-- Simulation-Time Recovery Transit with causal destination selection and no defeat fast-travel/ship/robot/cargo teleportation;
-- typed strategic consequence batches over owning world/faction/economy/narrative/resource domains;
-- exactly-one `Stabilize | Sever | Contain` finale commit through a prepared atomic FinalResolution transaction and persistent PostgameResolutionState;
-- deterministic local/strategic phase integration, chronological deadline processing, Stable Save Boundary invariants and headless diagnostics/testing contracts.
+### TA-10 Content and Asset Pipeline
+
+TA-10 establishes:
+
+- DCC working files, canonical repository source content, and generated cooked runtime content as separate layers;
+- a canonical `content/` source layout and UTF-8 `*.sfdef.json` closed schema definitions;
+- stable path-independent lowercase dotted `ContentId` plus explicit `ContentKind`, schema versioning, typed references, SHA-256 fingerprints, and complete-build `ContentBuildId`;
+- glTF 2.0 import through fastgltf into StarForge-owned mesh/skeleton/animation formats, with deterministic transform/vertex/index processing, sockets, skinning, and meshoptimizer offline optimization/LOD;
+- KTX2/KTX-Software cooked texture workflow with semantic color-space, mip and desktop BC-format policies;
+- material/environment/IBL cooking and bounded ShaderFamily/variant bundles with glslang offline GLSL validation while final OpenGL compilation remains renderer authority;
+- explicit separate collision, collision-material, grounded navigation, free-flight navigation, terrain, traversal-link and mission-feasibility cooked products;
+- closed authored gameplay/template/procedural-module schemas without general-purpose gameplay scripting or content-side persistent-ID/resource/reward authority;
+- versioned loose cooked assets plus one immutable Content Registry, generation-checked nonpersistent ContentHandles, immutable CPU ContentCache, and backend-resource ownership retained by renderer/physics/navigation/audio consumers;
+- deterministic dependency graph and SHA-256 fingerprint-driven incremental cooking, atomic output/registry publication, source provenance/license validation, and clean-build reproducibility;
+- hot-reload safety classes `PresentationSafe`, `SceneReactivationRequired`, and `SessionRestartRequired` with stale-generation rejection;
+- headless content validation/cook/build tooling integrated through CMake and designed for later TA-14 CI enforcement;
+- registry-first runtime loading, required asset readiness, Hard Streaming Hold integration, no raw-source fallback in shipping, and no gameplay/procedural changes from I/O/cache/worker timing.
 
 ## Architecture Documents
 
@@ -235,15 +222,29 @@ TA-9 establishes:
 - [`69_ta9_runtime_phase_integration_debugging_and_validation.md`](69_ta9_runtime_phase_integration_debugging_and_validation.md)
 - [`TA9_CROSS_VALIDATION.md`](TA9_CROSS_VALIDATION.md)
 
+### TA-10
+
+- [`70_content_repository_layout_and_source_formats.md`](70_content_repository_layout_and_source_formats.md)
+- [`71_content_ids_schemas_registry_and_compatibility.md`](71_content_ids_schemas_registry_and_compatibility.md)
+- [`72_gltf_mesh_scene_skeleton_and_animation_import.md`](72_gltf_mesh_scene_skeleton_and_animation_import.md)
+- [`73_texture_material_environment_and_shader_pipeline.md`](73_texture_material_environment_and_shader_pipeline.md)
+- [`74_collision_navigation_and_terrain_cooking.md`](74_collision_navigation_and_terrain_cooking.md)
+- [`75_gameplay_content_definitions_and_procedural_modules.md`](75_gameplay_content_definitions_and_procedural_modules.md)
+- [`76_cooked_asset_formats_registry_runtime_cache.md`](76_cooked_asset_formats_registry_runtime_cache.md)
+- [`77_content_dependency_graph_incremental_build_and_hot_reload.md`](77_content_dependency_graph_incremental_build_and_hot_reload.md)
+- [`78_content_validation_diagnostics_and_build_integration.md`](78_content_validation_diagnostics_and_build_integration.md)
+- [`79_content_runtime_loading_failure_and_scene_integration.md`](79_content_runtime_loading_failure_and_scene_integration.md)
+- [`TA10_CROSS_VALIDATION.md`](TA10_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define the content pipeline, input/UI/audio integration, persistence implementation details, performance/concurrency, testing/CI, integration audit, and implementation handoff.
+Later TA phases define input/UI/audio/presentation integration, persistence implementation details, performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
 
 ## Implementation Gate
 
-Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
+Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-9 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-10 Architecture Complete does not authorize C++/OpenGL scaffolding yet.**

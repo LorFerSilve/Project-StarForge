@@ -1058,3 +1058,171 @@ MS-F02 allows routine retry until an explicit `FinalResolutionTransaction` commi
 ### Rationale
 
 An irreversible ending must not be selected by UI timing or partially applied across domains. After commit, later tactical state or reload cannot select a second ending from the same post-choice save timeline.
+
+---
+
+## AD-076 — Shipping Runtime Consumes Cooked Content, Not Authoring Sources
+
+**Status:** Accepted
+
+### Decision
+
+Canonical source assets are validated/cooked offline into versioned runtime products. Normal shipping runtime resolves the generated Content Registry and cooked assets instead of parsing source JSON, glTF, PNG/EXR or DCC working files.
+
+### Rationale
+
+This preserves reproducibility, startup/load budgets, format validation and tool-version control while preventing player-machine cooking from becoming hidden content authority.
+
+---
+
+## AD-077 — ContentId Is Path-Independent Canonical Logical Identity
+
+**Status:** Accepted
+
+### Decision
+
+Version-1 canonical ContentIds use lowercase dotted logical names, remain independent from source/cooked paths, and are resolved with an explicit ContentKind/schema. Saves continue serializing ContentId text rather than runtime registry indices.
+
+### Rationale
+
+Authored files can move or be repackaged without changing persistent identity, while kind/schema validation prevents string-backed IDs from being silently misused across domains.
+
+---
+
+## AD-078 — Structured Gameplay Content Uses Closed Versioned JSON Schemas
+
+**Status:** Accepted
+
+### Decision
+
+Hand-authored structured definitions use UTF-8 `.sfdef.json` with explicit SchemaId, SchemaVersion, ContentId and closed validated fields. Unknown behavior cannot be introduced through arbitrary executable expressions or a general-purpose scripting VM.
+
+### Rationale
+
+Closed schemas keep gameplay behavior inspectable, deterministic and aligned with the Design Complete GDS while still allowing tuneable data to live outside C++.
+
+---
+
+## AD-079 — glTF 2.0 Is the Canonical 3D Exchange and Mesh Optimization Is Offline
+
+**Status:** Accepted
+
+### Decision
+
+StarForge imports glTF 2.0 through fastgltf into project-owned mesh/skeleton/animation products. Pinned meshoptimizer may optimize vertex/index order and generate declared LODs offline; raw glTF objects/indices never become runtime or save identity.
+
+### Rationale
+
+This keeps DCC exchange standard and mature while allowing the runtime format to be compact, deterministic and decoupled from the parser representation.
+
+---
+
+## AD-080 — KTX2 Is the Canonical Cooked Texture Container
+
+**Status:** Accepted
+
+### Decision
+
+Textures cook from explicit semantic source metadata into KTX2 using pinned KTX-Software. Desktop profile uses declared GPU formats such as BC7/BC5/BC4/BC6H as appropriate; mipmaps and semantic transforms are offline content products.
+
+### Rationale
+
+KTX2 provides a standardized OpenGL-friendly texture container with explicit format/mip metadata and avoids runtime PNG/EXR decoding as the normal shipping path.
+
+---
+
+## AD-081 — Collision and Navigation Are Explicit Separately Cooked Products
+
+**Status:** Accepted
+
+### Decision
+
+Visible geometry does not automatically become collision or navigation. Collision sources/materials, grounded nav, free-flight nav and terrain products are explicitly selected/cooked/versioned, while dynamic security/hazard/access state remains runtime authority.
+
+### Rationale
+
+Render, physics and AI have different correctness requirements. Explicit products prevent visual LOD/material changes from accidentally changing physical or traversal semantics.
+
+---
+
+## AD-082 — Gameplay Content Configures Implemented Capabilities Rather Than Executing Arbitrary Scripts
+
+**Status:** Accepted
+
+### Decision
+
+Weapon, actor, ship, station, mission, raid, Dynamic Event and procedural definitions select/configure closed project behavior and parameters. Content loading never allocates persistent gameplay IDs, grants rewards/resources, or executes arbitrary code.
+
+### Rationale
+
+This preserves transaction ownership and testability while avoiding a second hidden gameplay engine inside content files.
+
+---
+
+## AD-083 — Version-1 Uses Loose Cooked Assets Plus One Immutable Runtime Registry
+
+**Status:** Accepted
+
+### Decision
+
+The initial runtime uses individual versioned cooked assets addressed by one generated immutable Content Registry. Compact runtime ContentHandles/indices are generation-checked and nonpersistent; saves remain ContentId-based.
+
+### Rationale
+
+Loose cooked assets simplify incremental builds, inspection and hot reload without prematurely designing a package/archive system. Packaging can be added later without changing content identity.
+
+---
+
+## AD-084 — Content Rebuilds Are Fingerprint-Driven, Not Timestamp- or Worker-Driven
+
+**Status:** Accepted
+
+### Decision
+
+SHA-256 content fingerprints include normalized source, dependency fingerprints, schema/tool versions and target profile. Timestamps are hints only; dependency graph and stable ordering determine invalidation/publication independent of filesystem or worker completion order.
+
+### Rationale
+
+Reproducible builds and deterministic procedural/content behavior require build correctness to survive different checkout paths, clocks and thread schedules.
+
+---
+
+## AD-085 — Hot Reload Is Generation-Checked and Safety-Classified
+
+**Status:** Accepted
+
+### Decision
+
+Development hot reload classifies changes as PresentationSafe, SceneReactivationRequired or SessionRestartRequired. Candidates validate before publication; failed candidates preserve prior valid state; stale async work cannot overwrite a newer ContentGeneration.
+
+### Rationale
+
+Texture/shader iteration should be fast without allowing collision/nav or persistent gameplay semantics to be piecemeal reinterpreted inside an active save.
+
+---
+
+## AD-086 — Required Content Timing Cannot Change Gameplay Outcomes
+
+**Status:** Accepted
+
+### Decision
+
+Scene activation waits for required cooked/render/physics/navigation content and uses TA-3 Hard Streaming Hold when needed. Optional deferred content may improve presentation only. A committed procedural mission resolves exactly its stored module/content choices and can never reroll because loading is slow or an asset is missing.
+
+### Rationale
+
+Disk speed, cache hits, worker count and GPU upload timing must affect loading duration rather than world state, mission identity or procedural outcomes.
+
+---
+
+## AD-087 — GLSL Is Validated Offline but Final OpenGL Compilation Remains Runtime Renderer Authority
+
+**Status:** Accepted
+
+### Decision
+
+Pinned glslang validates every declared shipping GLSL variant during content build, while the cooked ShaderBundle remains source/interface metadata for final OpenGL driver compile/link and TA-4 interface validation.
+
+### Rationale
+
+Offline validation catches authoring errors early without relying on nonportable driver binaries or moving OpenGL program ownership out of the renderer.

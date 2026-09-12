@@ -22,9 +22,10 @@ Technical Architecture has completed:
 - **TA-8 — AI and Navigation Architecture**;
 - **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**;
 - **TA-10 — Content and Asset Pipeline**;
-- **TA-11 — Input, UI, Audio, and Presentation Integration**.
+- **TA-11 — Input, UI, Audio, and Presentation Integration**;
+- **TA-12 — Persistence Implementation Architecture**.
 
-The next dependency is **TA-12 — Persistence Implementation Architecture**.
+The next dependency is **TA-13 — Concurrency, Performance, Memory, and Streaming Budgets**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -116,7 +117,6 @@ TA-10 establishes:
 - headless content validation/cook/build tooling integrated through CMake and designed for later TA-14 CI enforcement;
 - registry-first runtime loading, required asset readiness, Hard Streaming Hold integration, no raw-source fallback in shipping, and no gameplay/procedural changes from I/O/cache/worker timing.
 
-
 ### TA-11 Input, UI, Audio, and Presentation
 
 TA-11 establishes:
@@ -134,6 +134,21 @@ TA-11 establishes:
 - subtitles/Closed Captions, typed `AlarmPriority::P0–P3`, acknowledgement/escalation/deduplication, High Contrast, Reduced Motion/Effects, Photosensitivity Safe and critical multi-channel redundancy;
 - animation/camera/VFX/viewmodel projection where notifies, particles and camera effects never become movement/combat/resource/gameplay authority;
 - one explicit runtime handoff from fixed-tick commits to immutable Read Models + ordered exactly-once PresentationEvents, with Simulation Time separated from Presentation Time and stale generation/revision rejection.
+
+### TA-12 Persistence Implementation
+
+TA-12 establishes:
+
+- Stable Save Boundary persistence-service orchestration with immutable snapshots and background encoding/writing;
+- an exact v1 `SFGSAVE` binary container with a 128-byte header, 64-byte section entries, deterministic little-endian encoding, CRC32C and explicit ContentBuildId metadata;
+- a stable required SectionKind/domain-codec registry including consequential LocalContextContinuation without serializing runtime/backend memory;
+- immutable save generations, logical manual/quick/autosave slots, SnapshotSequence ordering, rebuildable catalog caches and 10-generation rolling autosave retention;
+- crash-safe pending-file validation and atomic unique rename commit with post-commit cleanup only;
+- staged all-or-nothing load/migration/content validation followed by exactly one SessionRoot replacement and fresh runtime/backend reconstruction;
+- deterministic source-preserving migrations with Persistent-ID/exactly-once preservation and explicit ContentId compatibility rules;
+- separate fail-soft versioned profile persistence for non-gameplay controls/accessibility/HUD/audio/display settings;
+- save inspection, corruption/quarantine diagnostics, golden fixtures and no heuristic gameplay-state repair;
+- fixed load-resume semantics at `saved_simulation_tick + 1` with zero gameplay progression during file/migration/backend work.
 
 ## Architecture Documents
 
@@ -271,15 +286,29 @@ TA-11 establishes:
 - [`89_ta11_runtime_phase_integration_debugging_and_validation.md`](89_ta11_runtime_phase_integration_debugging_and_validation.md)
 - [`TA11_CROSS_VALIDATION.md`](TA11_CROSS_VALIDATION.md)
 
+### TA-12
+
+- [`90_persistence_service_and_snapshot_orchestration.md`](90_persistence_service_and_snapshot_orchestration.md)
+- [`91_save_container_v1_byte_layout.md`](91_save_container_v1_byte_layout.md)
+- [`92_section_registry_domain_codecs_and_payload_rules.md`](92_section_registry_domain_codecs_and_payload_rules.md)
+- [`93_save_catalog_slots_manual_quick_and_autosave.md`](93_save_catalog_slots_manual_quick_and_autosave.md)
+- [`94_crash_safe_write_commit_and_recovery.md`](94_crash_safe_write_commit_and_recovery.md)
+- [`95_load_staging_validation_and_session_activation.md`](95_load_staging_validation_and_session_activation.md)
+- [`96_save_migration_and_content_compatibility.md`](96_save_migration_and_content_compatibility.md)
+- [`97_profile_application_settings_persistence.md`](97_profile_application_settings_persistence.md)
+- [`98_persistence_diagnostics_inspection_and_recovery_tooling.md`](98_persistence_diagnostics_inspection_and_recovery_tooling.md)
+- [`99_ta12_runtime_integration_debugging_and_validation.md`](99_ta12_runtime_integration_debugging_and_validation.md)
+- [`TA12_CROSS_VALIDATION.md`](TA12_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define persistence implementation details, performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
+Later TA phases define performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
 
 ## Implementation Gate
 
 Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-11 Architecture Complete does not authorize C++/OpenGL/audio/UI scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-12 Architecture Complete does not authorize implementation scaffolding yet.**

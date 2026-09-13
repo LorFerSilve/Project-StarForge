@@ -40,7 +40,7 @@ add_subdirectory(src/platform_glfw)
 add_subdirectory(src/render)
 add_subdirectory(src/render_opengl)
 add_subdirectory(apps/headless)
-add_subdirectory(apps/starforge)
+add_subdirectory(apps/game)
 
 if(BUILD_TESTING AND STARFORGE_BUILD_TESTS)
     find_package(Catch2 3.16 CONFIG REQUIRED)

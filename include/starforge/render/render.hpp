@@ -15,15 +15,55 @@ struct Color final {
     float a{1.0F};
 };
 
+class RenderSnapshot final {
+public:
+    constexpr RenderSnapshot() noexcept = default;
+
+    constexpr RenderSnapshot(
+        const std::uint64_t tick_index,
+        const std::uint64_t scene_generation,
+        const std::uint64_t origin_epoch,
+        const std::uint64_t state_revision) noexcept
+        : tick_index_(tick_index),
+          scene_generation_(scene_generation),
+          origin_epoch_(origin_epoch),
+          state_revision_(state_revision) {}
+
+    [[nodiscard]] constexpr std::uint64_t tick_index() const noexcept { return tick_index_; }
+    [[nodiscard]] constexpr std::uint64_t scene_generation() const noexcept { return scene_generation_; }
+    [[nodiscard]] constexpr std::uint64_t origin_epoch() const noexcept { return origin_epoch_; }
+    [[nodiscard]] constexpr std::uint64_t state_revision() const noexcept { return state_revision_; }
+
+private:
+    std::uint64_t tick_index_{0};
+    std::uint64_t scene_generation_{0};
+    std::uint64_t origin_epoch_{0};
+    std::uint64_t state_revision_{0};
+};
+
 struct RenderFrame final {
     std::uint32_t framebuffer_width{0};
     std::uint32_t framebuffer_height{0};
     Color clear_color{0.015F, 0.02F, 0.04F, 1.0F};
+    std::shared_ptr<const RenderSnapshot> snapshot{};
 };
 
 struct RendererCapabilities final {
     std::uint32_t api_major{0};
     std::uint32_t api_minor{0};
+    bool core_profile{false};
+    bool debug_output{false};
+    bool reversed_z{false};
+};
+
+struct RendererDiagnostics final {
+    bool initialized{false};
+    bool debug_callback_active{false};
+    bool reversed_z_active{false};
+    bool last_frame_clean{true};
+    std::uint32_t live_gpu_objects{0};
+    std::uint64_t rendered_frames{0};
+    std::uint64_t debug_messages{0};
 };
 
 struct TextureHandle final {
@@ -71,6 +111,7 @@ public:
     virtual void render(const RenderFrame& frame) = 0;
     virtual void shutdown() noexcept = 0;
     [[nodiscard]] virtual RendererCapabilities capabilities() const noexcept = 0;
+    [[nodiscard]] virtual RendererDiagnostics diagnostics() const noexcept = 0;
 };
 
 // The concrete implementation is supplied by the linked renderer adapter.

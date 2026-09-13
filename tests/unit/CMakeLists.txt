@@ -1,10 +1,14 @@
 add_executable(starforge_tests_unit
     core_build_contract_tests.cpp
+    imp1_core_tests.cpp
 )
 
 target_link_libraries(starforge_tests_unit
     PRIVATE
         StarForge::Core
+        StarForge::Diagnostics
+        StarForge::Simulation
+        StarForge::ReadModels
         Catch2::Catch2WithMain
 )
 

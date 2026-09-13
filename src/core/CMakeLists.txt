@@ -1,5 +1,6 @@
 add_library(sf_core STATIC
     build_contract.cpp
+    rng.cpp
 )
 
 add_library(StarForge::Core ALIAS sf_core)

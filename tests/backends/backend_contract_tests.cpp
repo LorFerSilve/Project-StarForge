@@ -1,9 +1,9 @@
 #include <starforge/platform/fixed_step.hpp>
 #include <starforge/render/render.hpp>
 
+#include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <cmath>
 #include <limits>
 
 TEST_CASE("fixed-step scheduler accumulates partial frames deterministically", "[backends]") {

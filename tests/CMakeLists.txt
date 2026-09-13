@@ -1,2 +1,4 @@
 add_subdirectory(unit)
 add_subdirectory(domain)
+add_subdirectory(content)
+add_subdirectory(persistence)

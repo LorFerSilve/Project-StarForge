@@ -74,6 +74,20 @@
       "filter": { "include": { "label": "domain" } }
     },
     {
+      "name": "windows-content",
+      "configurePreset": "windows-msvc-debug",
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true },
+      "filter": { "include": { "label": "content" } }
+    },
+    {
+      "name": "windows-persistence",
+      "configurePreset": "windows-msvc-debug",
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true },
+      "filter": { "include": { "label": "persistence" } }
+    },
+    {
       "name": "linux-unit",
       "configurePreset": "linux-clang-debug",
       "output": { "outputOnFailure": true },
@@ -84,6 +98,18 @@
       "configurePreset": "linux-clang-debug",
       "output": { "outputOnFailure": true },
       "filter": { "include": { "label": "domain" } }
+    },
+    {
+      "name": "linux-content",
+      "configurePreset": "linux-clang-debug",
+      "output": { "outputOnFailure": true },
+      "filter": { "include": { "label": "content" } }
+    },
+    {
+      "name": "linux-persistence",
+      "configurePreset": "linux-clang-debug",
+      "output": { "outputOnFailure": true },
+      "filter": { "include": { "label": "persistence" } }
     }
   ]
 }

@@ -28,6 +28,14 @@ jobs:
             test_label: domain
             test_preset: windows-domain
             determinism_probe: true
+          - check_name: StarForge / Content Contracts
+            test_label: content
+            test_preset: windows-content
+            determinism_probe: false
+          - check_name: StarForge / Persistence Contracts
+            test_label: persistence
+            test_preset: windows-persistence
+            determinism_probe: false
 
     name: ${{ matrix.check_name }}
     runs-on: windows-2022
@@ -123,7 +131,7 @@ jobs:
         run: ctest --preset ${{ matrix.test_preset }}
 
       - name: Run headless bootstrap executable
-        if: ${{ matrix.determinism_probe == false }}
+        if: ${{ matrix.check_name == 'StarForge / Build & Unit' }}
         shell: pwsh
         run: .\out\build\windows-msvc-debug\apps\headless\Debug\starforge-headless.exe
 
@@ -155,7 +163,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Evaluate required IMP-1 gates
+      - name: Evaluate required IMP-2 gates
         shell: bash
         run: |
           echo "Verification matrix result: ${{ needs.verification.result }}"

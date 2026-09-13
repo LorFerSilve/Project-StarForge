@@ -6,41 +6,69 @@ The game centers on a physically traversable and expandable player-owned space s
 
 ## Current Project Phase
 
-The authoritative Game Design Specification has completed **GDS-0 through GDS-14** and is formally **Design Complete**.
+The authoritative Game Design Specification completed **GDS-0 through GDS-14** and is formally **Design Complete**.
 
-The project is now in **Technical Architecture**.
+Technical Architecture completed **TA-0 through TA-16**. TA-15's final integration audit ended **260/260 PASS** with 0 blockers, and TA-16 has now converted the architecture into the first **Implementation Locked** baseline: `TA16-V1`.
 
-Technical Architecture stages **TA-0 through TA-15** are complete/Architecture Complete. The next and final pre-implementation dependency is **TA-16 — Implementation Roadmap and Contract Locking**.
+The project is therefore leaving Technical Architecture and entering **dependency-ordered implementation**.
 
-TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
+The next formal dependency is:
 
-TA-3 fixed the one-player-local-scene model, bounded Zone/Scene lifecycle, streaming residency versus simulation activation, double-precision Context Space plus floating-origin runtime coordinates, Horizon active/off-screen handoff, persistent world projection, scene profiles, and staged atomic context transitions/loading.
+> **IMP-1 — Core, Identity, Deterministic Simulation, and Transactions**
 
-TA-4 fixed the OpenGL renderer architecture: immutable render snapshots, hybrid deferred/forward rendering, reversed-Z depth, glTF-compatible PBR, lighting/shadows, cameras, visibility/LOD/instancing/transparency, VFX/particles, GPU resource lifetime, resize/failure behavior, and presentation-only graphics tiers.
+TA-16 materialized only the minimum non-gameplay bootstrap required to make the implementation contract executable: pinned toolchain/dependencies, root CMake/presets, `sf_core`, `starforge-headless`, Catch2 unit tests, zero-test protection, and a real GitHub Actions Build & Unit / CI Gate. Broad gameplay implementation has not started yet.
 
-TA-5 fixed Jolt integration, collision/query layers, kinematic CharacterMotor, physical projectiles/sweeps, Dynamic 6DoF spacecraft, docking constraints, Zero-G/EVA/Magnetic Boots, collision-damage fact routing, origin synchronization, and fixed 60 Hz physics ordering.
+## Architecture State
 
-TA-6 fixed Horizon's structural/traversal/utility topology, deterministic Power allocation, conserved Atmosphere/Thermal/Water state, one-owner logistics, manufacturing/farming/work scheduling, construction/damage/repair topology mutation, ControlData/automation, chronological off-screen simulation, and persistent-state-first physics projection.
+The locked architecture includes:
 
-TA-7 fixed the active gameplay runtime: one generation-checked RuntimeEntityRegistry per SceneInstance, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/equipment/inventory runtime references, combat/weapon/status runtime state, projectile/interactable/world-object projections, persistent↔runtime synchronization, deferred destruction, and deterministic 60 Hz runtime phase ordering.
+- purpose-built C++23 modular monolith;
+- fixed 60 Hz authoritative Simulation Time;
+- typed persistent identity separate from runtime handles;
+- prepared atomic cross-domain transactions and immutable read models;
+- one authoritative player-local SceneInstance plus persistent off-screen world state;
+- custom OpenGL 4.6 renderer with project-owned resource lifetime;
+- Jolt and Recast/Detour behind project adapters;
+- persistent-state-first Horizon station simulation;
+- generation-checked active runtime entities and Activation Leases;
+- knowledge-limited deterministic AI/navigation;
+- stable Mission/MissionInstance/raid/DynamicEvent state machines;
+- deterministic cooked content pipeline with path-independent ContentIds;
+- StarForge-owned shipping UI/input/audio/presentation boundaries;
+- exact versioned staged/crash-safe persistence;
+- bounded concurrency/performance/memory policies that may never rewrite gameplay semantics;
+- headless deterministic verification, backend smoke, content/persistence compatibility and controlled performance certification.
 
-TA-8 fixed AI/navigation: Recast/Detour-backed grounded navigation behind a project adapter, separate bounded 3D free-flight navigation, traversal profiles/links, dynamic nav invalidation, async revision-validated paths, project-owned path following/local avoidance, explicit knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task navigation, off-screen logical actor behavior, deterministic AI scheduling, and fixed integration into the TA-7 runtime phases.
+## TA16-V1 Implementation Baseline
 
-TA-9 fixed missions and strategic events: persistent MissionId versus per-attempt MissionInstanceId, objective DAG/exactly-once progression, deterministic anti-reroll procedural mission generation, offensive raids as specialized missions, finite reinforcement/escalation state, persistent Horizon DefenseEvents across active/off-screen simulation, DynamicEvent scheduling/concurrency/Recovery Grace, communication-separated event knowledge, causal Recovery Transit, cross-domain strategic consequence transactions, and the exactly-once Stabilize/Sever/Contain finale/Postgame commit.
+Initial locked environment:
 
-TA-10 fixes the complete content/asset path: canonical source layout and closed JSON schemas, path-independent ContentIds, SHA-256 content fingerprints/ContentBuildId, glTF import through fastgltf, meshoptimizer offline mesh/LOD processing, KTX2/KTX-Software texture cooking, glslang shader validation, explicit collision/navigation/terrain cooking, gameplay/procedural module definitions without a scripting VM, versioned loose cooked assets plus immutable Content Registry/CPU cache, deterministic dependency-driven incremental builds, safety-classified hot reload, headless content validation, and registry-first runtime scene loading where I/O timing cannot change gameplay or reroll committed procedural content.
+- C++23;
+- Visual Studio / Build Tools 17.14.40, MSVC v143 x64;
+- CMake 4.3.3;
+- LLVM/Clang 23.1.1 independent tooling/compiler line;
+- vcpkg manifest baseline `a1cae005c39be7b18ba319fced856b68d7276271`;
+- OpenGL 4.6 Core Profile;
+- GLFW 3.5.1;
+- glad2 v2.0.8 generated-source contract;
+- GLM 1.0.3;
+- Jolt Physics 5.6.0#1;
+- Recast/Detour 1.6.0#1;
+- miniaudio 0.11.25;
+- FreeType 2.14.3 + HarfBuzz 14.4.0;
+- fastgltf 0.9.0;
+- KTX-Software 4.4.2;
+- meshoptimizer 1.2;
+- glslang 16.4.0;
+- Dear ImGui 1.92.9 for development tooling only;
+- Catch2 3.16.0;
+- simdjson 4.6.8 where selected by content tooling.
 
-TA-11 fixes the complete player-facing input/presentation integration: fixed-tick semantic action sampling and remapping, explicit input/focus contexts, a StarForge-owned retained shipping UI with HarfBuzz/FreeType text, knowledge-filtered HUD/markers/management/tutorial flows, miniaudio-backed audio with AI-hearing separation and vacuum/Pilot Telemetry rules, subtitles/captions/typed alarms/accessibility, animation/camera/VFX presentation-only boundaries, and deterministic stable-state/event handoff where presentation timing cannot mutate gameplay.
+## First Implementation Roadmap
 
-TA-12 fixes the concrete persistence implementation architecture: exact v1 binary container bytes and SectionKind registry, Stable Save Boundary snapshot orchestration, immutable Manual/Quick/Autosave generations and crash-safe atomic commit, deterministic staged load/session replacement, explicit migrations and ContentId compatibility, separate profile-settings persistence, diagnostic/recovery tooling, and resume semantics that never advance gameplay during load.
+The dependency-ordered plan is defined in [`docs/technical_architecture/136_implementation_roadmap_and_vertical_slice.md`](docs/technical_architecture/136_implementation_roadmap_and_vertical_slice.md).
 
-TA-13 fixes the concurrency/performance/memory envelope: bounded shared workers and backpressure, fixed-tick/main-thread backlog policy, active entity/physics scale, Horizon/AI/strategic scalability, CPU/GPU/cache/streaming budgets, renderer/VFX complexity targets, UI/audio/input/presentation budgets, persistence/content-build concurrency limits, and standardized percentile-based performance benchmarks. Its central rule is that performance pressure may reduce technical/presentation cost or cause an explicit Hold/failure, but may never silently change authoritative gameplay semantics.
-
-TA-14 fixes the complete testing/diagnostics/CI architecture: layered CMake/CTest/Catch2 suites, deterministic headless scenario/replay and worker/frame-rate equivalence, backend-adapter smoke testing, content/schema/shader/cook determinism gates, persistence binary goldens/migration/corruption/fault-injection suites, typed diagnostics/assertions/debug tools, warnings-as-errors/static analysis/sanitizers, least-privilege GitHub Actions aggregate-check architecture, controlled reference-runner performance regression, strict flaky/quarantine policy, and exact-SHA certification evidence. Executable workflow YAML is intentionally deferred to TA-16 so CI begins with real CMake/CTest targets rather than placeholder-green jobs.
-
-TA-15 now completes the cross-architecture integration audit: all GDS domains are traced to technical realization; ownership/identity/dependency/threading/timing/active-off-screen/persistence/content/presentation/performance/testing boundaries were cross-validated; the build-level dependency DAG is realizable without required circular ownership; the formal audit is **260/260 PASS** with **0 blockers, 0 required corrections, and 0 implementation-critical open architecture questions**. Remaining choices are explicitly TA-16 lock items rather than architecture gaps.
-
-Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind TA-16 implementation roadmap/contract locking and per-contract `Implementation Locked` handoff.
+The first major end-to-end proof is **IMP-5 — Horizon Test Cell V0**: a small authored room in which first-person movement/collision, persistent physical item ownership, typed transfer, read-model feedback, Stable Save Boundary, save/quit/load, and runtime reconstruction are proven together before broad station/AI/mission/spacecraft development.
 
 ## Documentation
 
@@ -48,42 +76,42 @@ Authoritative game design:
 
 [`docs/game_design/`](docs/game_design/)
 
-Technical architecture:
+Technical architecture and Implementation Locked contracts:
 
 [`docs/technical_architecture/`](docs/technical_architecture/)
 
-Technical Architecture roadmap:
+Technical Architecture roadmap / implementation handoff:
 
 [`docs/technical_architecture/TA_ROADMAP.md`](docs/technical_architecture/TA_ROADMAP.md)
+
+TA-16 final handoff:
+
+[`docs/technical_architecture/139_ta16_final_implementation_handoff.md`](docs/technical_architecture/139_ta16_final_implementation_handoff.md)
+
+Consolidated architecture decision registry:
+
+[`docs/technical_architecture/ARCHITECTURE_DECISION_REGISTRY.md`](docs/technical_architecture/ARCHITECTURE_DECISION_REGISTRY.md)
 
 Final GDS-14 maturity/promotion evidence:
 
 [`docs/game_design/audit/`](docs/game_design/audit/)
 
-## Initial Technical Baseline
+## Bootstrap Build
 
-- C++23
-- CMake
-- vcpkg manifest mode
-- OpenGL 4.6 Core Profile
-- GLFW
-- glad2
-- GLM
-- Jolt Physics behind a StarForge adapter
-- Recast/Detour behind a StarForge navigation adapter for grounded navigation
-- project-owned bounded 3D navigation for flying/Zero-G AI
-- miniaudio behind a StarForge audio layer
-- FreeType + HarfBuzz for shipping UI text
-- fastgltf / glTF 2.0 asset import
-- KTX2 + Khronos KTX-Software for cooked textures
-- meshoptimizer for offline mesh optimization and generated LODs
-- glslang for offline GLSL validation
-- Dear ImGui for development tooling only
-- Catch2 for automated C++ tests
+The TA-16 bootstrap is intentionally small and is not gameplay implementation.
+
+With the locked vcpkg checkout exposed as `VCPKG_ROOT`, the primary Windows loop is:
+
+```text
+cmake --preset windows-msvc-debug
+cmake --build --preset windows-msvc-debug
+cmake -DSTARFORGE_TEST_BUILD_DIR=out/build/windows-msvc-debug -DSTARFORGE_TEST_LABEL=unit -DSTARFORGE_TEST_CONFIG=Debug -P cmake/RequireTests.cmake
+ctest --preset windows-unit
+```
 
 ## Core Development Principle
 
-Project StarForge implements only the engine and gameplay functionality required by approved game design. Technical architecture follows the Design Complete gameplay requirements rather than speculative engine development.
+Project StarForge implements only the engine and gameplay functionality required by approved game design. Code remains subordinate to the Design Complete GDS and Implementation Locked architecture; implementation difficulty is not permission to silently change gameplay, ownership, persistence, determinism, or dependency boundaries.
 
 ## Working Title
 

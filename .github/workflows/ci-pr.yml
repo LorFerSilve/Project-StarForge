@@ -28,15 +28,15 @@ jobs:
             test_label: domain
             test_preset: windows-domain
             determinism_probe: true
-          - check_name: StarForge / Content Contracts
+          - check_name: StarForge / Content Validation
             test_label: content
             test_preset: windows-content
             determinism_probe: false
-          - check_name: StarForge / Persistence Contracts
+          - check_name: StarForge / Persistence Compatibility
             test_label: persistence
             test_preset: windows-persistence
             determinism_probe: false
-          - check_name: StarForge / Backend Contracts
+          - check_name: StarForge / Backend Smoke
             test_label: backends
             test_preset: windows-backends
             determinism_probe: false

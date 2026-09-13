@@ -1,10 +1,6 @@
 {
   "version": 10,
-  "cmakeMinimumRequired": {
-    "major": 4,
-    "minor": 3,
-    "patch": 3
-  },
+  "cmakeMinimumRequired": { "major": 4, "minor": 3, "patch": 3 },
   "configurePresets": [
     {
       "name": "windows-msvc-debug",
@@ -14,7 +10,7 @@
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_MANIFEST_FEATURES": "tests",
+        "VCPKG_MANIFEST_FEATURES": "tests;runtime",
         "STARFORGE_BUILD_TESTS": "ON",
         "STARFORGE_BUILD_DEVTOOLS": "OFF",
         "STARFORGE_WARNINGS_AS_ERRORS": "ON"
@@ -35,7 +31,7 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_COMPILER": "clang++-23",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_MANIFEST_FEATURES": "tests",
+        "VCPKG_MANIFEST_FEATURES": "tests;runtime",
         "STARFORGE_BUILD_TESTS": "ON",
         "STARFORGE_BUILD_DEVTOOLS": "OFF",
         "STARFORGE_WARNINGS_AS_ERRORS": "ON"
@@ -43,73 +39,20 @@
     }
   ],
   "buildPresets": [
-    {
-      "name": "windows-msvc-debug",
-      "configurePreset": "windows-msvc-debug",
-      "configuration": "Debug"
-    },
-    {
-      "name": "windows-msvc-relwithdebinfo",
-      "configurePreset": "windows-msvc-relwithdebinfo",
-      "configuration": "RelWithDebInfo"
-    },
-    {
-      "name": "linux-clang-debug",
-      "configurePreset": "linux-clang-debug"
-    }
+    { "name": "windows-msvc-debug", "configurePreset": "windows-msvc-debug", "configuration": "Debug" },
+    { "name": "windows-msvc-relwithdebinfo", "configurePreset": "windows-msvc-relwithdebinfo", "configuration": "RelWithDebInfo" },
+    { "name": "linux-clang-debug", "configurePreset": "linux-clang-debug" }
   ],
   "testPresets": [
-    {
-      "name": "windows-unit",
-      "configurePreset": "windows-msvc-debug",
-      "configuration": "Debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "unit" } }
-    },
-    {
-      "name": "windows-domain",
-      "configurePreset": "windows-msvc-debug",
-      "configuration": "Debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "domain" } }
-    },
-    {
-      "name": "windows-content",
-      "configurePreset": "windows-msvc-debug",
-      "configuration": "Debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "content" } }
-    },
-    {
-      "name": "windows-persistence",
-      "configurePreset": "windows-msvc-debug",
-      "configuration": "Debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "persistence" } }
-    },
-    {
-      "name": "linux-unit",
-      "configurePreset": "linux-clang-debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "unit" } }
-    },
-    {
-      "name": "linux-domain",
-      "configurePreset": "linux-clang-debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "domain" } }
-    },
-    {
-      "name": "linux-content",
-      "configurePreset": "linux-clang-debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "content" } }
-    },
-    {
-      "name": "linux-persistence",
-      "configurePreset": "linux-clang-debug",
-      "output": { "outputOnFailure": true },
-      "filter": { "include": { "label": "persistence" } }
-    }
+    { "name": "windows-unit", "configurePreset": "windows-msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "unit" } } },
+    { "name": "windows-domain", "configurePreset": "windows-msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "domain" } } },
+    { "name": "windows-content", "configurePreset": "windows-msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "content" } } },
+    { "name": "windows-persistence", "configurePreset": "windows-msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "persistence" } } },
+    { "name": "windows-backends", "configurePreset": "windows-msvc-debug", "configuration": "Debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "backends" } } },
+    { "name": "linux-unit", "configurePreset": "linux-clang-debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "unit" } } },
+    { "name": "linux-domain", "configurePreset": "linux-clang-debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "domain" } } },
+    { "name": "linux-content", "configurePreset": "linux-clang-debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "content" } } },
+    { "name": "linux-persistence", "configurePreset": "linux-clang-debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "persistence" } } },
+    { "name": "linux-backends", "configurePreset": "linux-clang-debug", "output": { "outputOnFailure": true }, "filter": { "include": { "label": "backends" } } }
   ]
 }

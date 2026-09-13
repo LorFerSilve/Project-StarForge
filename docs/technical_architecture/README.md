@@ -9,7 +9,7 @@ This directory translates the authoritative Game Design Specification under `doc
 
 The Game Design Specification is **Design Complete**.
 
-Technical Architecture has completed **TA-0 through TA-14**. The next dependency is **TA-15 — Architecture Integration Audit**.
+Technical Architecture has completed **TA-0 through TA-15**. The next and final pre-implementation dependency is **TA-16 — Implementation Roadmap and Contract Locking**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -115,6 +115,23 @@ TA-14 establishes:
 - bounded privacy-safe artifacts, explicit flaky/quarantine issue-owner-expiry governance, exact-SHA certification evidence and zero-test required-gate protection;
 - executable CI workflow YAML deliberately deferred to TA-16 so workflows are created together with real CMake/CTest targets/presets and pinned toolchain/runner versions.
 
+### TA-15 — Architecture Integration Audit
+
+TA-15 establishes:
+
+- one final audit method/severity/evidence contract over TA-0 through TA-14;
+- a single-owner authority audit covering persistent identity, runtime handles, transactions, backend encapsulation and mutation rights;
+- fixed-tick/Simulation-Time/threading/lifecycle verification including worker non-authority, deferred destruction, save/load ordering and backlog semantics;
+- active local scene, streaming, physics, station, navigation, AI and active↔off-screen equivalence validation;
+- mission/raid/event/content/persistence/input/UI/audio/accessibility exactly-once and knowledge-boundary validation;
+- failure/recovery/performance/testability validation proving technical pressure/failure never fabricates or simplifies authoritative gameplay;
+- complete GDS-0 through GDS-14 → TA realization traceability;
+- a realizable build/module dependency DAG with no required compile-time or semantic ownership cycle;
+- an explicit implementation-readiness/risk register separating 0 blockers/0 required corrections from normal engineering risks and TA-16 lock items;
+- a formal **260/260 PASS** integration matrix and final verdict authorizing TA-16, not direct coding.
+
+TA-15 deliberately introduces no new Architecture Decision number: the audit certifies already accepted contracts instead of redesigning them during certification.
+
 ## Architecture Documents
 
 | Phase | Authoritative artifacts |
@@ -133,6 +150,7 @@ TA-14 establishes:
 | TA-12 | `90_persistence_service_and_snapshot_orchestration.md` through `99_ta12_runtime_integration_debugging_and_validation.md`, `TA12_CROSS_VALIDATION.md` |
 | TA-13 | `100_performance_target_and_budget_framework.md` through `109_profiling_telemetry_benchmark_scenes_and_degradation.md`, `TA13_CROSS_VALIDATION.md` |
 | TA-14 | `110_test_architecture_layers_targets_and_conventions.md` through `119_ci_evidence_artifacts_quarantine_and_release_certification.md`, `TA14_CROSS_VALIDATION.md` |
+| TA-15 | `120_ta15_audit_scope_method_and_evidence.md` through `129_ta15_final_integration_verdict.md`, `TA15_CROSS_VALIDATION.md` |
 
 ## Governance
 
@@ -142,10 +160,10 @@ TA-14 establishes:
 - [`TA14_ARCHITECTURE_DECISIONS.md`](TA14_ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-TA-15 performs the final architecture integration audit. TA-16 then produces the dependency-ordered implementation roadmap, pins dependencies/toolchains/reference hardware, materializes CMake/CTest/GitHub Actions scaffolding, and locks approved contracts for implementation.
+TA-16 now owns the dependency-ordered implementation roadmap, exact toolchain/dependency pins, concrete target/preset/runner selection, CI workflow materialization, reference hardware, vertical slice, milestone exits, decision-log consolidation and per-contract implementation locking.
 
 ## Implementation Gate
 
 Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content/performance/testing boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a TA-16 per-contract handoff state. **TA-14 Architecture Complete does not authorize implementation scaffolding yet.**
+`Implementation Locked` remains a TA-16 per-contract handoff state. **TA-15 Architecture Complete authorizes TA-16 only; it does not authorize C++/OpenGL scaffolding by itself.**

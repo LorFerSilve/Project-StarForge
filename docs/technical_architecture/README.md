@@ -12,11 +12,17 @@ The Game Design Specification is **Design Complete**.
 
 Technical Architecture **TA-0 through TA-16 is complete**. TA-15 finished the integration audit at **260/260 PASS** with 0 blockers. TA-16 then fixed the concrete implementation baseline, target DAG, repository/build/test/CI contracts, reference runner, implementation roadmap, vertical slice, milestone/branch policy, and change-control boundary.
 
-The next project dependency is no longer another TA phase:
+Implementation has completed:
 
 > **IMP-1 — Core, Identity, Deterministic Simulation, and Transactions**
 
-TA-16's checked-in CMake/headless/unit-test/CI bootstrap is infrastructure proof only; it does not claim gameplay implementation.
+The corresponding milestone **M1 — Deterministic Core Ready** is certified in `../implementation/IMP1_M1_COMPLETION_REPORT.md` with green exact-head and post-integration CI evidence.
+
+The next formal implementation dependency is:
+
+> **IMP-2 — Content Model and Persistence Primitives**
+
+TA-16 remains the locked architectural authority; completion of IMP-1 does not alter the TA16-V1 contracts.
 
 ## Authority Relationship
 
@@ -184,12 +190,19 @@ TA-16 fixes:
 
 ## Implementation Gate
 
-The Technical Architecture gate is now open. Implementation proceeds only in the dependency order and milestone rules defined by TA-16.
+The Technical Architecture gate is open and implementation proceeds only in the dependency order and milestone rules defined by TA-16.
+
+Completed implementation milestone:
+
+```text
+M1 — Deterministic Core Ready
+IMP-1 — Core, Identity, Deterministic Simulation, and Transactions
+```
 
 Immediate next dependency:
 
 ```text
-IMP-1 — Core, Identity, Deterministic Simulation, and Transactions
+IMP-2 — Content Model and Persistence Primitives
 ```
 
 No implementation phase may use difficulty, performance pressure, backend convenience, presentation state, worker completion order, or existing code as permission to contradict Design Complete / Implementation Locked authority.

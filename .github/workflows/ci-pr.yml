@@ -15,8 +15,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-unit:
-    name: StarForge / Build & Unit
+  verification:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check_name: StarForge / Build & Unit
+            test_label: unit
+            test_preset: windows-unit
+            determinism_probe: false
+          - check_name: StarForge / Headless Determinism
+            test_label: domain
+            test_preset: windows-domain
+            determinism_probe: true
+
+    name: ${{ matrix.check_name }}
     runs-on: windows-2022
     timeout-minutes: 30
 
@@ -41,36 +54,18 @@ jobs:
         shell: pwsh
         run: |
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          if (-not (Test-Path $vswhere)) {
-            throw "vswhere.exe was not found on the certification runner"
-          }
-
+          if (-not (Test-Path $vswhere)) { throw "vswhere.exe was not found on the certification runner" }
           $vsPath = & $vswhere -latest -products * -version "[17.14,17.15)" -property installationPath
           $version = & $vswhere -latest -products * -version "[17.14,17.15)" -property installationVersion
-          if (-not $vsPath -or -not $version) {
-            throw "TA16-V1 requires a Visual Studio 2022 17.14 installation"
-          }
-
+          if (-not $vsPath -or -not $version) { throw "TA16-V1 requires a Visual Studio 2022 17.14 installation" }
           Write-Host "visual_studio_installation_path=$vsPath"
           Write-Host "visual_studio_installation_version=$version"
-          if ($version -ne "17.14.37614.0") {
-            throw "TA16-V1 requires Visual Studio 2022 17.14.39 / installation 17.14.37614.0; runner has $version"
-          }
-
+          if ($version -ne "17.14.37614.0") { throw "TA16-V1 requires Visual Studio 2022 17.14.39 / installation 17.14.37614.0; runner has $version" }
           $msvcRoot = Join-Path $vsPath "VC\Tools\MSVC"
-          $toolset = Get-ChildItem -Path $msvcRoot -Directory |
-            Where-Object { $_.Name -like "14.44.*" } |
-            Sort-Object Name -Descending |
-            Select-Object -First 1
-          if (-not $toolset) {
-            throw "TA16-V1 requires the MSVC v143 14.44 toolset family"
-          }
-
+          $toolset = Get-ChildItem -Path $msvcRoot -Directory | Where-Object { $_.Name -like "14.44.*" } | Sort-Object Name -Descending | Select-Object -First 1
+          if (-not $toolset) { throw "TA16-V1 requires the MSVC v143 14.44 toolset family" }
           $cl = Join-Path $toolset.FullName "bin\Hostx64\x64\cl.exe"
-          if (-not (Test-Path $cl)) {
-            throw "Expected x64 cl.exe was not found at $cl"
-          }
-
+          if (-not (Test-Path $cl)) { throw "Expected x64 cl.exe was not found at $cl" }
           Write-Host "msvc_toolset_directory=$($toolset.Name)"
           Write-Host "cl_file_version=$((Get-Item $cl).VersionInfo.FileVersion)"
 
@@ -81,27 +76,17 @@ jobs:
           $installRoot = Join-Path $env:RUNNER_TEMP "cmake-4.3.3"
           $url = "https://github.com/Kitware/CMake/releases/download/v4.3.3/cmake-4.3.3-windows-x86_64.zip"
           $expectedSha256 = "935ade9e5e8723583c07f44c5592cea2a1c8f65c56ca7e07b34c025c880e0bd6"
-
           Invoke-WebRequest -Uri $url -OutFile $archive
           $actualSha256 = (Get-FileHash -Path $archive -Algorithm SHA256).Hash.ToLowerInvariant()
           Write-Host "cmake_archive_sha256=$actualSha256"
-          if ($actualSha256 -ne $expectedSha256) {
-            throw "CMake 4.3.3 archive SHA-256 mismatch"
-          }
-
+          if ($actualSha256 -ne $expectedSha256) { throw "CMake 4.3.3 archive SHA-256 mismatch" }
           Expand-Archive -Path $archive -DestinationPath $installRoot
           $cmakeBin = Join-Path $installRoot "cmake-4.3.3-windows-x86_64\bin"
           $cmakeExe = Join-Path $cmakeBin "cmake.exe"
-          if (-not (Test-Path $cmakeExe)) {
-            throw "Expected CMake executable was not found at $cmakeExe"
-          }
-
+          if (-not (Test-Path $cmakeExe)) { throw "Expected CMake executable was not found at $cmakeExe" }
           $versionLine = (& $cmakeExe --version | Select-Object -First 1)
           Write-Host $versionLine
-          if ($versionLine -ne "cmake version 4.3.3") {
-            throw "TA16-V1 requires CMake 4.3.3"
-          }
-
+          if ($versionLine -ne "cmake version 4.3.3") { throw "TA16-V1 requires CMake 4.3.3" }
           $cmakeBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Bootstrap exact vcpkg baseline
@@ -111,9 +96,7 @@ jobs:
           git clone --filter=blob:none https://github.com/microsoft/vcpkg.git $root
           git -C $root checkout a1cae005c39be7b18ba319fced856b68d7276271
           $actual = git -C $root rev-parse HEAD
-          if ($actual -ne "a1cae005c39be7b18ba319fced856b68d7276271") {
-            throw "vcpkg baseline checkout mismatch"
-          }
+          if ($actual -ne "a1cae005c39be7b18ba319fced856b68d7276271") { throw "vcpkg baseline checkout mismatch" }
           & "$root\bootstrap-vcpkg.bat" -disableMetrics
           "VCPKG_ROOT=$root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Host "vcpkg_baseline=$actual"
@@ -126,33 +109,54 @@ jobs:
         shell: pwsh
         run: cmake --build --preset windows-msvc-debug --parallel
 
-      - name: Require nonzero unit-test discovery
+      - name: Require nonzero test discovery
         shell: pwsh
         run: >-
           cmake
           -DSTARFORGE_TEST_BUILD_DIR=${{ github.workspace }}/out/build/windows-msvc-debug
-          -DSTARFORGE_TEST_LABEL=unit
+          -DSTARFORGE_TEST_LABEL=${{ matrix.test_label }}
           -DSTARFORGE_TEST_CONFIG=Debug
           -P cmake/RequireTests.cmake
 
-      - name: Run unit tests
+      - name: Run semantic test suite
         shell: pwsh
-        run: ctest --preset windows-unit
+        run: ctest --preset ${{ matrix.test_preset }}
 
       - name: Run headless bootstrap executable
+        if: ${{ matrix.determinism_probe == false }}
         shell: pwsh
         run: .\out\build\windows-msvc-debug\apps\headless\Debug\starforge-headless.exe
+
+      - name: Prove repeated headless determinism
+        if: ${{ matrix.determinism_probe == true }}
+        shell: pwsh
+        run: |
+          $exe = ".\out\build\windows-msvc-debug\apps\headless\Debug\starforge-headless.exe"
+          function Invoke-Probe {
+            $output = & $exe --ticks 512
+            if ($LASTEXITCODE -ne 0) { throw "headless determinism probe exited with $LASTEXITCODE" }
+            $line = $output | Where-Object { $_ -like "determinism_digest=*" } | Select-Object -First 1
+            if (-not $line) { throw "headless determinism probe did not emit determinism_digest" }
+            Write-Host ($output -join "`n")
+            return $line.Substring("determinism_digest=".Length)
+          }
+          $first = Invoke-Probe
+          $second = Invoke-Probe
+          $third = Invoke-Probe
+          if ($first -ne $second -or $first -ne $third) { throw "repeated headless runs diverged: $first / $second / $third" }
+          Write-Host "stable_headless_digest=$first"
+          Write-Host "worker_partition_counts=1,2,4,8 validated by starforge_tests_domain"
 
   ci-gate:
     name: StarForge / CI Gate
     if: ${{ always() }}
-    needs: [build-unit]
+    needs: [verification]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
 
     steps:
-      - name: Evaluate required bootstrap gates
+      - name: Evaluate required IMP-1 gates
         shell: bash
         run: |
-          echo "Build & Unit result: ${{ needs.build-unit.result }}"
-          test "${{ needs.build-unit.result }}" = "success"
+          echo "Verification matrix result: ${{ needs.verification.result }}"
+          test "${{ needs.verification.result }}" = "success"

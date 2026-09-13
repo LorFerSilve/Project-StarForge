@@ -47,6 +47,8 @@ StarForge / CI Gate
 7. execute the headless bootstrap executable;
 8. fail on any step failure.
 
+For a pull request, the candidate SHA is the exact PR head SHA. For a push, it is the exact pushed `github.sha`. The workflow explicitly checks out and verifies that SHA rather than relying on an implicit synthetic PR merge ref.
+
 `CI Gate` depends on every currently required upstream gate and fails if a required dependency failed/canceled/skipped unexpectedly.
 
 ## 4. Future Stable Check Names
@@ -119,18 +121,29 @@ then bootstraps that checkout and exports `VCPKG_ROOT`.
 
 This avoids relying on whatever vcpkg version happens to be preinstalled on a hosted runner.
 
-## 8. CMake and Compiler Evidence in CI
+## 8. CMake Distribution and Compiler Evidence in CI
 
-CI verifies/installs CMake 4.3.3 before configure. A workflow log records:
+CMake 4.3.3 is installed from Kitware's official GitHub release asset rather than from a floating runner installation or a package-manager mirror:
 
 ```text
-cmake --version
+asset:  cmake-4.3.3-windows-x86_64.zip
+source: Kitware/CMake release v4.3.3
+SHA-256: 935ade9e5e8723583c07f44c5592cea2a1c8f65c56ca7e07b34c025c880e0bd6
+```
+
+CI verifies the archive digest before extraction and then verifies `cmake --version == 4.3.3`. PyPI is not certification authority for this snapshot; absence of a matching wheel may not silently downgrade or upgrade CMake.
+
+A workflow log records:
+
+```text
+candidate commit SHA
+runner OS/image metadata
 Visual Studio installation path/version
 MSVC v143 14.44 toolset directory
 cl.exe file version
+CMake archive SHA-256
+cmake --version
 vcpkg baseline SHA
-runner OS/image metadata
-candidate commit SHA
 ```
 
 A mismatched CMake/compiler certification environment does not silently pass as TA16-V1 evidence.
@@ -241,6 +254,8 @@ Workflow namespace: LOCKED
 Initial executable workflow: ci-pr.yml
 Initial real checks: Build & Unit + CI Gate
 Windows certification runner: windows-2022 + exact VS 2022 17.14.39 assertion
+CMake certification asset/digest: LOCKED
+Exact PR-head checkout: REQUIRED
 Future stable check names: RESERVED
 Action versions/SHAs: LOCKED
 Permissions: LEAST PRIVILEGE

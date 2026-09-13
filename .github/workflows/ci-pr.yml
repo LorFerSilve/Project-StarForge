@@ -36,6 +36,10 @@ jobs:
             test_label: persistence
             test_preset: windows-persistence
             determinism_probe: false
+          - check_name: StarForge / Backend Contracts
+            test_label: backends
+            test_preset: windows-backends
+            determinism_probe: false
 
     name: ${{ matrix.check_name }}
     runs-on: windows-2022
@@ -163,7 +167,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Evaluate required IMP-2 gates
+      - name: Evaluate required IMP-3 gates
         shell: bash
         run: |
           echo "Verification matrix result: ${{ needs.verification.result }}"

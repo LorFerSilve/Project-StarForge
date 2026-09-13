@@ -16,14 +16,16 @@ The baseline primary development toolchain is:
 
 ```text
 OS family: Windows x64
-IDE/toolset distribution: Visual Studio 2022 / Build Tools 17.14.40
-VS build: 17.14.37628.2
-C++ toolset family: MSVC v143 x64
+IDE/toolset distribution: Visual Studio 2022 / Build Tools 17.14.39
+VS build: 17.14.37614.0
+C++ toolset family: MSVC v143 14.44 x64
 Language mode: C++23
 CMake: 4.3.3
 ```
 
-CI records the concrete `cl.exe` version emitted by the installed 17.14.40 image/toolset. A later MSVC family/Visual Studio servicing version is not automatically part of `TA16-V1`; it must pass the toolchain-upgrade gate.
+The TA-16 bootstrap certification runner is `windows-2022`. CI asserts the exact Visual Studio installation build above, asserts the presence of the MSVC v143 14.44 x64 toolset family, and records the concrete `cl.exe` file version. A later Visual Studio servicing build or compiler-family change is not automatically part of `TA16-V1`; it must pass the toolchain-upgrade gate.
+
+The earlier draft pairing of `windows-2025` with Visual Studio 2022 17.14.40 was rejected during TA-16 cross-validation because GitHub's `windows-2025` label now resolves to a Visual Studio 2026 image. The locked baseline therefore uses the currently certifiable Windows Server 2022 / Visual Studio 2022 17.14.39 combination rather than weakening the compiler assertion.
 
 ## 3. Independent Compiler Line
 

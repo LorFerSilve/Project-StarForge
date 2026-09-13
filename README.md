@@ -44,7 +44,8 @@ The locked architecture includes:
 Initial locked environment:
 
 - C++23;
-- Visual Studio / Build Tools 17.14.40, MSVC v143 x64;
+- Visual Studio 2022 / Build Tools 17.14.39 (installation build 17.14.37614.0), MSVC v143 14.44 x64;
+- primary hosted bootstrap certification image `windows-2022`;
 - CMake 4.3.3;
 - LLVM/Clang 23.1.1 independent tooling/compiler line;
 - vcpkg manifest baseline `a1cae005c39be7b18ba319fced856b68d7276271`;
@@ -87,6 +88,10 @@ Technical Architecture roadmap / implementation handoff:
 TA-16 final handoff:
 
 [`docs/technical_architecture/139_ta16_final_implementation_handoff.md`](docs/technical_architecture/139_ta16_final_implementation_handoff.md)
+
+TA-16 final cross-validation:
+
+[`docs/technical_architecture/TA16_CROSS_VALIDATION.md`](docs/technical_architecture/TA16_CROSS_VALIDATION.md)
 
 Consolidated architecture decision registry:
 

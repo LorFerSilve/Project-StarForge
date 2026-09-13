@@ -47,6 +47,8 @@ StarForge / CI Gate
 7. execute the headless bootstrap executable;
 8. fail on any step failure.
 
+For a pull request, the candidate SHA is the exact PR head SHA. For a push, it is the exact pushed `github.sha`. The workflow explicitly checks out and verifies that SHA rather than relying on an implicit synthetic PR merge ref.
+
 `CI Gate` depends on every currently required upstream gate and fails if a required dependency failed/canceled/skipped unexpectedly.
 
 ## 4. Future Stable Check Names
@@ -91,11 +93,21 @@ Third-party convenience Actions are avoided when a short transparent shell/CMake
 Ordinary CI baseline:
 
 ```text
-Windows primary: windows-2025
+Windows primary: windows-2022
 Linux portability/static/sanitizer: ubuntu-24.04
 ```
 
+The Windows bootstrap certification job additionally asserts:
+
+```text
+Visual Studio 2022 17.14.39
+installation build 17.14.37614.0
+MSVC v143 14.44 x64 toolset family
+```
+
 Hosted image revisions are recorded in workflow evidence. Runner labels may receive provider image servicing; the compiler/tool versions are asserted/recorded separately and a toolchain mismatch fails the certification job rather than silently redefining TA16-V1.
+
+TA-16 cross-validation explicitly rejected `windows-2025` for this baseline because that label currently resolves to a Visual Studio 2026 image. Selecting `windows-2022` preserves the locked Visual Studio 2022 generator/toolset contract instead of weakening version validation.
 
 ## 7. vcpkg Bootstrap in CI
 
@@ -109,16 +121,29 @@ then bootstraps that checkout and exports `VCPKG_ROOT`.
 
 This avoids relying on whatever vcpkg version happens to be preinstalled on a hosted runner.
 
-## 8. CMake Version in CI
+## 8. CMake Distribution and Compiler Evidence in CI
 
-CI verifies/installs CMake 4.3.3 before configure. A workflow log records:
+CMake 4.3.3 is installed from Kitware's official GitHub release asset rather than from a floating runner installation or a package-manager mirror:
 
 ```text
-cmake --version
-cl /Bv or equivalent compiler metadata
-vcpkg baseline SHA
-runner OS/image metadata
+asset:  cmake-4.3.3-windows-x86_64.zip
+source: Kitware/CMake release v4.3.3
+SHA-256: 935ade9e5e8723583c07f44c5592cea2a1c8f65c56ca7e07b34c025c880e0bd6
+```
+
+CI verifies the archive digest before extraction and then verifies `cmake --version == 4.3.3`. PyPI is not certification authority for this snapshot; absence of a matching wheel may not silently downgrade or upgrade CMake.
+
+A workflow log records:
+
+```text
 candidate commit SHA
+runner OS/image metadata
+Visual Studio installation path/version
+MSVC v143 14.44 toolset directory
+cl.exe file version
+CMake archive SHA-256
+cmake --version
+vcpkg baseline SHA
 ```
 
 A mismatched CMake/compiler certification environment does not silently pass as TA16-V1 evidence.
@@ -228,6 +253,9 @@ As more required gates activate, all become dependencies of CI Gate.
 Workflow namespace: LOCKED
 Initial executable workflow: ci-pr.yml
 Initial real checks: Build & Unit + CI Gate
+Windows certification runner: windows-2022 + exact VS 2022 17.14.39 assertion
+CMake certification asset/digest: LOCKED
+Exact PR-head checkout: REQUIRED
 Future stable check names: RESERVED
 Action versions/SHAs: LOCKED
 Permissions: LEAST PRIVILEGE

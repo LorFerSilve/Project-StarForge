@@ -52,8 +52,9 @@ No gameplay-system implementation is claimed by TA-16.
 
 ```text
 C++23
-Visual Studio / Build Tools 17.14.40
-MSVC v143 x64
+Visual Studio 2022 / Build Tools 17.14.39
+Visual Studio installation build 17.14.37614.0
+MSVC v143 14.44 x64
 CMake 4.3.3
 LLVM/Clang 23.1.1 independent line
 vcpkg a1cae005c39be7b18ba319fced856b68d7276271
@@ -61,7 +62,7 @@ OpenGL 4.6 Core
 glad2 v2.0.8 generated-source contract
 ```
 
-Direct dependency versions and license/notice handling are owned by `131_toolchain_dependency_and_license_lock.md`.
+The primary hosted bootstrap certification image is `windows-2022`. Direct dependency versions and license/notice handling are owned by `131_toolchain_dependency_and_license_lock.md`.
 
 ## 4. Bootstrap Evidence Boundary
 
@@ -87,6 +88,8 @@ StarForge / CI Gate
 ```
 
 They are real gates over the bootstrap. Additional TA-14 stable gates are reserved and activate only when their real suites exist.
+
+TA-16 cross-validation detected that the earlier `windows-2025` runner assumption had drifted to Visual Studio 2026. The certification workflow now uses `windows-2022`, asserts Visual Studio 2022 17.14.39 / build 17.14.37614.0 and the MSVC v143 14.44 toolset family, and fails on unexpected servicing/toolchain drift.
 
 Repository branch ruleset activation is an administrative GitHub setting after the first checks have materialized; the connector available during TA-16 does not expose a ruleset write action. The exact target state is locked in the CI/branch specifications rather than falsely reported as configured.
 

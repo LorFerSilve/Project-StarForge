@@ -8,15 +8,19 @@ The game centers on a physically traversable and expandable player-owned space s
 
 The authoritative Game Design Specification completed **GDS-0 through GDS-14** and is formally **Design Complete**.
 
-Technical Architecture completed **TA-0 through TA-16**. TA-15's final integration audit ended **260/260 PASS** with 0 blockers, and TA-16 has now converted the architecture into the first **Implementation Locked** baseline: `TA16-V1`.
+Technical Architecture completed **TA-0 through TA-16**. TA-15's final integration audit ended **260/260 PASS** with 0 blockers, and TA-16 converted the architecture into the first **Implementation Locked** baseline: `TA16-V1`.
 
-The project is therefore leaving Technical Architecture and entering **dependency-ordered implementation**.
-
-The next formal dependency is:
+Implementation has now completed:
 
 > **IMP-1 — Core, Identity, Deterministic Simulation, and Transactions**
 
-TA-16 materialized only the minimum non-gameplay bootstrap required to make the implementation contract executable: pinned toolchain/dependencies, root CMake/presets, `sf_core`, `starforge-headless`, Catch2 unit tests, zero-test protection, and a real GitHub Actions Build & Unit / CI Gate. Broad gameplay implementation has not started yet.
+Its exit milestone **M1 — Deterministic Core Ready** is certified by the checked-in completion report and green exact-head / post-integration CI evidence. IMP-1 materialized the deterministic C++ foundation: typed identity and revisions, project-owned deterministic RNG, fixed-tick simulation, command/result/event contracts, prepared transaction coordination, immutable read-model publication, diagnostics, headless execution, and dedicated unit/domain determinism gates.
+
+The next formal dependency is:
+
+> **IMP-2 — Content Model and Persistence Primitives**
+
+No IMP-2 implementation is implied by the IMP-1 milestone.
 
 ## Architecture State
 
@@ -93,6 +97,10 @@ TA-16 final cross-validation:
 
 [`docs/technical_architecture/TA16_CROSS_VALIDATION.md`](docs/technical_architecture/TA16_CROSS_VALIDATION.md)
 
+IMP-1 / M1 completion evidence:
+
+[`docs/implementation/IMP1_M1_COMPLETION_REPORT.md`](docs/implementation/IMP1_M1_COMPLETION_REPORT.md)
+
 Consolidated architecture decision registry:
 
 [`docs/technical_architecture/ARCHITECTURE_DECISION_REGISTRY.md`](docs/technical_architecture/ARCHITECTURE_DECISION_REGISTRY.md)
@@ -101,9 +109,7 @@ Final GDS-14 maturity/promotion evidence:
 
 [`docs/game_design/audit/`](docs/game_design/audit/)
 
-## Bootstrap Build
-
-The TA-16 bootstrap is intentionally small and is not gameplay implementation.
+## IMP-1 Build and Verification
 
 With the locked vcpkg checkout exposed as `VCPKG_ROOT`, the primary Windows loop is:
 
@@ -112,7 +118,12 @@ cmake --preset windows-msvc-debug
 cmake --build --preset windows-msvc-debug
 cmake -DSTARFORGE_TEST_BUILD_DIR=out/build/windows-msvc-debug -DSTARFORGE_TEST_LABEL=unit -DSTARFORGE_TEST_CONFIG=Debug -P cmake/RequireTests.cmake
 ctest --preset windows-unit
+cmake -DSTARFORGE_TEST_BUILD_DIR=out/build/windows-msvc-debug -DSTARFORGE_TEST_LABEL=domain -DSTARFORGE_TEST_CONFIG=Debug -P cmake/RequireTests.cmake
+ctest --preset windows-domain
+.\out\build\windows-msvc-debug\apps\headless\Debug\starforge-headless.exe --ticks 512
 ```
+
+CI additionally verifies repeated headless digest stability through `StarForge / Headless Determinism`.
 
 ## Core Development Principle
 

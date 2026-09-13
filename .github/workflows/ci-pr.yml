@@ -1,0 +1,109 @@
+name: StarForge CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-unit:
+    name: StarForge / Build & Unit
+    runs-on: windows-2025
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout exact candidate SHA
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Verify candidate SHA
+        shell: pwsh
+        run: |
+          $actual = git rev-parse HEAD
+          Write-Host "candidate_sha=$actual"
+          if ($actual -ne "${{ github.sha }}") {
+            throw "Checkout SHA mismatch: expected ${{ github.sha }}, got $actual"
+          }
+
+      - name: Verify locked Visual Studio toolset distribution
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $version = & $vswhere -latest -products * -property installationVersion
+          Write-Host "visual_studio_installation_version=$version"
+          if ($version -ne "17.14.37628.2") {
+            throw "TA16-V1 requires Visual Studio 17.14.40 / installation 17.14.37628.2; runner has $version"
+          }
+
+      - name: Install and verify CMake 4.3.3
+        shell: pwsh
+        run: |
+          python -m pip install --disable-pip-version-check --no-warn-script-location "cmake==4.3.3"
+          $versionLine = (cmake --version | Select-Object -First 1)
+          Write-Host $versionLine
+          if ($versionLine -ne "cmake version 4.3.3") {
+            throw "TA16-V1 requires CMake 4.3.3"
+          }
+
+      - name: Bootstrap exact vcpkg baseline
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP "vcpkg"
+          git clone --filter=blob:none https://github.com/microsoft/vcpkg.git $root
+          git -C $root checkout a1cae005c39be7b18ba319fced856b68d7276271
+          $actual = git -C $root rev-parse HEAD
+          if ($actual -ne "a1cae005c39be7b18ba319fced856b68d7276271") {
+            throw "vcpkg baseline checkout mismatch"
+          }
+          & "$root\bootstrap-vcpkg.bat" -disableMetrics
+          "VCPKG_ROOT=$root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "vcpkg_baseline=$actual"
+
+      - name: Configure
+        shell: pwsh
+        run: cmake --preset windows-msvc-debug
+
+      - name: Build
+        shell: pwsh
+        run: cmake --build --preset windows-msvc-debug --parallel
+
+      - name: Require nonzero unit-test discovery
+        shell: pwsh
+        run: >-
+          cmake
+          -DSTARFORGE_TEST_BUILD_DIR=${{ github.workspace }}/out/build/windows-msvc-debug
+          -DSTARFORGE_TEST_LABEL=unit
+          -DSTARFORGE_TEST_CONFIG=Debug
+          -P cmake/RequireTests.cmake
+
+      - name: Run unit tests
+        shell: pwsh
+        run: ctest --preset windows-unit
+
+      - name: Run headless bootstrap executable
+        shell: pwsh
+        run: .\out\build\windows-msvc-debug\apps\headless\Debug\starforge-headless.exe
+
+  ci-gate:
+    name: StarForge / CI Gate
+    if: ${{ always() }}
+    needs: [build-unit]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Evaluate required bootstrap gates
+        shell: bash
+        run: |
+          echo "Build & Unit result: ${{ needs.build-unit.result }}"
+          test "${{ needs.build-unit.result }}" = "success"

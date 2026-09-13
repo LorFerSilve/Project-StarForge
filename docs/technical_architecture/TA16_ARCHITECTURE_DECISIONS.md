@@ -14,11 +14,11 @@ TA-16 fixes the implementation snapshot and handoff. These decisions do not chan
 
 ### Decision
 
-The first implementation baseline is `TA16-V1`: C++23, Visual Studio/Build Tools 17.14.40 / MSVC v143 x64, CMake 4.3.3, LLVM/Clang 23.1.1 for the independent compiler/tooling line, and vcpkg baseline `a1cae005c39be7b18ba319fced856b68d7276271`. Upgrades are explicit baseline changes rather than floating environment drift.
+The first implementation baseline is `TA16-V1`: C++23, Visual Studio 2022 / Build Tools 17.14.39 (installation build 17.14.37614.0) with MSVC v143 14.44 x64, CMake 4.3.3, LLVM/Clang 23.1.1 for the independent compiler/tooling line, and vcpkg baseline `a1cae005c39be7b18ba319fced856b68d7276271`. The primary hosted bootstrap certification image is `windows-2022`; CI fails rather than silently accepting Visual Studio servicing/toolchain drift. Upgrades are explicit baseline changes rather than floating environment drift.
 
 ### Rationale
 
-Architecture cannot be called implementation-ready while compiler/build/dependency identity remains implicit.
+Architecture cannot be called implementation-ready while compiler/build/dependency identity remains implicit. TA-16 cross-validation also proved that the earlier `windows-2025` assumption no longer matched this contract because that runner label now supplies Visual Studio 2026.
 
 ---
 

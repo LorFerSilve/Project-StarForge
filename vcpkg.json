@@ -1,0 +1,72 @@
+{
+  "name": "project-starforge",
+  "version-string": "0.0.0-ta16",
+  "builtin-baseline": "a1cae005c39be7b18ba319fced856b68d7276271",
+  "features": {
+    "tests": {
+      "description": "C++ unit and integration test framework",
+      "dependencies": [
+        "catch2"
+      ]
+    },
+    "runtime": {
+      "description": "Shipping/runtime backend dependencies excluding generated glad2",
+      "dependencies": [
+        "glfw3",
+        "glm",
+        "joltphysics",
+        "recastnavigation",
+        "miniaudio",
+        {
+          "name": "freetype",
+          "default-features": false,
+          "features": [
+            "png",
+            "zlib"
+          ]
+        },
+        {
+          "name": "harfbuzz",
+          "default-features": false,
+          "features": [
+            "freetype"
+          ]
+        },
+        "ktx"
+      ]
+    },
+    "content": {
+      "description": "Offline content validation, import, cook, and build dependencies",
+      "dependencies": [
+        "fastgltf",
+        "simdjson",
+        {
+          "name": "ktx",
+          "features": [
+            "tools"
+          ]
+        },
+        "meshoptimizer",
+        {
+          "name": "glslang",
+          "features": [
+            "tools"
+          ]
+        },
+        "recastnavigation"
+      ]
+    },
+    "dev-tools": {
+      "description": "Development-only inspection/debug UI dependencies",
+      "dependencies": [
+        {
+          "name": "imgui",
+          "features": [
+            "glfw-binding",
+            "opengl3-binding"
+          ]
+        }
+      ]
+    }
+  }
+}

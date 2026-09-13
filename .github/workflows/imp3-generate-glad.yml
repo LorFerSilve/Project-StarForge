@@ -1,0 +1,47 @@
+name: IMP-3 Generate Pinned glad
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  generate-glad:
+    if: ${{ github.head_ref == 'impl/imp-3-platform-rendering-foundation' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: impl/imp-3-platform-rendering-foundation
+          persist-credentials: true
+
+      - name: Generate locked glad2 2.0.8 artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --no-input "glad2==2.0.8"
+          rm -rf third_party/generated/glad/include third_party/generated/glad/src
+          python -m glad --api="gl:core=4.6" --extensions="" --out-path="third_party/generated/glad" c
+          test -f third_party/generated/glad/include/glad/gl.h
+          test -f third_party/generated/glad/include/KHR/khrplatform.h
+          test -f third_party/generated/glad/src/gl.c
+
+      - name: Commit generated artifacts to implementation branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add third_party/generated/glad/include third_party/generated/glad/src
+          if git diff --cached --quiet; then
+            echo "Pinned glad artifacts are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "IMP-3: generate pinned glad 2.0.8 artifacts"
+          git push origin HEAD:impl/imp-3-platform-rendering-foundation

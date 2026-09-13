@@ -19,6 +19,12 @@ void glfw_error_callback(const int error_code, const char* description) {
 class GlfwWindow final : public Window {
 public:
     explicit GlfwWindow(const WindowConfig& config) {
+        // Validate inputs before touching GLFW process-global state so an
+        // exception cannot strand a successful glfwInit() without a matching
+        // glfwTerminate().
+        const auto width = checked_dimension(config.width);
+        const auto height = checked_dimension(config.height);
+
         glfwSetErrorCallback(&glfw_error_callback);
         if (glfwInit() != GLFW_TRUE) {
             throw std::runtime_error("PLATFORM.GLFW_INITIALIZATION_FAILED");
@@ -32,8 +38,6 @@ public:
         glfwWindowHint(GLFW_VISIBLE, config.visible ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        const auto width = checked_dimension(config.width);
-        const auto height = checked_dimension(config.height);
         window_ = glfwCreateWindow(width, height, config.title.c_str(), nullptr, nullptr);
         if (window_ == nullptr) {
             glfwTerminate();

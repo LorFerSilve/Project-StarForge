@@ -125,20 +125,7 @@ Artifacts:
 
 **Status:** Architecture Complete
 
-Defines:
-
-- fixed-tick semantic ActionId sampling from GLFW device state, one-use physical edge latching, deterministic context priority/consumption and safe device switching;
-- full remapping, conflict/essential-action validation, controller calibration/deadzones/inversion, Hold/Toggle, Auto-Sprint, sustained-interaction support and bounded knowledge-safe Aim Assist;
-- profile/application settings snapshots and optional semantic haptics behind a StarForge-owned backend;
-- purpose-built retained shipping UI, one focus owner, pointer/keyboard/controller navigation, preview/confirm/commit separation, safe area and responsive UI/text scaling;
-- HarfBuzz + FreeType shipping text shaping/rasterization behind project-owned text/layout and renderer-owned glyph atlases;
-- knowledge-filtered HUD, interaction prompts, markers, notifications and ship/station/mission/raid presentation with no false success before commit;
-- management/planning/tutorial/save/loading/failure/system UI using immutable composite Read Models and typed Commands without UI-side gameplay authority or partial pause;
-- miniaudio adapter ownership, callback isolation, generation-checked voices, semantic buses, resident/streamed clips, listener/emitter/device lifecycle and safe silent degradation;
-- GameplaySoundEvent vs PresentationAudioEvent separation, medium/vacuum/conduction/Pilot Telemetry rules, dialogue/radio and knowledge-safe adaptive music;
-- subtitles/Closed Captions, typed alarms, acknowledgement/escalation, redundant critical channels and accessibility presentation transforms;
-- animation/camera/VFX/viewmodels as presentation projections with no generic root-motion, hit, resource or objective authority;
-- explicit fixed-tick → stable Read Model/PresentationEvent → variable-rate presentation integration, Simulation Time vs Presentation Time separation, stale-generation rejection and headless semantic testability.
+Defines fixed-tick semantic input/remapping, explicit input/focus contexts, retained shipping UI with HarfBuzz/FreeType text, knowledge-filtered HUD/management/tutorial flows, miniaudio-backed presentation audio separated from AI hearing, subtitles/captions/typed alarms/accessibility, presentation-only animation/camera/VFX, and deterministic stable-state/event handoff.
 
 Artifacts: `80_input_device_action_and_context_routing.md` through `89_ta11_runtime_phase_integration_debugging_and_validation.md`, plus `TA11_CROSS_VALIDATION.md`.
 
@@ -146,32 +133,36 @@ Artifacts: `80_input_device_action_and_context_routing.md` through `89_ta11_runt
 
 **Status:** Architecture Complete
 
-Defines:
-
-- PersistenceService save/load operation state machines, Stable Save Boundary capture, immutable SaveSnapshot handoff and explicit session tokens;
-- exact little-endian v1 container bytes: 128-byte header, 64-byte directory entries, header/directory/per-payload CRC32C, 8-byte payload alignment, ContentBuildId metadata and codec None baseline;
-- stable SectionKind registry for all required gameplay domains plus optional SaveMetadata, SimulationInfrastructure and LocalContextContinuation, with explicit versioned domain codecs;
-- immutable committed save generations, SnapshotSequence ordering, logical Manual/Quick/Autosave slot semantics, rebuildable catalog/index state and 10-generation rolling Autosave retention;
-- crash-safe pending-file → flush → reopen/validate → unique atomic rename commit, with catalog update and superseded cleanup strictly post-commit;
-- deterministic all-or-nothing load staging, domain/cross-domain/ownership/timer/RNG/content validation, RuntimeActivationPlan creation, one SessionRoot replacement and fresh backend reconstruction;
-- explicit container/application/domain migration chains, deterministic migration-created ID allocation, exactly-once marker preservation, source-save immutability and ContentId rename/removal compatibility rules;
-- separate versioned fail-soft profile/application settings persistence for controls/accessibility/HUD/audio/display preferences without campaign coupling;
-- shared save inspector/diagnostic/recovery tooling, golden/corruption fixtures, quarantine and a prohibition on heuristic general gameplay repair;
-- fixed runtime integration: no mid-tick capture, no load-time Simulation progression, no presentation one-shot replay, and resume from `saved_simulation_tick + 1`.
+Defines exact save-container bytes/SectionKind codecs, Stable Save Boundary snapshot capture, immutable Manual/Quick/Autosave generations, crash-safe atomic commit, staged all-or-nothing load/session replacement, deterministic migrations/content compatibility, separate profile persistence, recovery/inspection tooling, and saved-tick resume semantics.
 
 Artifacts: `90_persistence_service_and_snapshot_orchestration.md` through `99_ta12_runtime_integration_debugging_and_validation.md`, plus `TA12_CROSS_VALIDATION.md`.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define worker-pool model, job priorities, snapshot/versioning, streaming/CPU/GPU/memory budgets, simulation backlog policy, profiling, performance scenes, station scalability, and numeric TA-3 through TA-12 budgets including entities, physics, station solvers, navigation/path/perception/AI, objective/procedural/event scheduling, content I/O/decode/upload, ContentCache residency, texture/mesh/nav/terrain memory, content-build concurrency, UI/layout/text/glyph-atlas work, input/controller processing, marker/presentation queues, audio voices/streams/decode/occlusion, animation/VFX work, persistence snapshot memory, encode/decode/CRC/migration/catalog/load I/O work, and strategic backlog limits.
+Defines:
+
+- a percentile-based reference target of fixed 60 Hz simulation plus 60 FPS at 1920×1080 High, with TA-16 responsible for pinning concrete reference hardware;
+- explicit budget classes and the invariant that performance pressure never authorizes gameplay-semantic degradation;
+- one bounded shared runtime worker pool `clamp(HardwareConcurrency - 2, 2, 12)`, typed priority classes, fairness, cancellation, bounded queues/mailboxes, immutable job snapshots and deterministic result acceptance;
+- main-thread/tick budgets, a four-catch-up-ticks-per-render-frame cap, Warning/Severe/Critical backlog states, and CriticalPerformanceRecovery without Simulation-Time skipping;
+- active-local runtime scale envelopes for entities, actors, projectiles, physics bodies/contacts/queries, CharacterMotors, spacecraft and spatial indexing;
+- Horizon station graph/logistics/WorkOrder/automation scale targets, detailed/off-screen AI/navigation budgets, objective/event/reinforcement envelopes, and chronological strategic backlog policy;
+- CPU process/ContentCache/streaming staging budgets plus GPU residency targets for Low/Medium/High/Ultra, bounded I/O/decode/upload work, prefetch lead targets, cache eviction policy and Hard Streaming Hold acceptance metrics;
+- renderer/GPU budgets including main/GPU frame percentiles, draw/triangle/instance/light/shadow/transparency/particle/skinning/render-target envelopes and presentation-only pressure degradation;
+- bounded semantic input, retained UI/text/glyph/marker/notification/presentation-event, animation, audio voice/stream/callback/occlusion and haptic budgets while preserving accessibility and AI-hearing independence;
+- persistence snapshot/file/load/catalog budgets, one-save-write concurrency, staged-load memory limits, and offline content-build worker/RAM/I/O/hot-reload envelopes;
+- one standardized profiler/telemetry vocabulary and ten representative benchmark scenarios covering Horizon, defense, surface, spaceflight, mixed boarding, off-screen concurrency, streaming, save/load, presentation and content builds;
+- regression thresholds based on p95/p99, bounded profiler overhead, hitch traces, repeated-transition leak tests, worker-count/frame-rate determinism matrices and a strict technical/presentation degradation order.
+
+Artifacts: `100_performance_target_and_budget_framework.md` through `109_profiling_telemetry_benchmark_scenes_and_degradation.md`, plus `TA13_CROSS_VALIDATION.md` and `TA13_ARCHITECTURE_DECISIONS.md`.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
-**Status:** Planned
+**Status:** Next
 
-Must define CMake/Catch2 layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, clean/incremental content validation/cook determinism, schema/reference/provenance checks, required GLSL validation, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/subtitle/caption/alarm/accessibility/presentation/persistence smoke and deterministic tests, persistence golden bytes/migrations/corruption/fault injection, formatting/tidy/warnings, sanitizers, CI gates, and debug-tool requirements.
+Must define CMake/Catch2 test layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation/cook determinism, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/accessibility/presentation/persistence smoke and deterministic tests, TA-13 performance-budget regression gates, golden save/content/RNG fixtures, corruption/fault injection, formatting/tidy/warnings, sanitizers, CI workflows/gates, artifact/report retention, and debug-tool requirements.
 
 ## TA-15 — Architecture Integration Audit
 
@@ -185,7 +176,7 @@ No implementation phase is authorized to invent unresolved architecture after th
 
 **Status:** Planned
 
-Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, first test/content gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
+Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, reference hardware, first test/content/performance gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
 
 Only after TA-16 may planned C++/OpenGL scaffolding begin.
 
@@ -205,8 +196,9 @@ GDS Design Complete
 → TA-10 Architecture Complete  
 → TA-11 Architecture Complete  
 → TA-12 Architecture Complete  
-→ **TA-13 next**  
-→ TA-14 ... TA-15  
+→ TA-13 Architecture Complete  
+→ **TA-14 next**  
+→ TA-15  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

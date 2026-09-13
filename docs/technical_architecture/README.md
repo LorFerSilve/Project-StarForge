@@ -23,9 +23,10 @@ Technical Architecture has completed:
 - **TA-9 — Missions, Raids, Dynamic Events, and Strategic State Machines**;
 - **TA-10 — Content and Asset Pipeline**;
 - **TA-11 — Input, UI, Audio, and Presentation Integration**;
-- **TA-12 — Persistence Implementation Architecture**.
+- **TA-12 — Persistence Implementation Architecture**;
+- **TA-13 — Concurrency, Performance, Memory, and Streaming Budgets**.
 
-The next dependency is **TA-13 — Concurrency, Performance, Memory, and Streaming Budgets**.
+The next dependency is **TA-14 — Testing, Diagnostics, and CI Architecture**.
 
 Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
 
@@ -35,7 +36,7 @@ The technical architecture must implement the Design Complete GDS, may choose so
 
 ## Architectural Direction
 
-Project StarForge is a **purpose-built modular monolith** in C++23 with a custom OpenGL renderer. It deliberately avoids a general-purpose game engine, runtime plugin architecture, mandatory scripting VM, baseline networking architecture, one universal persistent ECS, and hidden framework ownership of the game loop.
+Project StarForge is a **purpose-built modular monolith** in C++23 with a custom OpenGL renderer. It deliberately avoids a general-purpose game engine, runtime plugin architecture, mandatory gameplay scripting VM, baseline networking architecture, one universal persistent ECS, and hidden framework ownership of the game loop.
 
 ## Initial Technical Baseline
 
@@ -48,9 +49,9 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 - GLM;
 - Jolt Physics behind a StarForge adapter;
 - Recast/Detour behind a StarForge navigation adapter for grounded navigation;
-- project-owned bounded 3D navigation graph/volume for flying/Zero-G AI;
+- project-owned bounded 3D navigation for flying/Zero-G AI;
 - miniaudio behind a StarForge audio layer;
-- FreeType + HarfBuzz for shipping text shaping/rasterization;
+- FreeType + HarfBuzz for shipping text;
 - fastgltf / glTF 2.0 for canonical 3D exchange import;
 - KTX2 + Khronos KTX-Software for cooked textures;
 - meshoptimizer for offline mesh optimization/generated LODs;
@@ -59,96 +60,73 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 - Catch2;
 - GitHub + GitHub Actions.
 
-Exact dependency versions remain implementation-roadmap/toolchain data and must be pinned before scaffolding.
+Exact dependency versions and concrete reference hardware remain TA-16 implementation-roadmap data and must be pinned before scaffolding.
 
 ## Architecture Baselines
 
-### TA-1 Runtime Foundation
+### TA-1 — Runtime Foundation
 
-Modular-monolith process model, main-thread simulation/OpenGL authority, fixed **60 Hz** authoritative simulation, deterministic worker handoff, Stable Simulation Boundaries, and save-snapshot capture boundary.
+Purpose-built modular monolith, main-thread simulation/OpenGL authority, fixed **60 Hz** authoritative simulation, bounded workers, deterministic handoff, Stable Simulation Boundaries, True Pause, and save-snapshot capture boundary.
 
-### TA-2 Data / State
+### TA-2 — Identity / State / Transactions / Serialization
 
-Typed persistent IDs, generation-checked runtime handles, Content IDs, domain stores, Activation Leases, revisions/epochs, typed commands/results/events, prepared atomic transactions, immutable Read Models, one-owner physical transfers, Credits ledger, Save DTO/container contracts, staged load/migration, and deterministic PCG32 RNG.
+Typed persistent IDs, generation-checked runtime handles, domain stores, Activation Leases, revisions, typed commands/results/events, atomic prepared transactions, immutable Read Models, one-owner physical transfers, versioned Save DTOs, staged migration/load, and deterministic PCG32 RNG.
 
-### TA-3 World / Scene
+### TA-3 — World / Scene / Streaming
 
-One authoritative player-local `SceneInstance`, strategic-vs-local coordinates, Scene lifecycle/generation, streaming residency separate from simulation activation, Hard Streaming Hold, double-precision Context Space + floating origin, Horizon active/off-screen handoff, staged atomic transitions, persistent world projection, and scene profiles.
+One authoritative player-local SceneInstance, strategic-vs-local coordinates, scene lifecycle/generation, residency separate from gameplay activation, Hard Streaming Hold, double-precision Context Space + floating origin, Horizon active/off-screen handoff, persistent world projection, and staged atomic transitions.
 
-### TA-4 Rendering
+### TA-4 — Rendering
 
-Main-thread OpenGL 4.6 renderer, immutable `RenderSnapshot`, reversed-Z, linear HDR → SDR, hybrid deferred/forward rendering, glTF-compatible PBR, shadows/lights, camera contracts, culling/LOD/instancing/transparency, VFX/particles, GPU resource lifetime, and presentation-only graphics tiers.
+Main-thread OpenGL 4.6 renderer, immutable RenderSnapshot, hybrid deferred/forward pipeline, reversed-Z, linear HDR → SDR, glTF-compatible PBR, lights/shadows, cameras, culling/LOD/instancing/transparency, VFX/particles, GPU lifetime, and presentation-only quality tiers.
 
-### TA-5 Physics
+### TA-5 — Physics / Character / Spaceflight
 
-One StarForge `PhysicsWorld` per active SceneInstance, Jolt encapsulation, semantic collision/query contracts, kinematic `CharacterMotor`, swept projectiles, Dynamic 6DoF spacecraft, physical docking constraints, Zero-G/EVA/Magnetic Boots, collision fact routing, deferred safe physics mutation, and no synthetic load/rebase impacts.
+One StarForge PhysicsWorld per active scene, Jolt encapsulation, collision/query facts, kinematic CharacterMotor, swept projectiles, Dynamic 6DoF spacecraft, physical docking, Zero-G/EVA/Magnetic Boots, collision consequence routing, deferred safe backend mutation, and origin/load invariants.
 
-### TA-6 Station Simulation
+### TA-6 — Station Simulation
 
-Canonical Horizon topology with separate Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData views; deterministic Power; conserved atmosphere/thermal/water; one-owner logistics; persistent Simulation-Time WorkOrders; topology mutation; automation/control; chronological off-screen station simulation; and persistent-state-first projection into physics.
+Canonical Horizon topology with separate Structural/Traversal/Pressure/Power/Thermal/Water/Logistics/ControlData views, deterministic Power, conserved utilities, one-owner logistics, persistent WorkOrders, topology mutation, automation/control, chronological off-screen station simulation, and persistent-state-first physics projection.
 
-### TA-7 Gameplay Runtime Entities
+### TA-7 — Gameplay Runtime Entities
 
-One generation-checked runtime registry per active scene, typed component pools, persistent-actor Activation Lease bridges, actor lifecycle, player/inventory/equipment runtime references, combat/status/projectile/interactable projections, persistent↔runtime synchronization, deferred destruction, deterministic 60 Hz runtime phase ordering, and headless execution.
+Generation-checked RuntimeEntityRegistry, typed component pools, persistent actor Activation Lease bridges, player/equipment/inventory runtime references, combat/status/projectile/interactable projections, runtime↔persistent synchronization, deferred destruction, deterministic runtime phases, and headless execution.
 
-### TA-8 AI and Navigation
+### TA-8 — AI and Navigation
 
-Recast/Detour-backed tiled grounded navmeshes, separate bounded 3D free-flight navigation, typed traversal profiles/links, persistent-state-first navigation invalidation, revision-validated asynchronous paths, project-owned following/avoidance, explicit world-truth vs AI-knowledge separation, enemy tactical AI, robot command/squad AI, crew task/emergency navigation, off-screen logical AI, deterministic AI scheduling, and headless diagnostics/tests.
+Recast/Detour grounded navigation plus project-owned bounded 3D free-flight navigation, traversal profiles/links, nav invalidation, revision-checked asynchronous paths, knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task behavior, off-screen logical AI, and deterministic scheduling.
 
-### TA-9 Missions, Raids, Dynamic Events, and Strategic State Machines
+### TA-9 — Missions / Raids / Strategic State Machines
 
-Persistent `MissionId` separated from per-attempt `MissionInstanceId`, typed exactly-once objective DAGs, deterministic anti-reroll procedural generation, offensive raids as specialized missions, finite reinforcement state, one persistent Horizon `DefenseEventId` across active/off-screen modes, DynamicEvent scheduling/Recovery Grace, communication-separated event knowledge, causal Recovery Transit, typed strategic consequences, and exactly-once `Stabilize | Sever | Contain` finale commit.
+Persistent MissionId vs per-attempt MissionInstanceId, exactly-once objective DAGs, deterministic anti-reroll generation, offensive raids as specialized missions, finite reinforcements, persistent Horizon DefenseEvents, Dynamic Events/Recovery Grace, communication-separated knowledge, causal Recovery Transit, and exactly-once finale resolution.
 
-### TA-10 Content and Asset Pipeline
+### TA-10 — Content and Asset Pipeline
 
-TA-10 establishes:
+Canonical source/cooked separation, path-independent ContentId, closed versioned schemas, SHA-256 fingerprints/ContentBuildId, fastgltf import, meshoptimizer, KTX2 texture cooking, glslang shader validation, explicit collision/nav/terrain products, no general gameplay scripting VM, immutable Content Registry/cache, deterministic dependency builds, classified hot reload, and registry-first runtime loading.
 
-- DCC working files, canonical repository source content, and generated cooked runtime content as separate layers;
-- a canonical `content/` source layout and UTF-8 `*.sfdef.json` closed schema definitions;
-- stable path-independent lowercase dotted `ContentId` plus explicit `ContentKind`, schema versioning, typed references, SHA-256 fingerprints, and complete-build `ContentBuildId`;
-- glTF 2.0 import through fastgltf into StarForge-owned mesh/skeleton/animation formats, with deterministic transform/vertex/index processing, sockets, skinning, and meshoptimizer offline optimization/LOD;
-- KTX2/KTX-Software cooked texture workflow with semantic color-space, mip and desktop BC-format policies;
-- material/environment/IBL cooking and bounded ShaderFamily/variant bundles with glslang offline GLSL validation while final OpenGL compilation remains renderer authority;
-- explicit separate collision, collision-material, grounded navigation, free-flight navigation, terrain, traversal-link and mission-feasibility cooked products;
-- closed authored gameplay/template/procedural-module schemas without general-purpose gameplay scripting or content-side persistent-ID/resource/reward authority;
-- versioned loose cooked assets plus one immutable Content Registry, generation-checked nonpersistent ContentHandles, immutable CPU ContentCache, and backend-resource ownership retained by renderer/physics/navigation/audio consumers;
-- deterministic dependency graph and SHA-256 fingerprint-driven incremental cooking, atomic output/registry publication, source provenance/license validation, and clean-build reproducibility;
-- hot-reload safety classes `PresentationSafe`, `SceneReactivationRequired`, and `SessionRestartRequired` with stale-generation rejection;
-- headless content validation/cook/build tooling integrated through CMake and designed for later TA-14 CI enforcement;
-- registry-first runtime loading, required asset readiness, Hard Streaming Hold integration, no raw-source fallback in shipping, and no gameplay/procedural changes from I/O/cache/worker timing.
+### TA-11 — Input / UI / Audio / Presentation
 
-### TA-11 Input, UI, Audio, and Presentation
+Fixed-tick semantic ActionId sampling/remapping, explicit input/focus contexts, StarForge-owned retained shipping UI, HarfBuzz/FreeType text, knowledge-filtered HUD/management/tutorial flows, miniaudio-backed audio separated from AI hearing, subtitles/captions/typed alarms/accessibility, presentation-only animation/camera/VFX, and stable Read Model/PresentationEvent handoff.
 
-TA-11 establishes:
+### TA-12 — Persistence Implementation
 
-- GLFW raw-device ingestion mapped to typed semantic `ActionId` samples at the fixed simulation boundary, with a one-tick edge latch that is explicitly not a gameplay input buffer;
-- deterministic InputContextStack priority/consumption, device switching, controller calibration, Hold/Toggle, sustained-interaction support, Auto-Sprint and bounded knowledge-safe Aim Assist;
-- fully remappable keyboard/mouse/controller profiles, conflict validation, effective prompt glyph resolution, settings snapshots and optional haptics behind a StarForge `IHapticsBackend`;
-- a purpose-built retained shipping UI tree with one focus owner, keyboard/controller/pointer navigation, safe Back/Cancel, preview-versus-commit flows, responsive UI scaling/safe area and TA-4 native-resolution rendering;
-- UTF-8 text shaping with HarfBuzz plus FreeType glyph/font rasterization behind StarForge-owned text layout and renderer-owned glyph atlases;
-- knowledge-filtered HUD, interaction prompts, marker precision, notifications, station/ship/mission/raid presentation, and commit-synchronized success feedback;
-- management/planning/tutorial/system screens built from immutable composite Read Models and typed Commands, with no UI-side business-rule or partial-pause authority;
-- miniaudio behind a project audio adapter with isolated real-time callback, generation-checked voices, semantic buses, resident/streamed clip classes, device-failure degradation and explicit audio lifetime;
-- separate GameplaySoundEvent and PresentationAudioEvent pipelines so user mix never alters AI hearing;
-- atmosphere/vacuum/conduction/radio/Pilot Telemetry audio semantics, knowledge-safe occlusion, dialogue/radio, and non-omniscient adaptive music;
-- subtitles/Closed Captions, typed `AlarmPriority::P0–P3`, acknowledgement/escalation/deduplication, High Contrast, Reduced Motion/Effects, Photosensitivity Safe and critical multi-channel redundancy;
-- animation/camera/VFX/viewmodel projection where notifies, particles and camera effects never become movement/combat/resource/gameplay authority;
-- one explicit runtime handoff from fixed-tick commits to immutable Read Models + ordered exactly-once PresentationEvents, with Simulation Time separated from Presentation Time and stale generation/revision rejection.
+Exact v1 `SFGSAVE` bytes and SectionKind registry, Stable Save Boundary orchestration, immutable save generations, Manual/Quick/Autosave catalogs, crash-safe pending-file validation + atomic commit, all-or-nothing staged load/session replacement, deterministic source-preserving migrations, explicit ContentId compatibility, fail-soft profile settings persistence, diagnostics/recovery tooling, and resume at `saved_simulation_tick + 1`.
 
-### TA-12 Persistence Implementation
+### TA-13 — Concurrency / Performance / Memory / Streaming Budgets
 
-TA-12 establishes:
+TA-13 establishes:
 
-- Stable Save Boundary persistence-service orchestration with immutable snapshots and background encoding/writing;
-- an exact v1 `SFGSAVE` binary container with a 128-byte header, 64-byte section entries, deterministic little-endian encoding, CRC32C and explicit ContentBuildId metadata;
-- a stable required SectionKind/domain-codec registry including consequential LocalContextContinuation without serializing runtime/backend memory;
-- immutable save generations, logical manual/quick/autosave slots, SnapshotSequence ordering, rebuildable catalog caches and 10-generation rolling autosave retention;
-- crash-safe pending-file validation and atomic unique rename commit with post-commit cleanup only;
-- staged all-or-nothing load/migration/content validation followed by exactly one SessionRoot replacement and fresh runtime/backend reconstruction;
-- deterministic source-preserving migrations with Persistent-ID/exactly-once preservation and explicit ContentId compatibility rules;
-- separate fail-soft versioned profile persistence for non-gameplay controls/accessibility/HUD/audio/display settings;
-- save inspection, corruption/quarantine diagnostics, golden fixtures and no heuristic gameplay-state repair;
-- fixed load-resume semantics at `saved_simulation_tick + 1` with zero gameplay progression during file/migration/backend work.
+- reference software target of fixed 60 Hz authoritative simulation plus 60 FPS at 1920×1080 High, with TA-16 pinning the concrete reference PC;
+- simulation p95 <= **4.0 ms**, total main-thread work p95 <= **12.0 ms**, GPU p95 <= **13.5 ms**, GPU p99 <= **16.0 ms** in representative reference scenes;
+- one shared runtime worker pool `clamp(HardwareConcurrency - 2, 2, 12)`, bounded priority queues/mailboxes, fairness, cancellation, immutable job data, and completion-order non-authority;
+- four catch-up ticks/render frame maximum, explicit backlog pressure states, and CriticalPerformanceRecovery without skipping Simulation Time;
+- active-local envelopes for runtime entities, physics bodies/contacts/queries, actors, projectiles, CharacterMotors, spacecraft and spatial indexing;
+- numeric Horizon graph/logistics/WorkOrder/automation, AI/perception/pathfinding, nav rebuild, objective, reinforcement and strategic scheduler envelopes while preserving chronological semantics;
+- process/ContentCache/streaming-staging CPU memory targets, Low/Medium/High/Ultra GPU residency targets, bounded file/decode/upload concurrency, prefetch lead times, cache eviction, and Hard Streaming Hold acceptance targets;
+- renderer budgets for visible instances/triangles/draws/lights/shadows/transparency/particles/skinning/render targets plus presentation-only degradation;
+- bounded input/UI/text/glyph/marker/notification/presentation/audio/animation/haptic work with accessibility and GameplaySoundEvent invariants preserved;
+- bounded save snapshot/file/load/catalog memory/I/O/concurrency and offline content-build worker/RAM/I/O/hot-reload envelopes;
+- standardized profiler/telemetry, 30-second warm-up + 120-second repeated benchmark runs, ten representative benchmark scenarios, percentile regression thresholds, bounded trace overhead, hitch captures, leak plateau tests, worker-count/frame-rate equivalence matrices, and a strict degradation order that never reaches authoritative gameplay semantics.
 
 ## Architecture Documents
 
@@ -300,15 +278,31 @@ TA-12 establishes:
 - [`99_ta12_runtime_integration_debugging_and_validation.md`](99_ta12_runtime_integration_debugging_and_validation.md)
 - [`TA12_CROSS_VALIDATION.md`](TA12_CROSS_VALIDATION.md)
 
+### TA-13
+
+- [`100_performance_target_and_budget_framework.md`](100_performance_target_and_budget_framework.md)
+- [`101_worker_pool_job_system_and_backpressure.md`](101_worker_pool_job_system_and_backpressure.md)
+- [`102_main_thread_tick_frame_and_backlog_budgets.md`](102_main_thread_tick_frame_and_backlog_budgets.md)
+- [`103_runtime_entities_physics_and_spatial_budgets.md`](103_runtime_entities_physics_and_spatial_budgets.md)
+- [`104_station_ai_mission_and_strategic_scalability.md`](104_station_ai_mission_and_strategic_scalability.md)
+- [`105_streaming_content_cache_and_memory_budgets.md`](105_streaming_content_cache_and_memory_budgets.md)
+- [`106_renderer_gpu_and_vfx_performance_budgets.md`](106_renderer_gpu_and_vfx_performance_budgets.md)
+- [`107_ui_audio_input_and_presentation_budgets.md`](107_ui_audio_input_and_presentation_budgets.md)
+- [`108_persistence_io_and_content_build_concurrency_budgets.md`](108_persistence_io_and_content_build_concurrency_budgets.md)
+- [`109_profiling_telemetry_benchmark_scenes_and_degradation.md`](109_profiling_telemetry_benchmark_scenes_and_degradation.md)
+- [`TA13_CROSS_VALIDATION.md`](TA13_CROSS_VALIDATION.md)
+
 ### Governance
 
 - [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
+- [`TA12_ARCHITECTURE_DECISIONS.md`](TA12_ARCHITECTURE_DECISIONS.md)
+- [`TA13_ARCHITECTURE_DECISIONS.md`](TA13_ARCHITECTURE_DECISIONS.md)
 - [`TA_ROADMAP.md`](TA_ROADMAP.md)
 
-Later TA phases define performance/concurrency/memory/streaming budgets, testing/CI, final architecture integration audit, and implementation handoff/locking.
+Later TA phases define automated testing/CI, final architecture integration audit, and implementation handoff/locking.
 
 ## Implementation Gate
 
-Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
+Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content/performance boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
 
-`Implementation Locked` remains a later per-contract handoff state. **TA-12 Architecture Complete does not authorize implementation scaffolding yet.**
+`Implementation Locked` remains a later per-contract handoff state. **TA-13 Architecture Complete does not authorize implementation scaffolding yet.**

@@ -14,7 +14,8 @@ std::uint32_t Pcg32::next_u32() noexcept {
     state_ = old_state * 6364136223846793005ULL + increment_;
     const auto xorshifted = static_cast<std::uint32_t>(((old_state >> 18U) ^ old_state) >> 27U);
     const auto rotation = static_cast<std::uint32_t>(old_state >> 59U);
-    return (xorshifted >> rotation) | (xorshifted << ((-rotation) & 31U));
+    const auto inverse_rotation = (32U - rotation) & 31U;
+    return (xorshifted >> rotation) | (xorshifted << inverse_rotation);
 }
 
 std::uint64_t splitmix64(std::uint64_t value) noexcept {

@@ -24,13 +24,16 @@ FixedStepPlan FixedStepScheduler::advance(const double frame_seconds) noexcept {
         ++steps;
     }
 
-    if (steps == max_steps_per_frame_ && accumulator_ >= step_seconds_) {
-        accumulator_ = std::fmod(accumulator_, step_seconds_);
-    }
+    // A per-frame step cap limits how much authoritative simulation work may be
+    // performed in one rendered frame; it must not discard queued simulation
+    // time. Only the fractional remainder participates in render interpolation
+    // while any complete queued ticks remain in the accumulator for later
+    // frames.
+    const auto interpolation_remainder = std::fmod(accumulator_, step_seconds_);
 
     return FixedStepPlan{
         .steps = steps,
-        .interpolation_alpha = accumulator_ / step_seconds_,
+        .interpolation_alpha = interpolation_remainder / step_seconds_,
         .accepted_frame_seconds = accepted,
     };
 }

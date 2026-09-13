@@ -3,6 +3,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <stdexcept>
@@ -10,16 +11,24 @@
 namespace starforge::platform {
 namespace {
 
+void glfw_error_callback(const int error_code, const char* description) {
+    std::cerr << "PLATFORM.GLFW_ERROR code=" << error_code << " message="
+              << (description != nullptr ? description : "<none>") << '\n';
+}
+
 class GlfwWindow final : public Window {
 public:
     explicit GlfwWindow(const WindowConfig& config) {
+        glfwSetErrorCallback(&glfw_error_callback);
         if (glfwInit() != GLFW_TRUE) {
-            throw std::runtime_error("GLFW initialization failed");
+            throw std::runtime_error("PLATFORM.GLFW_INITIALIZATION_FAILED");
         }
 
+        glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         glfwWindowHint(GLFW_VISIBLE, config.visible ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
@@ -28,7 +37,7 @@ public:
         window_ = glfwCreateWindow(width, height, config.title.c_str(), nullptr, nullptr);
         if (window_ == nullptr) {
             glfwTerminate();
-            throw std::runtime_error("GLFW failed to create an OpenGL 4.6 core window");
+            throw std::runtime_error("PLATFORM.GLFW_OPENGL_46_CORE_CONTEXT_FAILED");
         }
 
         glfwMakeContextCurrent(window_);
@@ -85,7 +94,7 @@ private:
     static int checked_dimension(const std::uint32_t value) {
         constexpr auto max_int = static_cast<std::uint32_t>(std::numeric_limits<int>::max());
         if (value == 0 || value > max_int) {
-            throw std::invalid_argument("window dimensions must fit a positive int");
+            throw std::invalid_argument("PLATFORM.GLFW_INVALID_WINDOW_DIMENSION");
         }
         return static_cast<int>(value);
     }

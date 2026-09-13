@@ -28,13 +28,17 @@ jobs:
             test_label: domain
             test_preset: windows-domain
             determinism_probe: true
-          - check_name: StarForge / Content Contracts
+          - check_name: StarForge / Content Validation
             test_label: content
             test_preset: windows-content
             determinism_probe: false
-          - check_name: StarForge / Persistence Contracts
+          - check_name: StarForge / Persistence Compatibility
             test_label: persistence
             test_preset: windows-persistence
+            determinism_probe: false
+          - check_name: StarForge / Backend Smoke
+            test_label: backends
+            test_preset: windows-backends
             determinism_probe: false
 
     name: ${{ matrix.check_name }}
@@ -117,6 +121,44 @@ jobs:
         shell: pwsh
         run: cmake --build --preset windows-msvc-debug --parallel
 
+      - name: Install pinned Mesa llvmpipe for backend smoke
+        if: ${{ matrix.check_name == 'StarForge / Backend Smoke' }}
+        shell: pwsh
+        run: |
+          $mesaVersion = "26.2.0"
+          $archive = Join-Path $env:RUNNER_TEMP "mesa3d-$mesaVersion-release-msvc.7z"
+          $installRoot = Join-Path $env:RUNNER_TEMP "mesa3d-$mesaVersion"
+          $url = "https://github.com/pal1000/mesa-dist-win/releases/download/$mesaVersion/mesa3d-$mesaVersion-release-msvc.7z"
+          $expectedSha256 = "dcb2719ef346dab5b609fcb193a5f13cfc4b0502e3f4de1ad43d349477402f47"
+
+          Invoke-WebRequest -Uri $url -OutFile $archive
+          $actualSha256 = (Get-FileHash -Path $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Host "mesa_archive_sha256=$actualSha256"
+          if ($actualSha256 -ne $expectedSha256) { throw "Mesa3D $mesaVersion archive SHA-256 mismatch" }
+
+          $sevenZip = Join-Path $env:ProgramFiles "7-Zip\7z.exe"
+          if (-not (Test-Path $sevenZip)) { throw "7-Zip is required to extract the pinned Mesa3D package" }
+          New-Item -ItemType Directory -Path $installRoot -Force | Out-Null
+          & $sevenZip x $archive "-o$installRoot" -y | Out-Host
+          if ($LASTEXITCODE -ne 0) { throw "Mesa3D archive extraction failed with exit code $LASTEXITCODE" }
+
+          $mesaX64 = Join-Path $installRoot "x64"
+          $openGlDll = Join-Path $mesaX64 "opengl32.dll"
+          $galliumDll = Join-Path $mesaX64 "libgallium_wgl.dll"
+          if (-not (Test-Path $openGlDll) -or -not (Test-Path $galliumDll)) {
+            throw "Pinned Mesa3D package is missing the expected x64 WGL runtime"
+          }
+
+          $backendDir = Join-Path "${{ github.workspace }}" "out\build\windows-msvc-debug\tests\backends\Debug"
+          if (-not (Test-Path $backendDir)) { throw "Backend test executable directory was not produced by the build" }
+          Copy-Item -Path (Join-Path $mesaX64 "*.dll") -Destination $backendDir -Force
+
+          "GALLIUM_DRIVER=llvmpipe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "LIBGL_ALWAYS_SOFTWARE=1" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MESA_GL_VERSION_OVERRIDE=4.6" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MESA_GLSL_VERSION_OVERRIDE=460" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "backend_smoke_gl_provider=Mesa3D-$mesaVersion llvmpipe"
+
       - name: Require nonzero test discovery
         shell: pwsh
         run: >-
@@ -163,7 +205,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Evaluate required IMP-2 gates
+      - name: Evaluate required IMP-3 gates
         shell: bash
         run: |
           echo "Verification matrix result: ${{ needs.verification.result }}"

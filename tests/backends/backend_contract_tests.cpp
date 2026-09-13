@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <limits>
 #include <memory>
+#include <stdexcept>
 
 TEST_CASE("fixed-step scheduler accumulates partial frames deterministically", "[backends]") {
     starforge::platform::FixedStepScheduler scheduler{0.01, 0.25, 8};
@@ -19,6 +20,22 @@ TEST_CASE("fixed-step scheduler accumulates partial frames deterministically", "
     const auto second = scheduler.advance(0.006);
     REQUIRE(second.steps == 1U);
     REQUIRE(second.interpolation_alpha == Catch::Approx(0.2));
+}
+
+TEST_CASE("fixed-step scheduler preserves queued ticks after the per-frame cap", "[backends]") {
+    starforge::platform::FixedStepScheduler scheduler{0.125, 1.0, 3};
+
+    const auto capped = scheduler.advance(0.75);
+    REQUIRE(capped.steps == 3U);
+    REQUIRE(capped.interpolation_alpha == Catch::Approx(0.0));
+
+    const auto drained = scheduler.advance(0.0);
+    REQUIRE(drained.steps == 3U);
+    REQUIRE(drained.interpolation_alpha == Catch::Approx(0.0));
+
+    const auto empty = scheduler.advance(0.0);
+    REQUIRE(empty.steps == 0U);
+    REQUIRE(empty.interpolation_alpha == Catch::Approx(0.0));
 }
 
 TEST_CASE("fixed-step scheduler clamps pathological frame deltas", "[backends]") {
@@ -33,6 +50,28 @@ TEST_CASE("fixed-step scheduler clamps pathological frame deltas", "[backends]")
     REQUIRE(clamped.accepted_frame_seconds == Catch::Approx(0.05));
     REQUIRE(clamped.interpolation_alpha >= 0.0);
     REQUIRE(clamped.interpolation_alpha < 1.0);
+}
+
+TEST_CASE("GLFW window rejects invalid dimensions before creating a context", "[backends]") {
+    REQUIRE_THROWS_AS(
+        starforge::platform::create_window({
+            .title = "StarForge invalid window",
+            .width = 0,
+            .height = 64,
+            .visible = false,
+            .vsync = false,
+        }),
+        std::invalid_argument);
+
+    REQUIRE_THROWS_AS(
+        starforge::platform::create_window({
+            .title = "StarForge oversized window",
+            .width = std::numeric_limits<std::uint32_t>::max(),
+            .height = 64,
+            .visible = false,
+            .vsync = false,
+        }),
+        std::invalid_argument);
 }
 
 TEST_CASE("render snapshot is an immutable presentation handoff", "[backends]") {

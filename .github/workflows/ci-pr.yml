@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build-unit:
     name: StarForge / Build & Unit
-    runs-on: windows-2025
+    runs-on: windows-2022
     timeout-minutes: 30
 
     steps:
@@ -35,15 +35,42 @@ jobs:
             throw "Checkout SHA mismatch: expected ${{ github.sha }}, got $actual"
           }
 
-      - name: Verify locked Visual Studio toolset distribution
+      - name: Verify locked Visual Studio and MSVC toolset
         shell: pwsh
         run: |
           $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $version = & $vswhere -latest -products * -property installationVersion
-          Write-Host "visual_studio_installation_version=$version"
-          if ($version -ne "17.14.37628.2") {
-            throw "TA16-V1 requires Visual Studio 17.14.40 / installation 17.14.37628.2; runner has $version"
+          if (-not (Test-Path $vswhere)) {
+            throw "vswhere.exe was not found on the certification runner"
           }
+
+          $vsPath = & $vswhere -latest -products * -version "[17.14,17.15)" -property installationPath
+          $version = & $vswhere -latest -products * -version "[17.14,17.15)" -property installationVersion
+          if (-not $vsPath -or -not $version) {
+            throw "TA16-V1 requires a Visual Studio 2022 17.14 installation"
+          }
+
+          Write-Host "visual_studio_installation_path=$vsPath"
+          Write-Host "visual_studio_installation_version=$version"
+          if ($version -ne "17.14.37614.0") {
+            throw "TA16-V1 requires Visual Studio 2022 17.14.39 / installation 17.14.37614.0; runner has $version"
+          }
+
+          $msvcRoot = Join-Path $vsPath "VC\Tools\MSVC"
+          $toolset = Get-ChildItem -Path $msvcRoot -Directory |
+            Where-Object { $_.Name -like "14.44.*" } |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if (-not $toolset) {
+            throw "TA16-V1 requires the MSVC v143 14.44 toolset family"
+          }
+
+          $cl = Join-Path $toolset.FullName "bin\Hostx64\x64\cl.exe"
+          if (-not (Test-Path $cl)) {
+            throw "Expected x64 cl.exe was not found at $cl"
+          }
+
+          Write-Host "msvc_toolset_directory=$($toolset.Name)"
+          Write-Host "cl_file_version=$((Get-Item $cl).VersionInfo.FileVersion)"
 
       - name: Install and verify CMake 4.3.3
         shell: pwsh

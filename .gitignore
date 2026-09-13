@@ -1,0 +1,33 @@
+# Build outputs
+/out/
+/build/
+cmake-build-*/
+
+# vcpkg local state
+/vcpkg_installed/
+/.vcpkg-root/
+
+# IDE / editor local state
+.vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Compiler / profiler / coverage artifacts
+*.obj
+*.o
+*.pdb
+*.ilk
+*.gcda
+*.gcno
+*.profraw
+*.profdata
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Local logs / crash evidence
+/logs/
+/crash_dumps/

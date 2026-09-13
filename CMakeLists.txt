@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 4.3.3)
+
+project(ProjectStarForge VERSION 0.0.1 LANGUAGES CXX)
+
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+include(StarForgeProjectOptions)
+include(StarForgeWarnings)
+include(CTest)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+option(STARFORGE_BUILD_TESTS "Build StarForge automated tests" ON)
+option(STARFORGE_BUILD_DEVTOOLS "Build development-only tooling" OFF)
+option(STARFORGE_WARNINGS_AS_ERRORS "Treat project-owned warnings as errors" ON)
+option(STARFORGE_ENABLE_ASAN "Enable AddressSanitizer where supported" OFF)
+option(STARFORGE_ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer where supported" OFF)
+option(STARFORGE_ENABLE_TSAN "Enable ThreadSanitizer where supported" OFF)
+
+if(STARFORGE_ENABLE_ASAN AND STARFORGE_ENABLE_TSAN)
+    message(FATAL_ERROR "ASan and TSan are not a supported combined StarForge configuration")
+endif()
+
+add_subdirectory(src/core)
+add_subdirectory(apps/headless)
+
+if(BUILD_TESTING AND STARFORGE_BUILD_TESTS)
+    find_package(Catch2 3.16 CONFIG REQUIRED)
+    list(APPEND CMAKE_MODULE_PATH "${Catch2_DIR}")
+    include(Catch)
+    add_subdirectory(tests)
+endif()
+
+message(STATUS "StarForge implementation baseline: TA16-V1")
+message(STATUS "C++ standard: 23")
+message(STATUS "Tests: ${STARFORGE_BUILD_TESTS}")
+message(STATUS "Warnings as errors: ${STARFORGE_WARNINGS_AS_ERRORS}")

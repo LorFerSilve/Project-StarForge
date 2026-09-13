@@ -53,7 +53,9 @@ tests/unit/
 third_party/generated/glad/README.md
 ```
 
-## 3. Blocker Found During Cross-Validation
+## 3. Blockers Found During Cross-Validation
+
+### 3.1 Hosted Windows image drift
 
 The first TA-16 bootstrap workflow on `main` failed before configure/build because its runner/toolchain assumptions were contradictory:
 
@@ -65,7 +67,7 @@ actual hosted image:         Visual Studio 2026 (18.x)
 
 This was a real TA-16 blocker because the implementation handoff requires current-head bootstrap evidence and explicitly prohibits silently accepting a different compiler distribution.
 
-### Resolution
+#### Resolution
 
 The baseline and executable workflow were made mutually certifiable without weakening version checks:
 
@@ -88,6 +90,36 @@ The workflow now:
 - continues to fail on unexpected toolchain drift.
 
 This is a pre-closure correction of `TA16-V1`, not a post-lock C2 architecture migration.
+
+### 3.2 CMake distribution-channel mismatch
+
+The first PR-head validation then proved the corrected VS/MSVC assertion but failed before vcpkg because `pip install cmake==4.3.3` had no matching distribution on the hosted runner. CMake 4.3.3 itself is a real Kitware release; the failure was the assumption that PyPI was a complete certification source for that exact binary.
+
+#### Resolution
+
+The CI contract keeps CMake **4.3.3** and now installs the official Kitware Windows x64 release archive directly:
+
+```text
+asset:  cmake-4.3.3-windows-x86_64.zip
+SHA-256: 935ade9e5e8723583c07f44c5592cea2a1c8f65c56ca7e07b34c025c880e0bd6
+```
+
+The workflow verifies this hard-pinned digest before extraction and then verifies the executable reports `cmake version 4.3.3`. This is stricter and more reproducible than package-manager availability.
+
+### 3.3 Exact PR-head checkout semantics
+
+Cross-validation also identified that GitHub's default checkout on a `pull_request` event checks out the synthetic merge ref while the TA-14/TA-16 evidence contract refers to the exact candidate head SHA.
+
+#### Resolution
+
+`ci-pr.yml` now explicitly checks out:
+
+```text
+pull_request: github.event.pull_request.head.sha
+push/manual:  github.sha
+```
+
+and independently verifies `git rev-parse HEAD` equals that selected value. The dynamic promotion gate therefore applies to the exact final PR head that will be supplied to the squash merge operation.
 
 ## 4. Sixteen-Item TA-16 Exit Matrix
 
@@ -245,9 +277,9 @@ StarForge / CI Gate       = success
 
 The Build & Unit job must reach and pass all of:
 
-1. exact SHA checkout;
+1. exact PR-head/push-SHA checkout;
 2. exact VS/MSVC certification;
-3. exact CMake certification;
+3. exact CMake archive digest and version certification;
 4. exact vcpkg checkout/bootstrap;
 5. configure;
 6. build;
@@ -262,7 +294,7 @@ A prior SHA's green run does not satisfy this condition.
 ```text
 Static TA-16 categories:        16/16 PASS
 Static architecture blockers:   0
-Known CI contract blocker:      RESOLVED in candidate
+CI contract findings:           RESOLVED in candidate
 Placeholder-green gates:        0
 Bootstrap targets:              REAL
 Cross-validation artifact:      PRESENT

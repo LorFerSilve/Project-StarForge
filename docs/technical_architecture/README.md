@@ -1,49 +1,57 @@
 # Project StarForge — Technical Architecture Specification
 
-> **Status:** Active  
-> **Authority:** Technical realization of the Design Complete GDS
+> **Status:** Technical Architecture Complete / Implementation Locked  
+> **Implementation baseline:** `TA16-V1`  
+> **Authority:** Technical realization of the Design Complete GDS and implementation handoff
 
-This directory translates the authoritative Game Design Specification under `docs/game_design/` into an implementable C++/OpenGL software architecture.
+This directory translates the authoritative Game Design Specification under `docs/game_design/` into the locked C++/OpenGL software architecture used by implementation.
 
 ## Current Phase
 
 The Game Design Specification is **Design Complete**.
 
-Technical Architecture has completed **TA-0 through TA-15**. The next and final pre-implementation dependency is **TA-16 — Implementation Roadmap and Contract Locking**.
+Technical Architecture **TA-0 through TA-16 is complete**. TA-15 finished the integration audit at **260/260 PASS** with 0 blockers. TA-16 then fixed the concrete implementation baseline, target DAG, repository/build/test/CI contracts, reference runner, implementation roadmap, vertical slice, milestone/branch policy, and change-control boundary.
 
-Gameplay implementation and repository scaffolding have not started. Technical contracts are defined first so implementation does not invent architecture ad hoc.
+The next project dependency is no longer another TA phase:
+
+> **IMP-1 — Core, Identity, Deterministic Simulation, and Transactions**
+
+TA-16's checked-in CMake/headless/unit-test/CI bootstrap is infrastructure proof only; it does not claim gameplay implementation.
 
 ## Authority Relationship
 
-The technical architecture must implement the Design Complete GDS, may choose software/data/runtime realization, may not silently change gameplay behavior, and must escalate technical infeasibility through explicit design/architecture change control.
+The technical architecture implements the Design Complete GDS, may choose software/data/runtime realization where explicitly free, may not silently change gameplay behavior, and must escalate infeasibility through formal change control.
+
+At `TA16-V1`, TA-0 through TA-16 are **Implementation Locked**. Code is subordinate to those contracts.
 
 ## Architectural Direction
 
 Project StarForge is a **purpose-built modular monolith** in C++23 with a custom OpenGL renderer. It deliberately avoids a general-purpose game engine, runtime plugin architecture, mandatory gameplay scripting VM, baseline networking architecture, one universal persistent ECS, and hidden framework ownership of the game loop.
 
-## Initial Technical Baseline
+## TA16-V1 Toolchain / Dependency Lock
 
-- C++23;
-- CMake;
-- vcpkg manifest mode;
-- OpenGL 4.6 Core Profile;
-- GLFW;
-- glad2;
-- GLM;
-- Jolt Physics behind a StarForge adapter;
-- Recast/Detour behind a StarForge navigation adapter for grounded navigation;
-- project-owned bounded 3D navigation for flying/Zero-G AI;
-- miniaudio behind a StarForge audio layer;
-- FreeType + HarfBuzz for shipping text;
-- fastgltf / glTF 2.0 for canonical 3D exchange import;
-- KTX2 + Khronos KTX-Software for cooked textures;
-- meshoptimizer for offline mesh optimization/generated LODs;
-- glslang for offline GLSL validation;
-- Dear ImGui for development tooling only;
-- Catch2;
-- GitHub + GitHub Actions.
+- Visual Studio / Build Tools 17.14.40, MSVC v143 x64;
+- CMake 4.3.3;
+- LLVM/Clang 23.1.1 independent compiler/tooling line;
+- vcpkg baseline `a1cae005c39be7b18ba319fced856b68d7276271`;
+- OpenGL 4.6 Core;
+- GLFW 3.5.1;
+- glad2 v2.0.8 generated source, explicitly not the vcpkg glad1 port;
+- GLM 1.0.3;
+- Jolt Physics 5.6.0#1;
+- Recast/Detour 1.6.0#1;
+- miniaudio 0.11.25;
+- FreeType 2.14.3;
+- HarfBuzz 14.4.0;
+- fastgltf 0.9.0;
+- KTX-Software 4.4.2;
+- meshoptimizer 1.2;
+- glslang 16.4.0;
+- Dear ImGui 1.92.9 development-only;
+- Catch2 3.16.0;
+- simdjson 4.6.8 where selected by content tools.
 
-Exact dependency versions, compiler/runner versions and concrete reference hardware remain TA-16 implementation-roadmap data and must be pinned before scaffolding.
+Exact ownership/features/license-notice policy: `131_toolchain_dependency_and_license_lock.md`.
 
 ## Architecture Baselines
 
@@ -77,62 +85,73 @@ Generation-checked RuntimeEntityRegistry, typed component pools, persistent acto
 
 ### TA-8 — AI and Navigation
 
-Recast/Detour grounded navigation plus project-owned bounded 3D free-flight navigation, traversal profiles/links, nav invalidation, revision-checked asynchronous paths, knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew task behavior, off-screen logical AI and deterministic scheduling.
+Recast/Detour grounded navigation plus project-owned bounded 3D free-flight navigation, traversal profiles/links, nav invalidation, revision-checked async paths, knowledge-limited perception, enemy tactical AI, robot command/squad AI, crew tasks, off-screen logical AI and deterministic scheduling.
 
 ### TA-9 — Missions / Raids / Strategic State Machines
 
-Persistent MissionId vs per-attempt MissionInstanceId, exactly-once objective DAGs, deterministic anti-reroll generation, offensive raids as specialized missions, finite reinforcements, persistent Horizon DefenseEvents, Dynamic Events/Recovery Grace, communication-separated knowledge, causal Recovery Transit and exactly-once finale resolution.
+Persistent MissionId vs per-attempt MissionInstanceId, exactly-once objective DAGs, deterministic anti-reroll generation, offensive raids, finite reinforcements, persistent Horizon DefenseEvents, Dynamic Events/Recovery Grace, communication-separated knowledge, causal Recovery Transit and exactly-once finale resolution.
 
 ### TA-10 — Content and Asset Pipeline
 
-Canonical source/cooked separation, path-independent ContentId, closed versioned schemas, fingerprints/ContentBuildId, fastgltf import, meshoptimizer, KTX2 cooking, glslang validation, separate collision/nav/terrain products, no general gameplay scripting VM, immutable Content Registry/cache, deterministic dependency builds, classified hot reload and registry-first runtime loading.
+Canonical source/cooked separation, path-independent ContentId, closed versioned schemas, fingerprints/ContentBuildId, fastgltf import, meshoptimizer, KTX2, glslang, separately cooked collision/nav/terrain, immutable Content Registry/cache, deterministic builds, classified hot reload, provenance/license checks and registry-first runtime loading.
 
 ### TA-11 — Input / UI / Audio / Presentation
 
-Fixed-tick semantic ActionId sampling/remapping, explicit input/focus contexts, StarForge-owned retained shipping UI, HarfBuzz/FreeType text, knowledge-filtered HUD/management/tutorial flows, miniaudio-backed audio separated from AI hearing, subtitles/captions/typed alarms/accessibility, presentation-only animation/camera/VFX and stable Read Model/PresentationEvent handoff.
+Fixed-tick semantic ActionId sampling/remapping, explicit focus contexts, StarForge-owned retained shipping UI, HarfBuzz/FreeType text, knowledge-filtered HUD/management/tutorials, miniaudio presentation audio separated from AI hearing, subtitles/captions/alarms/accessibility and presentation-only animation/camera/VFX.
 
 ### TA-12 — Persistence Implementation
 
-Exact v1 `SFGSAVE` bytes/SectionKind registry, Stable Save Boundary orchestration, immutable save generations, Manual/Quick/Autosave catalogs, crash-safe pending-file validation + atomic commit, staged all-or-nothing load/session replacement, deterministic source-preserving migrations, explicit ContentId compatibility, fail-soft profile settings, diagnostics/recovery tooling and resume at `saved_simulation_tick + 1`.
+Exact v1 `SFGSAVE` bytes/SectionKind registry, Stable Save Boundary orchestration, immutable save generations, crash-safe commit, staged all-or-nothing load, deterministic source-preserving migrations, ContentId compatibility, fail-soft profile settings, recovery tooling and resume at `saved_simulation_tick + 1`.
 
-### TA-13 — Concurrency / Performance / Memory / Streaming Budgets
+### TA-13 — Concurrency / Performance / Memory / Streaming
 
-Fixed 60 Hz + 1080p High reference software target, bounded shared worker pool/backpressure, no Simulation-Time skipping, active entity/physics/station/AI/strategic scale envelopes, CPU/GPU/cache/streaming budgets, renderer/UI/audio/persistence/content-build envelopes, percentile regression thresholds, profiler/trace contracts and ten representative benchmark scenarios.
+Bounded worker pool/backpressure, no Simulation-Time skipping, entity/physics/station/AI/strategic scale envelopes, CPU/GPU/cache/streaming limits, renderer/UI/audio/persistence/content-build budgets, percentile thresholds and representative benchmark scenarios.
 
 ### TA-14 — Testing / Diagnostics / CI
 
-TA-14 establishes:
-
-- CMake/CTest/Catch2 layers for unit/domain, headless integration, deterministic scenarios, backend smoke, golden/compatibility, fault/corruption and performance verification;
-- fixed-seed SimulationTick-scripted scenarios with semantic checkpoints, transaction/ownership/Activation Lease tests and worker-count/frame-rate equivalence;
-- Jolt/Recast/OpenGL/GLFW/miniaudio/FreeType/HarfBuzz/fastgltf/KTX2/meshoptimizer/glslang adapter smoke coverage without backend identity becoming gameplay authority;
-- source/schema/reference/provenance validation, all baseline GLSL variant validation and deterministic clean/incremental/no-op content cook tests;
-- byte-exact persistence v1 goldens, historical migration fixtures, corruption/truncation/overflow matrices, crash fault injection, catalog/autosave recovery, RNG continuation and profile persistence tests;
-- typed bounded diagnostics, strong development assertions, crash context, deterministic trace correlation, Dear ImGui inspectors, debug commands and leak/stall/memory diagnostics;
-- warnings-as-errors, deterministic formatting, pinned static analysis, architecture-boundary linting, blocking ASan/UBSan and scheduled/release leak/TSan certification where supported;
-- least-privilege GitHub Actions architecture with stable aggregate checks (`Build & Unit`, `Headless Determinism`, `Content Validation`, `Persistence Compatibility`, `Static Analysis`, `Sanitizers`, `Backend Smoke` where stable, and final `CI Gate`);
-- controlled-reference-runner TA-13 percentile/memory/Hard-Hold performance regression gates with reviewed baselines and no rerun-until-green policy;
-- bounded privacy-safe artifacts, explicit flaky/quarantine issue-owner-expiry governance, exact-SHA certification evidence and zero-test required-gate protection;
-- executable CI workflow YAML deliberately deferred to TA-16 so workflows are created together with real CMake/CTest targets/presets and pinned toolchain/runner versions.
+CMake/CTest/Catch2 layers, deterministic headless scenarios, backend smoke, content determinism, persistence goldens/migration/corruption/fault injection, diagnostics/assertions/debug tools, warnings/static analysis/sanitizers, least-privilege Actions, controlled performance runner, exact-SHA evidence and zero-test protection.
 
 ### TA-15 — Architecture Integration Audit
 
-TA-15 establishes:
+Final cross-system audit covering authority, dependencies, timing, lifecycle, active/off-screen state, content, persistence, presentation, failure/performance and testability, with complete GDS traceability and a formal **260/260 PASS**.
 
-- one final audit method/severity/evidence contract over TA-0 through TA-14;
-- a single-owner authority audit covering persistent identity, runtime handles, transactions, backend encapsulation and mutation rights;
-- fixed-tick/Simulation-Time/threading/lifecycle verification including worker non-authority, deferred destruction, save/load ordering and backlog semantics;
-- active local scene, streaming, physics, station, navigation, AI and active↔off-screen equivalence validation;
-- mission/raid/event/content/persistence/input/UI/audio/accessibility exactly-once and knowledge-boundary validation;
-- failure/recovery/performance/testability validation proving technical pressure/failure never fabricates or simplifies authoritative gameplay;
-- complete GDS-0 through GDS-14 → TA realization traceability;
-- a realizable build/module dependency DAG with no required compile-time or semantic ownership cycle;
-- an explicit implementation-readiness/risk register separating 0 blockers/0 required corrections from normal engineering risks and TA-16 lock items;
-- a formal **260/260 PASS** integration matrix and final verdict authorizing TA-16, not direct coding.
+### TA-16 — Implementation Roadmap and Contract Locking
 
-TA-15 deliberately introduces no new Architecture Decision number: the audit certifies already accepted contracts instead of redesigning them during certification.
+TA-16 fixes:
 
-## Architecture Documents
+- `TA16-V1` reproducible environment;
+- concrete CMake target/source DAG;
+- repository-owned presets/CTest labels;
+- nonzero test discovery;
+- real bootstrap targets/tests;
+- executable CI with immutable Action pins;
+- stable check/ruleset target state;
+- `SF-PERF-WIN-01` reference hardware;
+- IMP-0 through IMP-16 dependency roadmap;
+- Horizon Test Cell V0 acceptance;
+- C0–C3 change control;
+- short-lived branch/squash-merge/evidence milestones;
+- architecture decision continuity AD-001 through AD-141.
+
+## TA-16 Artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `130_ta16_scope_lock_authority_and_exit_criteria.md` | final scope/lock/exit authority |
+| `131_toolchain_dependency_and_license_lock.md` | exact toolchain/dependency/license evidence |
+| `132_cmake_target_dependency_and_source_layout_lock.md` | target DAG and source layout |
+| `133_build_presets_configurations_and_ctest_lock.md` | presets/configurations/test labels |
+| `134_ci_workflows_actions_and_required_check_lock.md` | CI/action/check/ruleset contract |
+| `135_reference_hardware_and_performance_runner_lock.md` | controlled performance reference |
+| `136_implementation_roadmap_and_vertical_slice.md` | IMP roadmap + Horizon Test Cell V0 |
+| `137_implementation_lock_matrix_and_change_control.md` | per-contract locks / C0–C3 |
+| `138_branch_merge_milestone_and_release_strategy.md` | Git integration + M0–M9 |
+| `139_ta16_final_implementation_handoff.md` | final transition to implementation |
+| `TA16_ARCHITECTURE_DECISIONS.md` | AD-133 through AD-141 |
+| `ARCHITECTURE_DECISION_REGISTRY.md` | contiguous AD-001 through AD-141 registry |
+| `TA16_CROSS_VALIDATION.md` | final implementation-readiness audit |
+
+## Earlier Authoritative Artifact Ranges
 
 | Phase | Authoritative artifacts |
 |---|---|
@@ -154,16 +173,22 @@ TA-15 deliberately introduces no new Architecture Decision number: the audit cer
 
 ## Governance
 
-- [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md)
-- [`TA12_ARCHITECTURE_DECISIONS.md`](TA12_ARCHITECTURE_DECISIONS.md)
-- [`TA13_ARCHITECTURE_DECISIONS.md`](TA13_ARCHITECTURE_DECISIONS.md)
-- [`TA14_ARCHITECTURE_DECISIONS.md`](TA14_ARCHITECTURE_DECISIONS.md)
-- [`TA_ROADMAP.md`](TA_ROADMAP.md)
-
-TA-16 now owns the dependency-ordered implementation roadmap, exact toolchain/dependency pins, concrete target/preset/runner selection, CI workflow materialization, reference hardware, vertical slice, milestone exits, decision-log consolidation and per-contract implementation locking.
+- [`ARCHITECTURE_DECISIONS.md`](ARCHITECTURE_DECISIONS.md) — AD-001 through AD-100 detailed source;
+- [`TA12_ARCHITECTURE_DECISIONS.md`](TA12_ARCHITECTURE_DECISIONS.md) — AD-101 through AD-111;
+- [`TA13_ARCHITECTURE_DECISIONS.md`](TA13_ARCHITECTURE_DECISIONS.md) — AD-112 through AD-121;
+- [`TA14_ARCHITECTURE_DECISIONS.md`](TA14_ARCHITECTURE_DECISIONS.md) — AD-122 through AD-132;
+- [`TA16_ARCHITECTURE_DECISIONS.md`](TA16_ARCHITECTURE_DECISIONS.md) — AD-133 through AD-141;
+- [`ARCHITECTURE_DECISION_REGISTRY.md`](ARCHITECTURE_DECISION_REGISTRY.md) — canonical consolidated numbering/source registry;
+- [`TA_ROADMAP.md`](TA_ROADMAP.md).
 
 ## Implementation Gate
 
-Technical subsystems reach code only after the relevant Design Complete GDS, Architecture Complete technical contract, explicit ownership/lifetime/threading/persistence/content/performance/testing boundaries, dependency/toolchain decisions, validation expectations, and implementation-roadmap approval exist.
+The Technical Architecture gate is now open. Implementation proceeds only in the dependency order and milestone rules defined by TA-16.
 
-`Implementation Locked` remains a TA-16 per-contract handoff state. **TA-15 Architecture Complete authorizes TA-16 only; it does not authorize C++/OpenGL scaffolding by itself.**
+Immediate next dependency:
+
+```text
+IMP-1 — Core, Identity, Deterministic Simulation, and Transactions
+```
+
+No implementation phase may use difficulty, performance pressure, backend convenience, presentation state, worker completion order, or existing code as permission to contradict Design Complete / Implementation Locked authority.

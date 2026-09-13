@@ -1,8 +1,8 @@
-add_executable(starforge_tests_backends
+add_executable(starforge_tests_backend
     backend_contract_tests.cpp
 )
 
-target_link_libraries(starforge_tests_backends
+target_link_libraries(starforge_tests_backend
     PRIVATE
         StarForge::Platform
         StarForge::Render
@@ -11,9 +11,9 @@ target_link_libraries(starforge_tests_backends
         Catch2::Catch2WithMain
 )
 
-sf_apply_project_options(starforge_tests_backends)
+sf_apply_project_options(starforge_tests_backend)
 
-catch_discover_tests(starforge_tests_backends
+catch_discover_tests(starforge_tests_backend
     PROPERTIES
         LABELS "backends"
 )

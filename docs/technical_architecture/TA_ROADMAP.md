@@ -155,17 +155,33 @@ Artifacts: `110_test_architecture_layers_targets_and_conventions.md` through `11
 
 ## TA-15 — Architecture Integration Audit
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must cross-validate TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime/threading, dependency direction/cycles, fixed-tick ordering, active/off-screen equivalence, persistence/content compatibility, scene/world transitions, performance budgets, diagnostics/test coverage, failure recovery, toolchain boundaries, and implementation readiness. Any blocker must be resolved before TA-16.
+Defines and verifies:
+
+- one final evidence/severity method for cross-validating TA-0 through TA-14 against the Design Complete GDS;
+- authority, persistent/runtime identity, physical ownership, mutation rights, transactions, backend encapsulation and dependency direction;
+- Simulation Time, fixed-tick ordering, main-thread commit ownership, worker non-authority, Stable Boundaries, lifecycle/deferred destruction and save/load ordering;
+- one active local SceneInstance, residency/activation separation, streaming holds, physics/navigation/gameplay boundaries, station conservation and active↔off-screen equivalence;
+- mission/objective/raid/reinforcement/DynamicEvent/communications/recovery/finale exactly-once semantics;
+- ContentId/cooked-content/runtime compatibility, staged persistence/migrations and presentation/input/UI/audio/accessibility non-authority;
+- failure/recovery/performance degradation rules and complete TA-14 verification paths;
+- complete GDS-0 through GDS-14 → Technical Architecture traceability;
+- a realizable module/build dependency DAG with no required compile-time or semantic ownership cycle;
+- an implementation-readiness/risk register separating normal engineering risk and TA-16 lock items from architecture blockers;
+- a final **260/260 PASS** cross-validation with **0 blockers, 0 required corrections and 0 implementation-critical open architecture questions**.
+
+TA-15 introduces no new AD number; it certifies already accepted architecture rather than changing it during audit.
+
+Artifacts: `120_ta15_audit_scope_method_and_evidence.md` through `129_ta15_final_integration_verdict.md`, plus `TA15_CROSS_VALIDATION.md`.
 
 ## TA-16 — Implementation Roadmap and Contract Locking
 
-**Status:** Planned
+**Status:** Next
 
-Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, reference hardware, first test/content/performance gates, executable GitHub Actions workflows/required checks, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
+Must produce the dependency-ordered implementation phases, initial vertical slice, source/scaffolding plan, exact initial CMake targets/presets, pinned compiler/vcpkg/dependency/action versions, concrete reference hardware/runners, CTest labels/fixtures, executable GitHub Actions workflows/required checks, architecture-decision addendum consolidation, branch/merge strategy, milestone/exit criteria, and per-contract `Implementation Locked` handoff.
 
-Only after TA-16 may planned C++/OpenGL scaffolding begin.
+Only after TA-16 completes the relevant lock/scaffolding gate may planned C++/OpenGL scaffolding begin.
 
 ## Current Sequence
 
@@ -185,7 +201,8 @@ GDS Design Complete
 → TA-12 Architecture Complete  
 → TA-13 Architecture Complete  
 → TA-14 Architecture Complete  
-→ **TA-15 next**  
-→ TA-16 implementation roadmap/locking  
+→ TA-15 Architecture Complete  
+→ **TA-16 next — implementation roadmap/contract locking**  
+→ per-contract Implementation Locked  
 → C++/OpenGL scaffolding  
-→ gameplay implementation.
+→ dependency-ordered implementation.

@@ -6,12 +6,16 @@ if(NOT DEFINED STARFORGE_TEST_LABEL)
     set(STARFORGE_TEST_LABEL "unit")
 endif()
 
+if(NOT DEFINED STARFORGE_TEST_CONFIG)
+    set(STARFORGE_TEST_CONFIG "Debug")
+endif()
+
 if(NOT CMAKE_CTEST_COMMAND)
     find_program(CMAKE_CTEST_COMMAND ctest REQUIRED)
 endif()
 
 execute_process(
-    COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${STARFORGE_TEST_BUILD_DIR}" -C Debug -N -L "${STARFORGE_TEST_LABEL}"
+    COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${STARFORGE_TEST_BUILD_DIR}" -C "${STARFORGE_TEST_CONFIG}" -N -L "${STARFORGE_TEST_LABEL}"
     RESULT_VARIABLE discovery_result
     OUTPUT_VARIABLE discovery_output
     ERROR_VARIABLE discovery_error

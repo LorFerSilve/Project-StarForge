@@ -1,3 +1,4 @@
+#include "starforge/persistence/content_codec.hpp"
 #include "starforge/persistence/persistence.hpp"
 #include "starforge/persistence/primitives.hpp"
 
@@ -8,6 +9,7 @@
 #include <fstream>
 #include <iterator>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -59,6 +61,28 @@ TEST_CASE("Persistence.Primitives.Crc32cUsesCastagnoliPolynomial", "[persistence
     const std::string reference = "123456789";
     const auto bytes = std::as_bytes(std::span(reference.data(), reference.size()));
     REQUIRE(starforge::persistence::crc32c(bytes) == 0xE3069283U);
+}
+
+TEST_CASE("Persistence.ContentId.EncodesCanonicalLogicalIdentity", "[persistence]") {
+    using namespace starforge;
+
+    auto content_id = content::ContentId::parse("weapon.ballistic.rifle_mk1");
+    REQUIRE(content_id);
+
+    persistence::BinaryWriter writer;
+    persistence::write_content_id(writer, content_id.value());
+    persistence::BinaryReader reader(writer.bytes());
+    const auto decoded = persistence::read_content_id(reader);
+    REQUIRE(decoded);
+    REQUIRE(decoded.value() == content_id.value());
+    REQUIRE(reader.fully_consumed());
+
+    persistence::BinaryWriter invalid_writer;
+    invalid_writer.write_string("Weapon.invalid");
+    persistence::BinaryReader invalid_reader(invalid_writer.bytes());
+    const auto invalid = persistence::read_content_id(invalid_reader);
+    REQUIRE_FALSE(invalid);
+    REQUIRE(invalid.error().code == persistence::ContentCodecErrorCode::InvalidContentId);
 }
 
 TEST_CASE("Persistence.Container.MinimalV1MatchesExactGolden", "[persistence]") {

@@ -1,8 +1,14 @@
 #include "starforge/content/content_model.hpp"
+#include "starforge/content/hash.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <array>
+#include <cstddef>
+#include <cstdint>
 #include <optional>
+#include <span>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -18,6 +24,19 @@ TEST_CASE("Content.ContentId.CanonicalGrammarIsEnforced", "[content]") {
     REQUIRE_FALSE(ContentId::parse("weapon..rifle"));
     REQUIRE_FALSE(ContentId::parse("weapon/rifle"));
     REQUIRE_FALSE(ContentId::parse("weapon.-rifle"));
+}
+
+TEST_CASE("Content.Hash.Sha256MatchesKnownVector", "[content]") {
+    const std::string input = "abc";
+    const auto digest = starforge::content::sha256(
+        std::as_bytes(std::span(input.data(), input.size())));
+    constexpr std::array<std::uint8_t, 32> expected{
+        0xbaU, 0x78U, 0x16U, 0xbfU, 0x8fU, 0x01U, 0xcfU, 0xeaU,
+        0x41U, 0x41U, 0x40U, 0xdeU, 0x5dU, 0xaeU, 0x22U, 0x23U,
+        0xb0U, 0x03U, 0x61U, 0xa3U, 0x96U, 0x17U, 0x7aU, 0x9cU,
+        0xb4U, 0x10U, 0xffU, 0x61U, 0xf2U, 0x00U, 0x15U, 0xadU,
+    };
+    REQUIRE(digest == expected);
 }
 
 TEST_CASE("Content.Registry.IsSortedUniqueAndKindChecked", "[content]") {

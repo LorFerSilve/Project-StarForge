@@ -1,5 +1,6 @@
 add_library(sf_content_model STATIC
     content_model.cpp
+    hash.cpp
 )
 
 add_library(StarForge::ContentModel ALIAS sf_content_model)

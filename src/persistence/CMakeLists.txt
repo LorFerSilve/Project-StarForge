@@ -1,4 +1,5 @@
 add_library(sf_persistence STATIC
+    content_codec.cpp
     persistence.cpp
 )
 

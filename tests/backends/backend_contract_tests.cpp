@@ -53,7 +53,7 @@ TEST_CASE("renderer submit contracts reject zero-sized resources", "[backends]")
     REQUIRE_FALSE(starforge::render::valid_texture_desc({.width = 1, .height = 0}));
 }
 
-TEST_CASE("OpenGL backend opens a 4.6 core context and renders through project boundaries", "[backends][graphics]") {
+TEST_CASE("OpenGL backend opens a 4.6 core context and owns resource lifetime", "[backends][graphics]") {
     auto window = starforge::platform::create_window({
         .title = "StarForge IMP-3 backend smoke",
         .width = 64,
@@ -63,43 +63,55 @@ TEST_CASE("OpenGL backend opens a 4.6 core context and renders through project b
     });
 
     auto renderer = starforge::render::create_renderer();
-    renderer->initialize(window->graphics_proc_resolver());
-
-    const auto capabilities = renderer->capabilities();
-    REQUIRE(capabilities.api_major == 4U);
-    REQUIRE(capabilities.api_minor >= 6U);
-    REQUIRE(capabilities.core_profile);
-    REQUIRE(capabilities.debug_output);
-    REQUIRE(capabilities.reversed_z);
-
-    const auto initialized = renderer->diagnostics();
-    REQUIRE(initialized.initialized);
-    REQUIRE(initialized.debug_callback_active);
-    REQUIRE(initialized.reversed_z_active);
-    REQUIRE(initialized.live_gpu_objects == 3U);
-
     const auto snapshot = std::make_shared<const starforge::render::RenderSnapshot>(42U, 7U, 3U, 99U);
     const auto size = window->framebuffer_size();
     REQUIRE(size.width > 0U);
     REQUIRE(size.height > 0U);
 
-    renderer->render({
-        .framebuffer_width = size.width,
-        .framebuffer_height = size.height,
-        .snapshot = snapshot,
-    });
-    window->swap_buffers();
+    const auto initialize_and_render = [&] {
+        renderer->initialize(window->graphics_proc_resolver());
 
-    const auto rendered = renderer->diagnostics();
-    REQUIRE(rendered.rendered_frames == 1U);
-    REQUIRE(rendered.last_frame_clean);
-    REQUIRE(rendered.live_gpu_objects == 3U);
+        const auto capabilities = renderer->capabilities();
+        REQUIRE(capabilities.api_major == 4U);
+        REQUIRE(capabilities.api_minor >= 6U);
+        REQUIRE(capabilities.core_profile);
+        REQUIRE(capabilities.debug_output);
+        REQUIRE(capabilities.reversed_z);
+
+        const auto initialized = renderer->diagnostics();
+        REQUIRE(initialized.initialized);
+        REQUIRE(initialized.debug_callback_active);
+        REQUIRE(initialized.reversed_z_active);
+        REQUIRE(initialized.live_gpu_objects == 3U);
+
+        renderer->render({
+            .framebuffer_width = size.width,
+            .framebuffer_height = size.height,
+            .snapshot = snapshot,
+        });
+        window->swap_buffers();
+
+        const auto rendered = renderer->diagnostics();
+        REQUIRE(rendered.last_frame_clean);
+        REQUIRE(rendered.live_gpu_objects == 3U);
+    };
+
+    initialize_and_render();
+    REQUIRE(renderer->diagnostics().rendered_frames == 1U);
 
     renderer->shutdown();
-    const auto stopped = renderer->diagnostics();
-    REQUIRE_FALSE(stopped.initialized);
-    REQUIRE_FALSE(stopped.debug_callback_active);
-    REQUIRE_FALSE(stopped.reversed_z_active);
-    REQUIRE(stopped.live_gpu_objects == 0U);
-    REQUIRE(stopped.rendered_frames == 1U);
+    const auto stopped_once = renderer->diagnostics();
+    REQUIRE_FALSE(stopped_once.initialized);
+    REQUIRE_FALSE(stopped_once.debug_callback_active);
+    REQUIRE_FALSE(stopped_once.reversed_z_active);
+    REQUIRE(stopped_once.live_gpu_objects == 0U);
+
+    initialize_and_render();
+    REQUIRE(renderer->diagnostics().rendered_frames == 2U);
+
+    renderer->shutdown();
+    const auto stopped_twice = renderer->diagnostics();
+    REQUIRE_FALSE(stopped_twice.initialized);
+    REQUIRE(stopped_twice.live_gpu_objects == 0U);
+    REQUIRE(stopped_twice.rendered_frames == 2U);
 }

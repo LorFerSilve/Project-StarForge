@@ -30,7 +30,8 @@ Project StarForge is a **purpose-built modular monolith** in C++23 with a custom
 
 ## TA16-V1 Toolchain / Dependency Lock
 
-- Visual Studio / Build Tools 17.14.40, MSVC v143 x64;
+- Visual Studio 2022 / Build Tools 17.14.39 (installation build 17.14.37614.0), MSVC v143 14.44 x64;
+- primary hosted bootstrap certification image `windows-2022`;
 - CMake 4.3.3;
 - LLVM/Clang 23.1.1 independent compiler/tooling line;
 - vcpkg baseline `a1cae005c39be7b18ba319fced856b68d7276271`;

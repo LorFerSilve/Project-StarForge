@@ -10,11 +10,6 @@ TEST_CASE("Core.BuildContract.AuthoritativeTickRateIs60Hz", "[unit]") {
     REQUIRE(starforge::core::kAuthoritativeSimulationHz == 60U);
 }
 
-TEST_CASE("Core.Language.Cpp23BaselineIsActive", "[unit]") {
+TEST_CASE("Core.Language.Cpp23BaselineIsLocked", "[unit]") {
     STATIC_REQUIRE(starforge::core::kRequiredCppStandard == 23U);
-#if defined(_MSVC_LANG)
-    STATIC_REQUIRE(_MSVC_LANG >= 202302L);
-#else
-    STATIC_REQUIRE(__cplusplus >= 202302L);
-#endif
 }

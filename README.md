@@ -10,7 +10,7 @@ The authoritative Game Design Specification has completed **GDS-0 through GDS-14
 
 The project is now in **Technical Architecture**.
 
-Technical Architecture stages **TA-0 through TA-14** are complete/Architecture Complete. The next dependency is **TA-15 — Architecture Integration Audit**.
+Technical Architecture stages **TA-0 through TA-15** are complete/Architecture Complete. The next and final pre-implementation dependency is **TA-16 — Implementation Roadmap and Contract Locking**.
 
 TA-2 fixed persistent identity, domain-state ownership, Activation Leases, typed command/result/event contracts, cross-domain transaction semantics, immutable read models, save DTO/container contracts, migration/integrity rules, and deterministic procedural RNG.
 
@@ -36,9 +36,11 @@ TA-12 fixes the concrete persistence implementation architecture: exact v1 binar
 
 TA-13 fixes the concurrency/performance/memory envelope: bounded shared workers and backpressure, fixed-tick/main-thread backlog policy, active entity/physics scale, Horizon/AI/strategic scalability, CPU/GPU/cache/streaming budgets, renderer/VFX complexity targets, UI/audio/input/presentation budgets, persistence/content-build concurrency limits, and standardized percentile-based performance benchmarks. Its central rule is that performance pressure may reduce technical/presentation cost or cause an explicit Hold/failure, but may never silently change authoritative gameplay semantics.
 
-TA-14 now fixes the complete testing/diagnostics/CI architecture: layered CMake/CTest/Catch2 suites, deterministic headless scenario/replay and worker/frame-rate equivalence, backend-adapter smoke testing, content/schema/shader/cook determinism gates, persistence binary goldens/migration/corruption/fault-injection suites, typed diagnostics/assertions/debug tools, warnings-as-errors/static analysis/sanitizers, least-privilege GitHub Actions aggregate-check architecture, controlled reference-runner performance regression, strict flaky/quarantine policy, and exact-SHA certification evidence. Executable workflow YAML is intentionally deferred to TA-16 so CI begins with real CMake/CTest targets rather than placeholder-green jobs.
+TA-14 fixes the complete testing/diagnostics/CI architecture: layered CMake/CTest/Catch2 suites, deterministic headless scenario/replay and worker/frame-rate equivalence, backend-adapter smoke testing, content/schema/shader/cook determinism gates, persistence binary goldens/migration/corruption/fault-injection suites, typed diagnostics/assertions/debug tools, warnings-as-errors/static analysis/sanitizers, least-privilege GitHub Actions aggregate-check architecture, controlled reference-runner performance regression, strict flaky/quarantine policy, and exact-SHA certification evidence. Executable workflow YAML is intentionally deferred to TA-16 so CI begins with real CMake/CTest targets rather than placeholder-green jobs.
 
-Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind TA-15 integration audit and TA-16 implementation roadmap/contract locking.
+TA-15 now completes the cross-architecture integration audit: all GDS domains are traced to technical realization; ownership/identity/dependency/threading/timing/active-off-screen/persistence/content/presentation/performance/testing boundaries were cross-validated; the build-level dependency DAG is realizable without required circular ownership; the formal audit is **260/260 PASS** with **0 blockers, 0 required corrections, and 0 implementation-critical open architecture questions**. Remaining choices are explicitly TA-16 lock items rather than architecture gaps.
+
+Gameplay implementation and C++/OpenGL scaffolding have **not** begun yet. They remain gated behind TA-16 implementation roadmap/contract locking and per-contract `Implementation Locked` handoff.
 
 ## Documentation
 

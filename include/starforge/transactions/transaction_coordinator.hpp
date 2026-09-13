@@ -3,6 +3,7 @@
 #include "starforge/core/result.hpp"
 #include "starforge/core/strong_id.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <vector>
@@ -12,6 +13,7 @@ namespace starforge::transactions {
 enum class TransactionError : std::uint8_t {
     NoOperations,
     ParticipantRejected,
+    DuplicateOrderKey,
     IdAllocationFailed,
 };
 

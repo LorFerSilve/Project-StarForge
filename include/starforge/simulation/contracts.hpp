@@ -17,14 +17,6 @@ struct CommandEnvelope final {
     Payload payload;
 };
 
-template <typename Payload>
-struct EventEnvelope final {
-    core::EventSequence sequence{};
-    SimulationTick commit_tick{};
-    std::optional<core::TransactionId> transaction_id{};
-    Payload payload;
-};
-
 enum class ValidationDisposition : unsigned char {
     Accepted,
     Rejected,
@@ -35,6 +27,23 @@ template <typename Rejection>
 struct ValidationResult final {
     ValidationDisposition disposition{ValidationDisposition::Accepted};
     std::optional<Rejection> rejection{};
+};
+
+template <typename Payload, typename Rejection>
+struct CommandResultEnvelope final {
+    core::CommandId command_id{};
+    std::optional<core::TransactionId> transaction_id{};
+    ValidationDisposition disposition{ValidationDisposition::Accepted};
+    std::optional<Rejection> rejection{};
+    Payload payload;
+};
+
+template <typename Payload>
+struct EventEnvelope final {
+    core::EventSequence sequence{};
+    SimulationTick commit_tick{};
+    std::optional<core::TransactionId> transaction_id{};
+    Payload payload;
 };
 
 } // namespace starforge::simulation

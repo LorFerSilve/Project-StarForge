@@ -18,6 +18,22 @@ private:
     std::uint64_t value_{0};
 };
 
+class SimulationDuration final {
+public:
+    constexpr SimulationDuration() = default;
+    explicit constexpr SimulationDuration(std::int64_t ticks) noexcept : ticks_(ticks) {}
+
+    [[nodiscard]] constexpr std::int64_t ticks() const noexcept { return ticks_; }
+    [[nodiscard]] constexpr double seconds() const noexcept {
+        return static_cast<double>(ticks_) / 60.0;
+    }
+
+    friend constexpr auto operator<=>(const SimulationDuration&, const SimulationDuration&) = default;
+
+private:
+    std::int64_t ticks_{0};
+};
+
 class SimulationClock final {
 public:
     static constexpr std::uint32_t kFrequencyHz = 60;

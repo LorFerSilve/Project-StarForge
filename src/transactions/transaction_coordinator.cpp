@@ -14,6 +14,12 @@ core::Result<CommitReceipt, TransactionError> TransactionCoordinator::commit(
         return lhs.stable_order < rhs.stable_order;
     });
 
+    for (std::size_t index = 1; index < operations.size(); ++index) {
+        if (operations[index - 1].stable_order == operations[index].stable_order) {
+            return core::unexpected(TransactionError::DuplicateOrderKey);
+        }
+    }
+
     for (const auto& operation : operations) {
         if (!operation.validate || !operation.commit || !operation.validate()) {
             return core::unexpected(TransactionError::ParticipantRejected);

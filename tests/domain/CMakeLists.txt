@@ -13,6 +13,7 @@ target_link_libraries(starforge_tests_domain
 sf_apply_project_options(starforge_tests_domain)
 
 catch_discover_tests(starforge_tests_domain
+    TEST_PREFIX "domain::"
     PROPERTIES
         LABELS "domain;determinism"
 )

@@ -34,23 +34,22 @@ enum class IdAllocationError : std::uint8_t {
     CandidateMismatch,
 };
 
-template <typename Tag>
-using PersistentId = StrongId<Tag, std::uint64_t>;
-
-template <typename Tag>
-class PersistentIdAllocator final {
+template <typename Id>
+class MonotonicIdAllocator final {
 public:
-    explicit constexpr PersistentIdAllocator(std::uint64_t next_value = 1) noexcept
+    using value_type = typename Id::value_type;
+
+    explicit constexpr MonotonicIdAllocator(value_type next_value = 1) noexcept
         : next_value_(next_value) {}
 
-    [[nodiscard]] constexpr Result<PersistentId<Tag>, IdAllocationError> candidate() const noexcept {
-        if (next_value_ == 0 || next_value_ == std::numeric_limits<std::uint64_t>::max()) {
+    [[nodiscard]] constexpr Result<Id, IdAllocationError> candidate() const noexcept {
+        if (next_value_ == 0 || next_value_ == std::numeric_limits<value_type>::max()) {
             return unexpected(IdAllocationError::Exhausted);
         }
-        return PersistentId<Tag>{next_value_};
+        return Id{next_value_};
     }
 
-    [[nodiscard]] constexpr Result<void, IdAllocationError> commit(PersistentId<Tag> id) noexcept {
+    [[nodiscard]] constexpr Result<void, IdAllocationError> commit(Id id) noexcept {
         if (!id.valid() || id.value() != next_value_) {
             return unexpected(IdAllocationError::CandidateMismatch);
         }
@@ -58,11 +57,17 @@ public:
         return {};
     }
 
-    [[nodiscard]] constexpr std::uint64_t next_value() const noexcept { return next_value_; }
+    [[nodiscard]] constexpr value_type next_value() const noexcept { return next_value_; }
 
 private:
-    std::uint64_t next_value_{1};
+    value_type next_value_{1};
 };
+
+template <typename Tag>
+using PersistentId = StrongId<Tag, std::uint64_t>;
+
+template <typename Tag>
+using PersistentIdAllocator = MonotonicIdAllocator<PersistentId<Tag>>;
 
 struct CommandIdTag;
 struct JobIdTag;

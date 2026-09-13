@@ -182,7 +182,7 @@ public:
                 throw std::runtime_error("RENDER.OPENGL_CORE_PROFILE_REQUIRED");
             }
 
-            drain_gl_errors();
+            static_cast<void>(drain_gl_errors());
 
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -263,7 +263,7 @@ public:
             return;
         }
 
-        drain_gl_errors();
+        static_cast<void>(drain_gl_errors());
 
         glViewport(0, 0, static_cast<GLsizei>(frame.framebuffer_width), static_cast<GLsizei>(frame.framebuffer_height));
         glClearColor(frame.clear_color.r, frame.clear_color.g, frame.clear_color.b, frame.clear_color.a);

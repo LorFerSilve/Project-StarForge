@@ -25,6 +25,10 @@ if(STARFORGE_ENABLE_ASAN AND STARFORGE_ENABLE_TSAN)
 endif()
 
 add_subdirectory(src/core)
+add_subdirectory(src/diagnostics)
+add_subdirectory(src/simulation)
+add_subdirectory(src/transactions)
+add_subdirectory(src/read_models)
 add_subdirectory(apps/headless)
 
 if(BUILD_TESTING AND STARFORGE_BUILD_TESTS)
@@ -35,6 +39,7 @@ if(BUILD_TESTING AND STARFORGE_BUILD_TESTS)
 endif()
 
 message(STATUS "StarForge implementation baseline: TA16-V1")
+message(STATUS "Current implementation phase: IMP-1")
 message(STATUS "C++ standard: 23")
 message(STATUS "Tests: ${STARFORGE_BUILD_TESTS}")
 message(STATUS "Warnings as errors: ${STARFORGE_WARNINGS_AS_ERRORS}")

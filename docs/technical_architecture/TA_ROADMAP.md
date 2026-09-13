@@ -107,19 +107,7 @@ Defines:
 - headless `starforge-content` validation/cook/build architecture, stable diagnostics, CMake integration, provenance/license checks, deterministic fixtures and future CI contracts;
 - registry-first runtime loading, required-content readiness, TA-3 Hard Streaming Hold integration, no raw-source fallback in shipping, and the invariant that I/O/cache/worker timing cannot alter gameplay or reroll committed procedural content.
 
-Artifacts:
-
-- `70_content_repository_layout_and_source_formats.md`;
-- `71_content_ids_schemas_registry_and_compatibility.md`;
-- `72_gltf_mesh_scene_skeleton_and_animation_import.md`;
-- `73_texture_material_environment_and_shader_pipeline.md`;
-- `74_collision_navigation_and_terrain_cooking.md`;
-- `75_gameplay_content_definitions_and_procedural_modules.md`;
-- `76_cooked_asset_formats_registry_runtime_cache.md`;
-- `77_content_dependency_graph_incremental_build_and_hot_reload.md`;
-- `78_content_validation_diagnostics_and_build_integration.md`;
-- `79_content_runtime_loading_failure_and_scene_integration.md`;
-- `TA10_CROSS_VALIDATION.md`.
+Artifacts: `70_content_repository_layout_and_source_formats.md` through `79_content_runtime_loading_failure_and_scene_integration.md`, plus `TA10_CROSS_VALIDATION.md`.
 
 ## TA-11 — Input, UI, Audio, and Presentation Integration
 
@@ -135,48 +123,47 @@ Artifacts: `80_input_device_action_and_context_routing.md` through `89_ta11_runt
 
 Defines exact save-container bytes/SectionKind codecs, Stable Save Boundary snapshot capture, immutable Manual/Quick/Autosave generations, crash-safe atomic commit, staged all-or-nothing load/session replacement, deterministic migrations/content compatibility, separate profile persistence, recovery/inspection tooling, and saved-tick resume semantics.
 
-Artifacts: `90_persistence_service_and_snapshot_orchestration.md` through `99_ta12_runtime_integration_debugging_and_validation.md`, plus `TA12_CROSS_VALIDATION.md`.
+Artifacts: `90_persistence_service_and_snapshot_orchestration.md` through `99_ta12_runtime_integration_debugging_and_validation.md`, plus `TA12_CROSS_VALIDATION.md` and `TA12_ARCHITECTURE_DECISIONS.md`.
 
 ## TA-13 — Concurrency, Performance, Memory, and Streaming Budgets
 
 **Status:** Architecture Complete
 
-Defines:
-
-- a percentile-based reference target of fixed 60 Hz simulation plus 60 FPS at 1920×1080 High, with TA-16 responsible for pinning concrete reference hardware;
-- explicit budget classes and the invariant that performance pressure never authorizes gameplay-semantic degradation;
-- one bounded shared runtime worker pool `clamp(HardwareConcurrency - 2, 2, 12)`, typed priority classes, fairness, cancellation, bounded queues/mailboxes, immutable job snapshots and deterministic result acceptance;
-- main-thread/tick budgets, a four-catch-up-ticks-per-render-frame cap, Warning/Severe/Critical backlog states, and CriticalPerformanceRecovery without Simulation-Time skipping;
-- active-local runtime scale envelopes for entities, actors, projectiles, physics bodies/contacts/queries, CharacterMotors, spacecraft and spatial indexing;
-- Horizon station graph/logistics/WorkOrder/automation scale targets, detailed/off-screen AI/navigation budgets, objective/event/reinforcement envelopes, and chronological strategic backlog policy;
-- CPU process/ContentCache/streaming staging budgets plus GPU residency targets for Low/Medium/High/Ultra, bounded I/O/decode/upload work, prefetch lead targets, cache eviction policy and Hard Streaming Hold acceptance metrics;
-- renderer/GPU budgets including main/GPU frame percentiles, draw/triangle/instance/light/shadow/transparency/particle/skinning/render-target envelopes and presentation-only pressure degradation;
-- bounded semantic input, retained UI/text/glyph/marker/notification/presentation-event, animation, audio voice/stream/callback/occlusion and haptic budgets while preserving accessibility and AI-hearing independence;
-- persistence snapshot/file/load/catalog budgets, one-save-write concurrency, staged-load memory limits, and offline content-build worker/RAM/I/O/hot-reload envelopes;
-- one standardized profiler/telemetry vocabulary and ten representative benchmark scenarios covering Horizon, defense, surface, spaceflight, mixed boarding, off-screen concurrency, streaming, save/load, presentation and content builds;
-- regression thresholds based on p95/p99, bounded profiler overhead, hitch traces, repeated-transition leak tests, worker-count/frame-rate determinism matrices and a strict technical/presentation degradation order.
+Defines percentile-based 60 Hz / 1080p High reference software targets, bounded worker queues/backpressure, fixed-tick backlog recovery without Simulation-Time skipping, active-runtime/station/AI/strategic scale envelopes, CPU/GPU/content/streaming budgets, renderer/UI/audio/persistence/content-build limits, standardized profiler telemetry and ten representative benchmark scenarios.
 
 Artifacts: `100_performance_target_and_budget_framework.md` through `109_profiling_telemetry_benchmark_scenes_and_degradation.md`, plus `TA13_CROSS_VALIDATION.md` and `TA13_ARCHITECTURE_DECISIONS.md`.
 
 ## TA-14 — Testing, Diagnostics, and CI Architecture
 
-**Status:** Next
+**Status:** Architecture Complete
 
-Must define CMake/Catch2 test layers, headless simulation tests, transaction/persistence tests, deterministic-seed regressions, content validation/cook determinism, renderer/physics/station/runtime-entity/AI/navigation/mission/raid/event/content/input/UI/text/audio/accessibility/presentation/persistence smoke and deterministic tests, TA-13 performance-budget regression gates, golden save/content/RNG fixtures, corruption/fault injection, formatting/tidy/warnings, sanitizers, CI workflows/gates, artifact/report retention, and debug-tool requirements.
+Defines:
+
+- layered CMake/CTest/Catch2 verification with unit/domain, headless integration, deterministic scenario, backend smoke, golden/compatibility, fault/corruption and performance suites;
+- fixed-seed/tick scripted headless scenarios, semantic checkpoint/state-hash diagnostics, transaction/ownership/Activation Lease tests, worker-count and frame-rate equivalence, active/off-screen station equivalence, AI knowledge constraints, mission/raid/event/finale exactly-once tests;
+- adapter-level Jolt/Recast/OpenGL/GLFW/miniaudio/FreeType/HarfBuzz/fastgltf/KTX2/meshoptimizer/glslang smoke tests without backend identity becoming gameplay authority;
+- closed-schema/content reference/provenance validation, all required GLSL variant validation, deterministic clean/incremental/no-op content cooks, atomic registry publication and hot-reload safety tests;
+- exact persistence v1 binary goldens, current/historical migration fixtures, CRC/truncation/size corruption matrices, staged-load isolation, save-write crash fault injection, autosave/catalog recovery, RNG continuation and profile fail-soft tests;
+- typed bounded diagnostics, development assertions, crash context, deterministic traces, Dear ImGui inspectors, debug commands, state/graph dumps, stall/memory/leak diagnostics and privacy-safe failure artifacts;
+- warnings-as-errors, deterministic formatting, pinned static analysis, architecture-boundary linting, ASan/UBSan blocking gates, leak checking and scheduled/release TSan where supported;
+- GitHub Actions PR/main/nightly/reference workflow architecture, stable aggregate required checks, zero-test protection, least-privilege/untrusted-PR security, bounded caches, artifact/report semantics and final `StarForge / CI Gate`;
+- TA-13 reference-runner performance regression gates using controlled hardware, percentile/memory/Hard-Hold thresholds, reviewed versioned baselines and no rerun-until-green policy;
+- exact-SHA certification evidence, bounded artifact retention classes, strict flaky/quarantine issue-owner-expiry policy, and release/Implementation Locked certification requirements;
+- explicit deferral of executable `.github/workflows/*.yml` until TA-16 creates real CMake/CTest targets/presets and pins toolchain/runner versions.
+
+Artifacts: `110_test_architecture_layers_targets_and_conventions.md` through `119_ci_evidence_artifacts_quarantine_and_release_certification.md`, plus `TA14_CROSS_VALIDATION.md` and `TA14_ARCHITECTURE_DECISIONS.md`.
 
 ## TA-15 — Architecture Integration Audit
 
-**Status:** Planned
+**Status:** Next
 
-Cross-validates TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime, threading, persistence, content compatibility, world/scene transitions, performance assumptions, dependency cycles, failure recovery, and testability.
-
-No implementation phase is authorized to invent unresolved architecture after this audit.
+Must cross-validate TA-0 through TA-14 against all Design Complete GDS contracts, ownership/lifetime/threading, dependency direction/cycles, fixed-tick ordering, active/off-screen equivalence, persistence/content compatibility, scene/world transitions, performance budgets, diagnostics/test coverage, failure recovery, toolchain boundaries, and implementation readiness. Any blocker must be resolved before TA-16.
 
 ## TA-16 — Implementation Roadmap and Contract Locking
 
 **Status:** Planned
 
-Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, reference hardware, first test/content/performance gates, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
+Produces dependency-ordered implementation phases, vertical-slice definition, scaffolding plan, exact initial CMake/vcpkg targets and pinned dependency versions, reference hardware, first test/content/performance gates, executable GitHub Actions workflows/required checks, per-contract `Implementation Locked` handoff, merge/branch strategy, and milestone criteria.
 
 Only after TA-16 may planned C++/OpenGL scaffolding begin.
 
@@ -197,8 +184,8 @@ GDS Design Complete
 → TA-11 Architecture Complete  
 → TA-12 Architecture Complete  
 → TA-13 Architecture Complete  
-→ **TA-14 next**  
-→ TA-15  
+→ TA-14 Architecture Complete  
+→ **TA-15 next**  
 → TA-16 implementation roadmap/locking  
 → C++/OpenGL scaffolding  
 → gameplay implementation.

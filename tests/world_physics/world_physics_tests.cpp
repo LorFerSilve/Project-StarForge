@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
 
 namespace {
 
@@ -37,7 +38,8 @@ TestScene make_test_room(std::uint64_t generation) {
     return {.world = std::move(world), .character = character};
 }
 
-std::unique_ptr<starforge::world::SceneInstance> make_ready_scene(std::uint64_t generation, std::uint64_t origin_generation) {
+std::unique_ptr<starforge::world::SceneInstance> make_ready_scene(std::uint64_t generation,
+                                                                  std::uint64_t origin_generation) {
     constexpr std::array<starforge::world::RequiredContentKey, 0> no_required_content{};
     return std::make_unique<starforge::world::SceneInstance>(
         generation,
@@ -67,16 +69,32 @@ starforge::physics::Vec3 run_locomotion(std::uint64_t generation, std::size_t ti
 }  // namespace
 
 TEST_CASE("runtime entity handles reject stale generations") {
-    starforge::world::RuntimeEntityRegistry registry;
+    starforge::world::RuntimeEntityRegistry registry{61U};
     const auto first = registry.create();
     REQUIRE(registry.contains(first));
     registry.destroy(first);
     REQUIRE_FALSE(registry.contains(first));
 
     const auto replacement = registry.create();
+    REQUIRE(replacement.scene_generation == first.scene_generation);
     REQUIRE(replacement.index == first.index);
     REQUIRE(replacement.generation != first.generation);
     REQUIRE(registry.contains(replacement));
+}
+
+TEST_CASE("runtime entity handles are scoped to their scene generation") {
+    starforge::world::RuntimeEntityRegistry first_registry{62U};
+    const auto old_handle = first_registry.create();
+
+    starforge::world::RuntimeEntityRegistry replacement_registry{63U};
+    const auto replacement_handle = replacement_registry.create();
+
+    REQUIRE(old_handle.index == replacement_handle.index);
+    REQUIRE(old_handle.generation == replacement_handle.generation);
+    REQUIRE(old_handle.scene_generation != replacement_handle.scene_generation);
+    REQUIRE_FALSE(replacement_registry.contains(old_handle));
+    REQUIRE_THROWS_AS(replacement_registry.destroy(old_handle), std::invalid_argument);
+    REQUIRE(replacement_registry.contains(replacement_handle));
 }
 
 TEST_CASE("required content keeps scene in hard streaming hold until ready") {
@@ -139,6 +157,24 @@ TEST_CASE("context positions are converted relative to the runtime origin") {
     REQUIRE(runtime.x == Catch::Approx(10.0F));
     REQUIRE(runtime.y == Catch::Approx(1.0F));
     REQUIRE(runtime.z == Catch::Approx(5.0F));
+}
+
+TEST_CASE("incompatible physics body classes and collision layers are rejected") {
+    auto world = starforge::physics::create_jolt_physics_world(19U);
+
+    REQUIRE_THROWS_AS(
+        world->create_box({
+            .body_class = starforge::physics::BodyClass::Dynamic,
+            .layer = starforge::physics::CollisionLayer::StaticWorld,
+        }),
+        std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        world->create_capsule({
+            .body_class = starforge::physics::BodyClass::Character,
+            .layer = starforge::physics::CollisionLayer::DynamicWorld,
+        }),
+        std::invalid_argument);
+    REQUIRE(world->body_count() == 0U);
 }
 
 TEST_CASE("Jolt collision queries expose project-owned handles") {

@@ -13,11 +13,13 @@
 #include <cstdint>
 #include <cstdio>
 #include <exception>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <optional>
 #include <stdexcept>
+#include <system_error>
 #include <utility>
 #include <vector>
 
@@ -35,19 +37,31 @@ namespace {
 constexpr const char* save_path = "starforge_horizon_v0.sfgsave";
 constexpr const char* temporary_save_path = "starforge_horizon_v0.sfgsave.tmp";
 
-std::vector<std::byte> read_save_file() {
+std::optional<std::vector<std::byte>> read_save_file() {
+    std::error_code exists_error;
+    const bool exists = std::filesystem::exists(save_path, exists_error);
+    if (exists_error) {
+        throw std::runtime_error{"failed to inspect Horizon V0 save file"};
+    }
+    if (!exists) {
+        return std::nullopt;
+    }
+
     std::ifstream file{save_path, std::ios::binary | std::ios::ate};
     if (!file) {
-        return {};
+        throw std::runtime_error{"failed to open existing Horizon V0 save file"};
     }
     const auto size = file.tellg();
     if (size <= 0) {
-        return {};
+        throw std::runtime_error{"existing Horizon V0 save file is empty or unreadable"};
     }
     std::vector<std::byte> bytes(static_cast<std::size_t>(size));
     file.seekg(0, std::ios::beg);
     file.read(reinterpret_cast<char*>(bytes.data()), static_cast<std::streamsize>(bytes.size()));
-    return file ? bytes : std::vector<std::byte>{};
+    if (!file) {
+        throw std::runtime_error{"failed to read existing Horizon V0 save file"};
+    }
+    return bytes;
 }
 
 void replace_save_atomically() {
@@ -145,12 +159,13 @@ int main() {
         starforge::transactions::TransactionCoordinator transaction_coordinator;
         auto test_cell = std::make_unique<starforge::vertical_slice::HorizonTestCell>();
         const auto saved_bytes = read_save_file();
-        if (!saved_bytes.empty()) {
-            auto loaded = starforge::vertical_slice::HorizonTestCell::load(saved_bytes);
-            if (loaded) {
-                test_cell = std::make_unique<starforge::vertical_slice::HorizonTestCell>(std::move(loaded).value());
-                std::cout << "Loaded Horizon V0 persistent state\n";
+        if (saved_bytes.has_value()) {
+            auto loaded = starforge::vertical_slice::HorizonTestCell::load(*saved_bytes);
+            if (!loaded) {
+                throw std::runtime_error{"existing Horizon V0 save failed validation"};
             }
+            test_cell = std::make_unique<starforge::vertical_slice::HorizonTestCell>(std::move(loaded).value());
+            std::cout << "Loaded Horizon V0 persistent state\n";
         }
 
         const auto item_runtime = test_cell->enter_context(scene.entities());

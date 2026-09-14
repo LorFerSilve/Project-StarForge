@@ -19,9 +19,6 @@ void glfw_error_callback(const int error_code, const char* description) {
 class GlfwWindow final : public Window {
 public:
     explicit GlfwWindow(const WindowConfig& config) {
-        // Validate inputs before touching GLFW process-global state so an
-        // exception cannot strand a successful glfwInit() without a matching
-        // glfwTerminate().
         const auto width = checked_dimension(config.width);
         const auto height = checked_dimension(config.height);
 
@@ -120,6 +117,7 @@ private:
         input_.a = glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
         input_.s = glfwGetKey(window_, GLFW_KEY_S) == GLFW_PRESS;
         input_.d = glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
+        input_.e = glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS;
     }
 
     GLFWwindow* window_{nullptr};

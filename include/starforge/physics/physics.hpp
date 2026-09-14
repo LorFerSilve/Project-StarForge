@@ -31,10 +31,13 @@ enum class CollisionLayer : std::uint8_t {
 };
 
 struct PhysicsBodyHandle final {
+    std::uint64_t scene_generation{0};
     std::uint32_t index{0};
     std::uint32_t generation{0};
 
-    [[nodiscard]] constexpr bool valid() const noexcept { return generation != 0U; }
+    [[nodiscard]] constexpr bool valid() const noexcept {
+        return scene_generation != 0U && generation != 0U;
+    }
     friend constexpr auto operator<=>(const PhysicsBodyHandle&, const PhysicsBodyHandle&) noexcept = default;
 };
 

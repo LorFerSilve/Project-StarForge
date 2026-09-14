@@ -3,14 +3,33 @@
 #include <starforge/persistence/primitives.hpp>
 
 #include <array>
+#include <bit>
+#include <cmath>
+#include <utility>
 
 namespace starforge::vertical_slice {
 namespace {
 constexpr std::uint32_t slice_magic = 0x354D5049U;  // "IMP5" in little endian storage.
-constexpr std::uint32_t slice_schema_version = 1U;
+constexpr std::uint32_t slice_schema_version = 2U;
 
 [[nodiscard]] SliceError map_transaction_error() noexcept {
     return SliceError::TransactionRejected;
+}
+
+void write_f64(persistence::BinaryWriter& writer, double value) {
+    writer.write_u64(std::bit_cast<std::uint64_t>(value));
+}
+
+[[nodiscard]] core::Result<double, SliceError> read_f64(persistence::BinaryReader& reader) {
+    const auto bits = reader.read_u64();
+    if (!bits) {
+        return core::Result<double, SliceError>::failure(SliceError::InvalidSlicePayload);
+    }
+    const auto value = std::bit_cast<double>(bits.value());
+    if (!std::isfinite(value)) {
+        return core::Result<double, SliceError>::failure(SliceError::InvalidSlicePayload);
+    }
+    return core::Result<double, SliceError>::success(value);
 }
 }  // namespace
 
@@ -26,6 +45,7 @@ HorizonItemReadModel HorizonTestCell::read_model() const noexcept {
         .owner = owner_,
         .revision = revision_,
         .committed_transfer_count = committed_transfer_count_,
+        .world_physical_state = world_physical_state_,
         .runtime_handle = runtime_handle_,
     };
 }
@@ -47,6 +67,13 @@ void HorizonTestCell::leave_context(world::RuntimeEntityRegistry& registry) {
         registry.destroy(*runtime_handle_);
     }
     runtime_handle_.reset();
+}
+
+void HorizonTestCell::update_world_physical_state(physics::Vec3 position, physics::Vec3 linear_velocity) noexcept {
+    if (owner_ != ItemOwner::WorldContainer) {
+        return;
+    }
+    world_physical_state_ = {.position = position, .linear_velocity = linear_velocity};
 }
 
 core::Result<void, SliceError> HorizonTestCell::transfer(
@@ -109,6 +136,12 @@ core::Result<std::vector<std::byte>, SliceError> HorizonTestCell::save(
     writer.write_u8(static_cast<std::uint8_t>(owner_));
     writer.write_u64(revision_.raw());
     writer.write_u64(committed_transfer_count_);
+    write_f64(writer, world_physical_state_.position.x);
+    write_f64(writer, world_physical_state_.position.y);
+    write_f64(writer, world_physical_state_.position.z);
+    write_f64(writer, world_physical_state_.linear_velocity.x);
+    write_f64(writer, world_physical_state_.linear_velocity.y);
+    write_f64(writer, world_physical_state_.linear_velocity.z);
 
     persistence::SaveSnapshot snapshot{
         .saved_simulation_tick = simulation_tick,
@@ -191,7 +224,14 @@ core::Result<HorizonTestCell, SliceError> HorizonTestCell::decode_section(
     const auto owner = reader.read_u8();
     const auto revision = reader.read_u64();
     const auto transfer_count = reader.read_u64();
-    if (!magic || !version || !item_id || !owner || !revision || !transfer_count || !reader.fully_consumed() ||
+    const auto position_x = read_f64(reader);
+    const auto position_y = read_f64(reader);
+    const auto position_z = read_f64(reader);
+    const auto velocity_x = read_f64(reader);
+    const auto velocity_y = read_f64(reader);
+    const auto velocity_z = read_f64(reader);
+    if (!magic || !version || !item_id || !owner || !revision || !transfer_count || !position_x || !position_y ||
+        !position_z || !velocity_x || !velocity_y || !velocity_z || !reader.fully_consumed() ||
         magic.value() != slice_magic || version.value() != slice_schema_version || item_id.value() == 0U ||
         (owner.value() != static_cast<std::uint8_t>(ItemOwner::WorldContainer) &&
          owner.value() != static_cast<std::uint8_t>(ItemOwner::PlayerInventory))) {
@@ -202,6 +242,10 @@ core::Result<HorizonTestCell, SliceError> HorizonTestCell::decode_section(
     result.owner_ = static_cast<ItemOwner>(owner.value());
     result.revision_ = core::StateRevision{revision.value()};
     result.committed_transfer_count_ = transfer_count.value();
+    result.world_physical_state_ = {
+        .position = {position_x.value(), position_y.value(), position_z.value()},
+        .linear_velocity = {velocity_x.value(), velocity_y.value(), velocity_z.value()},
+    };
     result.runtime_handle_.reset();
     return core::Result<HorizonTestCell, SliceError>::success(std::move(result));
 }

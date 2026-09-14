@@ -5,8 +5,10 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 
 namespace {
 using starforge::vertical_slice::HorizonTestCell;
@@ -20,8 +22,6 @@ struct ScenarioCheckpoint final {
 };
 
 ScenarioCheckpoint run_transfer_scenario(const std::uint32_t render_frames_between_ticks) {
-    // Render cadence is deliberately an observation-only input: authoritative
-    // transfer occurs through the transaction coordinator, never per frame.
     REQUIRE(render_frames_between_ticks > 0U);
     starforge::world::RuntimeEntityRegistry registry{101U};
     starforge::transactions::TransactionCoordinator coordinator;
@@ -42,7 +42,7 @@ ScenarioCheckpoint run_transfer_scenario(const std::uint32_t render_frames_betwe
 }
 }  // namespace
 
-TEST_CASE("Horizon item has exactly one owner across a typed transaction") {
+TEST_CASE("Horizon item has exactly one owner across typed round-trip transactions") {
     starforge::world::RuntimeEntityRegistry registry{1U};
     starforge::transactions::TransactionCoordinator coordinator;
     HorizonTestCell cell;
@@ -52,8 +52,8 @@ TEST_CASE("Horizon item has exactly one owner across a typed transaction") {
     REQUIRE(registry.size() == 1U);
     REQUIRE(cell.read_model().owner == ItemOwner::WorldContainer);
 
-    const auto result = cell.transfer(ItemOwner::PlayerInventory, coordinator, registry);
-    REQUIRE(result.has_value());
+    const auto to_inventory = cell.transfer(ItemOwner::PlayerInventory, coordinator, registry);
+    REQUIRE(to_inventory.has_value());
     REQUIRE(coordinator.is_stable_save_boundary());
     REQUIRE(cell.read_model().owner == ItemOwner::PlayerInventory);
     REQUIRE(cell.read_model().committed_transfer_count == 1U);
@@ -63,15 +63,23 @@ TEST_CASE("Horizon item has exactly one owner across a typed transaction") {
     const auto duplicate = cell.transfer(ItemOwner::PlayerInventory, coordinator, registry);
     REQUIRE_FALSE(duplicate.has_value());
     REQUIRE(cell.read_model().committed_transfer_count == 1U);
+
+    const auto to_world = cell.transfer(ItemOwner::WorldContainer, coordinator, registry);
+    REQUIRE(to_world.has_value());
+    REQUIRE(cell.read_model().owner == ItemOwner::WorldContainer);
+    REQUIRE(cell.read_model().committed_transfer_count == 2U);
+    REQUIRE(cell.read_model().runtime_handle.has_value());
+    REQUIRE(registry.size() == 1U);
 }
 
-TEST_CASE("save load preserves persistent truth without serializing runtime handles") {
+TEST_CASE("save load preserves persistent truth physical facets and regenerates runtime handles") {
     starforge::transactions::TransactionCoordinator coordinator;
     HorizonTestCell original;
     starforge::world::RuntimeEntityRegistry first_registry{7U};
 
     const auto first_handle = original.enter_context(first_registry);
     REQUIRE(first_handle.valid());
+    original.update_world_physical_state({3.5, 2.25, -9.0}, {1.0, -0.5, 2.0});
     const auto saved = original.save(4242U, coordinator);
     REQUIRE(saved.has_value());
 
@@ -85,15 +93,34 @@ TEST_CASE("save load preserves persistent truth without serializing runtime hand
     auto loaded_result = HorizonTestCell::load(saved.value());
     REQUIRE(loaded_result.has_value());
     auto loaded = std::move(loaded_result).value();
-    REQUIRE(loaded.read_model().persistent_id == original.read_model().persistent_id);
-    REQUIRE(loaded.read_model().owner == ItemOwner::WorldContainer);
-    REQUIRE_FALSE(loaded.read_model().runtime_handle.has_value());
+    const auto loaded_state = loaded.read_model();
+    REQUIRE(loaded_state.persistent_id == original.read_model().persistent_id);
+    REQUIRE(loaded_state.owner == ItemOwner::WorldContainer);
+    REQUIRE(loaded_state.world_physical_state.position == starforge::physics::Vec3{3.5, 2.25, -9.0});
+    REQUIRE(loaded_state.world_physical_state.linear_velocity == starforge::physics::Vec3{1.0, -0.5, 2.0});
+    REQUIRE_FALSE(loaded_state.runtime_handle.has_value());
 
     starforge::world::RuntimeEntityRegistry second_registry{8U};
     const auto second_handle = loaded.enter_context(second_registry);
     REQUIRE(second_handle.valid());
     REQUIRE(second_handle.scene_generation != first_handle.scene_generation);
     REQUIRE(loaded.read_model().persistent_id == original.read_model().persistent_id);
+    REQUIRE(second_registry.size() == 1U);
+}
+
+TEST_CASE("leave and re-enter regenerates runtime identity without changing persistent truth") {
+    HorizonTestCell cell;
+    starforge::world::RuntimeEntityRegistry first_registry{21U};
+    const auto first = cell.enter_context(first_registry);
+    const auto persistent_id = cell.read_model().persistent_id;
+    cell.leave_context(first_registry);
+
+    starforge::world::RuntimeEntityRegistry second_registry{22U};
+    const auto second = cell.enter_context(second_registry);
+    REQUIRE(first.valid());
+    REQUIRE(second.valid());
+    REQUIRE(first.scene_generation != second.scene_generation);
+    REQUIRE(cell.read_model().persistent_id == persistent_id);
     REQUIRE(second_registry.size() == 1U);
 }
 

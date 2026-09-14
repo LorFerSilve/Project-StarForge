@@ -14,6 +14,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -117,21 +118,28 @@ public:
 
 [[nodiscard]] JPH::ObjectLayer to_jolt_layer(CollisionLayer layer) {
     switch (layer) {
-    case CollisionLayer::StaticWorld: return object_layers::static_world;
-    case CollisionLayer::DynamicWorld: return object_layers::dynamic_world;
-    case CollisionLayer::Character: return object_layers::character;
-    case CollisionLayer::Sensor: return object_layers::sensor;
+    case CollisionLayer::StaticWorld:
+        return object_layers::static_world;
+    case CollisionLayer::DynamicWorld:
+        return object_layers::dynamic_world;
+    case CollisionLayer::Character:
+        return object_layers::character;
+    case CollisionLayer::Sensor:
+        return object_layers::sensor;
     }
     throw std::invalid_argument{"unsupported collision layer"};
 }
 
 [[nodiscard]] JPH::EMotionType to_motion_type(BodyClass body_class) {
     switch (body_class) {
-    case BodyClass::Static: return JPH::EMotionType::Static;
+    case BodyClass::Static:
+        return JPH::EMotionType::Static;
     case BodyClass::Kinematic:
-    case BodyClass::Sensor: return JPH::EMotionType::Kinematic;
+    case BodyClass::Sensor:
+        return JPH::EMotionType::Kinematic;
     case BodyClass::Dynamic:
-    case BodyClass::Character: return JPH::EMotionType::Dynamic;
+    case BodyClass::Character:
+        return JPH::EMotionType::Dynamic;
     }
     throw std::invalid_argument{"unsupported body class"};
 }
@@ -160,7 +168,8 @@ public:
         if (scene_generation_ == 0U) {
             throw std::invalid_argument{"physics world requires a non-zero scene generation"};
         }
-        physics_system_.Init(4096, 0, 4096, 2048, broadphase_layer_interface_, object_vs_broadphase_layer_filter_, object_layer_pair_filter_);
+        physics_system_.Init(4096, 0, 4096, 2048, broadphase_layer_interface_, object_vs_broadphase_layer_filter_,
+                             object_layer_pair_filter_);
         physics_system_.SetGravity({0.0F, -9.81F, 0.0F});
     }
 
@@ -182,7 +191,9 @@ public:
             throw std::invalid_argument{"invalid box body descriptor"};
         }
         return create_body(
-            new JPH::BoxShape{{static_cast<float>(descriptor.half_extents.x), static_cast<float>(descriptor.half_extents.y), static_cast<float>(descriptor.half_extents.z)}},
+            new JPH::BoxShape{{static_cast<float>(descriptor.half_extents.x),
+                               static_cast<float>(descriptor.half_extents.y),
+                               static_cast<float>(descriptor.half_extents.z)}},
             descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
     }
 
@@ -190,8 +201,9 @@ public:
         if (!is_valid_descriptor(descriptor)) {
             throw std::invalid_argument{"invalid capsule body descriptor"};
         }
-        return create_body(new JPH::CapsuleShape{static_cast<float>(descriptor.half_height), static_cast<float>(descriptor.radius)},
-                           descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
+        return create_body(
+            new JPH::CapsuleShape{static_cast<float>(descriptor.half_height), static_cast<float>(descriptor.radius)},
+            descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
     }
 
     void destroy_body(PhysicsBodyHandle handle) override {
@@ -201,7 +213,9 @@ public:
         bodies.DestroyBody(slot.body_id);
         slot.alive = false;
         ++slot.generation;
-        if (slot.generation == 0U) slot.generation = 1U;
+        if (slot.generation == 0U) {
+            slot.generation = 1U;
+        }
         --alive_count_;
     }
 
@@ -234,7 +248,8 @@ public:
                 const double fraction = static_cast<double>(result.mFraction);
                 return RaycastHit{
                     .body = {.scene_generation = scene_generation_, .index = index, .generation = slot.generation},
-                    .position = {origin.x + direction.x * fraction, origin.y + direction.y * fraction, origin.z + direction.z * fraction},
+                    .position = {origin.x + direction.x * fraction, origin.y + direction.y * fraction,
+                                 origin.z + direction.z * fraction},
                     .fraction = fraction,
                 };
             }
@@ -260,7 +275,8 @@ private:
 
     [[nodiscard]] PhysicsBodyHandle create_body(const JPH::Shape* shape, BodyClass body_class, CollisionLayer layer,
                                                 Vec3 position, Vec3 velocity) {
-        JPH::BodyCreationSettings settings{shape, to_position(position), JPH::Quat::sIdentity(), to_motion_type(body_class), to_jolt_layer(layer)};
+        JPH::BodyCreationSettings settings{shape, to_position(position), JPH::Quat::sIdentity(),
+                                           to_motion_type(body_class), to_jolt_layer(layer)};
         settings.mIsSensor = body_class == BodyClass::Sensor;
         if (body_class == BodyClass::Character) {
             settings.mFriction = 0.0F;
@@ -271,6 +287,23 @@ private:
             throw std::runtime_error{"Jolt failed to allocate a physics body"};
         }
         bodies.SetLinearVelocity(id, to_vector(velocity));
+
+        for (std::uint32_t index = 0U; index < slots_.size(); ++index) {
+            auto& slot = slots_[index];
+            if (!slot.alive) {
+                slot.body_id = id;
+                slot.alive = true;
+                ++alive_count_;
+                return {.scene_generation = scene_generation_, .index = index, .generation = slot.generation};
+            }
+        }
+
+        if (slots_.size() >= static_cast<std::size_t>(std::numeric_limits<std::uint32_t>::max())) {
+            bodies.RemoveBody(id);
+            bodies.DestroyBody(id);
+            throw std::overflow_error{"physics body handle registry exhausted"};
+        }
+
         const auto index = static_cast<std::uint32_t>(slots_.size());
         slots_.push_back({.body_id = id});
         ++alive_count_;
@@ -278,11 +311,16 @@ private:
     }
 
     [[nodiscard]] BodySlot& require_slot(PhysicsBodyHandle handle) {
-        if (!contains(handle)) throw std::invalid_argument{"stale or invalid physics body handle"};
+        if (!contains(handle)) {
+            throw std::invalid_argument{"stale or invalid physics body handle"};
+        }
         return slots_[handle.index];
     }
+
     [[nodiscard]] const BodySlot& require_slot(PhysicsBodyHandle handle) const {
-        if (!contains(handle)) throw std::invalid_argument{"stale or invalid physics body handle"};
+        if (!contains(handle)) {
+            throw std::invalid_argument{"stale or invalid physics body handle"};
+        }
         return slots_[handle.index];
     }
 

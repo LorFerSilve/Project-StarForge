@@ -15,6 +15,7 @@ enum class Key : std::uint8_t {
     a,
     s,
     d,
+    e,
     count,
 };
 
@@ -24,6 +25,7 @@ struct InputSnapshot final {
     bool a{false};
     bool s{false};
     bool d{false};
+    bool e{false};
 };
 
 struct FramebufferSize final {

@@ -36,11 +36,17 @@ enum class SliceError : std::uint8_t {
     InvalidSlicePayload,
 };
 
+struct WorldItemPhysicalState final {
+    physics::Vec3 position{0.0, 1.0, -2.0};
+    physics::Vec3 linear_velocity{};
+};
+
 struct HorizonItemReadModel final {
     HorizonItemId persistent_id{};
     ItemOwner owner{ItemOwner::WorldContainer};
     core::StateRevision revision{};
     std::uint64_t committed_transfer_count{0U};
+    WorldItemPhysicalState world_physical_state{};
     std::optional<world::RuntimeEntityHandle> runtime_handle{};
 };
 
@@ -52,6 +58,7 @@ public:
 
     [[nodiscard]] world::RuntimeEntityHandle enter_context(world::RuntimeEntityRegistry& registry);
     void leave_context(world::RuntimeEntityRegistry& registry);
+    void update_world_physical_state(physics::Vec3 position, physics::Vec3 linear_velocity) noexcept;
 
     [[nodiscard]] core::Result<void, SliceError> transfer(
         ItemOwner destination,
@@ -78,6 +85,7 @@ private:
     ItemOwner owner_{ItemOwner::WorldContainer};
     core::StateRevision revision_{};
     std::uint64_t committed_transfer_count_{0U};
+    WorldItemPhysicalState world_physical_state_{};
     std::optional<ItemOwner> prepared_owner_{};
     core::StateRevision prepared_revision_{};
     std::optional<world::RuntimeEntityHandle> runtime_handle_{};

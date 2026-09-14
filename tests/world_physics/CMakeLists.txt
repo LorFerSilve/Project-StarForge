@@ -1,5 +1,6 @@
 add_executable(starforge_tests_world_physics
     world_physics_tests.cpp
+    physics_handle_tests.cpp
 )
 
 target_link_libraries(starforge_tests_world_physics

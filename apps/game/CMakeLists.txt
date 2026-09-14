@@ -15,6 +15,7 @@ target_link_libraries(starforge
         StarForge::PhysicsJolt
         StarForge::World
         StarForge::Player
+        StarForge::VerticalSlice
 )
 
 sf_apply_project_options(starforge)

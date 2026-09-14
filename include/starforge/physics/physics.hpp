@@ -3,6 +3,7 @@
 #include <compare>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 
 namespace starforge::physics {
 
@@ -35,6 +36,12 @@ struct PhysicsBodyHandle final {
 
     [[nodiscard]] constexpr bool valid() const noexcept { return generation != 0U; }
     friend constexpr auto operator<=>(const PhysicsBodyHandle&, const PhysicsBodyHandle&) noexcept = default;
+};
+
+struct RaycastHit final {
+    PhysicsBodyHandle body{};
+    Vec3 position{};
+    double fraction{0.0};
 };
 
 struct BoxBodyDescriptor final {
@@ -75,6 +82,7 @@ public:
     [[nodiscard]] virtual Vec3 position(PhysicsBodyHandle handle) const = 0;
     [[nodiscard]] virtual Vec3 linear_velocity(PhysicsBodyHandle handle) const = 0;
     virtual void set_linear_velocity(PhysicsBodyHandle handle, Vec3 velocity) = 0;
+    [[nodiscard]] virtual std::optional<RaycastHit> raycast(Vec3 origin, Vec3 direction) const = 0;
 
     virtual void step(double seconds) = 0;
     [[nodiscard]] virtual std::size_t body_count() const noexcept = 0;

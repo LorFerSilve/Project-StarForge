@@ -37,6 +37,15 @@ TestScene make_test_room(std::uint64_t generation) {
     return {.world = std::move(world), .character = character};
 }
 
+std::unique_ptr<starforge::world::SceneInstance> make_ready_scene(std::uint64_t generation, std::uint64_t origin_generation) {
+    constexpr std::array<starforge::world::RequiredContentKey, 0> no_required_content{};
+    return std::make_unique<starforge::world::SceneInstance>(
+        generation,
+        starforge::world::ContextOrigin{.generation = origin_generation},
+        no_required_content,
+        starforge::physics::create_jolt_physics_world(generation));
+}
+
 starforge::physics::Vec3 run_locomotion(std::uint64_t generation, std::size_t ticks, std::size_t batch_size) {
     auto scene = make_test_room(generation);
     starforge::player::CharacterMotor motor{{.max_speed_metres_per_second = 3.0}};
@@ -94,6 +103,35 @@ TEST_CASE("required content keeps scene in hard streaming hold until ready") {
     REQUIRE(scene.state() == starforge::world::SceneState::Destroyed);
 }
 
+TEST_CASE("active local context replaces rather than overlaps authoritative scenes") {
+    starforge::world::ActiveLocalContext context;
+    context.activate(
+        {.kind = starforge::world::ActiveLocalContextKind::Horizon,
+         .owner_key = 101U,
+         .scene_generation = 51U,
+         .origin_generation = 5U,
+         .scene_profile_key = 1001U},
+        make_ready_scene(51U, 5U));
+
+    REQUIRE(context.has_active_scene());
+    REQUIRE(context.scene().scene_generation() == 51U);
+
+    context.activate(
+        {.kind = starforge::world::ActiveLocalContextKind::Mission,
+         .owner_key = 202U,
+         .scene_generation = 52U,
+         .origin_generation = 6U,
+         .scene_profile_key = 1002U},
+        make_ready_scene(52U, 6U));
+
+    REQUIRE(context.has_active_scene());
+    REQUIRE(context.scene().scene_generation() == 52U);
+    REQUIRE(context.descriptor()->owner_key == 202U);
+    context.deactivate();
+    REQUIRE_FALSE(context.has_active_scene());
+    REQUIRE_FALSE(context.descriptor().has_value());
+}
+
 TEST_CASE("context positions are converted relative to the runtime origin") {
     const auto runtime = starforge::world::to_runtime_position(
         {1'000'010.0, -4.0, 2'000'005.0},
@@ -101,6 +139,22 @@ TEST_CASE("context positions are converted relative to the runtime origin") {
     REQUIRE(runtime.x == Catch::Approx(10.0F));
     REQUIRE(runtime.y == Catch::Approx(1.0F));
     REQUIRE(runtime.z == Catch::Approx(5.0F));
+}
+
+TEST_CASE("Jolt collision queries expose project-owned handles") {
+    auto world = starforge::physics::create_jolt_physics_world(20U);
+    const auto floor = world->create_box({
+        .body_class = starforge::physics::BodyClass::Static,
+        .layer = starforge::physics::CollisionLayer::StaticWorld,
+        .half_extents = {4.0, 0.5, 4.0},
+        .position = {0.0, -0.5, 0.0},
+    });
+
+    const auto hit = world->raycast({0.0, 5.0, 0.0}, {0.0, -10.0, 0.0});
+    REQUIRE(hit.has_value());
+    REQUIRE(hit->body == floor);
+    REQUIRE(hit->fraction == Catch::Approx(0.5).margin(1.0e-5));
+    REQUIRE(hit->position.y == Catch::Approx(0.0).margin(1.0e-5));
 }
 
 TEST_CASE("Jolt character collides with the static test-room floor") {

@@ -79,17 +79,21 @@ void replace_save_atomically() {
 }
 
 void write_save_file(const std::vector<std::byte>& bytes) {
-    {
-        std::ofstream file{temporary_save_path, std::ios::binary | std::ios::trunc};
-        if (!file) {
-            throw std::runtime_error{"failed to open Horizon V0 temporary save file"};
-        }
-        file.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size()));
-        file.flush();
-        if (!file) {
-            static_cast<void>(std::remove(temporary_save_path));
-            throw std::runtime_error{"failed to write Horizon V0 temporary save file"};
-        }
+    std::ofstream file{temporary_save_path, std::ios::binary | std::ios::trunc};
+    if (!file) {
+        throw std::runtime_error{"failed to open Horizon V0 temporary save file"};
+    }
+    file.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size()));
+    file.flush();
+    if (!file) {
+        file.close();
+        static_cast<void>(std::remove(temporary_save_path));
+        throw std::runtime_error{"failed to write Horizon V0 temporary save file"};
+    }
+    file.close();
+    if (!file) {
+        static_cast<void>(std::remove(temporary_save_path));
+        throw std::runtime_error{"failed to close Horizon V0 temporary save file"};
     }
     replace_save_atomically();
 }

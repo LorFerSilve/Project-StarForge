@@ -6,6 +6,7 @@
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
+#include <Jolt/Physics/Collision/RayCast.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/CapsuleShape.h>
 #include <Jolt/Physics/PhysicsSystem.h>
@@ -15,8 +16,8 @@
 #include <cstdint>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <stdexcept>
-#include <utility>
 #include <vector>
 
 namespace starforge::physics {
@@ -46,12 +47,8 @@ public:
     }
 
     [[nodiscard]] JPH::uint GetNumBroadPhaseLayers() const override { return broadphase_layers::count; }
-
     [[nodiscard]] JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer layer) const override {
-        if (layer >= object_layers::count) {
-            return broadphase_layers::moving;
-        }
-        return mapping_[layer];
+        return layer < object_layers::count ? mapping_[layer] : broadphase_layers::moving;
     }
 
 private:
@@ -60,11 +57,8 @@ private:
 
 class ObjectVsBroadPhaseLayerFilter final : public JPH::ObjectVsBroadPhaseLayerFilter {
 public:
-    [[nodiscard]] bool ShouldCollide(JPH::ObjectLayer object_layer, JPH::BroadPhaseLayer broadphase_layer) const override {
-        if (object_layer == object_layers::static_world) {
-            return broadphase_layer == broadphase_layers::moving;
-        }
-        return true;
+    [[nodiscard]] bool ShouldCollide(JPH::ObjectLayer layer, JPH::BroadPhaseLayer broadphase) const override {
+        return layer != object_layers::static_world || broadphase == broadphase_layers::moving;
     }
 };
 
@@ -74,24 +68,21 @@ public:
         if (lhs == object_layers::static_world && rhs == object_layers::static_world) {
             return false;
         }
-        if (lhs == object_layers::sensor && rhs == object_layers::sensor) {
-            return false;
-        }
-        return true;
+        return !(lhs == object_layers::sensor && rhs == object_layers::sensor);
     }
 };
 
-struct JoltRuntimeState final {
+struct RuntimeState final {
     std::mutex mutex;
     std::size_t users{0};
 };
 
-JoltRuntimeState& runtime_state() {
-    static JoltRuntimeState state;
+RuntimeState& runtime_state() {
+    static RuntimeState state;
     return state;
 }
 
-void acquire_jolt_runtime() {
+void acquire_runtime() {
     auto& state = runtime_state();
     const std::scoped_lock lock{state.mutex};
     if (state.users == 0U) {
@@ -102,7 +93,7 @@ void acquire_jolt_runtime() {
     ++state.users;
 }
 
-void release_jolt_runtime() noexcept {
+void release_runtime() noexcept {
     auto& state = runtime_state();
     const std::scoped_lock lock{state.mutex};
     if (state.users == 0U) {
@@ -116,47 +107,48 @@ void release_jolt_runtime() noexcept {
     }
 }
 
+class RuntimeGuard final {
+public:
+    RuntimeGuard() { acquire_runtime(); }
+    ~RuntimeGuard() { release_runtime(); }
+    RuntimeGuard(const RuntimeGuard&) = delete;
+    RuntimeGuard& operator=(const RuntimeGuard&) = delete;
+};
+
 [[nodiscard]] JPH::ObjectLayer to_jolt_layer(CollisionLayer layer) {
     switch (layer) {
-    case CollisionLayer::StaticWorld:
-        return object_layers::static_world;
-    case CollisionLayer::DynamicWorld:
-        return object_layers::dynamic_world;
-    case CollisionLayer::Character:
-        return object_layers::character;
-    case CollisionLayer::Sensor:
-        return object_layers::sensor;
+    case CollisionLayer::StaticWorld: return object_layers::static_world;
+    case CollisionLayer::DynamicWorld: return object_layers::dynamic_world;
+    case CollisionLayer::Character: return object_layers::character;
+    case CollisionLayer::Sensor: return object_layers::sensor;
     }
     throw std::invalid_argument{"unsupported collision layer"};
 }
 
 [[nodiscard]] JPH::EMotionType to_motion_type(BodyClass body_class) {
     switch (body_class) {
-    case BodyClass::Static:
-        return JPH::EMotionType::Static;
+    case BodyClass::Static: return JPH::EMotionType::Static;
     case BodyClass::Kinematic:
-    case BodyClass::Sensor:
-        return JPH::EMotionType::Kinematic;
+    case BodyClass::Sensor: return JPH::EMotionType::Kinematic;
     case BodyClass::Dynamic:
-    case BodyClass::Character:
-        return JPH::EMotionType::Dynamic;
+    case BodyClass::Character: return JPH::EMotionType::Dynamic;
     }
     throw std::invalid_argument{"unsupported body class"};
 }
 
-[[nodiscard]] JPH::RVec3 to_jolt_position(Vec3 value) {
+[[nodiscard]] JPH::RVec3 to_position(Vec3 value) {
     return {static_cast<JPH::Real>(value.x), static_cast<JPH::Real>(value.y), static_cast<JPH::Real>(value.z)};
 }
 
-[[nodiscard]] JPH::Vec3 to_jolt_vector(Vec3 value) {
+[[nodiscard]] JPH::Vec3 to_vector(Vec3 value) {
     return {static_cast<float>(value.x), static_cast<float>(value.y), static_cast<float>(value.z)};
 }
 
-[[nodiscard]] Vec3 from_jolt_position(JPH::RVec3Arg value) {
+[[nodiscard]] Vec3 from_position(JPH::RVec3Arg value) {
     return {static_cast<double>(value.GetX()), static_cast<double>(value.GetY()), static_cast<double>(value.GetZ())};
 }
 
-[[nodiscard]] Vec3 from_jolt_vector(JPH::Vec3Arg value) {
+[[nodiscard]] Vec3 from_vector(JPH::Vec3Arg value) {
     return {static_cast<double>(value.GetX()), static_cast<double>(value.GetY()), static_cast<double>(value.GetZ())};
 }
 
@@ -168,36 +160,19 @@ public:
         if (scene_generation_ == 0U) {
             throw std::invalid_argument{"physics world requires a non-zero scene generation"};
         }
-
-        acquire_jolt_runtime();
-        try {
-            physics_system_.Init(
-                4096,
-                0,
-                4096,
-                2048,
-                broadphase_layer_interface_,
-                object_vs_broadphase_layer_filter_,
-                object_layer_pair_filter_);
-            physics_system_.SetGravity({0.0F, -9.81F, 0.0F});
-        } catch (...) {
-            release_jolt_runtime();
-            throw;
-        }
+        physics_system_.Init(4096, 0, 4096, 2048, broadphase_layer_interface_, object_vs_broadphase_layer_filter_, object_layer_pair_filter_);
+        physics_system_.SetGravity({0.0F, -9.81F, 0.0F});
     }
 
     ~JoltPhysicsWorld() override {
-        auto& body_interface = physics_system_.GetBodyInterface();
+        auto& bodies = physics_system_.GetBodyInterface();
         for (auto& slot : slots_) {
-            if (!slot.alive) {
-                continue;
+            if (slot.alive) {
+                bodies.RemoveBody(slot.body_id);
+                bodies.DestroyBody(slot.body_id);
+                slot.alive = false;
             }
-            body_interface.RemoveBody(slot.body_id);
-            body_interface.DestroyBody(slot.body_id);
-            slot.alive = false;
         }
-        alive_count_ = 0U;
-        release_jolt_runtime();
     }
 
     [[nodiscard]] std::uint64_t scene_generation() const noexcept override { return scene_generation_; }
@@ -206,62 +181,65 @@ public:
         if (!is_valid_descriptor(descriptor)) {
             throw std::invalid_argument{"invalid box body descriptor"};
         }
-
-        const auto half_extents = JPH::Vec3{
-            static_cast<float>(descriptor.half_extents.x),
-            static_cast<float>(descriptor.half_extents.y),
-            static_cast<float>(descriptor.half_extents.z),
-        };
-        const auto* shape = new JPH::BoxShape{half_extents};
-        return create_body(shape, descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
+        return create_body(
+            new JPH::BoxShape{{static_cast<float>(descriptor.half_extents.x), static_cast<float>(descriptor.half_extents.y), static_cast<float>(descriptor.half_extents.z)}},
+            descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
     }
 
     [[nodiscard]] PhysicsBodyHandle create_capsule(const CapsuleBodyDescriptor& descriptor) override {
         if (!is_valid_descriptor(descriptor)) {
             throw std::invalid_argument{"invalid capsule body descriptor"};
         }
-
-        const auto* shape = new JPH::CapsuleShape{
-            static_cast<float>(descriptor.half_height),
-            static_cast<float>(descriptor.radius),
-        };
-        return create_body(shape, descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
+        return create_body(new JPH::CapsuleShape{static_cast<float>(descriptor.half_height), static_cast<float>(descriptor.radius)},
+                           descriptor.body_class, descriptor.layer, descriptor.position, descriptor.linear_velocity);
     }
 
     void destroy_body(PhysicsBodyHandle handle) override {
         auto& slot = require_slot(handle);
-        auto& body_interface = physics_system_.GetBodyInterface();
-        body_interface.RemoveBody(slot.body_id);
-        body_interface.DestroyBody(slot.body_id);
+        auto& bodies = physics_system_.GetBodyInterface();
+        bodies.RemoveBody(slot.body_id);
+        bodies.DestroyBody(slot.body_id);
         slot.alive = false;
         ++slot.generation;
-        if (slot.generation == 0U) {
-            slot.generation = 1U;
-        }
+        if (slot.generation == 0U) slot.generation = 1U;
         --alive_count_;
     }
 
     [[nodiscard]] bool contains(PhysicsBodyHandle handle) const noexcept override {
-        if (!handle.valid() || handle.index >= slots_.size()) {
-            return false;
-        }
-        const auto& slot = slots_[handle.index];
-        return slot.alive && slot.generation == handle.generation;
+        return handle.valid() && handle.index < slots_.size() && slots_[handle.index].alive &&
+               slots_[handle.index].generation == handle.generation;
     }
 
     [[nodiscard]] Vec3 position(PhysicsBodyHandle handle) const override {
-        const auto& slot = require_slot(handle);
-        return from_jolt_position(physics_system_.GetBodyInterface().GetPosition(slot.body_id));
+        return from_position(physics_system_.GetBodyInterface().GetPosition(require_slot(handle).body_id));
     }
 
     [[nodiscard]] Vec3 linear_velocity(PhysicsBodyHandle handle) const override {
-        const auto& slot = require_slot(handle);
-        return from_jolt_vector(physics_system_.GetBodyInterface().GetLinearVelocity(slot.body_id));
+        return from_vector(physics_system_.GetBodyInterface().GetLinearVelocity(require_slot(handle).body_id));
     }
 
     void set_linear_velocity(PhysicsBodyHandle handle, Vec3 velocity) override {
-        const auto& slot = require_slot(handle);
-        physics_system_.GetBodyInterface().SetLinearVelocity(slot.body_id, to_jolt_vector(velocity));
+        physics_system_.GetBodyInterface().SetLinearVelocity(require_slot(handle).body_id, to_vector(velocity));
+    }
+
+    [[nodiscard]] std::optional<RaycastHit> raycast(Vec3 origin, Vec3 direction) const override {
+        JPH::RayCastResult result;
+        const JPH::RRayCast ray{to_position(origin), to_vector(direction)};
+        if (!physics_system_.GetNarrowPhaseQuery().CastRay(ray, result)) {
+            return std::nullopt;
+        }
+        for (std::uint32_t index = 0U; index < slots_.size(); ++index) {
+            const auto& slot = slots_[index];
+            if (slot.alive && slot.body_id == result.mBodyID) {
+                const double fraction = static_cast<double>(result.mFraction);
+                return RaycastHit{
+                    .body = {.index = index, .generation = slot.generation},
+                    .position = {origin.x + direction.x * fraction, origin.y + direction.y * fraction, origin.z + direction.z * fraction},
+                    .fraction = fraction,
+                };
+            }
+        }
+        return std::nullopt;
     }
 
     void step(double seconds) override {
@@ -280,53 +258,35 @@ private:
         bool alive{true};
     };
 
-    [[nodiscard]] PhysicsBodyHandle create_body(
-        const JPH::Shape* shape,
-        BodyClass body_class,
-        CollisionLayer layer,
-        Vec3 position,
-        Vec3 linear_velocity) {
-        JPH::BodyCreationSettings settings{
-            shape,
-            to_jolt_position(position),
-            JPH::Quat::sIdentity(),
-            to_motion_type(body_class),
-            to_jolt_layer(layer),
-        };
+    [[nodiscard]] PhysicsBodyHandle create_body(const JPH::Shape* shape, BodyClass body_class, CollisionLayer layer,
+                                                Vec3 position, Vec3 velocity) {
+        JPH::BodyCreationSettings settings{shape, to_position(position), JPH::Quat::sIdentity(), to_motion_type(body_class), to_jolt_layer(layer)};
         settings.mIsSensor = body_class == BodyClass::Sensor;
         if (body_class == BodyClass::Character) {
-            settings.mAllowedDOFs = JPH::EAllowedDOFs::TranslationX | JPH::EAllowedDOFs::TranslationY |
-                                    JPH::EAllowedDOFs::TranslationZ;
             settings.mFriction = 0.0F;
         }
-
-        auto& body_interface = physics_system_.GetBodyInterface();
-        const auto body_id = body_interface.CreateAndAddBody(settings, JPH::EActivation::Activate);
-        if (body_id.IsInvalid()) {
+        auto& bodies = physics_system_.GetBodyInterface();
+        const auto id = bodies.CreateAndAddBody(settings, JPH::EActivation::Activate);
+        if (id.IsInvalid()) {
             throw std::runtime_error{"Jolt failed to allocate a physics body"};
         }
-        body_interface.SetLinearVelocity(body_id, to_jolt_vector(linear_velocity));
-
+        bodies.SetLinearVelocity(id, to_vector(velocity));
         const auto index = static_cast<std::uint32_t>(slots_.size());
-        slots_.push_back(BodySlot{.body_id = body_id});
+        slots_.push_back({.body_id = id});
         ++alive_count_;
-        return {.index = index, .generation = slots_.back().generation};
+        return {.index = index, .generation = 1U};
     }
 
     [[nodiscard]] BodySlot& require_slot(PhysicsBodyHandle handle) {
-        if (!contains(handle)) {
-            throw std::invalid_argument{"stale or invalid physics body handle"};
-        }
+        if (!contains(handle)) throw std::invalid_argument{"stale or invalid physics body handle"};
         return slots_[handle.index];
     }
-
     [[nodiscard]] const BodySlot& require_slot(PhysicsBodyHandle handle) const {
-        if (!contains(handle)) {
-            throw std::invalid_argument{"stale or invalid physics body handle"};
-        }
+        if (!contains(handle)) throw std::invalid_argument{"stale or invalid physics body handle"};
         return slots_[handle.index];
     }
 
+    RuntimeGuard runtime_guard_;
     std::uint64_t scene_generation_;
     BroadPhaseLayerInterface broadphase_layer_interface_;
     ObjectVsBroadPhaseLayerFilter object_vs_broadphase_layer_filter_;

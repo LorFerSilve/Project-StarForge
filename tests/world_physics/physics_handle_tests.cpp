@@ -2,6 +2,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <stdexcept>
+
 TEST_CASE("physics handles are scoped to their scene generation") {
     auto first_world = starforge::physics::create_jolt_physics_world(71U);
     const auto old_handle = first_world->create_box({

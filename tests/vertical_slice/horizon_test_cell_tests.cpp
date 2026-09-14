@@ -5,7 +5,6 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <utility>
@@ -94,10 +93,12 @@ TEST_CASE("save load preserves persistent truth physical facets and regenerates 
     REQUIRE(loaded_result.has_value());
     auto loaded = std::move(loaded_result).value();
     const auto loaded_state = loaded.read_model();
+    const starforge::physics::Vec3 expected_position{3.5, 2.25, -9.0};
+    const starforge::physics::Vec3 expected_velocity{1.0, -0.5, 2.0};
     REQUIRE(loaded_state.persistent_id == original.read_model().persistent_id);
     REQUIRE(loaded_state.owner == ItemOwner::WorldContainer);
-    REQUIRE(loaded_state.world_physical_state.position == starforge::physics::Vec3{3.5, 2.25, -9.0});
-    REQUIRE(loaded_state.world_physical_state.linear_velocity == starforge::physics::Vec3{1.0, -0.5, 2.0});
+    REQUIRE(loaded_state.world_physical_state.position == expected_position);
+    REQUIRE(loaded_state.world_physical_state.linear_velocity == expected_velocity);
     REQUIRE_FALSE(loaded_state.runtime_handle.has_value());
 
     starforge::world::RuntimeEntityRegistry second_registry{8U};

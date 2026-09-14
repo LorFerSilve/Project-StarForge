@@ -206,8 +206,8 @@ public:
     }
 
     [[nodiscard]] bool contains(PhysicsBodyHandle handle) const noexcept override {
-        return handle.valid() && handle.index < slots_.size() && slots_[handle.index].alive &&
-               slots_[handle.index].generation == handle.generation;
+        return handle.valid() && handle.scene_generation == scene_generation_ && handle.index < slots_.size() &&
+               slots_[handle.index].alive && slots_[handle.index].generation == handle.generation;
     }
 
     [[nodiscard]] Vec3 position(PhysicsBodyHandle handle) const override {
@@ -233,7 +233,7 @@ public:
             if (slot.alive && slot.body_id == result.mBodyID) {
                 const double fraction = static_cast<double>(result.mFraction);
                 return RaycastHit{
-                    .body = {.index = index, .generation = slot.generation},
+                    .body = {.scene_generation = scene_generation_, .index = index, .generation = slot.generation},
                     .position = {origin.x + direction.x * fraction, origin.y + direction.y * fraction, origin.z + direction.z * fraction},
                     .fraction = fraction,
                 };
@@ -274,7 +274,7 @@ private:
         const auto index = static_cast<std::uint32_t>(slots_.size());
         slots_.push_back({.body_id = id});
         ++alive_count_;
-        return {.index = index, .generation = 1U};
+        return {.scene_generation = scene_generation_, .index = index, .generation = 1U};
     }
 
     [[nodiscard]] BodySlot& require_slot(PhysicsBodyHandle handle) {

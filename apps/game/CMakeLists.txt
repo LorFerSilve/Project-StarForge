@@ -12,6 +12,9 @@ target_link_libraries(starforge
         StarForge::Simulation
         StarForge::Transactions
         StarForge::ReadModels
+        StarForge::PhysicsJolt
+        StarForge::World
+        StarForge::Player
 )
 
 sf_apply_project_options(starforge)

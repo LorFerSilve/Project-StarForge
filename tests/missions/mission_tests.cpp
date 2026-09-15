@@ -87,7 +87,7 @@ TEST_CASE("IMP-9 save load preserves mission instance objective hazard and extra
     REQUIRE(runtime.advance_hazards(deployment.value(), 99));
 
     const auto encoded = runtime.serialize();
-    const auto decoded = MissionRuntime::deserialize(encoded);
+    auto decoded = MissionRuntime::deserialize(encoded);
     REQUIRE(decoded);
     const auto* instance = decoded.value().instance(deployment.value());
     REQUIRE(instance != nullptr);

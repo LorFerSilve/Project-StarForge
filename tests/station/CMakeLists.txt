@@ -18,5 +18,5 @@ catch_discover_tests(starforge_tests_station
 
 add_test(NAME starforge_station_benchmark_smoke COMMAND starforge-station-benchmark)
 set_tests_properties(starforge_station_benchmark_smoke PROPERTIES
-    LABELS "headless;station;benchmark;determinism"
+    LABELS "domain;headless;station;benchmark;determinism"
 )

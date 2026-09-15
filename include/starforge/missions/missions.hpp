@@ -6,8 +6,8 @@
 
 #include <cstdint>
 #include <optional>
-#include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace starforge::missions {

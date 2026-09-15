@@ -106,7 +106,7 @@ std::optional<KnowledgeFact> KnowledgeStore::fact(FactId id) const {
 std::uint64_t KnowledgeStore::digest() const noexcept {
     std::uint64_t value = 1469598103934665603ULL;
     for (const auto& [id, fact] : facts_) {
-        for (const auto part : {id.value(), fact.subject.value(), fact.observed_tick, fact.expires_tick,
+        for (const auto part : {id.raw(), fact.subject.raw(), fact.observed_tick, fact.expires_tick,
                                 static_cast<std::uint64_t>(fact.confidence)}) {
             value ^= part;
             value *= 1099511628211ULL;
@@ -133,7 +133,7 @@ bool AIRuntime::assign_task(ActorId actor_id, TaskId task_id) {
 bool AIRuntime::set_robot_command(ActorId actor_id, NavNodeId destination, RulesOfEngagement roe) {
     auto it = actors_.find(actor_id);
     if (it == actors_.end() || it->second.kind != ActorKind::Robot) return false;
-    const TaskId task_id{0x8000000000000000ULL | actor_id.value()};
+    const TaskId task_id{0x8000000000000000ULL | actor_id.raw()};
     tasks_[task_id] = Task{task_id, destination, 255, false};
     it->second.task = task_id;
     it->second.roe = roe;
@@ -188,11 +188,11 @@ const ActorState* AIRuntime::actor(ActorId id) const {
 std::uint64_t AIRuntime::authoritative_digest() const noexcept {
     std::uint64_t value = knowledge_.digest() ^ tick_;
     for (const auto& [id, state] : actors_) {
-        value = (value * 1099511628211ULL) ^ id.value();
-        value = (value * 1099511628211ULL) ^ state.location.value();
+        value = (value * 1099511628211ULL) ^ id.raw();
+        value = (value * 1099511628211ULL) ^ state.location.raw();
         value = (value * 1099511628211ULL) ^ static_cast<std::uint64_t>(state.tactical);
         value = (value * 1099511628211ULL) ^ static_cast<std::uint64_t>(state.roe);
-        value = (value * 1099511628211ULL) ^ (state.task ? state.task->value() : 0ULL);
+        value = (value * 1099511628211ULL) ^ (state.task ? state.task->raw() : 0ULL);
     }
     return value;
 }

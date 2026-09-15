@@ -1,5 +1,6 @@
 add_library(sf_station STATIC
     station.cpp
+    station_processes.cpp
 )
 
 add_library(StarForge::Station ALIAS sf_station)

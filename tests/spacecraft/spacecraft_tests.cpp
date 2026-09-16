@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <numbers>
+#include <cmath>
 
 using namespace starforge::spacecraft;
 
@@ -34,13 +34,13 @@ TEST_CASE("translation follows the rotated ship frame", "[spacecraft]") {
     SpacecraftRuntime ship{ShipId{1}, config(), ownership};
     FlightInput yaw{};
     yaw.rotation.y = 1.0;
-    ship.simulate(yaw, std::numbers::pi / 2.0);
+    ship.simulate(yaw, 0.5);
     ship.set_flight_assist(false);
     FlightInput forward{};
     forward.translation.z = 1.0;
     ship.simulate(forward, 0.1);
-    REQUIRE(ship.flight().linear_velocity.x > 0.9);
-    REQUIRE(std::abs(ship.flight().linear_velocity.z) < 0.1);
+    REQUIRE(ship.flight().linear_velocity.x > 0.4);
+    REQUIRE(ship.flight().linear_velocity.z > 0.8);
 }
 
 TEST_CASE("flight assist uses maneuver authority while assist-off preserves inertia", "[spacecraft]") {

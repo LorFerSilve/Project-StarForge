@@ -7,6 +7,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 namespace starforge::spacecraft {
@@ -32,6 +33,8 @@ struct FlightInput final {
     bool boost{false};
 };
 
+enum class ReachClass : std::uint8_t { I = 1, II, III, IV };
+
 struct ShipConfiguration final {
     double dry_mass_kg{1000.0};
     double cargo_capacity_kg{0.0};
@@ -41,7 +44,7 @@ struct ShipConfiguration final {
     double inertia{1.0};
     double cruise_speed_mps{0.0};
     double boost_multiplier{1.0};
-    double reach{0.0};
+    ReachClass reach{ReachClass::I};
 };
 
 struct ShipSystems final {
@@ -64,6 +67,22 @@ struct FlightState final {
     bool flight_assist{true};
 };
 
+struct DockingCapture final {
+    DockId dock_id{};
+    double distance_m{};
+    double relative_speed_mps{};
+    double orientation_error_degrees{};
+    double relative_angular_speed{};
+    bool connector_compatible{true};
+    bool unobstructed{true};
+    bool operable{true};
+};
+
+struct RouteRequirement final {
+    ReachClass required_reach{ReachClass::I};
+    bool operational{true};
+};
+
 enum class ShipError : std::uint8_t {
     InvalidConfiguration,
     InvalidId,
@@ -74,12 +93,23 @@ enum class ShipError : std::uint8_t {
     AlreadyDocked,
     NotDocked,
     InsufficientReach,
+    RouteUnavailable,
     InvalidSerializedState,
+};
+
+class CargoOwnershipStore final {
+public:
+    [[nodiscard]] bool claim(CargoId cargo, ShipId ship);
+    [[nodiscard]] bool release(CargoId cargo, ShipId ship);
+    [[nodiscard]] std::optional<ShipId> owner(CargoId cargo) const;
+
+private:
+    std::unordered_map<std::uint64_t, ShipId> owners_{};
 };
 
 class SpacecraftRuntime final {
 public:
-    explicit SpacecraftRuntime(ShipId id, ShipConfiguration configuration);
+    SpacecraftRuntime(ShipId id, ShipConfiguration configuration, CargoOwnershipStore& cargo_ownership);
 
     [[nodiscard]] ShipId id() const noexcept { return id_; }
     [[nodiscard]] const ShipConfiguration& configuration() const noexcept { return configuration_; }
@@ -96,17 +126,18 @@ public:
 
     [[nodiscard]] core::Result<void, ShipError> load_cargo(CargoRecord cargo);
     [[nodiscard]] core::Result<CargoRecord, ShipError> unload_cargo(CargoId cargo_id);
-    [[nodiscard]] core::Result<void, ShipError> dock(DockId dock_id, double distance_m,
-                                                     double relative_speed_mps);
+    [[nodiscard]] core::Result<void, ShipError> dock(const DockingCapture& capture);
     [[nodiscard]] core::Result<void, ShipError> undock();
-    [[nodiscard]] core::Result<void, ShipError> strategic_travel(double distance);
+    [[nodiscard]] core::Result<void, ShipError> strategic_travel(const RouteRequirement& route);
 
     [[nodiscard]] std::string serialize() const;
-    [[nodiscard]] static core::Result<SpacecraftRuntime, ShipError> deserialize(std::string_view data);
+    [[nodiscard]] static core::Result<SpacecraftRuntime, ShipError> deserialize(std::string_view data,
+                                                                                CargoOwnershipStore& cargo_ownership);
 
 private:
     ShipId id_{};
     ShipConfiguration configuration_{};
+    CargoOwnershipStore* cargo_ownership_{};
     ShipSystems systems_{};
     FlightState flight_{};
     std::vector<CargoRecord> cargo_{};

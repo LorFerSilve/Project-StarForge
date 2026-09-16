@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <sstream>
+#include <unordered_set>
 
 namespace starforge::spacecraft {
 namespace {
@@ -11,24 +12,51 @@ double clamp_unit(double value) noexcept { return std::clamp(value, -1.0, 1.0); 
 double magnitude(const Vec3& value) noexcept {
     return std::sqrt(value.x * value.x + value.y * value.y + value.z * value.z);
 }
-void clamp_speed(Vec3& velocity, double limit) noexcept {
-    const double speed = magnitude(velocity);
-    if (limit > 0.0 && speed > limit) {
-        const double scale = limit / speed;
-        velocity.x *= scale;
-        velocity.y *= scale;
-        velocity.z *= scale;
-    }
-}
 void approach_zero(double& value, double amount) noexcept {
     if (value > 0.0) value = std::max(0.0, value - amount);
     else if (value < 0.0) value = std::min(0.0, value + amount);
 }
+Vec3 rotate_body_to_world(const Vec3& value, const Vec3& euler) noexcept {
+    const double cx = std::cos(euler.x), sx = std::sin(euler.x);
+    const double cy = std::cos(euler.y), sy = std::sin(euler.y);
+    const double cz = std::cos(euler.z), sz = std::sin(euler.z);
+    const Vec3 rx{value.x, value.y * cx - value.z * sx, value.y * sx + value.z * cx};
+    const Vec3 ry{rx.x * cy + rx.z * sy, rx.y, -rx.x * sy + rx.z * cy};
+    return Vec3{ry.x * cz - ry.y * sz, ry.x * sz + ry.y * cz, ry.z};
+}
+void bounded_brake(Vec3& velocity, double acceleration, double seconds) noexcept {
+    const double speed = magnitude(velocity);
+    if (speed <= 0.0 || acceleration <= 0.0) return;
+    const double next_speed = std::max(0.0, speed - acceleration * seconds);
+    const double scale = next_speed / speed;
+    velocity.x *= scale;
+    velocity.y *= scale;
+    velocity.z *= scale;
+}
 
 }  // namespace
 
-SpacecraftRuntime::SpacecraftRuntime(ShipId id, ShipConfiguration configuration)
-    : id_(id), configuration_(configuration) {}
+bool CargoOwnershipStore::claim(CargoId cargo, ShipId ship) {
+    if (!cargo.valid() || !ship.valid()) return false;
+    return owners_.emplace(cargo.raw(), ship).second;
+}
+
+bool CargoOwnershipStore::release(CargoId cargo, ShipId ship) {
+    const auto it = owners_.find(cargo.raw());
+    if (it == owners_.end() || it->second != ship) return false;
+    owners_.erase(it);
+    return true;
+}
+
+std::optional<ShipId> CargoOwnershipStore::owner(CargoId cargo) const {
+    const auto it = owners_.find(cargo.raw());
+    if (it == owners_.end()) return std::nullopt;
+    return it->second;
+}
+
+SpacecraftRuntime::SpacecraftRuntime(ShipId id, ShipConfiguration configuration,
+                                     CargoOwnershipStore& cargo_ownership)
+    : id_(id), configuration_(configuration), cargo_ownership_(&cargo_ownership) {}
 
 double SpacecraftRuntime::cargo_mass_kg() const noexcept {
     double mass = 0.0;
@@ -64,18 +92,26 @@ void SpacecraftRuntime::simulate(const FlightInput& input, double seconds) noexc
     const double boost = input.boost ? std::max(1.0, configuration_.boost_multiplier) : 1.0;
     const double forward_accel = configuration_.forward_thrust_n * propulsion * boost / mass;
     const double lateral_accel = configuration_.maneuver_thrust_n * maneuver / mass;
+    const double speed_limit = configuration_.cruise_speed_mps * systems_.avionics * boost;
+    const double speed_before = magnitude(flight_.linear_velocity);
 
-    flight_.linear_velocity.x += clamp_unit(input.translation.x) * lateral_accel * seconds;
-    flight_.linear_velocity.y += clamp_unit(input.translation.y) * lateral_accel * seconds;
-    flight_.linear_velocity.z += clamp_unit(input.translation.z) * forward_accel * seconds;
+    Vec3 body_accel{clamp_unit(input.translation.x) * lateral_accel,
+                    clamp_unit(input.translation.y) * lateral_accel,
+                    clamp_unit(input.translation.z) * forward_accel};
+    const Vec3 world_accel = rotate_body_to_world(body_accel, flight_.orientation);
+    const double dot = flight_.linear_velocity.x * world_accel.x + flight_.linear_velocity.y * world_accel.y +
+                       flight_.linear_velocity.z * world_accel.z;
+    if (speed_limit <= 0.0 || speed_before < speed_limit || dot <= 0.0) {
+        flight_.linear_velocity.x += world_accel.x * seconds;
+        flight_.linear_velocity.y += world_accel.y * seconds;
+        flight_.linear_velocity.z += world_accel.z * seconds;
+    }
 
     const bool no_translation = input.translation.x == 0.0 && input.translation.y == 0.0 &&
                                 input.translation.z == 0.0;
-    if ((flight_.flight_assist && no_translation) || input.brake) {
-        const double braking = lateral_accel * seconds;
-        approach_zero(flight_.linear_velocity.x, braking);
-        approach_zero(flight_.linear_velocity.y, braking);
-        approach_zero(flight_.linear_velocity.z, braking);
+    if ((flight_.flight_assist && no_translation) || input.brake ||
+        (speed_limit > 0.0 && magnitude(flight_.linear_velocity) > speed_limit)) {
+        bounded_brake(flight_.linear_velocity, lateral_accel, seconds);
     }
 
     const double angular_accel = configuration_.rotational_thrust * maneuver /
@@ -91,9 +127,6 @@ void SpacecraftRuntime::simulate(const FlightInput& input, double seconds) noexc
         approach_zero(flight_.angular_velocity.z, stabilization);
     }
 
-    const double speed_limit = configuration_.cruise_speed_mps * systems_.avionics *
-                               (input.boost ? std::max(1.0, configuration_.boost_multiplier) : 1.0);
-    clamp_speed(flight_.linear_velocity, speed_limit);
     flight_.position.x += flight_.linear_velocity.x * seconds;
     flight_.position.y += flight_.linear_velocity.y * seconds;
     flight_.position.z += flight_.linear_velocity.z * seconds;
@@ -105,10 +138,10 @@ void SpacecraftRuntime::simulate(const FlightInput& input, double seconds) noexc
 
 core::Result<void, ShipError> SpacecraftRuntime::load_cargo(CargoRecord cargo) {
     if (!cargo.id.valid() || cargo.mass_kg < 0.0) return core::Result<void, ShipError>::failure(ShipError::InvalidId);
-    if (std::ranges::any_of(cargo_, [&](const auto& item) { return item.id == cargo.id; }))
-        return core::Result<void, ShipError>::failure(ShipError::CargoAlreadyOwned);
     if (cargo_mass_kg() + cargo.mass_kg > configuration_.cargo_capacity_kg)
         return core::Result<void, ShipError>::failure(ShipError::CargoCapacityExceeded);
+    if (!cargo_ownership_->claim(cargo.id, id_))
+        return core::Result<void, ShipError>::failure(ShipError::CargoAlreadyOwned);
     cargo_.push_back(cargo);
     ++revision_;
     return core::Result<void, ShipError>::success();
@@ -118,18 +151,23 @@ core::Result<CargoRecord, ShipError> SpacecraftRuntime::unload_cargo(CargoId car
     const auto it = std::ranges::find_if(cargo_, [&](const auto& item) { return item.id == cargo_id; });
     if (it == cargo_.end()) return core::Result<CargoRecord, ShipError>::failure(ShipError::CargoNotOwned);
     const CargoRecord cargo = *it;
+    if (!cargo_ownership_->release(cargo.id, id_))
+        return core::Result<CargoRecord, ShipError>::failure(ShipError::CargoNotOwned);
     cargo_.erase(it);
     ++revision_;
     return core::Result<CargoRecord, ShipError>::success(cargo);
 }
 
-core::Result<void, ShipError> SpacecraftRuntime::dock(DockId dock_id, double distance_m,
-                                                       double relative_speed_mps) {
-    if (!dock_id.valid()) return core::Result<void, ShipError>::failure(ShipError::InvalidId);
+core::Result<void, ShipError> SpacecraftRuntime::dock(const DockingCapture& capture) {
+    if (!capture.dock_id.valid()) return core::Result<void, ShipError>::failure(ShipError::InvalidId);
     if (docked_at_) return core::Result<void, ShipError>::failure(ShipError::AlreadyDocked);
-    if (distance_m < 0.0 || distance_m > 2.0 || relative_speed_mps < 0.0 || relative_speed_mps > 1.0)
+    if (capture.distance_m < 0.0 || capture.distance_m > 2.0 || capture.relative_speed_mps < 0.0 ||
+        capture.relative_speed_mps > 1.0 || capture.orientation_error_degrees < 0.0 ||
+        capture.orientation_error_degrees > 5.0 || capture.relative_angular_speed < 0.0 ||
+        capture.relative_angular_speed > 0.1 || !capture.connector_compatible || !capture.unobstructed ||
+        !capture.operable)
         return core::Result<void, ShipError>::failure(ShipError::InvalidDockingEnvelope);
-    docked_at_ = dock_id;
+    docked_at_ = capture.dock_id;
     flight_.linear_velocity = {};
     flight_.angular_velocity = {};
     ++revision_;
@@ -143,8 +181,9 @@ core::Result<void, ShipError> SpacecraftRuntime::undock() {
     return core::Result<void, ShipError>::success();
 }
 
-core::Result<void, ShipError> SpacecraftRuntime::strategic_travel(double distance) {
-    if (distance < 0.0 || distance > configuration_.reach)
+core::Result<void, ShipError> SpacecraftRuntime::strategic_travel(const RouteRequirement& route) {
+    if (!route.operational) return core::Result<void, ShipError>::failure(ShipError::RouteUnavailable);
+    if (static_cast<std::uint8_t>(route.required_reach) > static_cast<std::uint8_t>(configuration_.reach))
         return core::Result<void, ShipError>::failure(ShipError::InsufficientReach);
     ++revision_;
     return core::Result<void, ShipError>::success();
@@ -153,11 +192,11 @@ core::Result<void, ShipError> SpacecraftRuntime::strategic_travel(double distanc
 std::string SpacecraftRuntime::serialize() const {
     std::ostringstream out;
     out.precision(17);
-    out << "SFSHIP1 " << id_.raw() << ' ' << revision_ << ' ' << configuration_.dry_mass_kg << ' '
+    out << "SFSHIP2 " << id_.raw() << ' ' << revision_ << ' ' << configuration_.dry_mass_kg << ' '
         << configuration_.cargo_capacity_kg << ' ' << configuration_.forward_thrust_n << ' '
         << configuration_.maneuver_thrust_n << ' ' << configuration_.rotational_thrust << ' '
         << configuration_.inertia << ' ' << configuration_.cruise_speed_mps << ' '
-        << configuration_.boost_multiplier << ' ' << configuration_.reach << ' '
+        << configuration_.boost_multiplier << ' ' << static_cast<unsigned>(configuration_.reach) << ' '
         << systems_.power << ' ' << systems_.propulsion << ' ' << systems_.maneuvering << ' '
         << systems_.avionics << ' ' << flight_.position.x << ' ' << flight_.position.y << ' '
         << flight_.position.z << ' ' << flight_.linear_velocity.x << ' ' << flight_.linear_velocity.y << ' '
@@ -169,36 +208,45 @@ std::string SpacecraftRuntime::serialize() const {
     return out.str();
 }
 
-core::Result<SpacecraftRuntime, ShipError> SpacecraftRuntime::deserialize(std::string_view data) {
+core::Result<SpacecraftRuntime, ShipError> SpacecraftRuntime::deserialize(std::string_view data,
+                                                                          CargoOwnershipStore& cargo_ownership) {
     std::istringstream in{std::string(data)};
     std::string magic;
     std::uint64_t id_raw{}, revision{}, dock_raw{};
+    unsigned reach_raw{};
     ShipConfiguration config;
     ShipSystems systems;
     FlightState flight;
     std::size_t cargo_count{};
     if (!(in >> magic >> id_raw >> revision >> config.dry_mass_kg >> config.cargo_capacity_kg >>
           config.forward_thrust_n >> config.maneuver_thrust_n >> config.rotational_thrust >> config.inertia >>
-          config.cruise_speed_mps >> config.boost_multiplier >> config.reach >> systems.power >> systems.propulsion >>
+          config.cruise_speed_mps >> config.boost_multiplier >> reach_raw >> systems.power >> systems.propulsion >>
           systems.maneuvering >> systems.avionics >> flight.position.x >> flight.position.y >> flight.position.z >>
           flight.linear_velocity.x >> flight.linear_velocity.y >> flight.linear_velocity.z >> flight.orientation.x >>
           flight.orientation.y >> flight.orientation.z >> flight.angular_velocity.x >> flight.angular_velocity.y >>
-          flight.angular_velocity.z >> flight.flight_assist >> dock_raw >> cargo_count) || magic != "SFSHIP1" || id_raw == 0)
+          flight.angular_velocity.z >> flight.flight_assist >> dock_raw >> cargo_count) || magic != "SFSHIP2" ||
+        id_raw == 0 || reach_raw < 1 || reach_raw > 4)
         return core::Result<SpacecraftRuntime, ShipError>::failure(ShipError::InvalidSerializedState);
-    SpacecraftRuntime runtime{ShipId{id_raw}, config};
+    config.reach = static_cast<ReachClass>(reach_raw);
+    SpacecraftRuntime runtime{ShipId{id_raw}, config, cargo_ownership};
     runtime.revision_ = revision;
     runtime.systems_ = systems;
     runtime.flight_ = flight;
     if (dock_raw != 0) runtime.docked_at_ = DockId{dock_raw};
+    std::unordered_set<std::uint64_t> decoded_ids;
     for (std::size_t index = 0; index < cargo_count; ++index) {
         std::uint64_t cargo_id{};
         double mass{};
-        if (!(in >> cargo_id >> mass) || cargo_id == 0 || mass < 0.0)
+        if (!(in >> cargo_id >> mass) || cargo_id == 0 || mass < 0.0 || !decoded_ids.insert(cargo_id).second)
             return core::Result<SpacecraftRuntime, ShipError>::failure(ShipError::InvalidSerializedState);
         runtime.cargo_.push_back(CargoRecord{CargoId{cargo_id}, mass});
     }
     if (runtime.current_mass_kg() <= 0.0 || runtime.cargo_mass_kg() > config.cargo_capacity_kg)
         return core::Result<SpacecraftRuntime, ShipError>::failure(ShipError::InvalidSerializedState);
+    for (const auto& cargo : runtime.cargo_) {
+        if (!cargo_ownership.claim(cargo.id, runtime.id_))
+            return core::Result<SpacecraftRuntime, ShipError>::failure(ShipError::InvalidSerializedState);
+    }
     return core::Result<SpacecraftRuntime, ShipError>::success(std::move(runtime));
 }
 

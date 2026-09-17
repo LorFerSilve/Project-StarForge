@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <string>
-#include <utility>
 
 namespace starforge::audio {
 
@@ -16,8 +15,6 @@ struct MiniaudioBackend::Impl {
 
 MiniaudioBackend::MiniaudioBackend() : impl_(std::make_unique<Impl>()) {}
 MiniaudioBackend::~MiniaudioBackend() { shutdown(); }
-MiniaudioBackend::MiniaudioBackend(MiniaudioBackend&&) noexcept = default;
-MiniaudioBackend& MiniaudioBackend::operator=(MiniaudioBackend&&) noexcept = default;
 
 bool MiniaudioBackend::initialize() noexcept {
     if (impl_->initialized) {

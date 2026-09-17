@@ -17,11 +17,34 @@ TEST_CASE("shipping focus skips unavailable and hidden-knowledge elements") {
     CHECK(scope.focused()->id == 1);
     REQUIRE(scope.next());
     CHECK(scope.focused()->id == 4);
+    CHECK_FALSE(scope.next());
     REQUIRE(scope.previous());
     CHECK(scope.focused()->id == 1);
+    CHECK_FALSE(scope.previous());
     CHECK_FALSE(scope.focus(3));
     scope.invalidate();
     CHECK(scope.focused() == nullptr);
+}
+
+TEST_CASE("retained focus survives refresh and wrapping is opt-in") {
+    starforge::ui::FocusScope scope;
+    scope.set_elements({
+        {1, starforge::ui::SemanticRole::Button, "First", true, true, true, false},
+        {2, starforge::ui::SemanticRole::Button, "Second", true, true, true, false},
+    });
+    REQUIRE(scope.focus(2));
+    scope.set_elements({
+        {1, starforge::ui::SemanticRole::Button, "First refreshed", true, true, true, false},
+        {2, starforge::ui::SemanticRole::Button, "Second refreshed", true, true, true, false},
+    });
+    REQUIRE(scope.focused() != nullptr);
+    CHECK(scope.focused()->id == 2);
+    CHECK_FALSE(scope.next());
+    scope.set_wrap_navigation(true);
+    REQUIRE(scope.next());
+    CHECK(scope.focused()->id == 1);
+    REQUIRE(scope.previous());
+    CHECK(scope.focused()->id == 2);
 }
 
 TEST_CASE("muting presentation never changes AI hearing semantics") {

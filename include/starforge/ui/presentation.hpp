@@ -34,16 +34,21 @@ struct Element {
 
 class FocusScope {
   public:
+    explicit FocusScope(bool wrap_navigation = false) noexcept : wrap_navigation_(wrap_navigation) {}
+
     void set_elements(std::vector<Element> elements);
     [[nodiscard]] const Element* focused() const noexcept;
     [[nodiscard]] bool focus(std::uint64_t id) noexcept;
     [[nodiscard]] bool next() noexcept;
     [[nodiscard]] bool previous() noexcept;
+    void set_wrap_navigation(bool enabled) noexcept { wrap_navigation_ = enabled; }
+    [[nodiscard]] bool wrap_navigation() const noexcept { return wrap_navigation_; }
     void invalidate() noexcept;
 
   private:
     std::vector<Element> elements_{};
     std::optional<std::size_t> focused_index_{};
+    bool wrap_navigation_{false};
 };
 
 struct AlarmPresentation {

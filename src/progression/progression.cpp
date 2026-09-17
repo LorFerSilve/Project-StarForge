@@ -12,21 +12,21 @@ void ProgressionState::commit_transaction(std::uint64_t transaction_id) {
 
 core::Result<void, ProgressionError> ProgressionState::credit(std::int64_t amount,
                                                                std::uint64_t transaction_id) {
-    if (amount <= 0) return ProgressionError::InvalidAmount;
-    if (transaction_seen(transaction_id)) return ProgressionError::DuplicateTransaction;
+    if (amount <= 0) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
     credits_ += amount;
     commit_transaction(transaction_id);
-    return {};
+    return core::Result<void, ProgressionError>::success();
 }
 
 core::Result<void, ProgressionError> ProgressionState::debit(std::int64_t amount,
                                                               std::uint64_t transaction_id) {
-    if (amount <= 0) return ProgressionError::InvalidAmount;
-    if (transaction_seen(transaction_id)) return ProgressionError::DuplicateTransaction;
-    if (credits_ < amount) return ProgressionError::InsufficientCredits;
+    if (amount <= 0) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
+    if (credits_ < amount) return core::Result<void, ProgressionError>::failure(ProgressionError::InsufficientCredits);
     credits_ -= amount;
     commit_transaction(transaction_id);
-    return {};
+    return core::Result<void, ProgressionError>::success();
 }
 
 std::int32_t ProgressionState::reputation(std::string_view faction) const noexcept {
@@ -40,12 +40,12 @@ ReputationTier ProgressionState::tier(std::string_view faction) const noexcept {
 
 core::Result<void, ProgressionError> ProgressionState::change_reputation(
     std::string faction, std::int32_t delta, std::uint64_t transaction_id) {
-    if (faction.empty()) return ProgressionError::InvalidReputation;
-    if (transaction_seen(transaction_id)) return ProgressionError::DuplicateTransaction;
+    if (faction.empty()) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidReputation);
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
     const auto next = std::clamp(reputation(faction) + delta, -100, 100);
     reputation_[std::move(faction)] = next;
     commit_transaction(transaction_id);
-    return {};
+    return core::Result<void, ProgressionError>::success();
 }
 
 void ProgressionState::integrate_evidence(
@@ -74,23 +74,23 @@ bool ProgressionState::has_blueprint(std::string_view blueprint_id) const noexce
 
 core::Result<void, ProgressionError> ProgressionState::complete_research(
     const ResearchProject& project, std::uint64_t transaction_id) {
-    if (project.id.empty()) return ProgressionError::MissingPrerequisite;
-    if (transaction_seen(transaction_id)) return ProgressionError::DuplicateTransaction;
-    if (completed_research_.contains(project.id)) return ProgressionError::AlreadyCompleted;
+    if (project.id.empty()) return core::Result<void, ProgressionError>::failure(ProgressionError::MissingPrerequisite);
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
+    if (completed_research_.contains(project.id)) return core::Result<void, ProgressionError>::failure(ProgressionError::AlreadyCompleted);
     for (const auto& prerequisite : project.prerequisites) {
-        if (!technologies_.contains(prerequisite)) return ProgressionError::MissingPrerequisite;
+        if (!technologies_.contains(prerequisite)) return core::Result<void, ProgressionError>::failure(ProgressionError::MissingPrerequisite);
     }
     for (const auto& requirement : project.evidence_thresholds) {
-        if (evidence(requirement.domain) < requirement.minimum) return ProgressionError::MissingEvidence;
+        if (evidence(requirement.domain) < requirement.minimum) return core::Result<void, ProgressionError>::failure(ProgressionError::MissingEvidence);
     }
     for (const auto& evidence_id : project.unique_evidence) {
-        if (!evidence_ids_.contains(evidence_id)) return ProgressionError::MissingEvidence;
+        if (!evidence_ids_.contains(evidence_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::MissingEvidence);
     }
     completed_research_.insert(project.id);
     technologies_.insert(project.technology_outputs.begin(), project.technology_outputs.end());
     blueprints_.insert(project.blueprint_outputs.begin(), project.blueprint_outputs.end());
     commit_transaction(transaction_id);
-    return {};
+    return core::Result<void, ProgressionError>::success();
 }
 
 bool ProgressionState::campaign_flag(std::string_view flag) const noexcept {
@@ -103,13 +103,13 @@ void ProgressionState::set_campaign_flag(std::string flag) {
 
 core::Result<void, ProgressionError> ProgressionState::commit_finale(
     std::string ending_flag, std::uint64_t transaction_id) {
-    if (ending_flag.empty()) return ProgressionError::InvalidFinaleState;
-    if (transaction_seen(transaction_id)) return ProgressionError::DuplicateTransaction;
-    if (finale_completed_) return ProgressionError::AlreadyCompleted;
+    if (ending_flag.empty()) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidFinaleState);
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
+    if (finale_completed_) return core::Result<void, ProgressionError>::failure(ProgressionError::AlreadyCompleted);
     campaign_flags_.insert(std::move(ending_flag));
     finale_completed_ = true;
     commit_transaction(transaction_id);
-    return {};
+    return core::Result<void, ProgressionError>::success();
 }
 
 } // namespace starforge::progression

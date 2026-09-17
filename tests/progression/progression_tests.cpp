@@ -87,3 +87,57 @@ TEST_CASE("finale transaction commits exactly once and preserves postgame state"
     CHECK(state.campaign_flag("ENDING_STABILIZE"));
     CHECK_FALSE(state.commit_finale("ENDING_SEVER", 41));
 }
+
+TEST_CASE("progression snapshot preserves exactly-once finale and research across reload") {
+    ProgressionState state;
+    REQUIRE(state.credit(750, 100));
+    REQUIRE(state.change_reputation("Helios", 45, 101));
+    state.integrate_evidence("EVID_CORE", {{"Energy", 4}});
+    ResearchProject project{
+        .id = "CORE_RESEARCH",
+        .evidence_thresholds = {{"Energy", 4}},
+        .unique_evidence = {"EVID_CORE"},
+        .technology_outputs = {"TECH_CORE"},
+        .blueprint_outputs = {"BP_CORE"},
+    };
+    REQUIRE(state.complete_research(project, 102));
+    state.set_campaign_flag("MS_F01_COMPLETE");
+    REQUIRE(state.commit_finale("ENDING_STABILIZE", 103));
+
+    auto restored_result = ProgressionState::restore(state.snapshot());
+    REQUIRE(restored_result);
+    auto restored = std::move(restored_result).value();
+
+    CHECK(restored.credits() == 750);
+    CHECK(restored.reputation("Helios") == 45);
+    CHECK(restored.evidence("Energy") == 4);
+    CHECK(restored.has_evidence("EVID_CORE"));
+    CHECK(restored.has_technology("TECH_CORE"));
+    CHECK(restored.has_blueprint("BP_CORE"));
+    CHECK(restored.campaign_flag("MS_F01_COMPLETE"));
+    CHECK(restored.campaign_flag("ENDING_STABILIZE"));
+    CHECK(restored.finale_completed());
+
+    // Transaction history is persistent authority: replay after reload cannot duplicate effects.
+    CHECK_FALSE(restored.credit(750, 100));
+    CHECK_FALSE(restored.complete_research(project, 102));
+    CHECK_FALSE(restored.commit_finale("ENDING_SEVER", 103));
+    CHECK_FALSE(restored.commit_finale("ENDING_SEVER", 104));
+    CHECK(restored.credits() == 750);
+    CHECK(restored.campaign_flag("ENDING_STABILIZE"));
+    CHECK_FALSE(restored.campaign_flag("ENDING_SEVER"));
+}
+
+TEST_CASE("progression restore rejects invalid authoritative state") {
+    ProgressionSnapshot snapshot;
+    snapshot.credits = -1;
+    CHECK_FALSE(ProgressionState::restore(snapshot));
+
+    snapshot.credits = 0;
+    snapshot.reputation["Helios"] = 101;
+    CHECK_FALSE(ProgressionState::restore(snapshot));
+
+    snapshot.reputation.clear();
+    snapshot.committed_transactions.insert(0);
+    CHECK_FALSE(ProgressionState::restore(snapshot));
+}

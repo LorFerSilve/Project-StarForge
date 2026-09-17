@@ -114,12 +114,30 @@ void ProgressionState::set_campaign_flag(std::string flag) {
 }
 
 core::Result<void, ProgressionError> ProgressionState::commit_finale(
-    std::string ending_flag, std::uint64_t transaction_id) {
-    if (ending_flag.empty()) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidFinaleState);
+    FinalChoice choice, std::uint64_t transaction_id, core::SimulationTick commit_tick) {
     if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
-    if (finale_completed_) return core::Result<void, ProgressionError>::failure(ProgressionError::AlreadyCompleted);
-    campaign_flags_.insert(std::move(ending_flag));
-    finale_completed_ = true;
+    if (postgame_resolution_.has_value()) return core::Result<void, ProgressionError>::failure(ProgressionError::AlreadyCompleted);
+    postgame_resolution_ = PostgameResolutionState{
+        .choice = choice,
+        .transaction_id = transaction_id,
+        .commit_tick = commit_tick,
+        .schema_version = 1U,
+        .main_campaign_complete = false,
+    };
+    commit_transaction(transaction_id);
+    return core::Result<void, ProgressionError>::success();
+}
+
+core::Result<void, ProgressionError> ProgressionState::complete_main_campaign(
+    std::uint64_t transaction_id) {
+    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
+    if (!postgame_resolution_.has_value()) {
+        return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidFinaleState);
+    }
+    if (postgame_resolution_->main_campaign_complete) {
+        return core::Result<void, ProgressionError>::failure(ProgressionError::AlreadyCompleted);
+    }
+    postgame_resolution_->main_campaign_complete = true;
     commit_transaction(transaction_id);
     return core::Result<void, ProgressionError>::success();
 }
@@ -135,7 +153,7 @@ ProgressionSnapshot ProgressionState::snapshot() const {
         .completed_research = completed_research_,
         .campaign_flags = campaign_flags_,
         .committed_transactions = committed_transactions_,
-        .finale_completed = finale_completed_,
+        .postgame_resolution = postgame_resolution_,
     };
 }
 
@@ -166,6 +184,14 @@ core::Result<ProgressionState, ProgressionError> ProgressionState::restore(
     for (const auto& value : snapshot.campaign_flags) {
         if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
     }
+    if (snapshot.postgame_resolution.has_value()) {
+        const auto& postgame = *snapshot.postgame_resolution;
+        if (postgame.transaction_id == 0 || postgame.schema_version != 1U ||
+            !snapshot.committed_transactions.contains(postgame.transaction_id)) {
+            return core::Result<ProgressionState, ProgressionError>::failure(
+                ProgressionError::InvalidSnapshot);
+        }
+    }
 
     ProgressionState state;
     state.credits_ = snapshot.credits;
@@ -177,7 +203,7 @@ core::Result<ProgressionState, ProgressionError> ProgressionState::restore(
     state.completed_research_ = std::move(snapshot.completed_research);
     state.campaign_flags_ = std::move(snapshot.campaign_flags);
     state.committed_transactions_ = std::move(snapshot.committed_transactions);
-    state.finale_completed_ = snapshot.finale_completed;
+    state.postgame_resolution_ = std::move(snapshot.postgame_resolution);
     return core::Result<ProgressionState, ProgressionError>::success(std::move(state));
 }
 

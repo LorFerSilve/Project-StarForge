@@ -109,3 +109,33 @@ TEST_CASE("conditional binding can explicitly pass action to lower-priority cont
     CHECK(interaction->owner_context == 10U);
     CHECK(interaction->owner_kind == starforge::input::ContextClass::OnFoot);
 }
+
+TEST_CASE("tutorial prompt text follows current effective remap") {
+    std::vector<starforge::input::EffectiveBinding> bindings{
+        {starforge::input::ActionId::Interact,
+         starforge::input::PromptDeviceFamily::KeyboardMouse,
+         starforge::input::ContextClass::OnFoot,
+         "E"},
+        {starforge::input::ActionId::Interact,
+         starforge::input::PromptDeviceFamily::Controller,
+         starforge::input::ContextClass::OnFoot,
+         "X"},
+    };
+
+    auto prompt = starforge::input::resolve_prompt(
+        starforge::input::ActionId::Interact,
+        starforge::input::ContextClass::OnFoot,
+        starforge::input::PromptDeviceFamily::KeyboardMouse,
+        bindings);
+    REQUIRE(prompt.has_value());
+    CHECK(*prompt == "E");
+
+    bindings[0].display = "F";
+    prompt = starforge::input::resolve_prompt(
+        starforge::input::ActionId::Interact,
+        starforge::input::ContextClass::OnFoot,
+        starforge::input::PromptDeviceFamily::KeyboardMouse,
+        bindings);
+    REQUIRE(prompt.has_value());
+    CHECK(*prompt == "F");
+}

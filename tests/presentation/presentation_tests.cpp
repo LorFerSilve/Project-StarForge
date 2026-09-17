@@ -85,3 +85,59 @@ TEST_CASE("accessibility transforms preserve semantic effect while removing unsa
     CHECK_FALSE(effect.rapid_flash);
     CHECK_FALSE(effect.camera_motion);
 }
+
+TEST_CASE("locked TA-13 presentation capacity envelope passes at exact limits") {
+    const auto& limits = starforge::ui::kPresentationBudgetLimits;
+    const starforge::ui::PresentationBudgetSnapshot snapshot{
+        limits.live_ui_nodes,
+        limits.visible_ui_nodes,
+        limits.focusable_nodes,
+        limits.active_alarms,
+        limits.presentation_events_soft,
+        limits.logical_audio_voices,
+        limits.mixed_audio_voices,
+        limits.spatial_audio_voices,
+        limits.streamed_audio_voices,
+        limits.subtitle_tracks,
+        limits.caption_cues,
+        limits.vfx_intents_per_frame,
+    };
+    const auto status = starforge::ui::evaluate_presentation_budget(snapshot);
+    CHECK(status.within_limits());
+    CHECK(status.pressure == starforge::ui::PresentationPressure::None);
+    CHECK_FALSE(status.should_degrade_decorative());
+}
+
+TEST_CASE("presentation overload degrades decoration but preserves critical accessibility routes") {
+    const auto& limits = starforge::ui::kPresentationBudgetLimits;
+    starforge::ui::PresentationBudgetSnapshot snapshot{};
+    snapshot.live_ui_nodes = limits.live_ui_nodes + 1U;
+    snapshot.queued_presentation_events = limits.presentation_events_soft + 1U;
+    snapshot.logical_audio_voices = limits.logical_audio_voices;
+    snapshot.mixed_audio_voices = limits.mixed_audio_voices;
+    snapshot.spatial_audio_voices = limits.spatial_audio_voices;
+    snapshot.streamed_audio_voices = limits.streamed_audio_voices;
+
+    auto status = starforge::ui::evaluate_presentation_budget(snapshot);
+    CHECK_FALSE(status.within_limits());
+    CHECK(status.pressure == starforge::ui::PresentationPressure::Soft);
+    CHECK(status.should_degrade_decorative());
+    CHECK(status.preserve_critical_cues());
+    CHECK(status.preserve_accessibility());
+
+    snapshot.live_ui_nodes = 0U;
+    snapshot.queued_presentation_events = limits.presentation_events_hard + 1U;
+    status = starforge::ui::evaluate_presentation_budget(snapshot);
+    CHECK(status.pressure == starforge::ui::PresentationPressure::Hard);
+    CHECK(status.preserve_critical_cues());
+    CHECK(status.preserve_accessibility());
+}
+
+TEST_CASE("presentation budget rejects inconsistent audio accounting") {
+    starforge::ui::PresentationBudgetSnapshot snapshot{};
+    snapshot.logical_audio_voices = 4U;
+    snapshot.mixed_audio_voices = 5U;
+    const auto status = starforge::ui::evaluate_presentation_budget(snapshot);
+    CHECK_FALSE(status.audio_accounting_consistent);
+    CHECK(status.pressure == starforge::ui::PresentationPressure::Hard);
+}

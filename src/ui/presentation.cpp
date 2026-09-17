@@ -146,4 +146,35 @@ PresentationEffect apply_accessibility(PresentationEffect effect,
     return effect;
 }
 
+PresentationBudgetStatus evaluate_presentation_budget(const PresentationBudgetSnapshot& snapshot,
+                                                       const PresentationBudgetLimits& limits) noexcept {
+    PresentationBudgetStatus status{};
+    status.ui_within_limits = snapshot.live_ui_nodes <= limits.live_ui_nodes &&
+                              snapshot.visible_ui_nodes <= limits.visible_ui_nodes &&
+                              snapshot.focusable_nodes <= limits.focusable_nodes;
+    status.alarms_within_limits = snapshot.active_alarms <= limits.active_alarms;
+    status.events_within_soft_limit =
+        snapshot.queued_presentation_events <= limits.presentation_events_soft;
+    status.events_within_hard_limit =
+        snapshot.queued_presentation_events <= limits.presentation_events_hard;
+    status.audio_within_limits = snapshot.logical_audio_voices <= limits.logical_audio_voices &&
+                                 snapshot.mixed_audio_voices <= limits.mixed_audio_voices &&
+                                 snapshot.spatial_audio_voices <= limits.spatial_audio_voices &&
+                                 snapshot.streamed_audio_voices <= limits.streamed_audio_voices;
+    status.audio_accounting_consistent =
+        snapshot.mixed_audio_voices <= snapshot.logical_audio_voices &&
+        snapshot.spatial_audio_voices <= snapshot.mixed_audio_voices &&
+        snapshot.streamed_audio_voices <= snapshot.logical_audio_voices;
+    status.subtitles_captions_within_limits =
+        snapshot.subtitle_tracks <= limits.subtitle_tracks && snapshot.caption_cues <= limits.caption_cues;
+    status.vfx_within_limits = snapshot.vfx_intents_this_frame <= limits.vfx_intents_per_frame;
+
+    if (!status.events_within_hard_limit || !status.audio_accounting_consistent) {
+        status.pressure = PresentationPressure::Hard;
+    } else if (!status.within_limits()) {
+        status.pressure = PresentationPressure::Soft;
+    }
+    return status;
+}
+
 }  // namespace starforge::ui

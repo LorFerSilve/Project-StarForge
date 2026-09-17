@@ -10,9 +10,19 @@ namespace {
 }  // namespace
 
 void FocusScope::set_elements(std::vector<Element> elements) {
+    std::optional<std::uint64_t> retained_id;
+    if (const auto* current = focused(); current != nullptr) {
+        retained_id = current->id;
+    }
     elements_ = std::move(elements);
     focused_index_.reset();
-    (void)next();
+    if (retained_id.has_value() && focus(*retained_id)) {
+        return;
+    }
+    const auto first = std::find_if(elements_.begin(), elements_.end(), can_focus);
+    if (first != elements_.end()) {
+        focused_index_ = static_cast<std::size_t>(std::distance(elements_.begin(), first));
+    }
 }
 
 const Element* FocusScope::focused() const noexcept {
@@ -37,15 +47,28 @@ bool FocusScope::next() noexcept {
     if (elements_.empty()) {
         return false;
     }
-    const auto start = focused_index_.value_or(elements_.size() - 1U);
-    for (std::size_t step = 1; step <= elements_.size(); ++step) {
-        const auto index = (start + step) % elements_.size();
+    if (!focused_index_) {
+        const auto first = std::find_if(elements_.begin(), elements_.end(), can_focus);
+        if (first == elements_.end()) {
+            return false;
+        }
+        focused_index_ = static_cast<std::size_t>(std::distance(elements_.begin(), first));
+        return true;
+    }
+    for (std::size_t index = *focused_index_ + 1U; index < elements_.size(); ++index) {
         if (can_focus(elements_[index])) {
             focused_index_ = index;
             return true;
         }
     }
-    focused_index_.reset();
+    if (wrap_navigation_) {
+        for (std::size_t index = 0; index < *focused_index_; ++index) {
+            if (can_focus(elements_[index])) {
+                focused_index_ = index;
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -53,15 +76,29 @@ bool FocusScope::previous() noexcept {
     if (elements_.empty()) {
         return false;
     }
-    const auto start = focused_index_.value_or(0U);
-    for (std::size_t step = 1; step <= elements_.size(); ++step) {
-        const auto index = (start + elements_.size() - (step % elements_.size())) % elements_.size();
+    if (!focused_index_) {
+        for (std::size_t index = elements_.size(); index-- > 0;) {
+            if (can_focus(elements_[index])) {
+                focused_index_ = index;
+                return true;
+            }
+        }
+        return false;
+    }
+    for (std::size_t index = *focused_index_; index-- > 0;) {
         if (can_focus(elements_[index])) {
             focused_index_ = index;
             return true;
         }
     }
-    focused_index_.reset();
+    if (wrap_navigation_) {
+        for (std::size_t index = elements_.size(); index-- > *focused_index_ + 1U;) {
+            if (can_focus(elements_[index])) {
+                focused_index_ = index;
+                return true;
+            }
+        }
+    }
     return false;
 }
 

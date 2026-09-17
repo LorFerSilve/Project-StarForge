@@ -72,14 +72,18 @@ jobs:
           if (-not $vsPath -or -not $version) { throw "TA16-V1 requires a Visual Studio 2022 17.14 installation" }
           Write-Host "visual_studio_installation_path=$vsPath"
           Write-Host "visual_studio_installation_version=$version"
-          if ($version -ne "17.14.37614.0") { throw "TA16-V1 requires Visual Studio 2022 17.14.39 / installation 17.14.37614.0; runner has $version" }
+          # GitHub-hosted windows-2022 images receive VS shell servicing in-place.
+          # Reproducibility is locked to the actual compiler/toolset below, not to
+          # a servicing-only Visual Studio installation patch number.
           $msvcRoot = Join-Path $vsPath "VC\Tools\MSVC"
-          $toolset = Get-ChildItem -Path $msvcRoot -Directory | Where-Object { $_.Name -like "14.44.*" } | Sort-Object Name -Descending | Select-Object -First 1
-          if (-not $toolset) { throw "TA16-V1 requires the MSVC v143 14.44 toolset family" }
+          $toolset = Get-ChildItem -Path $msvcRoot -Directory | Where-Object { $_.Name -eq "14.44.35207" } | Select-Object -First 1
+          if (-not $toolset) { throw "TA16-V1 requires MSVC v143 toolset 14.44.35207" }
           $cl = Join-Path $toolset.FullName "bin\Hostx64\x64\cl.exe"
           if (-not (Test-Path $cl)) { throw "Expected x64 cl.exe was not found at $cl" }
+          $clVersion = (Get-Item $cl).VersionInfo.FileVersion
           Write-Host "msvc_toolset_directory=$($toolset.Name)"
-          Write-Host "cl_file_version=$((Get-Item $cl).VersionInfo.FileVersion)"
+          Write-Host "cl_file_version=$clVersion"
+          if ($clVersion -ne "19.44.35228.0") { throw "TA16-V1 requires cl.exe 19.44.35228.0; runner has $clVersion" }
 
       - name: Install and verify CMake 4.3.3
         shell: pwsh

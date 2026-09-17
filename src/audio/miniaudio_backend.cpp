@@ -1,5 +1,11 @@
 #define MINIAUDIO_IMPLEMENTATION
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <miniaudio.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include "starforge/audio/miniaudio_backend.hpp"
 

@@ -1,5 +1,6 @@
 add_library(sf_progression STATIC
     progression.cpp
+    composite_transaction.cpp
     market.cpp
 )
 

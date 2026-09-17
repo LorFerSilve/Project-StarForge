@@ -1,5 +1,7 @@
 #include "starforge/progression/progression.hpp"
 
+#include <limits>
+
 namespace starforge::progression {
 
 bool ProgressionState::transaction_seen(std::uint64_t transaction_id) const noexcept {
@@ -14,6 +16,9 @@ core::Result<void, ProgressionError> ProgressionState::credit(std::int64_t amoun
                                                                std::uint64_t transaction_id) {
     if (amount <= 0) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
     if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
+    if (amount > std::numeric_limits<std::int64_t>::max() - credits_) {
+        return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
+    }
     credits_ += amount;
     commit_transaction(transaction_id);
     return core::Result<void, ProgressionError>::success();
@@ -42,7 +47,9 @@ core::Result<void, ProgressionError> ProgressionState::change_reputation(
     std::string faction, std::int32_t delta, std::uint64_t transaction_id) {
     if (faction.empty()) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidReputation);
     if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
-    const auto next = std::clamp(reputation(faction) + delta, -100, 100);
+    const auto current = static_cast<std::int64_t>(reputation(faction));
+    const auto requested = current + static_cast<std::int64_t>(delta);
+    const auto next = static_cast<std::int32_t>(std::clamp<std::int64_t>(requested, -100, 100));
     reputation_[std::move(faction)] = next;
     commit_transaction(transaction_id);
     return core::Result<void, ProgressionError>::success();
@@ -52,7 +59,11 @@ void ProgressionState::integrate_evidence(
     std::string evidence_id, const std::map<std::string, std::uint32_t>& values) {
     if (evidence_id.empty() || evidence_ids_.contains(evidence_id)) return;
     evidence_ids_.insert(std::move(evidence_id));
-    for (const auto& [domain, value] : values) evidence_totals_[domain] += value;
+    for (const auto& [domain, value] : values) {
+        auto& total = evidence_totals_[domain];
+        const auto maximum = std::numeric_limits<std::uint32_t>::max();
+        total = value > maximum - total ? maximum : total + value;
+    }
 }
 
 std::uint32_t ProgressionState::evidence(std::string_view domain) const noexcept {

@@ -60,16 +60,23 @@ TEST_CASE("supported UI scale contract preserves the locked accessibility range"
 }
 
 TEST_CASE("knowledge filtered markers cannot gain precision or wallhack eligibility") {
-    using enum starforge::ui::KnowledgeState;
-    using enum starforge::ui::MarkerPrecision;
+    using starforge::ui::KnowledgeState;
+    using starforge::ui::MarkerPrecision;
 
-    CHECK_FALSE(starforge::ui::marker_eligible({1U, Unknown, Exact, true, false, false}));
-    CHECK_FALSE(starforge::ui::marker_eligible({2U, Confirmed, Exact, false, false, false}));
-    CHECK_FALSE(starforge::ui::marker_eligible({3U, Confirmed, Exact, true, true, false}));
-    CHECK(starforge::ui::marker_eligible({3U, Confirmed, Exact, true, true, true}));
-    CHECK_FALSE(starforge::ui::marker_precision_allowed(SearchArea, Exact));
-    CHECK(starforge::ui::marker_precision_allowed(Exact, SearchArea));
-    CHECK_FALSE(starforge::ui::marker_precision_allowed(Exact, Unknown));
+    CHECK_FALSE(starforge::ui::marker_eligible(
+        {1U, KnowledgeState::Unknown, MarkerPrecision::Exact, true, false, false}));
+    CHECK_FALSE(starforge::ui::marker_eligible(
+        {2U, KnowledgeState::Confirmed, MarkerPrecision::Exact, false, false, false}));
+    CHECK_FALSE(starforge::ui::marker_eligible(
+        {3U, KnowledgeState::Confirmed, MarkerPrecision::Exact, true, true, false}));
+    CHECK(starforge::ui::marker_eligible(
+        {3U, KnowledgeState::Confirmed, MarkerPrecision::Exact, true, true, true}));
+    CHECK_FALSE(starforge::ui::marker_precision_allowed(MarkerPrecision::SearchArea,
+                                                        MarkerPrecision::Exact));
+    CHECK(starforge::ui::marker_precision_allowed(MarkerPrecision::Exact,
+                                                   MarkerPrecision::SearchArea));
+    CHECK_FALSE(starforge::ui::marker_precision_allowed(MarkerPrecision::Exact,
+                                                        MarkerPrecision::Unknown));
 }
 
 TEST_CASE("notifications aggregate only by explicit committed semantic grouping") {

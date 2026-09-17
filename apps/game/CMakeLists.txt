@@ -16,6 +16,8 @@ target_link_libraries(starforge
         StarForge::World
         StarForge::Player
         StarForge::VerticalSlice
+        StarForge::Audio
+        StarForge::UI
 )
 
 sf_apply_project_options(starforge)

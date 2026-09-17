@@ -21,6 +21,7 @@ enum class ProgressionError : std::uint8_t {
     MissingEvidence,
     AlreadyCompleted,
     InvalidFinaleState,
+    InvalidSnapshot,
 };
 
 enum class ReputationTier : std::uint8_t {
@@ -57,6 +58,21 @@ struct ResearchProject final {
     std::vector<std::string> blueprint_outputs;
 };
 
+// Persistence-facing value snapshot. Runtime-only state is deliberately absent; this is the
+// authoritative progression payload embedded by the owning save DTO at a Stable Save Boundary.
+struct ProgressionSnapshot final {
+    std::int64_t credits{0};
+    std::map<std::string, std::int32_t> reputation{};
+    std::map<std::string, std::uint32_t> evidence_totals{};
+    std::set<std::string> evidence_ids{};
+    std::set<std::string> technologies{};
+    std::set<std::string> blueprints{};
+    std::set<std::string> completed_research{};
+    std::set<std::string> campaign_flags{};
+    std::set<std::uint64_t> committed_transactions{};
+    bool finale_completed{false};
+};
+
 class ProgressionState final {
 public:
     [[nodiscard]] std::int64_t credits() const noexcept { return credits_; }
@@ -84,6 +100,10 @@ public:
     [[nodiscard]] core::Result<void, ProgressionError> commit_finale(
         std::string ending_flag, std::uint64_t transaction_id);
     [[nodiscard]] bool finale_completed() const noexcept { return finale_completed_; }
+
+    [[nodiscard]] ProgressionSnapshot snapshot() const;
+    [[nodiscard]] static core::Result<ProgressionState, ProgressionError> restore(
+        ProgressionSnapshot snapshot);
 
 private:
     [[nodiscard]] bool transaction_seen(std::uint64_t transaction_id) const noexcept;

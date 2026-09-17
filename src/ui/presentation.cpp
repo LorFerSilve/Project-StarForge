@@ -4,10 +4,30 @@
 
 namespace starforge::ui {
 namespace {
+constexpr float kMinimumUiScale = 0.8F;
+constexpr float kMaximumUiScale = 1.5F;
+
 [[nodiscard]] bool can_focus(const Element& element) noexcept {
     return element.visible && element.enabled && element.focusable && !element.reveals_hidden_knowledge;
 }
+
+[[nodiscard]] std::uint8_t precision_rank(const MarkerPrecision precision) noexcept {
+    return static_cast<std::uint8_t>(precision);
+}
+
+[[nodiscard]] bool generation_field_matches(const std::uint64_t candidate,
+                                            const std::uint64_t active) noexcept {
+    return candidate == 0U || candidate == active;
+}
 }  // namespace
+
+bool ui_scale_supported(const float scale) noexcept {
+    return scale >= kMinimumUiScale && scale <= kMaximumUiScale;
+}
+
+float clamp_ui_scale(const float scale) noexcept {
+    return std::clamp(scale, kMinimumUiScale, kMaximumUiScale);
+}
 
 void FocusScope::set_elements(std::vector<Element> elements) {
     std::optional<std::uint64_t> retained_id;
@@ -107,6 +127,59 @@ void FocusScope::invalidate() noexcept {
     focused_index_.reset();
 }
 
+bool marker_eligible(const MarkerDescriptor& marker) noexcept {
+    if (!marker.known_to_player || marker.knowledge == KnowledgeState::Unknown ||
+        marker.precision == MarkerPrecision::Unknown) {
+        return false;
+    }
+    return !marker.through_wall || marker.through_wall_authorized;
+}
+
+bool marker_precision_allowed(const MarkerPrecision available, const MarkerPrecision requested) noexcept {
+    if (available == MarkerPrecision::Unknown || requested == MarkerPrecision::Unknown) {
+        return false;
+    }
+    return precision_rank(requested) <= precision_rank(available);
+}
+
+bool notifications_groupable(const NotificationEvent& lhs, const NotificationEvent& rhs) noexcept {
+    return lhs.committed && rhs.committed && lhs.groupable && rhs.groupable && lhs.semantic_group != 0U &&
+           lhs.semantic_group == rhs.semantic_group;
+}
+
+bool generation_compatible(const PresentationGenerationStamp& candidate,
+                           const PresentationGenerationStamp& active) noexcept {
+    return generation_field_matches(candidate.scene_generation, active.scene_generation) &&
+           generation_field_matches(candidate.origin_epoch, active.origin_epoch) &&
+           generation_field_matches(candidate.content_generation, active.content_generation) &&
+           generation_field_matches(candidate.read_model_generation, active.read_model_generation);
+}
+
+bool PresentationEventCursor::consume(const PresentationEvent& event) noexcept {
+    if (!event.committed) {
+        ++diagnostics_.uncommitted;
+        return false;
+    }
+    if (scene_generation_ != 0U && event.scene_generation != 0U &&
+        event.scene_generation != scene_generation_) {
+        ++diagnostics_.stale_scene;
+        return false;
+    }
+    if (event.sequence == 0U || event.sequence <= last_sequence_) {
+        ++diagnostics_.duplicate_or_out_of_order;
+        return false;
+    }
+    last_sequence_ = event.sequence;
+    ++diagnostics_.consumed;
+    return true;
+}
+
+void PresentationEventCursor::reset_for_scene(const std::uint64_t scene_generation) noexcept {
+    scene_generation_ = scene_generation;
+    last_sequence_ = 0U;
+    diagnostics_ = {};
+}
+
 std::vector<CueChannel> effective_alarm_channels(const AlarmPresentation& alarm,
                                                  const AccessibilitySettings& settings) {
     if (!alarm.known_to_player) {
@@ -142,6 +215,9 @@ PresentationEffect apply_accessibility(PresentationEffect effect,
     }
     if (settings.reduced_motion && effect.decorative) {
         effect.camera_motion = false;
+    }
+    if (settings.reduced_effects && effect.decorative) {
+        effect.enabled = false;
     }
     return effect;
 }

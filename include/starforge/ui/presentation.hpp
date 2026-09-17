@@ -95,6 +95,20 @@ struct CommandFeedback {
     }
 };
 
+struct ManagementPreviewToken {
+    std::uint64_t selection_id{};
+    std::uint64_t source_revision{};
+    std::uint64_t scene_generation{};
+
+    [[nodiscard]] bool current(const std::uint64_t active_selection_id,
+                               const std::uint64_t active_source_revision,
+                               const std::uint64_t active_scene_generation) const noexcept {
+        return selection_id != 0U && selection_id == active_selection_id &&
+               source_revision == active_source_revision &&
+               scene_generation == active_scene_generation;
+    }
+};
+
 struct PresentationGenerationStamp {
     std::uint64_t scene_generation{};
     std::uint64_t origin_epoch{};

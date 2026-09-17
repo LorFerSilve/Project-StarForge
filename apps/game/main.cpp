@@ -1,9 +1,11 @@
+#include <starforge/audio/miniaudio_backend.hpp>
 #include <starforge/physics/jolt_world.hpp>
 #include <starforge/platform/fixed_step.hpp>
 #include <starforge/platform/platform.hpp>
 #include <starforge/player/character_motor.hpp>
 #include <starforge/render/render.hpp>
 #include <starforge/transactions/coordinator.hpp>
+#include <starforge/ui/presentation.hpp>
 #include <starforge/vertical_slice/horizon_test_cell.hpp>
 #include <starforge/world/world.hpp>
 
@@ -135,6 +137,20 @@ int main() {
 
         auto renderer = starforge::render::create_renderer();
         renderer->initialize(window->graphics_proc_resolver());
+
+        // Shipping presentation services are owned by the executable. Audio-device
+        // availability is recoverable and must not prevent the simulation from running.
+        starforge::audio::MiniaudioBackend audio_backend;
+        const bool audio_available = audio_backend.initialize();
+        if (!audio_available) {
+            std::cerr << "StarForge audio device unavailable; continuing with presentation audio disabled.\n";
+        }
+        starforge::ui::AccessibilitySettings accessibility{};
+        accessibility.master_muted = !audio_available;
+        starforge::ui::FocusScope shipping_focus;
+        shipping_focus.set_elements({
+            {1U, starforge::ui::SemanticRole::Button, "Interact", true, true, true, false},
+        });
 
         constexpr std::uint64_t scene_generation = 1U;
         constexpr std::array<starforge::world::RequiredContentKey, 0> no_required_content{};
@@ -274,6 +290,7 @@ int main() {
         test_cell->leave_context(scene.entities());
         scene.quiesce();
         scene.deactivate();
+        audio_backend.shutdown();
         renderer->shutdown();
         return 0;
     } catch (const std::exception& error) {

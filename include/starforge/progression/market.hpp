@@ -1,6 +1,7 @@
 #pragma once
 
 #include "starforge/core/result.hpp"
+#include "starforge/core/simulation_time.hpp"
 #include "starforge/progression/progression.hpp"
 
 #include <cstdint>
@@ -41,6 +42,19 @@ struct MarketQuote final {
     std::int64_t buy_from_player{0};
 };
 
+struct StockReplenishment final {
+    std::uint64_t quantity_per_cycle{0};
+    std::uint64_t maximum_stock{0};
+};
+
+struct MarketReplenishment final {
+    std::uint64_t interval_ticks{0};
+    core::SimulationTick next_update{};
+    std::int64_t liquidity_per_cycle{0};
+    std::int64_t maximum_liquidity{0};
+    std::map<std::string, StockReplenishment> stock{};
+};
+
 class Market final {
 public:
     explicit Market(std::string id, std::int64_t liquidity = 0);
@@ -48,11 +62,16 @@ public:
     [[nodiscard]] std::string_view id() const noexcept { return id_; }
     [[nodiscard]] std::int64_t liquidity() const noexcept { return liquidity_; }
     [[nodiscard]] bool trade_access() const noexcept { return trade_access_; }
+    [[nodiscard]] core::SimulationTick next_economic_update() const noexcept {
+        return replenishment_.next_update;
+    }
     void set_trade_access(bool allowed) noexcept { trade_access_ = allowed; }
 
     [[nodiscard]] core::Result<void, MarketError> add_item(MarketItem item);
     [[nodiscard]] std::uint64_t stock(std::string_view item_id) const noexcept;
     [[nodiscard]] core::Result<MarketQuote, MarketError> quote(std::string_view item_id) const;
+    [[nodiscard]] core::Result<void, MarketError> configure_replenishment(MarketReplenishment plan);
+    void advance_economy(core::SimulationTick now) noexcept;
 
     // These commit only the economic side of a physical transfer. The caller must first
     // validate and commit authoritative physical ownership/capacity through the owning domain.
@@ -71,6 +90,7 @@ private:
     std::int64_t liquidity_{0};
     bool trade_access_{true};
     std::map<std::string, MarketItem> items_{};
+    MarketReplenishment replenishment_{};
 };
 
 } // namespace starforge::progression

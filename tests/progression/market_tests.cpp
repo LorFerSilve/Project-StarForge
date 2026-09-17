@@ -51,3 +51,44 @@ TEST_CASE("market access gates transactions without mutation") {
     CHECK(player.credits() == 500);
     CHECK(market.stock("MODULE") == 1);
 }
+
+TEST_CASE("market replenishment advances only on explicit simulation time") {
+    Market market{"FRONTIER", 100};
+    REQUIRE(market.add_item(MarketItem{.id = "FUEL", .base_credit_value = 100, .stock = 1}));
+    MarketReplenishment plan;
+    plan.interval_ticks = 60;
+    plan.next_update = starforge::core::SimulationTick{120};
+    plan.liquidity_per_cycle = 25;
+    plan.maximum_liquidity = 175;
+    plan.stock.emplace("FUEL", StockReplenishment{.quantity_per_cycle = 2, .maximum_stock = 6});
+    REQUIRE(market.configure_replenishment(std::move(plan)));
+
+    market.advance_economy(starforge::core::SimulationTick{119});
+    CHECK(market.stock("FUEL") == 1);
+    CHECK(market.liquidity() == 100);
+    CHECK(market.next_economic_update().raw() == 120);
+
+    market.advance_economy(starforge::core::SimulationTick{120});
+    CHECK(market.stock("FUEL") == 3);
+    CHECK(market.liquidity() == 125);
+    CHECK(market.next_economic_update().raw() == 180);
+
+    market.advance_economy(starforge::core::SimulationTick{300});
+    CHECK(market.stock("FUEL") == 6);
+    CHECK(market.liquidity() == 175);
+    CHECK(market.next_economic_update().raw() == 360);
+}
+
+TEST_CASE("market replenishment rejects definitions that would discard current state") {
+    Market market{"KARA", 100};
+    REQUIRE(market.add_item(MarketItem{.id = "FUEL", .base_credit_value = 100, .stock = 5}));
+
+    MarketReplenishment plan;
+    plan.interval_ticks = 60;
+    plan.next_update = starforge::core::SimulationTick{60};
+    plan.maximum_liquidity = 99;
+    plan.stock.emplace("FUEL", StockReplenishment{.quantity_per_cycle = 1, .maximum_stock = 4});
+    CHECK_FALSE(market.configure_replenishment(std::move(plan)));
+    CHECK(market.stock("FUEL") == 5);
+    CHECK(market.liquidity() == 100);
+}

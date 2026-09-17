@@ -1,6 +1,7 @@
 add_executable(starforge_tests_presentation
     presentation_tests.cpp
     input_tests.cpp
+    management_tests.cpp
 )
 
 target_link_libraries(starforge_tests_presentation

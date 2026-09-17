@@ -3,7 +3,9 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <span>
+#include <string>
 #include <vector>
 
 namespace starforge::input {
@@ -31,6 +33,7 @@ enum class ContextClass : std::uint8_t {
 };
 
 enum class CaptureMode : std::uint8_t { Exclusive, Conditional, GlobalSystem };
+enum class PromptDeviceFamily : std::uint8_t { KeyboardMouse, Controller };
 
 struct ActionState {
     bool pressed{false};
@@ -63,6 +66,19 @@ struct RouterDiagnostics {
     std::size_t unhandled_actions{};
     std::uint64_t context_generation{};
 };
+
+struct EffectiveBinding {
+    ActionId action{ActionId::MoveForward};
+    PromptDeviceFamily family{PromptDeviceFamily::KeyboardMouse};
+    ContextClass context{ContextClass::OnFoot};
+    std::string display{};
+};
+
+[[nodiscard]] std::optional<std::string> resolve_prompt(
+    ActionId action,
+    ContextClass context,
+    PromptDeviceFamily family,
+    std::span<const EffectiveBinding> bindings);
 
 class SemanticInputRouter final {
   public:

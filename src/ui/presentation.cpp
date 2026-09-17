@@ -12,7 +12,7 @@ namespace {
 void FocusScope::set_elements(std::vector<Element> elements) {
     elements_ = std::move(elements);
     focused_index_.reset();
-    next();
+    (void)next();
 }
 
 const Element* FocusScope::focused() const noexcept {

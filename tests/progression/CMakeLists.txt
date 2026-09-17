@@ -1,5 +1,6 @@
 add_executable(starforge_tests_progression
     progression_tests.cpp
+    composite_transaction_tests.cpp
     market_tests.cpp
 )
 

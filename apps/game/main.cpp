@@ -1,4 +1,5 @@
 #include <starforge/audio/miniaudio_backend.hpp>
+#include <starforge/input/input.hpp>
 #include <starforge/physics/jolt_world.hpp>
 #include <starforge/platform/fixed_step.hpp>
 #include <starforge/platform/platform.hpp>
@@ -128,7 +129,7 @@ void sync_item_physical_state(
 int main() {
     try {
         auto window = starforge::platform::create_window({
-            .title = "Project StarForge - IMP-5 Horizon Test Cell",
+            .title = "Project StarForge - IMP-12 Shipping Presentation",
             .width = 1280,
             .height = 720,
             .visible = true,
@@ -145,12 +146,17 @@ int main() {
         if (!audio_available) {
             std::cerr << "StarForge audio device unavailable; continuing with presentation audio disabled.\n";
         }
-        starforge::ui::AccessibilitySettings accessibility{};
+        [[maybe_unused]] starforge::ui::AccessibilitySettings accessibility{};
         accessibility.master_muted = !audio_available;
-        starforge::ui::FocusScope shipping_focus;
+        [[maybe_unused]] starforge::ui::FocusScope shipping_focus;
         shipping_focus.set_elements({
             {1U, starforge::ui::SemanticRole::Button, "Interact", true, true, true, false},
         });
+
+        // Raw GLFW state is translated into semantic actions here at the composition
+        // boundary. Gameplay receives only fixed-tick semantic samples.
+        starforge::input::SemanticInputRouter semantic_input;
+        semantic_input.set_contexts({starforge::input::on_foot_context()});
 
         constexpr std::uint64_t scene_generation = 1U;
         constexpr std::array<starforge::world::RequiredContentKey, 0> no_required_content{};
@@ -202,8 +208,6 @@ int main() {
         starforge::platform::FixedStepScheduler scheduler{};
         auto previous = std::chrono::steady_clock::now();
         std::uint64_t tick_index = 0U;
-        bool previous_interact = false;
-        bool interaction_latched = false;
 
         while (!window->should_close()) {
             window->poll_events();
@@ -212,15 +216,12 @@ int main() {
                 window->request_close();
             }
 
-            if (input.e && !previous_interact) {
-                interaction_latched = true;
-            }
-            previous_interact = input.e;
-
-            input_buffer.sample({
-                .move_x = static_cast<float>(input.d) - static_cast<float>(input.a),
-                .move_z = static_cast<float>(input.s) - static_cast<float>(input.w),
-            });
+            semantic_input.observe(starforge::input::ActionId::MoveForward, input.w);
+            semantic_input.observe(starforge::input::ActionId::MoveBackward, input.s);
+            semantic_input.observe(starforge::input::ActionId::MoveLeft, input.a);
+            semantic_input.observe(starforge::input::ActionId::MoveRight, input.d);
+            semantic_input.observe(starforge::input::ActionId::Interact, input.e);
+            semantic_input.observe(starforge::input::ActionId::Pause, input.escape);
 
             const auto now = std::chrono::steady_clock::now();
             const std::chrono::duration<double> elapsed = now - previous;
@@ -228,8 +229,43 @@ int main() {
 
             const auto step_plan = scheduler.advance(elapsed.count());
             for (std::uint32_t step = 0; step < step_plan.steps; ++step) {
+                float move_x = 0.0F;
+                float move_z = 0.0F;
+                bool interact_pressed = false;
+
+                for (const auto& action : semantic_input.sample_tick()) {
+                    if (action.owner_kind != starforge::input::ContextClass::OnFoot) {
+                        continue;
+                    }
+                    switch (action.action) {
+                        case starforge::input::ActionId::MoveForward:
+                            move_z -= action.state.held ? 1.0F : 0.0F;
+                            break;
+                        case starforge::input::ActionId::MoveBackward:
+                            move_z += action.state.held ? 1.0F : 0.0F;
+                            break;
+                        case starforge::input::ActionId::MoveLeft:
+                            move_x -= action.state.held ? 1.0F : 0.0F;
+                            break;
+                        case starforge::input::ActionId::MoveRight:
+                            move_x += action.state.held ? 1.0F : 0.0F;
+                            break;
+                        case starforge::input::ActionId::Interact:
+                            interact_pressed = action.state.pressed;
+                            break;
+                        case starforge::input::ActionId::Fire:
+                        case starforge::input::ActionId::UiConfirm:
+                        case starforge::input::ActionId::UiCancel:
+                        case starforge::input::ActionId::Pause:
+                        case starforge::input::ActionId::Count:
+                            break;
+                    }
+                }
+
+                input_buffer.sample({.move_x = move_x, .move_z = move_z});
+
                 bool save_after_step = false;
-                if (interaction_latched) {
+                if (interact_pressed) {
                     const auto current_owner = test_cell->read_model().owner;
                     if (current_owner == starforge::vertical_slice::ItemOwner::WorldContainer) {
                         sync_item_physical_state(*test_cell, scene.physics_world(), item_body);
@@ -252,7 +288,6 @@ int main() {
                         }
                         save_after_step = true;
                     }
-                    interaction_latched = false;
                 }
 
                 character_motor.apply_fixed_tick(scene.physics_world(), character, input_buffer.latest());

@@ -1,5 +1,6 @@
 add_library(sf_progression STATIC
     progression.cpp
+    market.cpp
 )
 
 add_library(StarForge::Progression ALIAS sf_progression)

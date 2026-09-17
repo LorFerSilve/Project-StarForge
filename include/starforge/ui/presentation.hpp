@@ -12,6 +12,10 @@ namespace starforge::ui {
 enum class SemanticRole : std::uint8_t { Text, Button, Toggle, Slider, ListItem, Alert };
 enum class AlarmPriority : std::uint8_t { P0, P1, P2, P3 };
 enum class CueChannel : std::uint8_t { Visual, Audio, Caption, Haptic };
+enum class KnowledgeState : std::uint8_t { Unknown, Suspected, Confirmed, Stale };
+enum class MarkerPrecision : std::uint8_t { Unknown, SignalApproximate, DirectionOnly, SearchArea, Exact };
+enum class NotificationPriority : std::uint8_t { Critical, High, Normal, Informational };
+enum class CommandPresentationState : std::uint8_t { Preview, Pending, Accepted, Rejected, Committed };
 
 struct AccessibilitySettings {
     float ui_scale{1.0F};
@@ -20,8 +24,12 @@ struct AccessibilitySettings {
     bool high_contrast{false};
     bool reduced_motion{false};
     bool photosensitivity_safe{false};
+    bool reduced_effects{false};
     bool master_muted{false};
 };
+
+[[nodiscard]] bool ui_scale_supported(float scale) noexcept;
+[[nodiscard]] float clamp_ui_scale(float scale) noexcept;
 
 struct Element {
     std::uint64_t id{};
@@ -52,6 +60,83 @@ class FocusScope {
     bool wrap_navigation_{false};
 };
 
+struct MarkerDescriptor {
+    std::uint64_t source_id{};
+    KnowledgeState knowledge{KnowledgeState::Unknown};
+    MarkerPrecision precision{MarkerPrecision::Unknown};
+    bool known_to_player{false};
+    bool through_wall{false};
+    bool through_wall_authorized{false};
+};
+
+[[nodiscard]] bool marker_eligible(const MarkerDescriptor& marker) noexcept;
+[[nodiscard]] bool marker_precision_allowed(MarkerPrecision available,
+                                            MarkerPrecision requested) noexcept;
+
+struct NotificationEvent {
+    std::uint64_t correlation{};
+    std::uint64_t semantic_group{};
+    std::uint64_t source_incident{};
+    NotificationPriority priority{NotificationPriority::Normal};
+    bool groupable{false};
+    bool committed{false};
+};
+
+[[nodiscard]] bool notifications_groupable(const NotificationEvent& lhs,
+                                           const NotificationEvent& rhs) noexcept;
+
+struct CommandFeedback {
+    std::uint64_t correlation{};
+    std::uint64_t source_revision{};
+    CommandPresentationState state{CommandPresentationState::Preview};
+
+    [[nodiscard]] bool may_present_success() const noexcept {
+        return state == CommandPresentationState::Committed;
+    }
+};
+
+struct PresentationGenerationStamp {
+    std::uint64_t scene_generation{};
+    std::uint64_t origin_epoch{};
+    std::uint64_t content_generation{};
+    std::uint64_t read_model_generation{};
+};
+
+[[nodiscard]] bool generation_compatible(const PresentationGenerationStamp& candidate,
+                                         const PresentationGenerationStamp& active) noexcept;
+
+struct PresentationEvent {
+    std::uint64_t sequence{};
+    std::uint64_t correlation{};
+    std::uint64_t scene_generation{};
+    std::uint64_t source_read_model_generation{};
+    bool committed{false};
+};
+
+struct PresentationEventDiagnostics {
+    std::size_t consumed{};
+    std::size_t duplicate_or_out_of_order{};
+    std::size_t stale_scene{};
+    std::size_t uncommitted{};
+};
+
+class PresentationEventCursor {
+  public:
+    explicit PresentationEventCursor(std::uint64_t scene_generation = 0U) noexcept
+        : scene_generation_(scene_generation) {}
+
+    [[nodiscard]] bool consume(const PresentationEvent& event) noexcept;
+    void reset_for_scene(std::uint64_t scene_generation) noexcept;
+    [[nodiscard]] std::uint64_t last_sequence() const noexcept { return last_sequence_; }
+    [[nodiscard]] std::uint64_t scene_generation() const noexcept { return scene_generation_; }
+    [[nodiscard]] const PresentationEventDiagnostics& diagnostics() const noexcept { return diagnostics_; }
+
+  private:
+    std::uint64_t scene_generation_{};
+    std::uint64_t last_sequence_{};
+    PresentationEventDiagnostics diagnostics_{};
+};
+
 struct AlarmPresentation {
     AlarmPriority priority{AlarmPriority::P3};
     std::string text{};
@@ -75,6 +160,7 @@ struct PresentationEffect {
     bool rapid_flash{false};
     bool camera_motion{false};
     bool decorative{true};
+    bool enabled{true};
 };
 
 [[nodiscard]] PresentationEffect apply_accessibility(

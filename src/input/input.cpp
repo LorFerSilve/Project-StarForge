@@ -1,7 +1,6 @@
 #include "starforge/input/input.hpp"
 
 #include <algorithm>
-#include <type_traits>
 #include <utility>
 
 namespace starforge::input {
@@ -10,6 +9,20 @@ namespace {
     return static_cast<std::uint8_t>(kind);
 }
 }  // namespace
+
+std::optional<std::string> resolve_prompt(const ActionId action,
+                                          const ContextClass context,
+                                          const PromptDeviceFamily family,
+                                          const std::span<const EffectiveBinding> bindings) {
+    const auto binding = std::find_if(bindings.begin(), bindings.end(), [=](const EffectiveBinding& candidate) {
+        return candidate.action == action && candidate.context == context && candidate.family == family &&
+               !candidate.display.empty();
+    });
+    if (binding == bindings.end()) {
+        return std::nullopt;
+    }
+    return binding->display;
+}
 
 std::size_t SemanticInputRouter::index(const ActionId action) noexcept {
     return static_cast<std::size_t>(action);

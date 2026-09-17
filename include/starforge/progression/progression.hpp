@@ -15,32 +15,12 @@
 namespace starforge::progression {
 
 enum class ProgressionError : std::uint8_t {
-    InvalidAmount,
-    InsufficientCredits,
-    DuplicateTransaction,
-    InvalidReputation,
-    MissingPrerequisite,
-    MissingEvidence,
-    AlreadyCompleted,
-    InvalidFinaleState,
-    InvalidSnapshot,
+    InvalidAmount, InsufficientCredits, DuplicateTransaction, InvalidReputation,
+    MissingPrerequisite, MissingEvidence, AlreadyCompleted, InvalidFinaleState, InvalidSnapshot,
 };
 
-enum class ReputationTier : std::uint8_t {
-    Enemy,
-    Hostile,
-    Distrusted,
-    Neutral,
-    Accepted,
-    Trusted,
-    Allied,
-};
-
-enum class FinalChoice : std::uint8_t {
-    Stabilize,
-    Sever,
-    Contain,
-};
+enum class ReputationTier : std::uint8_t { Enemy, Hostile, Distrusted, Neutral, Accepted, Trusted, Allied };
+enum class FinalChoice : std::uint8_t { Stabilize, Sever, Contain };
 
 struct PostgameResolutionState final {
     FinalChoice choice{FinalChoice::Stabilize};
@@ -60,11 +40,7 @@ struct PostgameResolutionState final {
     return ReputationTier::Allied;
 }
 
-struct ResearchRequirement final {
-    std::string domain;
-    std::uint32_t minimum{0};
-};
-
+struct ResearchRequirement final { std::string domain; std::uint32_t minimum{0}; };
 struct ResearchProject final {
     std::string id;
     std::vector<std::string> prerequisites;
@@ -74,8 +50,16 @@ struct ResearchProject final {
     std::vector<std::string> blueprint_outputs;
 };
 
-// Persistence-facing value snapshot. Runtime-only state is deliberately absent; this is the
-// authoritative progression payload embedded by the owning save DTO at a Stable Save Boundary.
+// One authoritative story/reward transaction. Every field is validated before any mutation;
+// the supplied transaction id is committed exactly once after the complete mutation succeeds.
+struct ProgressionMutation final {
+    std::int64_t credit_delta{0};
+    std::map<std::string, std::int32_t> reputation_deltas{};
+    std::string evidence_id{};
+    std::map<std::string, std::uint32_t> evidence_values{};
+    std::vector<std::string> campaign_flags{};
+};
+
 struct ProgressionSnapshot final {
     std::int64_t credits{0};
     std::map<std::string, std::int32_t> reputation{};
@@ -92,31 +76,29 @@ struct ProgressionSnapshot final {
 class ProgressionState final {
 public:
     [[nodiscard]] std::int64_t credits() const noexcept { return credits_; }
-    [[nodiscard]] core::Result<void, ProgressionError> credit(std::int64_t amount,
-                                                               std::uint64_t transaction_id);
-    [[nodiscard]] core::Result<void, ProgressionError> debit(std::int64_t amount,
+    [[nodiscard]] core::Result<void, ProgressionError> credit(std::int64_t amount, std::uint64_t transaction_id);
+    [[nodiscard]] core::Result<void, ProgressionError> debit(std::int64_t amount, std::uint64_t transaction_id);
+    [[nodiscard]] core::Result<void, ProgressionError> apply(const ProgressionMutation& mutation,
                                                               std::uint64_t transaction_id);
 
     [[nodiscard]] std::int32_t reputation(std::string_view faction) const noexcept;
     [[nodiscard]] ReputationTier tier(std::string_view faction) const noexcept;
-    [[nodiscard]] core::Result<void, ProgressionError> change_reputation(
-        std::string faction, std::int32_t delta, std::uint64_t transaction_id);
+    [[nodiscard]] core::Result<void, ProgressionError> change_reputation(std::string faction, std::int32_t delta,
+                                                                         std::uint64_t transaction_id);
 
-    void integrate_evidence(std::string evidence_id,
-                            const std::map<std::string, std::uint32_t>& values);
+    void integrate_evidence(std::string evidence_id, const std::map<std::string, std::uint32_t>& values);
     [[nodiscard]] std::uint32_t evidence(std::string_view domain) const noexcept;
     [[nodiscard]] bool has_evidence(std::string_view evidence_id) const noexcept;
     [[nodiscard]] bool has_technology(std::string_view technology_id) const noexcept;
     [[nodiscard]] bool has_blueprint(std::string_view blueprint_id) const noexcept;
-    [[nodiscard]] core::Result<void, ProgressionError> complete_research(
-        const ResearchProject& project, std::uint64_t transaction_id);
+    [[nodiscard]] core::Result<void, ProgressionError> complete_research(const ResearchProject& project,
+                                                                         std::uint64_t transaction_id);
 
     [[nodiscard]] bool campaign_flag(std::string_view flag) const noexcept;
     void set_campaign_flag(std::string flag);
-    [[nodiscard]] core::Result<void, ProgressionError> commit_finale(
-        FinalChoice choice, std::uint64_t transaction_id, core::SimulationTick commit_tick);
-    [[nodiscard]] core::Result<void, ProgressionError> complete_main_campaign(
-        std::uint64_t transaction_id);
+    [[nodiscard]] core::Result<void, ProgressionError> commit_finale(FinalChoice choice, std::uint64_t transaction_id,
+                                                                     core::SimulationTick commit_tick);
+    [[nodiscard]] core::Result<void, ProgressionError> complete_main_campaign(std::uint64_t transaction_id);
     [[nodiscard]] bool finale_completed() const noexcept { return postgame_resolution_.has_value(); }
     [[nodiscard]] bool main_campaign_complete() const noexcept {
         return postgame_resolution_.has_value() && postgame_resolution_->main_campaign_complete;
@@ -126,8 +108,7 @@ public:
     }
 
     [[nodiscard]] ProgressionSnapshot snapshot() const;
-    [[nodiscard]] static core::Result<ProgressionState, ProgressionError> restore(
-        ProgressionSnapshot snapshot);
+    [[nodiscard]] static core::Result<ProgressionState, ProgressionError> restore(ProgressionSnapshot snapshot);
 
 private:
     [[nodiscard]] bool transaction_seen(std::uint64_t transaction_id) const noexcept;

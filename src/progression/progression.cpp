@@ -1,6 +1,7 @@
 #include "starforge/progression/progression.hpp"
 
 #include <limits>
+#include <utility>
 
 namespace starforge::progression {
 
@@ -121,6 +122,63 @@ core::Result<void, ProgressionError> ProgressionState::commit_finale(
     finale_completed_ = true;
     commit_transaction(transaction_id);
     return core::Result<void, ProgressionError>::success();
+}
+
+ProgressionSnapshot ProgressionState::snapshot() const {
+    return ProgressionSnapshot{
+        .credits = credits_,
+        .reputation = reputation_,
+        .evidence_totals = evidence_totals_,
+        .evidence_ids = evidence_ids_,
+        .technologies = technologies_,
+        .blueprints = blueprints_,
+        .completed_research = completed_research_,
+        .campaign_flags = campaign_flags_,
+        .committed_transactions = committed_transactions_,
+        .finale_completed = finale_completed_,
+    };
+}
+
+core::Result<ProgressionState, ProgressionError> ProgressionState::restore(
+    ProgressionSnapshot snapshot) {
+    if (snapshot.credits < 0 || snapshot.committed_transactions.contains(0)) {
+        return core::Result<ProgressionState, ProgressionError>::failure(
+            ProgressionError::InvalidSnapshot);
+    }
+    for (const auto& [faction, value] : snapshot.reputation) {
+        if (faction.empty() || value < -100 || value > 100) {
+            return core::Result<ProgressionState, ProgressionError>::failure(
+                ProgressionError::InvalidSnapshot);
+        }
+    }
+    for (const auto& value : snapshot.evidence_ids) {
+        if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
+    }
+    for (const auto& value : snapshot.technologies) {
+        if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
+    }
+    for (const auto& value : snapshot.blueprints) {
+        if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
+    }
+    for (const auto& value : snapshot.completed_research) {
+        if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
+    }
+    for (const auto& value : snapshot.campaign_flags) {
+        if (value.empty()) return core::Result<ProgressionState, ProgressionError>::failure(ProgressionError::InvalidSnapshot);
+    }
+
+    ProgressionState state;
+    state.credits_ = snapshot.credits;
+    state.reputation_ = std::move(snapshot.reputation);
+    state.evidence_totals_ = std::move(snapshot.evidence_totals);
+    state.evidence_ids_ = std::move(snapshot.evidence_ids);
+    state.technologies_ = std::move(snapshot.technologies);
+    state.blueprints_ = std::move(snapshot.blueprints);
+    state.completed_research_ = std::move(snapshot.completed_research);
+    state.campaign_flags_ = std::move(snapshot.campaign_flags);
+    state.committed_transactions_ = std::move(snapshot.committed_transactions);
+    state.finale_completed_ = snapshot.finale_completed;
+    return core::Result<ProgressionState, ProgressionError>::success(std::move(state));
 }
 
 } // namespace starforge::progression

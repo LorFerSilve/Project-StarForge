@@ -54,7 +54,10 @@ void Market::advance_economy(core::SimulationTick now) noexcept {
         const auto cycles_to_fill = (missing / rule.quantity_per_cycle) +
                                     ((missing % rule.quantity_per_cycle) != 0U ? 1U : 0U);
         const auto applied_cycles = std::min(cycles, cycles_to_fill);
-        it->second.stock += std::min(missing, applied_cycles * rule.quantity_per_cycle);
+        const auto addition = applied_cycles == cycles_to_fill
+                                  ? missing
+                                  : applied_cycles * rule.quantity_per_cycle;
+        it->second.stock += addition;
     }
 
     if (liquidity_ < replenishment_.maximum_liquidity && replenishment_.liquidity_per_cycle > 0) {
@@ -64,7 +67,9 @@ void Market::advance_economy(core::SimulationTick now) noexcept {
         const auto cycles_to_fill = (missing_unsigned / per_cycle) +
                                     ((missing_unsigned % per_cycle) != 0U ? 1U : 0U);
         const auto applied_cycles = std::min(cycles, cycles_to_fill);
-        const auto addition = std::min(missing_unsigned, applied_cycles * per_cycle);
+        const auto addition = applied_cycles == cycles_to_fill
+                                  ? missing_unsigned
+                                  : applied_cycles * per_cycle;
         liquidity_ += static_cast<std::int64_t>(addition);
     }
 

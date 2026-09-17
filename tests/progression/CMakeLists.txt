@@ -1,5 +1,6 @@
 add_executable(starforge_tests_progression
     progression_tests.cpp
+    market_tests.cpp
 )
 
 target_link_libraries(starforge_tests_progression

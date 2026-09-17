@@ -12,8 +12,8 @@ class MiniaudioBackend final {
 
     MiniaudioBackend(const MiniaudioBackend&) = delete;
     MiniaudioBackend& operator=(const MiniaudioBackend&) = delete;
-    MiniaudioBackend(MiniaudioBackend&&) noexcept;
-    MiniaudioBackend& operator=(MiniaudioBackend&&) noexcept;
+    MiniaudioBackend(MiniaudioBackend&&) = delete;
+    MiniaudioBackend& operator=(MiniaudioBackend&&) = delete;
 
     [[nodiscard]] bool initialize() noexcept;
     void shutdown() noexcept;

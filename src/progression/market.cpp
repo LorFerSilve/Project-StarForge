@@ -62,6 +62,8 @@ core::Result<void, MarketError> Market::commit_purchase(
         return core::Result<void, MarketError>::failure(MarketError::InvalidQuantity);
     const auto total = quoted.value().sell_to_player * static_cast<std::int64_t>(quantity);
     if (player.credits() < total) return core::Result<void, MarketError>::failure(MarketError::InsufficientCredits);
+    if (liquidity_ > std::numeric_limits<std::int64_t>::max() - total)
+        return core::Result<void, MarketError>::failure(MarketError::InvalidQuantity);
     if (!player.debit(total, transaction_id)) return core::Result<void, MarketError>::failure(MarketError::InvalidDefinition);
     it->second.stock -= quantity;
     liquidity_ += total;
@@ -79,11 +81,11 @@ core::Result<void, MarketError> Market::commit_sale(
     if (!quoted) return core::Result<void, MarketError>::failure(quoted.error());
     if (quantity > static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max() / quoted.value().buy_from_player))
         return core::Result<void, MarketError>::failure(MarketError::InvalidQuantity);
+    if (std::numeric_limits<std::uint64_t>::max() - it->second.stock < quantity)
+        return core::Result<void, MarketError>::failure(MarketError::InvalidQuantity);
     const auto total = quoted.value().buy_from_player * static_cast<std::int64_t>(quantity);
     if (liquidity_ < total) return core::Result<void, MarketError>::failure(MarketError::InsufficientLiquidity);
     if (!player.credit(total, transaction_id)) return core::Result<void, MarketError>::failure(MarketError::InvalidDefinition);
-    if (std::numeric_limits<std::uint64_t>::max() - it->second.stock < quantity)
-        return core::Result<void, MarketError>::failure(MarketError::InvalidQuantity);
     it->second.stock += quantity;
     liquidity_ -= total;
     return core::Result<void, MarketError>::success();

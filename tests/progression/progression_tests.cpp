@@ -2,6 +2,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <cstdint>
+#include <limits>
+
 using namespace starforge::progression;
 
 TEST_CASE("credits conserve committed ledger transactions") {
@@ -14,6 +17,17 @@ TEST_CASE("credits conserve committed ledger transactions") {
     CHECK(state.credits() == 375);
 }
 
+TEST_CASE("credits reject overflow without consuming the transaction id") {
+    ProgressionState state;
+    const auto maximum = std::numeric_limits<std::int64_t>::max();
+    REQUIRE(state.credit(maximum, 1));
+    CHECK_FALSE(state.credit(1, 2));
+    CHECK(state.credits() == maximum);
+    REQUIRE(state.debit(maximum, 3));
+    REQUIRE(state.credit(1, 2));
+    CHECK(state.credits() == 1);
+}
+
 TEST_CASE("reputation uses canonical independent bounded tiers") {
     ProgressionState state;
     REQUIRE(state.change_reputation("Helios", 31, 10));
@@ -22,6 +36,8 @@ TEST_CASE("reputation uses canonical independent bounded tiers") {
     REQUIRE(state.change_reputation("Helios", 500, 11));
     CHECK(state.reputation("Helios") == 100);
     CHECK(state.tier("Helios") == ReputationTier::Allied);
+    REQUIRE(state.change_reputation("Helios", std::numeric_limits<std::int32_t>::min(), 12));
+    CHECK(state.reputation("Helios") == -100);
 }
 
 TEST_CASE("research evidence is persistent non-spendable knowledge") {
@@ -42,6 +58,14 @@ TEST_CASE("research evidence is persistent non-spendable knowledge") {
     CHECK(state.has_blueprint("BP_ADVANCED_ALLOY"));
     CHECK(state.evidence("Materials") == 2);
     CHECK_FALSE(state.complete_research(project, 21));
+}
+
+TEST_CASE("research evidence accumulation saturates instead of wrapping") {
+    ProgressionState state;
+    const auto maximum = std::numeric_limits<std::uint32_t>::max();
+    state.integrate_evidence("EVID_A", {{"Materials", maximum}});
+    state.integrate_evidence("EVID_B", {{"Materials", 1}});
+    CHECK(state.evidence("Materials") == maximum);
 }
 
 TEST_CASE("research prerequisites gate completion") {

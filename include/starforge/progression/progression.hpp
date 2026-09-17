@@ -1,10 +1,12 @@
 #pragma once
 
 #include "starforge/core/result.hpp"
+#include "starforge/core/simulation_time.hpp"
 
 #include <algorithm>
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <string_view>
@@ -32,6 +34,20 @@ enum class ReputationTier : std::uint8_t {
     Accepted,
     Trusted,
     Allied,
+};
+
+enum class FinalChoice : std::uint8_t {
+    Stabilize,
+    Sever,
+    Contain,
+};
+
+struct PostgameResolutionState final {
+    FinalChoice choice{FinalChoice::Stabilize};
+    std::uint64_t transaction_id{0};
+    core::SimulationTick commit_tick{};
+    std::uint32_t schema_version{1U};
+    bool main_campaign_complete{false};
 };
 
 [[nodiscard]] constexpr ReputationTier reputation_tier(std::int32_t value) noexcept {
@@ -70,7 +86,7 @@ struct ProgressionSnapshot final {
     std::set<std::string> completed_research{};
     std::set<std::string> campaign_flags{};
     std::set<std::uint64_t> committed_transactions{};
-    bool finale_completed{false};
+    std::optional<PostgameResolutionState> postgame_resolution{};
 };
 
 class ProgressionState final {
@@ -98,8 +114,16 @@ public:
     [[nodiscard]] bool campaign_flag(std::string_view flag) const noexcept;
     void set_campaign_flag(std::string flag);
     [[nodiscard]] core::Result<void, ProgressionError> commit_finale(
-        std::string ending_flag, std::uint64_t transaction_id);
-    [[nodiscard]] bool finale_completed() const noexcept { return finale_completed_; }
+        FinalChoice choice, std::uint64_t transaction_id, core::SimulationTick commit_tick);
+    [[nodiscard]] core::Result<void, ProgressionError> complete_main_campaign(
+        std::uint64_t transaction_id);
+    [[nodiscard]] bool finale_completed() const noexcept { return postgame_resolution_.has_value(); }
+    [[nodiscard]] bool main_campaign_complete() const noexcept {
+        return postgame_resolution_.has_value() && postgame_resolution_->main_campaign_complete;
+    }
+    [[nodiscard]] const std::optional<PostgameResolutionState>& postgame_resolution() const noexcept {
+        return postgame_resolution_;
+    }
 
     [[nodiscard]] ProgressionSnapshot snapshot() const;
     [[nodiscard]] static core::Result<ProgressionState, ProgressionError> restore(
@@ -118,7 +142,7 @@ private:
     std::set<std::string> completed_research_{};
     std::set<std::string> campaign_flags_{};
     std::set<std::uint64_t> committed_transactions_{};
-    bool finale_completed_{false};
+    std::optional<PostgameResolutionState> postgame_resolution_{};
 };
 
 } // namespace starforge::progression

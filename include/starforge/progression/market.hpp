@@ -55,6 +55,14 @@ struct MarketReplenishment final {
     std::map<std::string, StockReplenishment> stock{};
 };
 
+struct MarketSnapshot final {
+    std::string id;
+    std::int64_t liquidity{0};
+    bool trade_access{true};
+    std::map<std::string, MarketItem> items{};
+    MarketReplenishment replenishment{};
+};
+
 class Market final {
 public:
     explicit Market(std::string id, std::int64_t liquidity = 0);
@@ -72,6 +80,9 @@ public:
     [[nodiscard]] core::Result<MarketQuote, MarketError> quote(std::string_view item_id) const;
     [[nodiscard]] core::Result<void, MarketError> configure_replenishment(MarketReplenishment plan);
     void advance_economy(core::SimulationTick now) noexcept;
+
+    [[nodiscard]] MarketSnapshot snapshot() const;
+    [[nodiscard]] static core::Result<Market, MarketError> restore(MarketSnapshot snapshot);
 
     // These commit only the economic side of a physical transfer. The caller must first
     // validate and commit authoritative physical ownership/capacity through the owning domain.

@@ -81,6 +81,50 @@ void Market::advance_economy(core::SimulationTick now) noexcept {
     }
 }
 
+MarketSnapshot Market::snapshot() const {
+    return MarketSnapshot{
+        .id = id_,
+        .liquidity = liquidity_,
+        .trade_access = trade_access_,
+        .items = items_,
+        .replenishment = replenishment_,
+    };
+}
+
+core::Result<Market, MarketError> Market::restore(MarketSnapshot snapshot) {
+    if (snapshot.id.empty() || snapshot.liquidity < 0) {
+        return core::Result<Market, MarketError>::failure(MarketError::InvalidDefinition);
+    }
+
+    Market restored{std::move(snapshot.id), snapshot.liquidity};
+    restored.trade_access_ = snapshot.trade_access;
+    for (auto& [item_id, item] : snapshot.items) {
+        if (item_id.empty() || item.id != item_id) {
+            return core::Result<Market, MarketError>::failure(MarketError::InvalidDefinition);
+        }
+        const auto added = restored.add_item(std::move(item));
+        if (!added) {
+            return core::Result<Market, MarketError>::failure(added.error());
+        }
+    }
+
+    const auto& plan = snapshot.replenishment;
+    const bool has_replenishment = plan.interval_ticks != 0 || plan.next_update.raw() != 0 ||
+                                   plan.liquidity_per_cycle != 0 || plan.maximum_liquidity != 0 ||
+                                   !plan.stock.empty();
+    if (has_replenishment) {
+        if (plan.interval_ticks == 0) {
+            return core::Result<Market, MarketError>::failure(MarketError::InvalidDefinition);
+        }
+        const auto configured = restored.configure_replenishment(std::move(snapshot.replenishment));
+        if (!configured) {
+            return core::Result<Market, MarketError>::failure(configured.error());
+        }
+    }
+
+    return core::Result<Market, MarketError>::success(std::move(restored));
+}
+
 std::int64_t Market::apply_basis_points(std::int64_t value, std::int32_t basis_points) noexcept {
     if (value <= 0 || basis_points <= 0) return 0;
     const auto safe_max = std::numeric_limits<std::int64_t>::max() / basis_points;

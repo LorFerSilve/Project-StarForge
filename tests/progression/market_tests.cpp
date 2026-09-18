@@ -94,3 +94,47 @@ TEST_CASE("market replenishment rejects definitions that would discard current s
     CHECK(market.stock("FUEL") == 5);
     CHECK(market.liquidity() == 100);
 }
+
+TEST_CASE("market snapshot preserves finite economy state and simulation schedule") {
+    Market market{"KARA", 500};
+    REQUIRE(market.add_item(MarketItem{.id = "FUEL", .base_credit_value = 100, .stock = 3}));
+    MarketReplenishment plan;
+    plan.interval_ticks = 60;
+    plan.next_update = starforge::core::SimulationTick{180};
+    plan.liquidity_per_cycle = 25;
+    plan.maximum_liquidity = 750;
+    plan.stock.emplace("FUEL", StockReplenishment{.quantity_per_cycle = 2, .maximum_stock = 8});
+    REQUIRE(market.configure_replenishment(std::move(plan)));
+    market.set_trade_access(false);
+
+    const auto restored_result = Market::restore(market.snapshot());
+    REQUIRE(restored_result);
+    auto restored = restored_result.value();
+    CHECK(restored.id() == "KARA");
+    CHECK(restored.liquidity() == 500);
+    CHECK(restored.stock("FUEL") == 3);
+    CHECK_FALSE(restored.trade_access());
+    CHECK(restored.next_economic_update().raw() == 180);
+
+    restored.advance_economy(starforge::core::SimulationTick{180});
+    CHECK(restored.stock("FUEL") == 5);
+    CHECK(restored.liquidity() == 525);
+    CHECK(restored.next_economic_update().raw() == 240);
+}
+
+TEST_CASE("market restore rejects malformed persisted invariants") {
+    Market market{"KARA", 100};
+    REQUIRE(market.add_item(MarketItem{.id = "FUEL", .base_credit_value = 100, .stock = 2}));
+
+    auto mismatched_item = market.snapshot();
+    mismatched_item.items.at("FUEL").id = "OTHER";
+    CHECK_FALSE(Market::restore(std::move(mismatched_item)));
+
+    auto invalid_liquidity = market.snapshot();
+    invalid_liquidity.liquidity = -1;
+    CHECK_FALSE(Market::restore(std::move(invalid_liquidity)));
+
+    auto invalid_schedule = market.snapshot();
+    invalid_schedule.replenishment.next_update = starforge::core::SimulationTick{60};
+    CHECK_FALSE(Market::restore(std::move(invalid_schedule)));
+}

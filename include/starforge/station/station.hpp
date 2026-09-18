@@ -259,4 +259,37 @@ private:
     bool alarm_active_{false};
 };
 
+struct StationSnapshot {
+    std::uint64_t tick{0};
+    std::uint64_t topology_revision{0};
+    std::int64_t gas_mmol{0};
+    std::int64_t vented_mmol{0};
+    std::int64_t water_ml{0};
+    std::int64_t thermal_energy_j{0};
+    std::int64_t allocated_power_w{0};
+    bool alarm_active{false};
+
+    friend bool operator==(const StationSnapshot&, const StationSnapshot&) = default;
+};
+
+class HorizonStationSimulation {
+public:
+    StationTopologyStore topology;
+    StationPowerStore power;
+    AtmosphereStore atmosphere;
+    EnvironmentalStore environment;
+    LogisticsStore logistics;
+    WorkOrderStore work_orders;
+    ProductionStore production;
+    ConstructionStore construction;
+    AutomationController automation;
+
+    void advance(std::uint64_t ticks, SimulationMode mode);
+    [[nodiscard]] StationSnapshot snapshot() const;
+
+private:
+    std::uint64_t tick_{0};
+    PowerAllocationSnapshot last_power_{};
+};
+
 }  // namespace starforge::station

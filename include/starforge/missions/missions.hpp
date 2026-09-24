@@ -125,7 +125,7 @@ public:
     PreparedMissionDeployment(const PreparedMissionDeployment&) = delete;
     PreparedMissionDeployment& operator=(const PreparedMissionDeployment&) = delete;
 
-    [[nodiscard]] MissionInstanceId instance_id() const noexcept { return instance_.id; }
+    [[nodiscard]] MissionInstanceId instance_id() const noexcept { return instance_id_; }
     [[nodiscard]] transactions::DomainCommitKey commit_key() const noexcept override;
     [[nodiscard]] core::StateRevision expected_revision() const noexcept override;
     [[nodiscard]] core::StateRevision current_revision() const noexcept override;
@@ -137,12 +137,14 @@ private:
 
     PreparedMissionDeployment(MissionRuntime& runtime,
                               MissionId mission_id,
-                              MissionInstanceRecord instance,
+                              MissionInstanceId instance_id,
+                              std::vector<MissionInstanceRecord> next_instances,
                               core::StateRevision expected_revision) noexcept;
 
     MissionRuntime* runtime_{nullptr};
     MissionId mission_id_{};
-    MissionInstanceRecord instance_{};
+    MissionInstanceId instance_id_{};
+    std::vector<MissionInstanceRecord> next_instances_{};
     core::StateRevision expected_revision_{};
 };
 

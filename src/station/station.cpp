@@ -377,6 +377,10 @@ bool LogisticsStore::release(ReservationId reservation) {
     return true;
 }
 
+bool LogisticsStore::has_reservation(ReservationId reservation) const noexcept {
+    return reservation && reservations_.contains(reservation);
+}
+
 std::int64_t LogisticsStore::total(ResourceId resource) const {
     std::int64_t result = 0;
     for (const auto& [_, storage] : inventory_) {

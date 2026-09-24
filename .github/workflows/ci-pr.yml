@@ -83,7 +83,7 @@ jobs:
           $clVersion = (Get-Item $cl).VersionInfo.FileVersion
           Write-Host "msvc_toolset_directory=$($toolset.Name)"
           Write-Host "cl_file_version=$clVersion"
-          if ($clVersion -ne "19.44.35228.0") { throw "TA16-V1 requires cl.exe 19.44.35228.0; runner has $clVersion" }
+          if ($clVersion -ne "19.44.35229.0") { throw "TA16-V1 requires cl.exe 19.44.35229.0; runner has $clVersion" }
 
       - name: Install and verify CMake 4.3.3
         shell: pwsh

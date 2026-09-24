@@ -2,6 +2,7 @@ add_library(sf_station STATIC
     station.cpp
     station_processes.cpp
     logistics_transaction.cpp
+    logistics_reservation_transaction.cpp
 )
 
 add_library(StarForge::Station ALIAS sf_station)

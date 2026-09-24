@@ -1,6 +1,7 @@
 #include "starforge/station/logistics_reservation_transaction.hpp"
 
 #include <limits>
+#include <set>
 #include <utility>
 
 namespace starforge::station {
@@ -84,5 +85,49 @@ void PreparedLogisticsReservation::commit() noexcept {
 }
 
 void PreparedLogisticsReservation::publish_committed_events() noexcept {}
+
+PreparedLogisticsReservationGuard::PreparedLogisticsReservationGuard(
+    LogisticsStore& store, core::StateRevision expected_revision) noexcept
+    : store_(&store), expected_revision_(expected_revision) {}
+
+core::Result<PreparedLogisticsReservationGuard, LogisticsReservationError>
+PreparedLogisticsReservationGuard::prepare(
+    LogisticsStore& store, std::vector<ReservationId> reservations) {
+    if (reservations.empty()) {
+        return core::Result<PreparedLogisticsReservationGuard, LogisticsReservationError>::failure(
+            LogisticsReservationError::EmptyBatch);
+    }
+
+    std::set<ReservationId> unique;
+    for (const auto reservation : reservations) {
+        if (!reservation || !unique.insert(reservation).second) {
+            return core::Result<PreparedLogisticsReservationGuard, LogisticsReservationError>::failure(
+                LogisticsReservationError::InvalidReservation);
+        }
+        if (!store.has_reservation(reservation)) {
+            return core::Result<PreparedLogisticsReservationGuard, LogisticsReservationError>::failure(
+                LogisticsReservationError::InsufficientQuantity);
+        }
+    }
+
+    return core::Result<PreparedLogisticsReservationGuard, LogisticsReservationError>::success(
+        PreparedLogisticsReservationGuard{store, store.revision()});
+}
+
+transactions::DomainCommitKey PreparedLogisticsReservationGuard::commit_key() const noexcept {
+    return {.domain = transactions::DomainCommitOrder::Inventory, .stable_ordinal = 2U};
+}
+
+core::StateRevision PreparedLogisticsReservationGuard::expected_revision() const noexcept {
+    return expected_revision_;
+}
+
+core::StateRevision PreparedLogisticsReservationGuard::current_revision() const noexcept {
+    return store_->revision();
+}
+
+void PreparedLogisticsReservationGuard::commit() noexcept {}
+
+void PreparedLogisticsReservationGuard::publish_committed_events() noexcept {}
 
 } // namespace starforge::station

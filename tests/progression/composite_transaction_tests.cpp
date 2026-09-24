@@ -29,7 +29,7 @@ TEST_CASE("failed composite progression transaction leaves progression state unc
         .reputation_deltas = {{"Helios", 50}},
         .evidence_id = "EVID_FAILED",
         .evidence_values = {{"Energy", 5}},
-        .campaign_flags = {"SHOULD_NOT_COMMIT"},
+        .campaign_flags = {"", "SHOULD_NOT_COMMIT"},
     };
     CHECK_FALSE(state.apply(invalid, 11));
     CHECK(state.reputation("Helios") == 0);

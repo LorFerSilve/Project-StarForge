@@ -43,6 +43,36 @@ bool provider_matches(const SupportProviderSelection& lhs,
 
 } // namespace
 
+PreparedFinaleDeploymentActivation::PreparedFinaleDeploymentActivation(
+    FinaleReadinessStore& store,
+    DepartureReadinessState next_state,
+    std::set<std::uint64_t> committed_transactions,
+    core::StateRevision expected_revision) noexcept
+    : store_(&store),
+      next_state_(std::move(next_state)),
+      committed_transactions_(std::move(committed_transactions)),
+      expected_revision_(expected_revision) {}
+
+transactions::DomainCommitKey PreparedFinaleDeploymentActivation::commit_key() const noexcept {
+    return {.domain = transactions::DomainCommitOrder::Progression, .stable_ordinal = 11U};
+}
+
+core::StateRevision PreparedFinaleDeploymentActivation::expected_revision() const noexcept {
+    return expected_revision_;
+}
+
+core::StateRevision PreparedFinaleDeploymentActivation::current_revision() const noexcept {
+    return store_->revision_;
+}
+
+void PreparedFinaleDeploymentActivation::commit() noexcept {
+    store_->current_ = std::move(next_state_);
+    store_->committed_transactions_ = std::move(committed_transactions_);
+    static_cast<void>(store_->revision_.advance());
+}
+
+void PreparedFinaleDeploymentActivation::publish_committed_events() noexcept {}
+
 PreparedFinaleReadinessCommit::PreparedFinaleReadinessCommit(
     FinaleReadinessStore& store,
     DepartureReadinessState next_state,
@@ -280,6 +310,9 @@ FinaleReadinessReport FinaleReadinessStore::refresh_status(
     }
 
     const auto& locked = *current_;
+    if (locked.status == FinaleReadinessStatus::Deployed) {
+        return report;
+    }
     if (view.selected_ship_id != locked.selected_ship_id ||
         view.selected_robot_squad_id != locked.selected_robot_squad_id ||
         support_providers.size() != locked.support_providers.size()) {
@@ -314,6 +347,39 @@ FinaleReadinessReport FinaleReadinessStore::refresh_status(
     return report;
 }
 
+core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>
+FinaleReadinessStore::prepare_deployment_activation(
+    core::TransactionId transaction_id, std::uint64_t mission_instance_id) {
+    if (!transaction_id.valid() || mission_instance_id == 0) {
+        return core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>::failure(
+            FinaleReadinessError::InvalidTransaction);
+    }
+    if (transaction_seen(transaction_id)) {
+        return core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>::failure(
+            FinaleReadinessError::DuplicateTransaction);
+    }
+    if (!current_.has_value() || current_->status != FinaleReadinessStatus::Deployable) {
+        return core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>::failure(
+            FinaleReadinessError::NotReady);
+    }
+    if (!revision_.can_advance()) {
+        return core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>::failure(
+            FinaleReadinessError::RevisionExhausted);
+    }
+
+    auto next = *current_;
+    next.deployment_transaction_id = transaction_id.raw();
+    next.mission_instance_id = mission_instance_id;
+    next.status = FinaleReadinessStatus::Deployed;
+
+    auto transactions = committed_transactions_;
+    transactions.insert(transaction_id.raw());
+
+    return core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>::success(
+        PreparedFinaleDeploymentActivation{
+            *this, std::move(next), std::move(transactions), revision_});
+}
+
 FinaleReadinessSnapshot FinaleReadinessStore::snapshot() const {
     return FinaleReadinessSnapshot{
         .current = current_,
@@ -337,7 +403,13 @@ core::Result<FinaleReadinessStore, FinaleReadinessError> FinaleReadinessStore::r
             current.manifest_reservations.empty() ||
             !valid_support_set(current.support_providers) ||
             (current.status != FinaleReadinessStatus::Deployable &&
-             current.status != FinaleReadinessStatus::Invalidated)) {
+             current.status != FinaleReadinessStatus::Invalidated &&
+             current.status != FinaleReadinessStatus::Deployed) ||
+            (current.status == FinaleReadinessStatus::Deployed &&
+             (current.deployment_transaction_id == 0 || current.mission_instance_id == 0 ||
+              !snapshot.committed_transactions.contains(current.deployment_transaction_id))) ||
+            (current.status != FinaleReadinessStatus::Deployed &&
+             (current.deployment_transaction_id != 0 || current.mission_instance_id != 0))) {
             return core::Result<FinaleReadinessStore, FinaleReadinessError>::failure(
                 FinaleReadinessError::InvalidSnapshot);
         }

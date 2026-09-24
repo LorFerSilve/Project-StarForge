@@ -159,6 +159,7 @@ public:
     [[nodiscard]] std::int64_t quantity(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t reserved(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t total(ResourceId resource) const;
+    [[nodiscard]] bool has_reservation(ReservationId reservation) const noexcept;
     [[nodiscard]] core::StateRevision revision() const noexcept { return revision_; }
 
 private:

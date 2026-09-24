@@ -1,3 +1,4 @@
+#include "starforge/progression/finale_deployment.hpp"
 #include "starforge/progression/finale_readiness.hpp"
 #include "starforge/transactions/coordinator.hpp"
 
@@ -297,4 +298,277 @@ TEST_CASE("finale readiness snapshot preserves the locked deployment attempt") {
     auto invalid = readiness.snapshot();
     invalid.current->transaction_id = 999'999;
     CHECK_FALSE(FinaleReadinessStore::restore(std::move(invalid)));
+}
+
+
+TEST_CASE("MS-F02 deployment atomically activates mission and locks deployed readiness") {
+    ManifestFixture fixture;
+    FinaleReadinessStore readiness;
+    starforge::missions::MissionRuntime missions;
+    starforge::transactions::TransactionCoordinator coordinator;
+
+    starforge::missions::MissionRecord finale{};
+    finale.id = starforge::missions::MissionId{9001};
+    finale.retryable = true;
+    finale.objectives = {
+        {starforge::missions::ObjectiveId{1}, {}, true, false},
+        {starforge::missions::ObjectiveId{2}, {starforge::missions::ObjectiveId{1}}, true, false},
+    };
+    REQUIRE(missions.add_mission(std::move(finale)));
+
+    const auto readiness_tx = coordinator.candidate_transaction_id();
+    REQUIRE(readiness_tx);
+    auto prepared_readiness = prepare_finale_departure(
+        readiness,
+        fixture.logistics,
+        ready_view(),
+        valid_support(),
+        fixture.reservations(),
+        readiness_tx.value());
+    REQUIRE(prepared_readiness);
+    auto readiness_participants = prepared_readiness.value().participants();
+    REQUIRE(coordinator.prepare(readiness_tx.value(), readiness_participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto deployment_tx = coordinator.candidate_transaction_id();
+    REQUIRE(deployment_tx);
+    auto deployment = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9001},
+        777,
+        deployment_tx.value());
+    REQUIRE(deployment);
+
+    const auto expected_instance = deployment.value().mission_instance_id();
+    auto participants = deployment.value().participants();
+    REQUIRE(coordinator.prepare(deployment_tx.value(), participants));
+    REQUIRE(coordinator.commit().committed);
+
+    REQUIRE(missions.active_external_instance() == expected_instance);
+    REQUIRE(missions.mission(starforge::missions::MissionId{9001}) != nullptr);
+    CHECK(missions.mission(starforge::missions::MissionId{9001})->state ==
+          starforge::missions::MissionState::Active);
+    REQUIRE(missions.instance(expected_instance) != nullptr);
+    CHECK(missions.instance(expected_instance)->deployment_tick == 777);
+    CHECK(missions.instance(expected_instance)->objectives.front().state ==
+          starforge::missions::ObjectiveState::Active);
+
+    REQUIRE(readiness.current().has_value());
+    CHECK(readiness.current()->status == FinaleReadinessStatus::Deployed);
+    CHECK(readiness.current()->deployment_transaction_id == deployment_tx.value().raw());
+    CHECK(readiness.current()->mission_instance_id == expected_instance.raw());
+    CHECK(fixture.logistics.reserved(fixture.storage, fixture.fuel) == 4);
+    CHECK(fixture.logistics.reserved(fixture.storage, fixture.spares) == 2);
+}
+
+TEST_CASE("MS-F02 deployment aborts atomically when manifest reservations change") {
+    ManifestFixture fixture;
+    FinaleReadinessStore readiness;
+    starforge::missions::MissionRuntime missions;
+    starforge::transactions::TransactionCoordinator coordinator;
+
+    starforge::missions::MissionRecord finale{};
+    finale.id = starforge::missions::MissionId{9002};
+    finale.objectives = {{starforge::missions::ObjectiveId{1}, {}, true, false}};
+    REQUIRE(missions.add_mission(std::move(finale)));
+
+    const auto readiness_tx = coordinator.candidate_transaction_id();
+    REQUIRE(readiness_tx);
+    auto prepared_readiness = prepare_finale_departure(
+        readiness,
+        fixture.logistics,
+        ready_view(),
+        valid_support(),
+        fixture.reservations(),
+        readiness_tx.value());
+    REQUIRE(prepared_readiness);
+    auto readiness_participants = prepared_readiness.value().participants();
+    REQUIRE(coordinator.prepare(readiness_tx.value(), readiness_participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto deployment_tx = coordinator.candidate_transaction_id();
+    REQUIRE(deployment_tx);
+    auto deployment = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9002},
+        888,
+        deployment_tx.value());
+    REQUIRE(deployment);
+
+    REQUIRE(fixture.logistics.release(starforge::station::ReservationId{101}));
+
+    auto participants = deployment.value().participants();
+    const auto prepare_result = coordinator.prepare(deployment_tx.value(), participants);
+    REQUIRE_FALSE(prepare_result);
+    CHECK(prepare_result.error() == starforge::transactions::TransactionError::StaleRevision);
+    CHECK_FALSE(missions.active_external_instance().has_value());
+    CHECK(missions.mission(starforge::missions::MissionId{9002})->state ==
+          starforge::missions::MissionState::Available);
+    CHECK(readiness.current()->status == FinaleReadinessStatus::Deployable);
+    CHECK(readiness.current()->mission_instance_id == 0);
+}
+
+TEST_CASE("MS-F02 deployment aborts atomically when mission ownership changes") {
+    ManifestFixture fixture;
+    FinaleReadinessStore readiness;
+    starforge::missions::MissionRuntime missions;
+    starforge::transactions::TransactionCoordinator coordinator;
+
+    starforge::missions::MissionRecord finale{};
+    finale.id = starforge::missions::MissionId{9003};
+    finale.objectives = {{starforge::missions::ObjectiveId{1}, {}, true, false}};
+    REQUIRE(missions.add_mission(std::move(finale)));
+
+    const auto readiness_tx = coordinator.candidate_transaction_id();
+    REQUIRE(readiness_tx);
+    auto prepared_readiness = prepare_finale_departure(
+        readiness,
+        fixture.logistics,
+        ready_view(),
+        valid_support(),
+        fixture.reservations(),
+        readiness_tx.value());
+    REQUIRE(prepared_readiness);
+    auto readiness_participants = prepared_readiness.value().participants();
+    REQUIRE(coordinator.prepare(readiness_tx.value(), readiness_participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto deployment_tx = coordinator.candidate_transaction_id();
+    REQUIRE(deployment_tx);
+    auto deployment = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9003},
+        999,
+        deployment_tx.value());
+    REQUIRE(deployment);
+
+    starforge::missions::MissionRecord unrelated{};
+    unrelated.id = starforge::missions::MissionId{9010};
+    unrelated.objectives = {{starforge::missions::ObjectiveId{1}, {}, true, false}};
+    REQUIRE(missions.add_mission(std::move(unrelated)));
+
+    auto participants = deployment.value().participants();
+    const auto prepare_result = coordinator.prepare(deployment_tx.value(), participants);
+    REQUIRE_FALSE(prepare_result);
+    CHECK(prepare_result.error() == starforge::transactions::TransactionError::StaleRevision);
+    CHECK_FALSE(missions.active_external_instance().has_value());
+    CHECK(readiness.current()->status == FinaleReadinessStatus::Deployable);
+}
+
+TEST_CASE("deployed finale readiness cannot create a second MS-F02 deployment") {
+    ManifestFixture fixture;
+    FinaleReadinessStore readiness;
+    starforge::missions::MissionRuntime missions;
+    starforge::transactions::TransactionCoordinator coordinator;
+
+    starforge::missions::MissionRecord finale{};
+    finale.id = starforge::missions::MissionId{9004};
+    finale.objectives = {{starforge::missions::ObjectiveId{1}, {}, true, false}};
+    REQUIRE(missions.add_mission(std::move(finale)));
+
+    const auto readiness_tx = coordinator.candidate_transaction_id();
+    REQUIRE(readiness_tx);
+    auto prepared_readiness = prepare_finale_departure(
+        readiness,
+        fixture.logistics,
+        ready_view(),
+        valid_support(),
+        fixture.reservations(),
+        readiness_tx.value());
+    REQUIRE(prepared_readiness);
+    auto readiness_participants = prepared_readiness.value().participants();
+    REQUIRE(coordinator.prepare(readiness_tx.value(), readiness_participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto deployment_tx = coordinator.candidate_transaction_id();
+    REQUIRE(deployment_tx);
+    auto deployment = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9004},
+        1000,
+        deployment_tx.value());
+    REQUIRE(deployment);
+    auto participants = deployment.value().participants();
+    REQUIRE(coordinator.prepare(deployment_tx.value(), participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto duplicate_tx = coordinator.candidate_transaction_id();
+    REQUIRE(duplicate_tx);
+    auto duplicate = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9004},
+        1001,
+        duplicate_tx.value());
+    REQUIRE_FALSE(duplicate);
+    CHECK(duplicate.error() == FinaleDeploymentError::AlreadyDeployed);
+}
+
+TEST_CASE("deployed finale readiness snapshot preserves mission binding") {
+    ManifestFixture fixture;
+    FinaleReadinessStore readiness;
+    starforge::missions::MissionRuntime missions;
+    starforge::transactions::TransactionCoordinator coordinator;
+
+    starforge::missions::MissionRecord finale{};
+    finale.id = starforge::missions::MissionId{9005};
+    finale.objectives = {{starforge::missions::ObjectiveId{1}, {}, true, false}};
+    REQUIRE(missions.add_mission(std::move(finale)));
+
+    const auto readiness_tx = coordinator.candidate_transaction_id();
+    REQUIRE(readiness_tx);
+    auto prepared_readiness = prepare_finale_departure(
+        readiness,
+        fixture.logistics,
+        ready_view(),
+        valid_support(),
+        fixture.reservations(),
+        readiness_tx.value());
+    REQUIRE(prepared_readiness);
+    auto readiness_participants = prepared_readiness.value().participants();
+    REQUIRE(coordinator.prepare(readiness_tx.value(), readiness_participants));
+    REQUIRE(coordinator.commit().committed);
+
+    const auto deployment_tx = coordinator.candidate_transaction_id();
+    REQUIRE(deployment_tx);
+    auto deployment = prepare_finale_mission_deployment(
+        readiness,
+        fixture.logistics,
+        missions,
+        ready_view(),
+        valid_support(),
+        starforge::missions::MissionId{9005},
+        1002,
+        deployment_tx.value());
+    REQUIRE(deployment);
+    const auto instance_id = deployment.value().mission_instance_id();
+    auto participants = deployment.value().participants();
+    REQUIRE(coordinator.prepare(deployment_tx.value(), participants));
+    REQUIRE(coordinator.commit().committed);
+
+    auto restored = FinaleReadinessStore::restore(readiness.snapshot());
+    REQUIRE(restored);
+    REQUIRE(restored.value().current().has_value());
+    CHECK(restored.value().current()->status == FinaleReadinessStatus::Deployed);
+    CHECK(restored.value().current()->mission_instance_id == instance_id.raw());
+    CHECK(restored.value().current()->deployment_transaction_id == deployment_tx.value().raw());
 }

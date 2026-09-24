@@ -85,11 +85,13 @@ void unlock_ready(MissionInstanceRecord& instance, const MissionRecord& mission)
 PreparedMissionDeployment::PreparedMissionDeployment(
     MissionRuntime& runtime,
     MissionId mission_id,
-    MissionInstanceRecord instance,
+    MissionInstanceId instance_id,
+    std::vector<MissionInstanceRecord> next_instances,
     core::StateRevision expected_revision) noexcept
     : runtime_(&runtime),
       mission_id_(mission_id),
-      instance_(std::move(instance)),
+      instance_id_(instance_id),
+      next_instances_(std::move(next_instances)),
       expected_revision_(expected_revision) {}
 
 transactions::DomainCommitKey PreparedMissionDeployment::commit_key() const noexcept {
@@ -109,12 +111,16 @@ void PreparedMissionDeployment::commit() noexcept {
         runtime_->missions_,
         [&](const auto& item) { return item.id == mission_id_; });
 
-    mission_it->attempt_count = instance_.attempt_ordinal;
+    const auto prepared_instance = std::ranges::find_if(
+        next_instances_,
+        [&](const auto& item) { return item.id == instance_id_; });
+
+    mission_it->attempt_count = prepared_instance->attempt_ordinal;
     mission_it->state = MissionState::Active;
     ++mission_it->revision;
 
-    runtime_->active_external_ = instance_.id;
-    runtime_->instances_.push_back(std::move(instance_));
+    runtime_->active_external_ = instance_id_;
+    runtime_->instances_.swap(next_instances_);
     ++runtime_->next_instance_id_;
     runtime_->touch_deployment_revision();
 }
@@ -212,10 +218,15 @@ core::Result<PreparedMissionDeployment, MissionError> MissionRuntime::prepare_de
             0});
     }
 
-    instances_.reserve(instances_.size() + 1U);
+    auto next_instances = instances_;
+    next_instances.push_back(std::move(instance));
     return core::Result<PreparedMissionDeployment, MissionError>::success(
         PreparedMissionDeployment{
-            *this, mission_id, std::move(instance), deployment_revision_});
+            *this,
+            mission_id,
+            MissionInstanceId{next_instance_id_},
+            std::move(next_instances),
+            deployment_revision_});
 }
 
 core::Result<void, MissionError> MissionRuntime::activate(MissionInstanceId instance_id) {

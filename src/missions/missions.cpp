@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <limits>
 #include <sstream>
 #include <string_view>
 
@@ -80,6 +81,49 @@ void unlock_ready(MissionInstanceRecord& instance, const MissionRecord& mission)
 
 }  // namespace
 
+PreparedMissionDeployment::PreparedMissionDeployment(
+    MissionRuntime& runtime,
+    MissionId mission_id,
+    MissionInstanceRecord instance,
+    core::StateRevision expected_revision) noexcept
+    : runtime_(&runtime),
+      mission_id_(mission_id),
+      instance_(std::move(instance)),
+      expected_revision_(expected_revision) {}
+
+transactions::DomainCommitKey PreparedMissionDeployment::commit_key() const noexcept {
+    return {.domain = transactions::DomainCommitOrder::Missions, .stable_ordinal = 0U};
+}
+
+core::StateRevision PreparedMissionDeployment::expected_revision() const noexcept {
+    return expected_revision_;
+}
+
+core::StateRevision PreparedMissionDeployment::current_revision() const noexcept {
+    return runtime_->deployment_revision_;
+}
+
+void PreparedMissionDeployment::commit() noexcept {
+    auto mission_it = std::ranges::find_if(
+        runtime_->missions_,
+        [&](const auto& item) { return item.id == mission_id_; });
+
+    mission_it->attempt_count = instance_.attempt_ordinal;
+    mission_it->state = MissionState::Active;
+    ++mission_it->revision;
+
+    runtime_->active_external_ = instance_.id;
+    runtime_->instances_.push_back(std::move(instance_));
+    ++runtime_->next_instance_id_;
+    runtime_->touch_deployment_revision();
+}
+
+void PreparedMissionDeployment::publish_committed_events() noexcept {}
+
+void MissionRuntime::touch_deployment_revision() noexcept {
+    static_cast<void>(deployment_revision_.advance());
+}
+
 core::Result<void, MissionError> MissionRuntime::add_mission(MissionRecord mission) {
     if (!mission.id) return core::Result<void, MissionError>::failure(MissionError::InvalidId);
     if (!valid_graph(mission.objectives)) return core::Result<void, MissionError>::failure(MissionError::InvalidObjectiveGraph);
@@ -87,10 +131,15 @@ core::Result<void, MissionError> MissionRuntime::add_mission(MissionRecord missi
     std::ranges::sort(mission.objectives, {}, &ObjectiveDefinition::id);
     missions_.push_back(std::move(mission));
     std::ranges::sort(missions_, {}, &MissionRecord::id);
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
 core::Result<MissionInstanceId, MissionError> MissionRuntime::deploy(MissionId mission_id, std::uint64_t tick) {
+    if (next_instance_id_ == std::numeric_limits<std::uint64_t>::max()) {
+        return core::Result<MissionInstanceId, MissionError>::failure(
+            MissionError::InstanceIdExhausted);
+    }
     auto mission_it = std::ranges::find_if(missions_, [&](const auto& item) { return item.id == mission_id; });
     if (mission_it == missions_.end()) return core::Result<MissionInstanceId, MissionError>::failure(MissionError::MissionNotFound);
     if (active_external_) return core::Result<MissionInstanceId, MissionError>::failure(MissionError::ExternalMissionAlreadyActive);
@@ -110,7 +159,62 @@ core::Result<MissionInstanceId, MissionError> MissionRuntime::deploy(MissionId m
     ++mission_it->revision;
     active_external_ = instance.id;
     instances_.push_back(instance);
+    touch_deployment_revision();
     return core::Result<MissionInstanceId, MissionError>::success(instance.id);
+}
+
+core::Result<PreparedMissionDeployment, MissionError> MissionRuntime::prepare_deployment(
+    MissionId mission_id, std::uint64_t tick, core::TransactionId transaction_id) {
+    if (!transaction_id.valid()) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(MissionError::InvalidId);
+    }
+    if (!deployment_revision_.can_advance()) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::RevisionExhausted);
+    }
+    if (next_instance_id_ == std::numeric_limits<std::uint64_t>::max()) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::InstanceIdExhausted);
+    }
+
+    auto mission_it = std::ranges::find_if(
+        missions_, [&](const auto& item) { return item.id == mission_id; });
+    if (mission_it == missions_.end()) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::MissionNotFound);
+    }
+    if (active_external_) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::ExternalMissionAlreadyActive);
+    }
+    if (mission_it->state != MissionState::Available &&
+        mission_it->state != MissionState::Prepared) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::InvalidState);
+    }
+    if (mission_it->attempt_count == std::numeric_limits<std::uint32_t>::max()) {
+        return core::Result<PreparedMissionDeployment, MissionError>::failure(
+            MissionError::GenerationFailed);
+    }
+
+    MissionInstanceRecord instance{};
+    instance.id = MissionInstanceId{next_instance_id_};
+    instance.mission_id = mission_id;
+    instance.attempt_ordinal = mission_it->attempt_count + 1U;
+    instance.deployment_tick = tick;
+    instance.applied_transactions.push_back(transaction_id.raw());
+    instance.objectives.reserve(mission_it->objectives.size());
+    for (const auto& definition : mission_it->objectives) {
+        instance.objectives.push_back({
+            definition.id,
+            definition.prerequisites.empty() ? ObjectiveState::Active : ObjectiveState::Locked,
+            0});
+    }
+
+    instances_.reserve(instances_.size() + 1U);
+    return core::Result<PreparedMissionDeployment, MissionError>::success(
+        PreparedMissionDeployment{
+            *this, mission_id, std::move(instance), deployment_revision_});
 }
 
 core::Result<void, MissionError> MissionRuntime::activate(MissionInstanceId instance_id) {
@@ -123,6 +227,7 @@ core::Result<void, MissionError> MissionRuntime::activate(MissionInstanceId inst
     ++mission_it->revision;
     for (auto& objective : instance_it->objectives) if (objective.state == ObjectiveState::Available) objective.state = ObjectiveState::Active;
     ++instance_it->revision;
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -158,6 +263,7 @@ core::Result<void, MissionError> MissionRuntime::commit_objective(MissionInstanc
         mission_it->state = MissionState::ExtractionAvailable;
         ++mission_it->revision;
     }
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -169,6 +275,7 @@ core::Result<void, MissionError> MissionRuntime::secure_extraction(MissionInstan
         return core::Result<void, MissionError>::failure(MissionError::ExtractionUnavailable);
     instance_it->extraction_secured = true;
     ++instance_it->revision;
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -187,6 +294,7 @@ core::Result<void, MissionError> MissionRuntime::extract(MissionInstanceId insta
     mission_it->state = MissionState::Succeeded;
     ++mission_it->revision;
     active_external_.reset();
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -201,6 +309,7 @@ core::Result<void, MissionError> MissionRuntime::fail(MissionInstanceId instance
     mission_it->state = MissionState::Failed;
     ++mission_it->revision;
     active_external_.reset();
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -211,6 +320,7 @@ core::Result<void, MissionError> MissionRuntime::prepare_retry(MissionId mission
         return core::Result<void, MissionError>::failure(MissionError::InvalidState);
     mission_it->state = MissionState::Prepared;
     ++mission_it->revision;
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 
@@ -219,6 +329,7 @@ core::Result<void, MissionError> MissionRuntime::advance_hazards(MissionInstance
     if (instance_it == instances_.end()) return core::Result<void, MissionError>::failure(MissionError::InstanceNotFound);
     instance_it->hazard_tick = std::max(instance_it->hazard_tick, tick);
     ++instance_it->revision;
+    touch_deployment_revision();
     return core::Result<void, MissionError>::success();
 }
 

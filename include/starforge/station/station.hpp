@@ -147,6 +147,7 @@ struct Reservation {
 };
 
 class PreparedLogisticsMutation;
+class PreparedLogisticsReservation;
 
 class LogisticsStore {
 public:
@@ -158,10 +159,12 @@ public:
     [[nodiscard]] std::int64_t quantity(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t reserved(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t total(ResourceId resource) const;
+    [[nodiscard]] bool has_reservation(ReservationId reservation) const noexcept;
     [[nodiscard]] core::StateRevision revision() const noexcept { return revision_; }
 
 private:
     friend class PreparedLogisticsMutation;
+    friend class PreparedLogisticsReservation;
     std::map<StorageId, std::map<ResourceId, std::int64_t>> inventory_;
     std::map<ReservationId, Reservation> reservations_;
     core::StateRevision revision_{};

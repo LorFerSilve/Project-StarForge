@@ -11,6 +11,7 @@
 namespace starforge::economy {
 
 class EconomyState;
+class Market;
 class PreparedMarketTrade;
 
 enum class EconomyError : std::uint8_t {
@@ -67,6 +68,7 @@ public:
 
 private:
     friend class PreparedCreditMutation;
+    friend class Market;
     friend class PreparedMarketTrade;
 
     [[nodiscard]] bool transaction_seen(core::TransactionId transaction_id) const noexcept;

@@ -85,7 +85,10 @@ bool FinaleReadinessStore::valid_support_set(
     const std::array<SupportProviderSelection, 4>& providers) noexcept {
     std::set<SupportChannel> seen;
     for (const auto& provider : providers) {
-        if (!valid_support_channel(provider.channel) || provider.provider_id.empty() ||
+        const bool valid_kind =
+            provider.kind == SupportProviderKind::ExternalCommitment ||
+            provider.kind == SupportProviderKind::SelfSufficient;
+        if (!valid_support_channel(provider.channel) || !valid_kind || provider.provider_id.empty() ||
             !seen.insert(provider.channel).second) {
             return false;
         }
@@ -331,7 +334,10 @@ core::Result<FinaleReadinessStore, FinaleReadinessError> FinaleReadinessStore::r
         if (current.transaction_id == 0 || current.selected_ship_id == 0 ||
             current.selected_robot_squad_id == 0 || current.schema_version != 1U ||
             !snapshot.committed_transactions.contains(current.transaction_id) ||
-            !valid_support_set(current.support_providers)) {
+            current.manifest_reservations.empty() ||
+            !valid_support_set(current.support_providers) ||
+            (current.status != FinaleReadinessStatus::Deployable &&
+             current.status != FinaleReadinessStatus::Invalidated)) {
             return core::Result<FinaleReadinessStore, FinaleReadinessError>::failure(
                 FinaleReadinessError::InvalidSnapshot);
         }

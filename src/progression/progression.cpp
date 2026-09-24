@@ -13,28 +13,6 @@ void ProgressionState::commit_transaction(std::uint64_t transaction_id) {
     committed_transactions_.insert(transaction_id);
 }
 
-core::Result<void, ProgressionError> ProgressionState::credit(std::int64_t amount,
-                                                               std::uint64_t transaction_id) {
-    if (amount <= 0) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
-    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
-    if (amount > std::numeric_limits<std::int64_t>::max() - credits_) {
-        return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
-    }
-    credits_ += amount;
-    commit_transaction(transaction_id);
-    return core::Result<void, ProgressionError>::success();
-}
-
-core::Result<void, ProgressionError> ProgressionState::debit(std::int64_t amount,
-                                                              std::uint64_t transaction_id) {
-    if (amount <= 0) return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
-    if (transaction_seen(transaction_id)) return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
-    if (credits_ < amount) return core::Result<void, ProgressionError>::failure(ProgressionError::InsufficientCredits);
-    credits_ -= amount;
-    commit_transaction(transaction_id);
-    return core::Result<void, ProgressionError>::success();
-}
-
 std::int32_t ProgressionState::reputation(std::string_view faction) const noexcept {
     const auto it = reputation_.find(std::string(faction));
     return it == reputation_.end() ? 0 : it->second;
@@ -144,7 +122,6 @@ core::Result<void, ProgressionError> ProgressionState::complete_main_campaign(
 
 ProgressionSnapshot ProgressionState::snapshot() const {
     return ProgressionSnapshot{
-        .credits = credits_,
         .reputation = reputation_,
         .evidence_totals = evidence_totals_,
         .evidence_ids = evidence_ids_,
@@ -159,7 +136,7 @@ ProgressionSnapshot ProgressionState::snapshot() const {
 
 core::Result<ProgressionState, ProgressionError> ProgressionState::restore(
     ProgressionSnapshot snapshot) {
-    if (snapshot.credits < 0 || snapshot.committed_transactions.contains(0)) {
+    if (snapshot.committed_transactions.contains(0)) {
         return core::Result<ProgressionState, ProgressionError>::failure(
             ProgressionError::InvalidSnapshot);
     }
@@ -194,7 +171,6 @@ core::Result<ProgressionState, ProgressionError> ProgressionState::restore(
     }
 
     ProgressionState state;
-    state.credits_ = snapshot.credits;
     state.reputation_ = std::move(snapshot.reputation);
     state.evidence_totals_ = std::move(snapshot.evidence_totals);
     state.evidence_ids_ = std::move(snapshot.evidence_ids);

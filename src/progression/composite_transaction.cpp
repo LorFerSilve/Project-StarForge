@@ -10,24 +10,7 @@ core::Result<void, ProgressionError> ProgressionState::apply(
         return core::Result<void, ProgressionError>::failure(ProgressionError::DuplicateTransaction);
     }
 
-    // Validate the complete transaction before touching authoritative state.
-    std::int64_t next_credits = credits_;
-    if (mutation.credit_delta > 0) {
-        if (mutation.credit_delta > std::numeric_limits<std::int64_t>::max() - credits_) {
-            return core::Result<void, ProgressionError>::failure(ProgressionError::InvalidAmount);
-        }
-        next_credits += mutation.credit_delta;
-    } else if (mutation.credit_delta < 0) {
-        if (mutation.credit_delta == std::numeric_limits<std::int64_t>::min()) {
-            return core::Result<void, ProgressionError>::failure(ProgressionError::InsufficientCredits);
-        }
-        const auto debit = -mutation.credit_delta;
-        if (credits_ < debit) {
-            return core::Result<void, ProgressionError>::failure(ProgressionError::InsufficientCredits);
-        }
-        next_credits -= debit;
-    }
-
+    // Validate the complete progression-domain transaction before touching authoritative state.
     auto next_reputation = reputation_;
     for (const auto& [faction, delta] : mutation.reputation_deltas) {
         if (faction.empty()) {
@@ -55,7 +38,6 @@ core::Result<void, ProgressionError> ProgressionState::apply(
         }
     }
 
-    credits_ = next_credits;
     reputation_ = std::move(next_reputation);
     if (!mutation.evidence_id.empty()) {
         evidence_ids_.insert(mutation.evidence_id);

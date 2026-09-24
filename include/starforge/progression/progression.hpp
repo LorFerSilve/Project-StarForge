@@ -15,7 +15,7 @@
 namespace starforge::progression {
 
 enum class ProgressionError : std::uint8_t {
-    InvalidAmount, InsufficientCredits, DuplicateTransaction, InvalidReputation,
+    DuplicateTransaction, InvalidReputation,
     MissingPrerequisite, MissingEvidence, AlreadyCompleted, InvalidFinaleState, InvalidSnapshot,
 };
 
@@ -53,7 +53,6 @@ struct ResearchProject final {
 // One authoritative story/reward transaction. Every field is validated before any mutation;
 // the supplied transaction id is committed exactly once after the complete mutation succeeds.
 struct ProgressionMutation final {
-    std::int64_t credit_delta{0};
     std::map<std::string, std::int32_t> reputation_deltas{};
     std::string evidence_id{};
     std::map<std::string, std::uint32_t> evidence_values{};
@@ -61,7 +60,6 @@ struct ProgressionMutation final {
 };
 
 struct ProgressionSnapshot final {
-    std::int64_t credits{0};
     std::map<std::string, std::int32_t> reputation{};
     std::map<std::string, std::uint32_t> evidence_totals{};
     std::set<std::string> evidence_ids{};
@@ -75,9 +73,6 @@ struct ProgressionSnapshot final {
 
 class ProgressionState final {
 public:
-    [[nodiscard]] std::int64_t credits() const noexcept { return credits_; }
-    [[nodiscard]] core::Result<void, ProgressionError> credit(std::int64_t amount, std::uint64_t transaction_id);
-    [[nodiscard]] core::Result<void, ProgressionError> debit(std::int64_t amount, std::uint64_t transaction_id);
     [[nodiscard]] core::Result<void, ProgressionError> apply(const ProgressionMutation& mutation,
                                                               std::uint64_t transaction_id);
 
@@ -114,7 +109,6 @@ private:
     [[nodiscard]] bool transaction_seen(std::uint64_t transaction_id) const noexcept;
     void commit_transaction(std::uint64_t transaction_id);
 
-    std::int64_t credits_{0};
     std::map<std::string, std::int32_t> reputation_{};
     std::map<std::string, std::uint32_t> evidence_totals_{};
     std::set<std::string> evidence_ids_{};

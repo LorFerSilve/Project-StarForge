@@ -1,6 +1,7 @@
 #pragma once
 
 #include "starforge/core/strong_id.hpp"
+#include "starforge/core/revision.hpp"
 
 #include <cstdint>
 #include <map>
@@ -145,6 +146,8 @@ struct Reservation {
     std::int64_t quantity{0};
 };
 
+class PreparedLogisticsMutation;
+
 class LogisticsStore {
 public:
     bool add_storage(StorageId storage);
@@ -155,10 +158,13 @@ public:
     [[nodiscard]] std::int64_t quantity(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t reserved(StorageId storage, ResourceId resource) const;
     [[nodiscard]] std::int64_t total(ResourceId resource) const;
+    [[nodiscard]] core::StateRevision revision() const noexcept { return revision_; }
 
 private:
+    friend class PreparedLogisticsMutation;
     std::map<StorageId, std::map<ResourceId, std::int64_t>> inventory_;
     std::map<ReservationId, Reservation> reservations_;
+    core::StateRevision revision_{};
 };
 
 struct WorkOrder {

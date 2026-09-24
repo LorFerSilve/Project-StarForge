@@ -7,27 +7,6 @@
 
 using namespace starforge::progression;
 
-TEST_CASE("credits conserve committed ledger transactions") {
-    ProgressionState state;
-    REQUIRE(state.credit(500, 1));
-    REQUIRE(state.debit(125, 2));
-    CHECK(state.credits() == 375);
-    CHECK_FALSE(state.credit(500, 1));
-    CHECK_FALSE(state.debit(376, 3));
-    CHECK(state.credits() == 375);
-}
-
-TEST_CASE("credits reject overflow without consuming the transaction id") {
-    ProgressionState state;
-    const auto maximum = std::numeric_limits<std::int64_t>::max();
-    REQUIRE(state.credit(maximum, 1));
-    CHECK_FALSE(state.credit(1, 2));
-    CHECK(state.credits() == maximum);
-    REQUIRE(state.debit(maximum, 3));
-    REQUIRE(state.credit(1, 2));
-    CHECK(state.credits() == 1);
-}
-
 TEST_CASE("reputation uses canonical independent bounded tiers") {
     ProgressionState state;
     REQUIRE(state.change_reputation("Helios", 31, 10));
@@ -104,7 +83,6 @@ TEST_CASE("campaign completion cannot precede final resolution") {
 
 TEST_CASE("progression snapshot preserves exactly-once finale and research across reload") {
     ProgressionState state;
-    REQUIRE(state.credit(750, 100));
     REQUIRE(state.change_reputation("Helios", 45, 101));
     state.integrate_evidence("EVID_CORE", {{"Energy", 4}});
     ResearchProject project{
@@ -123,7 +101,6 @@ TEST_CASE("progression snapshot preserves exactly-once finale and research acros
     REQUIRE(restored_result);
     auto restored = std::move(restored_result).value();
 
-    CHECK(restored.credits() == 750);
     CHECK(restored.reputation("Helios") == 45);
     CHECK(restored.evidence("Energy") == 4);
     CHECK(restored.has_evidence("EVID_CORE"));
@@ -137,21 +114,15 @@ TEST_CASE("progression snapshot preserves exactly-once finale and research acros
     CHECK(restored.main_campaign_complete());
 
     // Persistent authority rejects both same-ID replay and a conflicting second ending.
-    CHECK_FALSE(restored.credit(750, 100));
     CHECK_FALSE(restored.complete_research(project, 102));
     CHECK_FALSE(restored.commit_finale(FinalChoice::Sever, 103, starforge::core::SimulationTick{80'000}));
     CHECK_FALSE(restored.commit_finale(FinalChoice::Sever, 105, starforge::core::SimulationTick{80'000}));
     CHECK_FALSE(restored.complete_main_campaign(106));
-    CHECK(restored.credits() == 750);
     CHECK(restored.postgame_resolution()->choice == FinalChoice::Stabilize);
 }
 
 TEST_CASE("progression restore rejects invalid authoritative state") {
     ProgressionSnapshot snapshot;
-    snapshot.credits = -1;
-    CHECK_FALSE(ProgressionState::restore(snapshot));
-
-    snapshot.credits = 0;
     snapshot.reputation["Helios"] = 101;
     CHECK_FALSE(ProgressionState::restore(snapshot));
 

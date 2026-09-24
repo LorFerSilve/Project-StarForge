@@ -1,8 +1,11 @@
 #pragma once
 
+#include "starforge/core/operation_ids.hpp"
 #include "starforge/core/result.hpp"
+#include "starforge/core/revision.hpp"
 #include "starforge/core/rng.hpp"
 #include "starforge/core/strong_id.hpp"
+#include "starforge/transactions/participant.hpp"
 
 #include <cstdint>
 #include <optional>
@@ -49,6 +52,8 @@ enum class MissionError : std::uint8_t {
     GenerationFailed,
     InvalidSnapshot,
     InvalidSerializedState,
+    RevisionExhausted,
+    InstanceIdExhausted,
 };
 
 struct ObjectiveDefinition final {
@@ -111,11 +116,43 @@ struct GenerationRequest final {
     std::uint32_t max_attempts{8};
 };
 
+class MissionRuntime;
+
+class PreparedMissionDeployment final : public transactions::IPreparedTransactionParticipant {
+public:
+    PreparedMissionDeployment(PreparedMissionDeployment&&) noexcept = default;
+    PreparedMissionDeployment& operator=(PreparedMissionDeployment&&) noexcept = default;
+    PreparedMissionDeployment(const PreparedMissionDeployment&) = delete;
+    PreparedMissionDeployment& operator=(const PreparedMissionDeployment&) = delete;
+
+    [[nodiscard]] MissionInstanceId instance_id() const noexcept { return instance_.id; }
+    [[nodiscard]] transactions::DomainCommitKey commit_key() const noexcept override;
+    [[nodiscard]] core::StateRevision expected_revision() const noexcept override;
+    [[nodiscard]] core::StateRevision current_revision() const noexcept override;
+    void commit() noexcept override;
+    void publish_committed_events() noexcept override;
+
+private:
+    friend class MissionRuntime;
+
+    PreparedMissionDeployment(MissionRuntime& runtime,
+                              MissionId mission_id,
+                              MissionInstanceRecord instance,
+                              core::StateRevision expected_revision) noexcept;
+
+    MissionRuntime* runtime_{nullptr};
+    MissionId mission_id_{};
+    MissionInstanceRecord instance_{};
+    core::StateRevision expected_revision_{};
+};
+
 class MissionRuntime final {
 public:
     [[nodiscard]] core::Result<void, MissionError> add_mission(MissionRecord mission);
     [[nodiscard]] core::Result<MissionInstanceId, MissionError> deploy(MissionId mission_id,
                                                                       std::uint64_t tick);
+    [[nodiscard]] core::Result<PreparedMissionDeployment, MissionError> prepare_deployment(
+        MissionId mission_id, std::uint64_t tick, core::TransactionId transaction_id);
     [[nodiscard]] core::Result<void, MissionError> activate(MissionInstanceId instance_id);
     [[nodiscard]] core::Result<void, MissionError> commit_objective(MissionInstanceId instance_id,
                                                                     ObjectiveId objective_id,
@@ -131,14 +168,22 @@ public:
     [[nodiscard]] const MissionRecord* mission(MissionId id) const noexcept;
     [[nodiscard]] const MissionInstanceRecord* instance(MissionInstanceId id) const noexcept;
     [[nodiscard]] std::optional<MissionInstanceId> active_external_instance() const noexcept;
+    [[nodiscard]] core::StateRevision deployment_revision() const noexcept {
+        return deployment_revision_;
+    }
     [[nodiscard]] std::string serialize() const;
     [[nodiscard]] static core::Result<MissionRuntime, MissionError> deserialize(std::string_view data);
 
 private:
+    friend class PreparedMissionDeployment;
+
+    void touch_deployment_revision() noexcept;
+
     std::vector<MissionRecord> missions_{};
     std::vector<MissionInstanceRecord> instances_{};
     std::optional<MissionInstanceId> active_external_{};
     std::uint64_t next_instance_id_{1};
+    core::StateRevision deployment_revision_{};
 };
 
 [[nodiscard]] core::Result<GeneratedMissionPackage, MissionError>

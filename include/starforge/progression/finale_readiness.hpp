@@ -137,6 +137,7 @@ struct FinaleReadinessReport final {
 enum class FinaleReadinessStatus : std::uint8_t {
     Deployable,
     Invalidated,
+    Deployed,
 };
 
 struct DepartureReadinessState final {
@@ -145,6 +146,8 @@ struct DepartureReadinessState final {
     std::uint64_t selected_robot_squad_id{0};
     std::array<SupportProviderSelection, 4> support_providers{};
     std::vector<station::ReservationId> manifest_reservations{};
+    std::uint64_t deployment_transaction_id{0};
+    std::uint64_t mission_instance_id{0};
     FinaleReadinessStatus status{FinaleReadinessStatus::Deployable};
     std::uint32_t schema_version{1U};
 };
@@ -166,6 +169,34 @@ enum class FinaleReadinessError : std::uint8_t {
 };
 
 class FinaleReadinessStore;
+
+class PreparedFinaleDeploymentActivation final : public transactions::IPreparedTransactionParticipant {
+public:
+    PreparedFinaleDeploymentActivation(PreparedFinaleDeploymentActivation&&) noexcept = default;
+    PreparedFinaleDeploymentActivation& operator=(PreparedFinaleDeploymentActivation&&) noexcept = default;
+    PreparedFinaleDeploymentActivation(const PreparedFinaleDeploymentActivation&) = delete;
+    PreparedFinaleDeploymentActivation& operator=(const PreparedFinaleDeploymentActivation&) = delete;
+
+    [[nodiscard]] transactions::DomainCommitKey commit_key() const noexcept override;
+    [[nodiscard]] core::StateRevision expected_revision() const noexcept override;
+    [[nodiscard]] core::StateRevision current_revision() const noexcept override;
+    void commit() noexcept override;
+    void publish_committed_events() noexcept override;
+
+private:
+    friend class FinaleReadinessStore;
+
+    PreparedFinaleDeploymentActivation(
+        FinaleReadinessStore& store,
+        DepartureReadinessState next_state,
+        std::set<std::uint64_t> committed_transactions,
+        core::StateRevision expected_revision) noexcept;
+
+    FinaleReadinessStore* store_{nullptr};
+    DepartureReadinessState next_state_{};
+    std::set<std::uint64_t> committed_transactions_{};
+    core::StateRevision expected_revision_{};
+};
 
 class PreparedFinaleReadinessCommit final : public transactions::IPreparedTransactionParticipant {
 public:
@@ -211,6 +242,10 @@ public:
         const std::vector<SupportProviderSelection>& support_providers,
         const station::LogisticsStore& logistics);
 
+    [[nodiscard]] core::Result<PreparedFinaleDeploymentActivation, FinaleReadinessError>
+    prepare_deployment_activation(core::TransactionId transaction_id,
+                                  std::uint64_t mission_instance_id);
+
     [[nodiscard]] const std::optional<DepartureReadinessState>& current() const noexcept {
         return current_;
     }
@@ -222,6 +257,7 @@ public:
 
 private:
     friend class PreparedFinaleReadinessCommit;
+    friend class PreparedFinaleDeploymentActivation;
 
     [[nodiscard]] bool transaction_seen(core::TransactionId transaction_id) const noexcept;
     [[nodiscard]] static bool valid_support_channel(SupportChannel channel) noexcept;

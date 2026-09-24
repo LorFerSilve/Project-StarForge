@@ -5,6 +5,7 @@
 #include <limits>
 #include <sstream>
 #include <string_view>
+#include <utility>
 
 namespace starforge::missions {
 namespace {

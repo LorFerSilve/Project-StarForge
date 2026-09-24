@@ -1,6 +1,7 @@
 add_library(sf_progression STATIC
     progression.cpp
     composite_transaction.cpp
+    campaign_progression.cpp
 )
 
 add_library(StarForge::Progression ALIAS sf_progression)

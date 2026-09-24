@@ -147,6 +147,7 @@ struct Reservation {
 };
 
 class PreparedLogisticsMutation;
+class PreparedLogisticsReservation;
 
 class LogisticsStore {
 public:
@@ -162,6 +163,7 @@ public:
 
 private:
     friend class PreparedLogisticsMutation;
+    friend class PreparedLogisticsReservation;
     std::map<StorageId, std::map<ResourceId, std::int64_t>> inventory_;
     std::map<ReservationId, Reservation> reservations_;
     core::StateRevision revision_{};

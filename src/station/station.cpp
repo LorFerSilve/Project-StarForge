@@ -273,22 +273,29 @@ std::int64_t EnvironmentalStore::total_thermal_energy_j() const noexcept {
 }
 
 bool LogisticsStore::add_storage(StorageId storage) {
-    if (!storage || inventory_.contains(storage)) {
+    if (!storage || inventory_.contains(storage) || !revision_.can_advance()) {
         return false;
     }
     inventory_.emplace(storage, std::map<ResourceId, std::int64_t>{});
+    static_cast<void>(revision_.advance());
     return true;
 }
 
 bool LogisticsStore::deposit(StorageId storage, ResourceId resource, std::int64_t quantity_value) {
-    if (!resource || !positive(quantity_value)) {
+    if (!resource || !positive(quantity_value) || !revision_.can_advance()) {
         return false;
     }
     const auto it = inventory_.find(storage);
     if (it == inventory_.end()) {
         return false;
     }
-    it->second[resource] += quantity_value;
+    const auto current_it = it->second.find(resource);
+    const auto current = current_it == it->second.end() ? 0 : current_it->second;
+    if (quantity_value > std::numeric_limits<std::int64_t>::max() - current) {
+        return false;
+    }
+    it->second[resource] = current + quantity_value;
+    static_cast<void>(revision_.advance());
     return true;
 }
 
@@ -314,33 +321,64 @@ std::int64_t LogisticsStore::reserved(StorageId storage, ResourceId resource) co
 bool LogisticsStore::reserve(Reservation reservation) {
     if (!reservation.id || !reservation.source || !reservation.resource ||
         !positive(reservation.quantity) || reservations_.contains(reservation.id) ||
-        quantity(reservation.source, reservation.resource) - reserved(reservation.source, reservation.resource) <
+        !revision_.can_advance() ||
+        quantity(reservation.source, reservation.resource) -
+                reserved(reservation.source, reservation.resource) <
             reservation.quantity) {
         return false;
     }
     reservations_.emplace(reservation.id, reservation);
+    static_cast<void>(revision_.advance());
     return true;
 }
 
 bool LogisticsStore::commit_transfer(ReservationId reservation_id, StorageId destination) {
     const auto reservation_it = reservations_.find(reservation_id);
     const auto destination_it = inventory_.find(destination);
-    if (reservation_it == reservations_.end() || destination_it == inventory_.end()) {
+    if (reservation_it == reservations_.end() || destination_it == inventory_.end() ||
+        !revision_.can_advance()) {
         return false;
     }
     const auto reservation = reservation_it->second;
     auto source_it = inventory_.find(reservation.source);
-    if (source_it == inventory_.end() || source_it->second[reservation.resource] < reservation.quantity) {
+    if (source_it == inventory_.end()) {
         return false;
     }
-    source_it->second[reservation.resource] -= reservation.quantity;
-    destination_it->second[reservation.resource] += reservation.quantity;
+    const auto source_resource = source_it->second.find(reservation.resource);
+    if (source_resource == source_it->second.end() ||
+        source_resource->second < reservation.quantity) {
+        return false;
+    }
+    const auto destination_resource = destination_it->second.find(reservation.resource);
+    const auto destination_quantity =
+        destination_resource == destination_it->second.end() ? 0 : destination_resource->second;
+    if (reservation.quantity >
+        std::numeric_limits<std::int64_t>::max() - destination_quantity) {
+        return false;
+    }
+
+    source_resource->second -= reservation.quantity;
+    destination_it->second[reservation.resource] =
+        destination_quantity + reservation.quantity;
     reservations_.erase(reservation_it);
+    static_cast<void>(revision_.advance());
     return true;
 }
 
 bool LogisticsStore::release(ReservationId reservation) {
-    return reservations_.erase(reservation) == 1;
+    if (!revision_.can_advance()) {
+        return false;
+    }
+    const auto erased = reservations_.erase(reservation);
+    if (erased != 1U) {
+        return false;
+    }
+    static_cast<void>(revision_.advance());
+    return true;
+}
+
+bool LogisticsStore::has_reservation(ReservationId reservation) const noexcept {
+    return reservation && reservations_.contains(reservation);
 }
 
 std::int64_t LogisticsStore::total(ResourceId resource) const {
@@ -348,6 +386,9 @@ std::int64_t LogisticsStore::total(ResourceId resource) const {
     for (const auto& [_, storage] : inventory_) {
         const auto item = storage.find(resource);
         if (item != storage.end()) {
+            if (item->second > std::numeric_limits<std::int64_t>::max() - result) {
+                return std::numeric_limits<std::int64_t>::max();
+            }
             result += item->second;
         }
     }

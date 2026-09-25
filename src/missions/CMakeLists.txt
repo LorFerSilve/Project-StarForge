@@ -12,6 +12,7 @@ target_include_directories(sf_missions
 target_link_libraries(sf_missions
     PUBLIC
         StarForge::Core
+        StarForge::Transactions
 )
 
 sf_apply_project_options(sf_missions)
